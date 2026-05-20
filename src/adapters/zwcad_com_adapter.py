@@ -8,7 +8,12 @@ from src.cad_core.base import CADAdapter
 from src.cad_core.drawing_standards import (
     CADGenerationStandards,
     cad_unicode_escape,
+    insulation_batting_pattern_points,
+    insulation_centerline,
+    measured_dimension_override,
+    qleader_l_route_points,
     resolve_annotation_style,
+    text_box_width,
 )
 from src.testing.environment_check import zwcad_progid_candidates
 from src.utils.geometry import chunk_points
@@ -567,11 +572,51 @@ class ZWCADCOMAdapter(CADAdapter):
         ent = doc.ModelSpace.AddDimAligned(self._variant_point(start), self._variant_point(end), self._variant_point(text_position))
         try:
             ent.Layer = target_layer
-            if text_override is not None:
-                ent.TextOverride = str(text_override)
+            ent.TextOverride = measured_dimension_override()
+            ent.ScaleFactor = self.standards.default_dimension_scale
+            if text_override:
+                self.warnings.append({
+                    "type": "dimension_text_override_ignored",
+                    "requested": str(text_override),
+                    "reason": "generated dimensions must display measured geometry",
+                })
         except Exception:
             pass
         return self.apply_annotation_style(ent, style)
+
+    def create_qleader_label(
+        self,
+        target: Iterable[float],
+        label_origin: Iterable[float],
+        label: str,
+        text_height: float | None = None,
+        layer: str | None = None,
+        text_layer: str | None = None,
+        style: str | None = None,
+    ) -> dict[str, Any]:
+        height = float(text_height or self.standards.default_text_height)
+        origin = list(label_origin)
+        target_values = list(target)
+        label_width = text_box_width(label, height)
+        route2d = qleader_l_route_points(
+            (float(target_values[0]), float(target_values[1])),
+            (float(origin[0]), float(origin[1])),
+            label_width,
+            height,
+        )
+        z = float(target_values[2]) if len(target_values) > 2 else 0.0
+        leader = self.create_orthogonal_leader(
+            [[x, y, z] for x, y in route2d],
+            layer=layer,
+            style=style,
+        )
+        text_entity = self.create_text(
+            label,
+            [float(origin[0]), float(origin[1]), float(origin[2]) if len(origin) > 2 else z],
+            height=height,
+            layer=text_layer or "DET_TEXT",
+        )
+        return {"leader": leader, "text": text_entity, "points": route2d}
 
     def create_orthogonal_leader(
         self,
@@ -596,6 +641,24 @@ class ZWCADCOMAdapter(CADAdapter):
         except Exception:
             pass
         return self.apply_annotation_style(ent, style)
+
+    def create_insulation_batting_pattern(
+        self,
+        origin: Iterable[float],
+        thickness_mm: float,
+        length_mm: float,
+        vertical: bool = True,
+        layer: str | None = None,
+    ) -> dict[str, Any]:
+        values = list(origin)
+        xy = (float(values[0]), float(values[1]))
+        z = float(values[2]) if len(values) > 2 else 0.0
+        target_layer = layer or self.standards.insulation_layer
+        points = insulation_batting_pattern_points(xy, thickness_mm, length_mm, vertical=vertical)
+        polyline = self.create_polyline([[x, y, z] for x, y in points], target_layer, closed=False) if points else None
+        start, end = insulation_centerline(xy, thickness_mm, length_mm, vertical=vertical)
+        centerline = self.create_line([start[0], start[1], z], [end[0], end[1], z], target_layer)
+        return {"pattern": polyline, "centerline": centerline, "points": points}
 
     def apply_batting_linetype(self, entity: Any, width_mm: float | None = None) -> Any:
         self.ensure_linetype(self.standards.batting_linetype)
