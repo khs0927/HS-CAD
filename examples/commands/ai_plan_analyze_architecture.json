@@ -1,0 +1,8 @@
+{
+  "command": "analyze_architecture",
+  "params": {},
+  "safety": {
+    "backup_required": false,
+    "preview_required": true
+  }
+}

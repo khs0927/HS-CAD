@@ -1,0 +1,155 @@
+# Generated from uploaded XiCAD Lisp/xiShortkey_origin.key
+# XiCAD commands are interactive unless noted. Use dry-run first.
+commands:
+  - alias: SEB
+    function: xiSelectBoundary
+    description: "영역 내 선택"
+    section: SecComm
+  - alias: SER
+    function: xiSelectEntitiesRange
+    description: "범위로 선택"
+    section: SecComm
+  - alias: FLT
+    function: xiFlatten
+    description: "Z값 0으로 변경"
+    section: SecComm
+  - alias: SE
+    function: xiSelectSameEntities
+    description: "유사 객체 선택"
+    section: SecComm
+  - alias: STT
+    function: xiStart
+    description: "도면 초기설정"
+    section: SecOpen
+  - alias: BLS
+    function: xiBeamSchedule
+    description: "보 스케쥴작성"
+    section: SecDraw
+  - alias: BE
+    function: xiBE
+    description: "H빔,C채널,L형강 그리기"
+    section: SecDraw
+  - alias: BLI
+    function: xiBeamList
+    description: "보 일람표그리기"
+    section: SecDraw
+  - alias: CEN
+    function: xiCenter
+    description: "두선을 선택하여 중심선 그리기"
+    section: SecDraw
+  - alias: CEP
+    function: xiCenterPoly
+    description: "폴리선 중심 그리기"
+    section: SecDraw
+  - alias: CLI
+    function: xiColumnList
+    description: "기둥일람표그리기"
+    section: SecDraw
+  - alias: COL
+    function: xiDrawColumn
+    description: "기둥그리기"
+    section: SecDraw
+  - alias: CW
+    function: xiCWall
+    description: "커튼월 그리기"
+    section: SecDraw
+  - alias: D1
+    function: xiDoor1
+    description: "간단문그리기"
+    section: SecDraw
+  - alias: D2
+    function: xiDoor2
+    description: "문 그리기"
+    section: SecDraw
+  - alias: D3
+    function: xiDoor3
+    description: "문 그리기"
+    section: SecDraw
+  - alias: DEV
+    function: xiDrawExplodedView
+    description: "전개도 그리기"
+    section: SecDraw
+  - alias: EED
+    function: xiEED
+    description: "에스컬레이터 입면 그리기"
+    section: SecDraw
+  - alias: ELV
+    function: xiElevator
+    description: "엘리베이터 그리기"
+    section: SecDraw
+  - alias: EPD
+    function: xiEPD
+    description: "에스컬레이터 평면 그리기"
+    section: SecDraw
+  - alias: HGRID
+    function: xiHeatGrid
+    description: "바닥난방 XL파이프 그리기"
+    section: SecDraw
+  - alias: INS
+    function: xiInsul
+    description: "단열재 그리기"
+    section: SecDraw
+  - alias: PK
+    function: xipk
+    description: "주차장 그리기"
+    section: SecDraw
+  - alias: PZ
+    function: xiPartialZoom
+    description: "부분 확대도 그리기"
+    section: SecDraw
+  - alias: SCB
+    function: xiScaleBar
+    description: "축척 막대 그리기"
+    section: SecDraw
+  - alias: STB
+    function: xiSTB
+    description: "철골보 평면 그리기"
+    section: SecDraw
+  - alias: STC
+    function: xiSTC
+    description: "계단 입면"
+    section: SecDraw
+  - alias: STP
+    function: xiSTP
+    description: "계단 평면 그리기"
+    section: SecDraw
+  - alias: TAJ
+    function: xiTableWidAj
+    description: "캐드 테이블 문자에 맞추어 폭 자동 변경"
+    section: SecDraw
+  - alias: W1
+    function: xiWin1
+    description: "간단창그리기"
+    section: SecDraw
+  - alias: W2
+    function: xiWin2
+    description: "미서기창 그리기"
+    section: SecDraw
+  - alias: W3
+    function: xiWin3
+    description: "미서기창 그리기"
+    section: SecDraw
+  - alias: WAL
+    function: xiDrawWall
+    description: "벽 그리기"
+    section: SecDraw
+  - alias: WO
+    function: xiWallOpening
+    description: "개구부 그리기"
+    section: SecDraw
+  - alias: C2E
+    function: xiCad2Excel
+    description: "캐드의 일반표를 엑셀로 보내기"
+    section: SecHatch
+  - alias: E2C
+    function: xiExcel2Cad
+    description: "엑셀표를 캐드 일반표로 보내기"
+    section: SecHatch
+  - alias: TAJ
+    function: xiTableWidAj
+    description: "캐드 테이블 문자에 맞추어 폭 자동 변경"
+    section: SecHatch
+  - alias: TB
+    function: xiTable
+    description: "XiCAD 테이블그리기"
+    section: SecHatch

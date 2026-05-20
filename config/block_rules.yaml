@@ -1,0 +1,3 @@
+column_prefixes: [C, COL, COLUMN]
+door_prefixes: [D, DOOR]
+window_prefixes: [W, WIN, WINDOW]

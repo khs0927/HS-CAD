@@ -1,0 +1,10 @@
+{
+  "command": "delete_layer_objects",
+  "params": {
+    "layer": "A-TEMP"
+  },
+  "safety": {
+    "backup_required": true,
+    "preview_required": true
+  }
+}

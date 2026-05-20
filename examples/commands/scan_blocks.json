@@ -1,0 +1,8 @@
+{
+  "command": "scan_blocks",
+  "params": {},
+  "safety": {
+    "backup_required": false,
+    "preview_required": false
+  }
+}

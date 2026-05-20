@@ -1,0 +1,17 @@
+{
+  "command": "create_boundary",
+  "params": {
+    "width": 18000,
+    "depth": 12000,
+    "origin": [
+      0,
+      0,
+      0
+    ],
+    "layer": "A-BOUNDARY"
+  },
+  "safety": {
+    "backup_required": true,
+    "preview_required": true
+  }
+}

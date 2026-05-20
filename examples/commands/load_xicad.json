@@ -1,0 +1,10 @@
+{
+  "command": "load_xicad",
+  "params": {
+    "xicad_root": "C:/xicad"
+  },
+  "safety": {
+    "backup_required": false,
+    "preview_required": true
+  }
+}

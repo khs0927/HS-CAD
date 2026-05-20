@@ -1,0 +1,15 @@
+{
+  "command": "xicad_safe_execute",
+  "alias": "WAL",
+  "load_first": true,
+  "dry_run": false,
+  "params": {
+    "xicad_root": "../vendor/xicad"
+  },
+  "safety": {
+    "backup_required": true,
+    "preview_required": true,
+    "allow_interactive": true,
+    "allow_high_risk": false
+  }
+}

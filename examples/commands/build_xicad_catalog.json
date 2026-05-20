@@ -1,0 +1,10 @@
+{
+  "command": "build_xicad_catalog",
+  "params": {
+    "xicad_root": "../vendor/xicad"
+  },
+  "safety": {
+    "backup_required": false,
+    "preview_required": true
+  }
+}

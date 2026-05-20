@@ -1,0 +1,11 @@
+{
+  "command": "delete_layer_objects",
+  "params": {
+    "layer": "A-DEMO",
+    "yes": true
+  },
+  "safety": {
+    "backup_required": true,
+    "preview_required": true
+  }
+}

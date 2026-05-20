@@ -1,0 +1,5 @@
+(defun c:ZW_AUDIT_PURGE ()
+  (command "_.AUDIT" "_Y")
+  (command "_.-PURGE" "_ALL" "*" "_N")
+  (princ)
+)

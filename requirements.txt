@@ -1,0 +1,11 @@
+comtypes
+pywin32
+pydantic>=2
+pydantic-settings
+python-dotenv
+rich
+typer
+pandas
+openpyxl
+ezdxf
+pyyaml

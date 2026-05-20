@@ -1,0 +1,11 @@
+(defun c:ZW_EXPORT_HANDLES (/ ss i ent)
+  (setq ss (ssget "X"))
+  (setq i 0)
+  (while (< i (sslength ss))
+    (setq ent (ssname ss i))
+    (princ (strcat "
+" (cdr (assoc 5 (entget ent)))))
+    (setq i (1+ i))
+  )
+  (princ)
+)

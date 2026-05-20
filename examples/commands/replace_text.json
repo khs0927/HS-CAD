@@ -1,0 +1,12 @@
+{
+  "command": "replace_text",
+  "params": {
+    "find": "사무실",
+    "replace": "업무시설",
+    "layer": null
+  },
+  "safety": {
+    "backup_required": true,
+    "preview_required": true
+  }
+}

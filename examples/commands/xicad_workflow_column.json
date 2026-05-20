@@ -1,0 +1,11 @@
+{
+  "command": "xicad_workflow",
+  "params": {
+    "workflow": "draw_column",
+    "xicad_root": "C:/xicad"
+  },
+  "safety": {
+    "backup_required": true,
+    "preview_required": true
+  }
+}

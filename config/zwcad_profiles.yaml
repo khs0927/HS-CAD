@@ -1,0 +1,3 @@
+default:
+  com_clsid: ZWCAD.Application
+  visible: true

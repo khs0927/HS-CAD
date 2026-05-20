@@ -1,0 +1,10 @@
+{
+  "command": "save_as",
+  "params": {
+    "path": "C:/cad/sample_modified.dwg"
+  },
+  "safety": {
+    "backup_required": true,
+    "preview_required": true
+  }
+}

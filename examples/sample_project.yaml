@@ -1,0 +1,9 @@
+project_name: sample_architecture
+building:
+  width: 18000
+  depth: 12000
+  floors: 1
+structure:
+  grid_x: 6000
+  grid_y: 6000
+  column_block: C1

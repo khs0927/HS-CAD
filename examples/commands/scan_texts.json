@@ -1,0 +1,8 @@
+{
+  "command": "scan_texts",
+  "params": {},
+  "safety": {
+    "backup_required": false,
+    "preview_required": false
+  }
+}

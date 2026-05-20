@@ -1,0 +1,8 @@
+{
+  "command": "export_objects_json",
+  "params": {},
+  "safety": {
+    "backup_required": false,
+    "preview_required": false
+  }
+}

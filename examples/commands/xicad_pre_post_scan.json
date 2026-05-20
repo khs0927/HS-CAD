@@ -1,0 +1,17 @@
+{
+  "command": "xicad_safe_plan",
+  "alias": "WAL",
+  "load_first": true,
+  "dry_run": true,
+  "params": {
+    "pre_scan": true,
+    "post_scan": true,
+    "report_dir": "outputs/xicad_report"
+  },
+  "safety": {
+    "backup_required": true,
+    "preview_required": true,
+    "allow_interactive": false,
+    "allow_high_risk": false
+  }
+}

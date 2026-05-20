@@ -1,0 +1,15 @@
+{
+  "command": "xicad_safe_execute",
+  "alias": "W1",
+  "load_first": true,
+  "dry_run": false,
+  "params": {
+    "note": "Queue XiCAD window command only after user confirms interactive prompts"
+  },
+  "safety": {
+    "backup_required": true,
+    "preview_required": true,
+    "allow_interactive": true,
+    "allow_high_risk": false
+  }
+}

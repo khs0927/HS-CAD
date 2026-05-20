@@ -1,0 +1,101 @@
+# Architectural layer taxonomy used by src/semantics.
+# Priority: layer rule -> entity type/geometry -> block/text hints -> optional screen capture.
+classification_priority:
+  - layer
+  - entity_type_geometry
+  - block_name_text
+  - screen_capture_support_only
+layers:
+  COL:
+    meaning: [structure, concrete_column, concrete_wall, steel_wall, steel_beam, other_structural_member]
+    semantic_type: structural_member
+    category: structure
+    structural_role: structural
+    discipline: structure
+    is_structural: true
+    output: true
+    risk: high
+    confidence: 0.98
+  WAL1:
+    meaning: [nonstructural_wall, white_layer, lightweight_wall]
+    semantic_type: nonstructural_wall
+    subtype: lightweight_wall
+    category: wall
+    structural_role: nonstructural
+    recommended_color: 7
+    is_structural: false
+    output: true
+    risk: medium
+    confidence: 0.98
+  WAL2:
+    meaning: [nonstructural_wall, green_layer, masonry_wall]
+    semantic_type: nonstructural_wall
+    subtype: masonry_wall
+    category: wall
+    structural_role: nonstructural
+    recommended_color: 3
+    is_structural: false
+    output: true
+    risk: medium
+    confidence: 0.98
+  WAL3:
+    meaning: [nonstructural_wall, other_wall]
+    semantic_type: nonstructural_wall
+    subtype: other_wall
+    category: wall
+    structural_role: nonstructural
+    is_structural: false
+    output: true
+    risk: medium
+    confidence: 0.96
+  WAL4_PLUS:
+    pattern: "^WAL[4-9][0-9]*$"
+    meaning: [nonstructural_wall, detailed_wall_variant]
+    semantic_type: nonstructural_wall
+    subtype: wall_variant
+    category: wall
+    structural_role: nonstructural
+    is_structural: false
+    output: true
+    risk: medium
+    confidence: 0.86
+  ELE: {meaning: [elevation_line], semantic_type: elevation_line, category: elevation, recommended_color: 8, confidence: 0.98}
+  ELE1: {meaning: [elevation_line], semantic_type: elevation_line, category: elevation, recommended_color: 251, confidence: 0.98}
+  ELE2: {meaning: [elevation_line], semantic_type: elevation_line, category: elevation, recommended_color: 252, confidence: 0.98}
+  ELE3: {meaning: [elevation_line], semantic_type: elevation_line, category: elevation, recommended_color: 253, confidence: 0.98}
+  ELE4: {meaning: [elevation_line], semantic_type: elevation_line, category: elevation, recommended_color: 254, confidence: 0.98}
+  ETC: {meaning: [other_line, same_color_family_as_ele], semantic_type: elevation_line, category: etc_elevation, recommended_color: 8, confidence: 0.96}
+  ETC1: {meaning: [other_line, same_color_family_as_ele1], semantic_type: elevation_line, category: etc_elevation, recommended_color: 251, confidence: 0.96}
+  ETC2: {meaning: [other_line, same_color_family_as_ele2], semantic_type: elevation_line, category: etc_elevation, recommended_color: 252, confidence: 0.96}
+  ETC3: {meaning: [other_line, same_color_family_as_ele3], semantic_type: elevation_line, category: etc_elevation, recommended_color: 253, confidence: 0.96}
+  ETC4: {meaning: [other_line, same_color_family_as_ele4], semantic_type: elevation_line, category: etc_elevation, recommended_color: 254, confidence: 0.96}
+  DOOR: {meaning: [door], semantic_type: door, category: opening, confidence: 0.98}
+  DOOR_ELE: {meaning: [door_elevation], semantic_type: door_elevation, category: elevation, confidence: 0.98}
+  WIN: {meaning: [window], semantic_type: window, category: opening, confidence: 0.98}
+  WINBAR: {meaning: [window_frame], semantic_type: window_frame, category: opening, confidence: 0.98}
+  WINELE: {meaning: [window_elevation], semantic_type: window_elevation, category: elevation, confidence: 0.98}
+  STAIR: {meaning: [stair], semantic_type: stair, category: vertical_circulation, confidence: 0.98}
+  DIM: {meaning: [dimension], semantic_type: dimension, category: annotation, confidence: 0.98}
+  DIMLE: {meaning: [leader], semantic_type: leader, category: annotation, confidence: 0.98}
+  CEN: {meaning: [column_centerline, main_centerline], semantic_type: centerline_main, category: grid_centerline, confidence: 0.98}
+  CEN1: {meaning: [aux_centerline, lightweight_wall_centerline, wall_centerline], semantic_type: centerline_aux_wall, category: grid_centerline, confidence: 0.98}
+  CEN2: {meaning: [aux_centerline, other_centerline], semantic_type: centerline_aux_other, category: grid_centerline, confidence: 0.98}
+  DEFPOINTS:
+    meaning: [invisible_guideline, non_print_guide]
+    semantic_type: guide_nonplot
+    category: guide
+    structural_role: guide
+    output: false
+    risk: protected
+    confidence: 1.0
+  FIX: {meaning: [kitchen_furniture, bathroom_fixture, fixed_furniture], semantic_type: fixed_furniture, category: fixture, confidence: 0.98}
+  FUR: {meaning: [general_furniture], semantic_type: loose_furniture, category: furniture, confidence: 0.98}
+  SYM: {meaning: [symbol_line], semantic_type: symbol_line, category: symbol, confidence: 0.98}
+  SYM_T: {meaning: [symbol_text], semantic_type: symbol_text, category: symbol, confidence: 0.98}
+  TIT: {meaning: [title_text], semantic_type: title_text, category: title, confidence: 0.98}
+  AREA: {meaning: [cadastral_line, site_lot_line], semantic_type: site_boundary, category: site_boundary, confidence: 0.98}
+  PARKING: {meaning: [parking_line], semantic_type: parking_line, category: parking, confidence: 0.98}
+  INS: {meaning: [insulation], semantic_type: insulation, category: insulation, confidence: 0.98}
+  BOUND: {meaning: [zone_boundary], semantic_type: zone_boundary, category: boundary, confidence: 0.98}
+  A-FORM: {meaning: [title_block, drawing_border], semantic_type: title_block, category: sheet, confidence: 0.98}
+  MARK: {meaning: [worker_shared_markup], semantic_type: markup, category: coordination, confidence: 0.98}

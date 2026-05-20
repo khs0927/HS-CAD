@@ -1,0 +1,19 @@
+{
+  "allowed_commands": [
+    "scan_all",
+    "scan_layers",
+    "scan_blocks",
+    "scan_texts",
+    "export_objects_json",
+    "move_layer",
+    "move_object_by_handle",
+    "replace_text",
+    "replace_block",
+    "delete_layer_objects",
+    "create_boundary",
+    "create_grid",
+    "place_columns",
+    "generate_quantity_report",
+    "save_as"
+  ]
+}

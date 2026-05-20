@@ -1,0 +1,6 @@
+default_layers:
+  boundary: A-BOUNDARY
+  grid: A-GRID
+  column: A-COLUMN
+  wall: A-WALL
+units: mm

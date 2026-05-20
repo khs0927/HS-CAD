@@ -1,0 +1,13 @@
+{
+  "command": "run_xicad_command",
+  "params": {
+    "alias": "W1",
+    "xicad_root": "../vendor/xicad",
+    "args": [],
+    "interactive": true
+  },
+  "safety": {
+    "backup_required": true,
+    "preview_required": true
+  }
+}

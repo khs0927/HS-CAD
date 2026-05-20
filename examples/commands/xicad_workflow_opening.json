@@ -1,0 +1,11 @@
+{
+  "command": "run_xicad_workflow",
+  "params": {
+    "workflow": "opening_basic",
+    "xicad_root": "../vendor/xicad"
+  },
+  "safety": {
+    "backup_required": true,
+    "preview_required": true
+  }
+}

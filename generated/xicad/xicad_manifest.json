@@ -1,0 +1,17 @@
+{
+  "root": "C:\\cad\\vendor\\xicad",
+  "zwcad_dir": "C:\\cad\\vendor\\xicad\\_ZWCad",
+  "lisp_dir": null,
+  "lib_dir": "C:\\cad\\vendor\\xicad\\Lib",
+  "xilib_dir": null,
+  "dialogbox_dir": "C:\\cad\\vendor\\xicad\\DialogBox",
+  "loader_candidates": [],
+  "support_paths": [
+    "C:\\cad\\vendor\\xicad\\Lib",
+    "C:\\cad\\vendor\\xicad\\DialogBox",
+    "C:\\cad\\vendor\\xicad\\_ZWCad"
+  ],
+  "menu_candidates": [],
+  "zrx_candidates": [],
+  "shortkey_file": null
+}

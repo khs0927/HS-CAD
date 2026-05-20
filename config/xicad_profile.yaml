@@ -1,0 +1,15 @@
+# XiCAD integration profile for ZWCAD AI Architectural Modifier
+# Set xicad_root to the folder where XiCAD is installed/extracted on Windows.
+xicad_root: "C:/xicad"
+loader_candidates:
+  - "Lisp/xi.zelx"
+  - "Lisp/xi.fas"
+  - "_ZWCad/zwcad.lsp"
+shortkey_file: "Lisp/xiShortkey_origin.key"
+menu_file: "_ZWCad/xicad_ZWCAD.cuix"
+support_paths:
+  - "Lisp"
+  - "Lib"
+  - "xiLib"
+  - "DialogBox"
+  - "_ZWCad"

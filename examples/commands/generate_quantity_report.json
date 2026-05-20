@@ -1,0 +1,8 @@
+{
+  "command": "generate_quantity_report",
+  "params": {},
+  "safety": {
+    "backup_required": false,
+    "preview_required": false
+  }
+}

@@ -1,0 +1,7 @@
+architecture_layers:
+  wall: [A-WALL, WALL, 벽체]
+  column: [A-COLUMN, COLUMN, 기둥]
+  beam: [A-BEAM, BEAM, 보]
+  door: [A-DOOR, DOOR, 문]
+  window: [A-WINDOW, WINDOW, 창호]
+  text: [A-TEXT, A-ROOM-TEXT, TEXT]

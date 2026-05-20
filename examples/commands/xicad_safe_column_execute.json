@@ -1,0 +1,16 @@
+{
+  "command": "xicad_safe_execute",
+  "alias": "COL",
+  "load_first": true,
+  "dry_run": false,
+  "params": {
+    "xicad_root": "C:/xicad",
+    "note": "사용자 확인 후 기둥 그리기 실행"
+  },
+  "safety": {
+    "backup_required": true,
+    "preview_required": true,
+    "allow_interactive": true,
+    "allow_high_risk": false
+  }
+}

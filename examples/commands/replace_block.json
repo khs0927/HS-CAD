@@ -1,0 +1,12 @@
+{
+  "command": "replace_block",
+  "params": {
+    "target_block": "C1",
+    "new_block": "C600",
+    "layer": "A-COLUMN"
+  },
+  "safety": {
+    "backup_required": true,
+    "preview_required": true
+  }
+}

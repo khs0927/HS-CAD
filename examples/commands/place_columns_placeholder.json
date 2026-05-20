@@ -1,0 +1,18 @@
+{
+  "command": "place_columns",
+  "params": {
+    "block_name": null,
+    "width": 18000,
+    "depth": 12000,
+    "grid_x": 6000,
+    "grid_y": 6000,
+    "layer": "A-COLUMN",
+    "column_width": 500,
+    "column_depth": 500,
+    "placeholder": true
+  },
+  "safety": {
+    "backup_required": true,
+    "preview_required": true
+  }
+}

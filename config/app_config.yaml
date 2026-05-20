@@ -1,0 +1,7 @@
+app_name: ZWCAD AI Architectural Modifier
+adapter_priority:
+  - pyrx
+  - zwcad_com
+  - pyzwcad
+backup_dir: backups
+output_dir: outputs

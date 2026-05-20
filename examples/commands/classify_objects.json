@@ -1,0 +1,8 @@
+{
+  "command": "classify_objects",
+  "params": {},
+  "safety": {
+    "backup_required": false,
+    "preview_required": true
+  }
+}
