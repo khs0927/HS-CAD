@@ -1,0 +1,177 @@
+=== NATIVE LISP MATERIAL AUDIT ===
+Layer: TXT | Text: THK125 EPS(심재준불연)(0.040W/㎡) 1000골패널(백색)
+Layer: TXT | Text: THK125 EPS(심재준불연)(0.040W/㎡) 1000골패널(백색)
+Layer: @text | Text: THK125 EPS(심재준불연)(0.040W/㎡) 1000골패널(백색)
+Layer: @text | Text: THK125 EPS(심재준불연)(0.040W/㎡) 1000골패널(백색)
+Layer: AZ-TEXT | Text: T100 샌드위치 판넬
+Layer: TEXT | Text: T100 EPS 판넬(준불연)
+Layer: TEXT | Text: T100 EPS 판넬(준불연)
+Layer: TXT | Text: THK90 압출법보온판 1호 단열재(가등급)
+Layer: TXT | Text: THK150 잡석다짐(THK0.03 PE필름 2겹)
+Layer: TXT | Text: THK300철근CON'C기초판
+Layer: TXT | Text: THK50 버림CON'C
+Layer: TXT | Text: THK0.5 용마루 후레싱
+Layer: TXT | Text: THK90 압출법보온판 1호 단열재(가등급)
+Layer: TXT | Text: THK150 잡석다짐(THK0.03 PE필름 2겹)
+Layer: TXT | Text: THK600철근CON'C기초판
+Layer: TXT | Text: THK50 버림CON'C
+Layer: TXT | Text: THK225 EPS(심재준불연)(0.040W/㎡이하) 지붕패널(검은색)
+Layer: TXT | Text: H-400X200X8X13
+Layer: TXT | Text: THK90 압출법보온판 1호 단열재(가등급)
+Layer: TXT | Text: THK150 잡석다짐(THK0.03 PE필름 2겹)
+Layer: TXT | Text: THK600철근CON'C기초판
+Layer: TXT | Text: THK50 버림CON'C
+Layer: TXT | Text: THK90 압출법보온판 1호 단열재(가등급)
+Layer: TXT | Text: THK150 잡석다짐(THK0.03 PE필름 2겹)
+Layer: TXT | Text: THK300철근CON'C기초판
+Layer: TXT | Text: THK50 버림CON'C
+Layer: TXT | Text: THK225 EPS(심재준불연)(0.040W/㎡이하) 지붕패널(검은색)
+Layer: TEXT | Text: Ø200 이중벽관(우수관)
+Layer: 0 | Text: Φ200 이중벽관 우수관
+Layer: 문자 | Text: 4, 생활오수(주방씽크대,세면대,욕실바닥,발코니바닥)는 오수맨홀에 연결시공하고 우수(지붕빗물및 대지내
+Layer: 문자 | Text: 1. 차량 통행하는 곳 - pvc(vg1)관, 이중벽 PE관
+Layer: TEXT | Text: 일반철골조
+Layer: TEXT | Text: 외벽선
+Layer: @text | Text: T100 샌드위치 판넬
+Layer: 0 | Text: 지붕 평면도(공장동)
+Layer: 0 | Text: 지붕 평면도
+Layer: TIT | Text: 지붕 평면도
+Layer: TITLE | Text: 지붕 평면도
+Layer: @text | Text: THK225 EPS(심재준불연)(0.040W/㎡이하) 지붕패널(검은색)
+Layer: TXT | Text: 0.5B 시멘트벽돌/엑체방수1종(2차)>H:1200
+Layer: TXT | Text: THK90 압출법보온판 1호 단열재(가등급)
+Layer: TXT | Text: THK150 잡석다짐(THK0.03 PE필름 2겹)
+Layer: TXT | Text: THK600철근CON'C기초판
+Layer: TXT | Text: THK50 버림CON'C
+Layer: TITLE | Text: 지붕평면도
+Layer: @text | Text: THK225 EPS(심재준불연)(0.040W/㎡이하) 지붕패널(검은색)
+Layer: @text | Text: THK225 EPS(심재준불연)(0.040W/㎡이하) 지붕패널(검은색)
+Layer: @text | Text: THK225 EPS(심재준불연)(0.040W/㎡이하) 지붕패널(검은색)
+Layer: TIT | Text: 지붕 평면도(공장동)
+Layer: 0 | Text: 지붕층 구조 평면도
+Layer: 0 | Text: 지붕층 구조평면도 (공장동)
+Layer: TXT | Text: / 노출 우레탄 방수
+Layer: TEXT | Text: Ø200 이중벽관(우수관)
+Layer: textex | Text: THK8 에칭강화유리
+Layer: textex | Text: THK1 SST. CAP
+Layer: textex | Text: THK1.2 SST.
+Layer: textex | Text: THK1 SST. CAP
+Layer: textex | Text: THK1.2 SST. FRAME
+Layer: textex | Text: THK8 에칭강화유리
+Layer: textex | Text: THK1.2 SST.
+Layer: textex | Text: THK0.8 METAL
+Layer: textex | Text: 아연 다이케스팅 위 ABS우레탄도장
+Layer: textex | Text: / ABS우레탄도장
+Layer: textex | Text: THK5 합판
+Layer: textex | Text: THK18 DECO CORE BOARD.
+Layer: textex | Text: THK0.8 PLASTIC LAMINATE FIN.
+Layer: textex | Text: THK5 합판
+Layer: textex | Text: THK0.8 PLASTIC LAMINATE FIN.
+Layer: textex | Text: THK18 DECO CORE BOARD + T5 합판양면취부.
+Layer: textex | Text: THK18 DECO BOARD.
+Layer: textex | Text: THK0.8 PLASTIC LAMINATE FIN.
+Layer: textex | Text: THK0.8 PLASTIC LAMINATE FIN.
+Layer: textex | Text: THK0.8 PLASTIC LAMINATE FIN.
+Layer: textex | Text: THK0.8 PLASTIC LAMINATE FIN.
+Layer: textex | Text: THK0.8 METAL
+Layer: textex | Text: THK0.8 METAL
+Layer: textex | Text: THK12.5 석고보드 2겹
+Layer: textex | Text: THK1.6 STL. PL. 위
+Layer: textex | Text: THK2.0 SST/ Ø6 펀칭
+Layer: textex | Text: 벽마감선
+Layer: A-TXT | Text: 내부벽체(창호)상부고정 상세도
+Layer: TXT | Text: THK9.5석고보드 2PLY
+Layer: TXT | Text: THK65 STUD
+Layer: TXT | Text: THK9.5석고보드 2PLY
+Layer: TXT | Text: THK 225 EPS 지붕판넬 (0.340W/㎡.K이하)
+Layer: TXT | Text: THK12 흡음텍스마감
+Layer: TXT | Text: 경량철골천정틀(T-BAR)
+Layer: TXT | Text: THK12 흡음텍스마감
+Layer: TXT | Text: 경량철골천정틀(T-BAR)
+Layer: TXT | Text: THK12 흡음텍스마감
+Layer: TXT | Text: 경량철골천정틀(T-BAR)
+Layer: TXT | Text: THK12 흡음텍스마감
+Layer: TXT | Text: 경량철골천정틀(T-BAR)
+Layer: TXT | Text: THK12 흡음텍스마감
+Layer: TXT | Text: 경량철골천정틀(T-BAR)
+Layer: TXT | Text: THK12 흡음텍스마감
+Layer: TXT | Text: 경량철골천정틀(T-BAR)
+Layer: TXT | Text: THK100 무근콘크리트
+Layer: TXT | Text: THK12 흡음텍스마감
+Layer: TXT | Text: 경량철골천정틀(T-BAR)
+Layer: TXT | Text: THK 225 EPS 지붕판넬 (0.340W/㎡.K이하)
+Layer: TXT | Text: THK90 압출법보온판 1호 단열재(가등급)
+Layer: TXT | Text: THK150 잡석다짐(THK0.03 PE필름 2겹)
+Layer: TXT | Text: THK600철근CON'C기초판
+Layer: TXT | Text: THK50 버림CON'C
+Layer: AZ-TEXT | Text: 경량철골천정틀(CLIP-BAR)
+Layer: AZ-TEXT | Text: 경량철골천정틀(T-BAR)
+Layer: AZ-TEXT | Text: T17 전기바닥판넬/보온단열재
+Layer: AZ-TEXT | Text: T100 샌드위치 판넬
+Layer: DT | Text: THK30 시멘트모르타르
+Layer: DT | Text: THK10 포세린타일
+Layer: 0-AC-LEAD-TEXT | Text: 벽마감선
+Layer: 0-AC-LEAD-TEXT | Text: 경량철골 천장틀(CLIP-BAR)
+Layer: 0-AC-LEAD-TEXT | Text: 벽마감선
+Layer: 0-AC-LEAD-TEXT | Text: 경량철골 천장틀(T-BAR)
+Layer: 0-AC-LEAD-TEXT | Text: T17 전기바닥판넬/보온단열재
+Layer: AZ-TEXT | Text: 경량철골천정틀(T-BAR)
+Layer: AZ-TEXT | Text: 경량철골천정틀(CLIP-BAR)
+Layer: AZ-TEXT | Text: 벽
+Layer: 문자 | Text: THK12mm 강화유리
+Layer: 문자 | Text: THK24mm 로이복층유리(5CL+14+5LE/소프트코팅)_아르곤주입
+Layer: 문자 | Text: THK24mm 로이복층유리(5CL+14+5LE/소프트코팅)_아르곤주입
+Layer: @text | Text: THK225 EPS(심재준불연)(0.040W/㎡이하) 지붕패널(검은색)
+Layer: @text | Text: THK225 EPS(심재준불연)(0.040W/㎡이하) 지붕패널(검은색)
+Layer: @text | Text: THK225 EPS(준불연)(0.040W/㎡이하) 지붕패널(검은색)
+Layer: @text | Text: THK125 EPS(준불연)(0.040W/㎡) 행거도어
+Layer: @text | Text: THK125 EPS(준불연)(0.040W/㎡) 다이아몬드문양 패널(어두운 회색)
+Layer: @text | Text: THK125 EPS(준불연)(0.040W/㎡) 1000골패널(백색)
+Layer: @text | Text: THK125 EPS(준불연)(0.040W/㎡) 다이아몬드문양 패널(어두운 회색)
+Layer: @text | Text: THK125 EPS(준불연)(0.040W/㎡) 1000골패널(백색)
+Layer: @text | Text: THK125 EPS(준불연)(0.040W/㎡) 다이아몬드문양 패널(어두운 회색)
+Layer: @text | Text: THK125 EPS(준불연)(0.040W/㎡) 1000골패널(백색)
+Layer: @text | Text: THK125 EPS(준불연)(0.040W/㎡) 다이아몬드문양 패널(어두운 회색)
+Layer: @text | Text: THK125 EPS(준불연)(0.040W/㎡) 1000골패널(백색)
+Layer: @text | Text: THK24 로이복층유리
+Layer: @text | Text: THK24 로이복층유리
+Layer: @text | Text: THK24 로이복층유리
+Layer: @text | Text: THK24 로이복층유리
+Layer: @text | Text: THK125 EPS(준불연)(0.040W/㎡) 다이아몬드문양 패널(백색)
+Layer: @text | Text: THK125 EPS(준불연)(0.040W/㎡) 다이아몬드문양 패널(어두운 회색)
+Layer: @text | Text: THK125 EPS(준불연)(0.040W/㎡) 다이아몬드문양 패널(어두운 회색)
+Layer: @text | Text: THK125 EPS(준불연)(0.040W/㎡) 다이아몬드문양 패널(백색)
+Layer: @text | Text: THK225 EPS(준불연)(0.040W/㎡이하) 지붕패널(검은색)
+Layer: @text | Text: THK225 EPS(준불연)(0.040W/㎡이하) 지붕패널(검은색)
+Layer: @text | Text: THK225 EPS(준불연)(0.040W/㎡이하) 지붕패널(검은색)
+Layer: @text | Text: THK125 EPS(준불연)(0.040W/㎡) 다이아몬드문양 패널(백색)
+Layer: @text | Text: THK125 EPS(준불연)(0.040W/㎡) 다이아몬드문양 패널(어두운 회색)
+Layer: @text | Text: THK125 EPS(준불연)(0.040W/㎡) 다이아몬드문양 패널(어두운 회색)
+Layer: @text | Text: THK125 EPS(준불연)(0.040W/㎡) 다이아몬드문양 패널(백색)
+Layer: @text | Text: THK225 EPS(준불연)(0.040W/㎡이하) 지붕패널(검은색)
+Layer: T-M | Text: THK14아르곤+THK5 GRAY 유리)
+Layer: T-M | Text: (THK5로이유리 소프트코팅+
+Layer: T-M | Text: PJ : THK24 GRAY로이복층유리
+Layer: 문자 | Text: THK1.2 스테인레스 스틸 SUS 32종 (헤어라인 마감)
+Layer: 문자 | Text: THK12 투명강화유리
+Layer: 문자 | Text: THK12 투명강화유리
+Layer: 문자 | Text: THK24 GRAY로이복층유리(THK5로이유리 소프트코팅+THK14아르곤+THK5 GRAY 유리)
+Layer: 문자 | Text: THK24 GRAY로이복층유리(THK5로이유리 소프트코팅+THK14아르곤+THK5 GRAY 유리)
+Layer: T-M | Text: 소방관 안전 진입 SE창 / DH-SIP-SE24A / 100*60
+Layer: T-M | Text: THK14아르곤+THK5 GRAY 유리)
+Layer: T-M | Text: (THK5로이유리 소프트코팅+
+Layer: T-M | Text: PJ : THK24 GRAY로이복층유리
+Layer: 문자 | Text: THK24 GRAY로이복층유리(THK5로이유리 소프트코팅+THK14아르곤+THK5 GRAY 유리)
+Layer: 문자 | Text: THK200 AL.FRAME 위 불소수지코팅3회
+Layer: 문자 | Text: THK24 GRAY로이복층유리(THK5로이유리 소프트코팅+THK14아르곤+THK5 GRAY 유리)
+Layer: 문자 | Text: THK125 AL.FRAME 위 불소수지코팅
+Layer: 문자 | Text: THK12 투명강화유리
+Layer: 문자 | Text: 칼라알루미늄 자동문 (벽부형)
+Layer: 문자 | Text: THK24 투명로이복층유리(THK5 로이유리 소프트코팅+THK14아르곤+THK5투명유리)
+Layer: @text | Text: 0.5B 시멘트 벽돌쌓기
+Layer: @text | Text: THK9.5석고보드 2PLY
+Layer: @text | Text: THK125 EPS(준불연)(0.040W/㎡) 다이아몬드문양 패널
+Layer: @text | Text: 0.5B 시멘트 벽돌쌓기
+Layer: @text | Text: 1.0B 시멘트 벽돌쌓기
+Layer: @text | Text: THK9.5석고보드 2PLY
+Layer: @text | Text: THK125 EPS(준불연)(0.040W/㎡) 다이아몬드문양 패널

@@ -1,0 +1,99 @@
+# Oriental Factory Steel Structure & EPS Panel Presets
+# Captured from: 건축도면 [오리엔탈 공장]_0115(개요수정).dwg
+# Standard: 지음건축 (Jieum Architects) S조 설계 문법
+
+structure_type: "SteelStructure"
+project_reference: "OrientalFactory"
+jieum_standards: true
+
+materials:
+  roof:
+    eps_panel_roof:
+      thickness: 225
+      thermal_conductivity: 0.040
+      thermal_transmittance_limit: 0.340
+      specification: "THK225 EPS(준불연)(0.040W/㎡K) 판넬(지붕)"
+      layer: "@text"
+      hatch_pattern: "ANSI31"
+  
+  wall:
+    eps_panel_standard:
+      thickness: 125
+      specification: "THK125 EPS(준불연)(0.040W/㎡K) 1000골판넬(벽)"
+      layer: "@text"
+      colors:
+        - "동우 회색"
+        - "백색"
+    eps_panel_siding:
+      thickness: 125
+      specification: "THK125 EPS(준불연)(0.040W/㎡K) 사이딩판넬(메탈 홑강판)"
+      layer: "@text"
+    eps_hanger_door:
+      thickness: 125
+      specification: "THK125 EPS(준불연)(0.040W/㎡K) 행거도어"
+      layer: "@text"
+    glasswool_panel:
+      thickness: 100
+      specification: "T100 그라스울 판넬"
+      layer: "@text"
+    urethane_panel:
+      thickness: 100
+      specification: "T100 우레탄 판넬"
+      layer: "@text"
+
+  glazing:
+    double_glass_gray:
+      thickness: 24
+      glass_formulation: "T5 반사유리 + T14 공기층 + T5 Gray 유리"
+      specification: "THK24 Gray 복층유리 (T5 반사유리 + T14 공기층 + T5 Gray 유리)"
+      layer: "textex"
+    tempered_glass:
+      thickness: 12
+      specification: "THK12 강화유리"
+      layer: "textex"
+    frame_steel:
+      thickness_gauge: 1.2
+      specification: "THK1.2 SST. FRAME"
+      layer: "textex"
+    frame_aluminum:
+      thickness_gauge: 200
+      specification: "THK200 AL.FRAME"
+      layer: "textex"
+
+  ceilings:
+    acoustic_tex:
+      thickness: 12
+      specification: "THK12 아쿠스틱 텍스"
+      grid_system: "아연도강판 천정틀 (T-BAR)"
+      layer: "AZ-TEXT"
+    clip_bar_system:
+      grid_system: "아연도강판 천정틀 (CLIP-BAR)"
+      layer: "AZ-TEXT"
+
+  partitions:
+    gypsum_stud:
+      total_thickness: 103
+      gypsum_thickness: 9.5
+      gypsum_layers: "2PLY"
+      stud_thickness: 65
+      specification: "THK9.5 석고보드 2PLY + THK65 STUD"
+      layer: "TXT"
+
+  foundations:
+    rc_foundation_300:
+      thickness: 300
+      specification: "THK300 철골 CON'C 기초"
+      layer: "TXT"
+    rc_foundation_600:
+      thickness: 600
+      specification: "THK600 철골 CON'C 기초"
+      layer: "TXT"
+    slab_under:
+      thickness: 150
+      concrete_specification: "THK150 밑창 콘크리트"
+      pe_film_specification: "THK0.03 PE필름 2겹"
+      layer: "TXT"
+    slab_insulation:
+      thickness: 90
+      specification: "THK90 단열재 (가등급 1호)"
+      layer: "TXT"
