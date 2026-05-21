@@ -1,0 +1,2 @@
+# Optional IFC/BIM extraction.
+ifcopenshell

@@ -1,0 +1,30 @@
+{
+  "operation": "insert_image_cad_preview",
+  "mode": "existing_dwg_preview",
+  "dry_run": true,
+  "can_execute": false,
+  "save": false,
+  "undo_mark_required": true,
+  "source_dxf": null,
+  "insert_layer": "QA-REVIEW",
+  "base_point": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "scale": 1.0,
+  "rotation": 0.0,
+  "style_context_used": true,
+  "warnings": [
+    "no source DXF found",
+    "preview insert cannot execute without a DXF file",
+    "missing neuro result: no result path provided",
+    "local_style_sample: path not provided",
+    "zium_sheet_area: path not provided",
+    "active_form_sample: path not provided",
+    "active_scan: path not provided",
+    "reference_style_profile: path not provided"
+  ],
+  "entities_summary": {},
+  "low_confidence_count": 0
+}

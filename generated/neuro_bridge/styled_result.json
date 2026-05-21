@@ -1,0 +1,1420 @@
+{
+  "version": "stage23-styled-neuro-result-v1",
+  "mode": "existing_dwg_preview",
+  "source_result_metadata": {},
+  "style_context_summary": {
+    "version": "stage23-style-context-v1",
+    "warnings": [
+      "local_style_sample: path not provided",
+      "zium_sheet_area: path not provided",
+      "active_form_sample: path not provided",
+      "active_scan: path not provided",
+      "reference_style_profile: path not provided"
+    ]
+  },
+  "entities": [
+    {
+      "original_entity": {
+        "id": "raw_line_0000",
+        "entity_type": "raw_line",
+        "geometry": {
+          "p1": [
+            725.8064516129032,
+            3387.0967741935483
+          ],
+          "p2": [
+            5725.806451612903,
+            3387.0967741935483
+          ]
+        },
+        "sources": [
+          "fallback"
+        ],
+        "confidence": 0.55,
+        "provenance": {
+          "image_points": [
+            [
+              180.0,
+              160.0
+            ],
+            [
+              1420.0,
+              160.0
+            ]
+          ],
+          "layer": "RAW_LINES"
+        },
+        "warnings": []
+      },
+      "target_layer": "QA-REVIEW",
+      "color": null,
+      "linetype": null,
+      "lineweight": null,
+      "text_style": null,
+      "text_height": null,
+      "dimstyle": null,
+      "block_name": null,
+      "needs_review": true,
+      "style_confidence": 0.69,
+      "style_reason": "raw line isolated for existing DWG preview",
+      "style_source": "policy"
+    },
+    {
+      "original_entity": {
+        "id": "cen_line_0000",
+        "entity_type": "wall_centerline",
+        "geometry": {
+          "p1": [
+            725.8064516129032,
+            3387.0967741935483
+          ],
+          "p2": [
+            5725.806451612903,
+            3387.0967741935483
+          ]
+        },
+        "sources": [
+          "fallback",
+          "line_to_centerline"
+        ],
+        "confidence": 0.55,
+        "provenance": {
+          "thickness_source": "standard_fallback"
+        },
+        "warnings": []
+      },
+      "target_layer": "QA-REVIEW",
+      "color": null,
+      "linetype": null,
+      "lineweight": null,
+      "text_style": null,
+      "text_height": null,
+      "dimstyle": null,
+      "block_name": null,
+      "needs_review": true,
+      "style_confidence": 0.41,
+      "style_reason": "no style source loaded",
+      "style_source": "fallback"
+    },
+    {
+      "original_entity": {
+        "id": "wall_line_0000",
+        "entity_type": "wall_polygon",
+        "geometry": {
+          "points": [
+            [
+              725.8064516129032,
+              3462.0967741935483
+            ],
+            [
+              5725.806451612903,
+              3462.0967741935483
+            ],
+            [
+              5725.806451612903,
+              3312.0967741935483
+            ],
+            [
+              725.8064516129032,
+              3312.0967741935483
+            ]
+          ],
+          "layer": "WAL1",
+          "thickness": 150.0
+        },
+        "sources": [
+          "fallback",
+          "standard_fallback"
+        ],
+        "confidence": 0.35,
+        "provenance": {
+          "hatch_layer": "WAL_HATCH"
+        },
+        "warnings": []
+      },
+      "target_layer": "QA-REVIEW",
+      "color": null,
+      "linetype": null,
+      "lineweight": null,
+      "text_style": null,
+      "text_height": null,
+      "dimstyle": null,
+      "block_name": null,
+      "needs_review": true,
+      "style_confidence": 0.29,
+      "style_reason": "no style source loaded",
+      "style_source": "fallback"
+    },
+    {
+      "original_entity": {
+        "id": "raw_line_0001",
+        "entity_type": "raw_line",
+        "geometry": {
+          "p1": [
+            5725.806451612903,
+            3387.0967741935483
+          ],
+          "p2": [
+            5725.806451612903,
+            645.1612903225806
+          ]
+        },
+        "sources": [
+          "fallback"
+        ],
+        "confidence": 0.55,
+        "provenance": {
+          "image_points": [
+            [
+              1420.0,
+              160.0
+            ],
+            [
+              1420.0,
+              840.0
+            ]
+          ],
+          "layer": "RAW_LINES"
+        },
+        "warnings": []
+      },
+      "target_layer": "QA-REVIEW",
+      "color": null,
+      "linetype": null,
+      "lineweight": null,
+      "text_style": null,
+      "text_height": null,
+      "dimstyle": null,
+      "block_name": null,
+      "needs_review": true,
+      "style_confidence": 0.69,
+      "style_reason": "raw line isolated for existing DWG preview",
+      "style_source": "policy"
+    },
+    {
+      "original_entity": {
+        "id": "cen_line_0001",
+        "entity_type": "wall_centerline",
+        "geometry": {
+          "p1": [
+            5725.806451612903,
+            3387.0967741935483
+          ],
+          "p2": [
+            5725.806451612903,
+            645.1612903225806
+          ]
+        },
+        "sources": [
+          "fallback",
+          "line_to_centerline"
+        ],
+        "confidence": 0.55,
+        "provenance": {
+          "thickness_source": "standard_fallback"
+        },
+        "warnings": []
+      },
+      "target_layer": "QA-REVIEW",
+      "color": null,
+      "linetype": null,
+      "lineweight": null,
+      "text_style": null,
+      "text_height": null,
+      "dimstyle": null,
+      "block_name": null,
+      "needs_review": true,
+      "style_confidence": 0.41,
+      "style_reason": "no style source loaded",
+      "style_source": "fallback"
+    },
+    {
+      "original_entity": {
+        "id": "wall_line_0001",
+        "entity_type": "wall_polygon",
+        "geometry": {
+          "points": [
+            [
+              5800.806451612903,
+              3387.0967741935483
+            ],
+            [
+              5800.806451612903,
+              645.1612903225806
+            ],
+            [
+              5650.806451612903,
+              645.1612903225806
+            ],
+            [
+              5650.806451612903,
+              3387.0967741935483
+            ]
+          ],
+          "layer": "WAL1",
+          "thickness": 150.0
+        },
+        "sources": [
+          "fallback",
+          "standard_fallback"
+        ],
+        "confidence": 0.35,
+        "provenance": {
+          "hatch_layer": "WAL_HATCH"
+        },
+        "warnings": []
+      },
+      "target_layer": "QA-REVIEW",
+      "color": null,
+      "linetype": null,
+      "lineweight": null,
+      "text_style": null,
+      "text_height": null,
+      "dimstyle": null,
+      "block_name": null,
+      "needs_review": true,
+      "style_confidence": 0.29,
+      "style_reason": "no style source loaded",
+      "style_source": "fallback"
+    },
+    {
+      "original_entity": {
+        "id": "raw_line_0002",
+        "entity_type": "raw_line",
+        "geometry": {
+          "p1": [
+            5725.806451612903,
+            645.1612903225806
+          ],
+          "p2": [
+            725.8064516129032,
+            645.1612903225806
+          ]
+        },
+        "sources": [
+          "fallback"
+        ],
+        "confidence": 0.55,
+        "provenance": {
+          "image_points": [
+            [
+              1420.0,
+              840.0
+            ],
+            [
+              180.0,
+              840.0
+            ]
+          ],
+          "layer": "RAW_LINES"
+        },
+        "warnings": []
+      },
+      "target_layer": "QA-REVIEW",
+      "color": null,
+      "linetype": null,
+      "lineweight": null,
+      "text_style": null,
+      "text_height": null,
+      "dimstyle": null,
+      "block_name": null,
+      "needs_review": true,
+      "style_confidence": 0.69,
+      "style_reason": "raw line isolated for existing DWG preview",
+      "style_source": "policy"
+    },
+    {
+      "original_entity": {
+        "id": "cen_line_0002",
+        "entity_type": "wall_centerline",
+        "geometry": {
+          "p1": [
+            5725.806451612903,
+            645.1612903225806
+          ],
+          "p2": [
+            725.8064516129032,
+            645.1612903225806
+          ]
+        },
+        "sources": [
+          "fallback",
+          "line_to_centerline"
+        ],
+        "confidence": 0.55,
+        "provenance": {
+          "thickness_source": "standard_fallback"
+        },
+        "warnings": []
+      },
+      "target_layer": "QA-REVIEW",
+      "color": null,
+      "linetype": null,
+      "lineweight": null,
+      "text_style": null,
+      "text_height": null,
+      "dimstyle": null,
+      "block_name": null,
+      "needs_review": true,
+      "style_confidence": 0.41,
+      "style_reason": "no style source loaded",
+      "style_source": "fallback"
+    },
+    {
+      "original_entity": {
+        "id": "wall_line_0002",
+        "entity_type": "wall_polygon",
+        "geometry": {
+          "points": [
+            [
+              5725.806451612903,
+              570.1612903225806
+            ],
+            [
+              725.8064516129032,
+              570.1612903225806
+            ],
+            [
+              725.8064516129032,
+              720.1612903225806
+            ],
+            [
+              5725.806451612903,
+              720.1612903225806
+            ]
+          ],
+          "layer": "WAL1",
+          "thickness": 150.0
+        },
+        "sources": [
+          "fallback",
+          "standard_fallback"
+        ],
+        "confidence": 0.35,
+        "provenance": {
+          "hatch_layer": "WAL_HATCH"
+        },
+        "warnings": []
+      },
+      "target_layer": "QA-REVIEW",
+      "color": null,
+      "linetype": null,
+      "lineweight": null,
+      "text_style": null,
+      "text_height": null,
+      "dimstyle": null,
+      "block_name": null,
+      "needs_review": true,
+      "style_confidence": 0.29,
+      "style_reason": "no style source loaded",
+      "style_source": "fallback"
+    },
+    {
+      "original_entity": {
+        "id": "raw_line_0003",
+        "entity_type": "raw_line",
+        "geometry": {
+          "p1": [
+            725.8064516129032,
+            645.1612903225806
+          ],
+          "p2": [
+            725.8064516129032,
+            3387.0967741935483
+          ]
+        },
+        "sources": [
+          "fallback"
+        ],
+        "confidence": 0.55,
+        "provenance": {
+          "image_points": [
+            [
+              180.0,
+              840.0
+            ],
+            [
+              180.0,
+              160.0
+            ]
+          ],
+          "layer": "RAW_LINES"
+        },
+        "warnings": []
+      },
+      "target_layer": "QA-REVIEW",
+      "color": null,
+      "linetype": null,
+      "lineweight": null,
+      "text_style": null,
+      "text_height": null,
+      "dimstyle": null,
+      "block_name": null,
+      "needs_review": true,
+      "style_confidence": 0.69,
+      "style_reason": "raw line isolated for existing DWG preview",
+      "style_source": "policy"
+    },
+    {
+      "original_entity": {
+        "id": "cen_line_0003",
+        "entity_type": "wall_centerline",
+        "geometry": {
+          "p1": [
+            725.8064516129032,
+            645.1612903225806
+          ],
+          "p2": [
+            725.8064516129032,
+            3387.0967741935483
+          ]
+        },
+        "sources": [
+          "fallback",
+          "line_to_centerline"
+        ],
+        "confidence": 0.55,
+        "provenance": {
+          "thickness_source": "standard_fallback"
+        },
+        "warnings": []
+      },
+      "target_layer": "QA-REVIEW",
+      "color": null,
+      "linetype": null,
+      "lineweight": null,
+      "text_style": null,
+      "text_height": null,
+      "dimstyle": null,
+      "block_name": null,
+      "needs_review": true,
+      "style_confidence": 0.41,
+      "style_reason": "no style source loaded",
+      "style_source": "fallback"
+    },
+    {
+      "original_entity": {
+        "id": "wall_line_0003",
+        "entity_type": "wall_polygon",
+        "geometry": {
+          "points": [
+            [
+              650.8064516129032,
+              645.1612903225806
+            ],
+            [
+              650.8064516129032,
+              3387.0967741935483
+            ],
+            [
+              800.8064516129032,
+              3387.0967741935483
+            ],
+            [
+              800.8064516129032,
+              645.1612903225806
+            ]
+          ],
+          "layer": "WAL1",
+          "thickness": 150.0
+        },
+        "sources": [
+          "fallback",
+          "standard_fallback"
+        ],
+        "confidence": 0.35,
+        "provenance": {
+          "hatch_layer": "WAL_HATCH"
+        },
+        "warnings": []
+      },
+      "target_layer": "QA-REVIEW",
+      "color": null,
+      "linetype": null,
+      "lineweight": null,
+      "text_style": null,
+      "text_height": null,
+      "dimstyle": null,
+      "block_name": null,
+      "needs_review": true,
+      "style_confidence": 0.29,
+      "style_reason": "no style source loaded",
+      "style_source": "fallback"
+    },
+    {
+      "original_entity": {
+        "id": "raw_line_0004",
+        "entity_type": "raw_line",
+        "geometry": {
+          "p1": [
+            3064.516129032258,
+            3387.0967741935483
+          ],
+          "p2": [
+            3064.516129032258,
+            1532.258064516129
+          ]
+        },
+        "sources": [
+          "fallback"
+        ],
+        "confidence": 0.55,
+        "provenance": {
+          "image_points": [
+            [
+              760.0,
+              160.0
+            ],
+            [
+              760.0,
+              620.0
+            ]
+          ],
+          "layer": "RAW_LINES"
+        },
+        "warnings": []
+      },
+      "target_layer": "QA-REVIEW",
+      "color": null,
+      "linetype": null,
+      "lineweight": null,
+      "text_style": null,
+      "text_height": null,
+      "dimstyle": null,
+      "block_name": null,
+      "needs_review": true,
+      "style_confidence": 0.69,
+      "style_reason": "raw line isolated for existing DWG preview",
+      "style_source": "policy"
+    },
+    {
+      "original_entity": {
+        "id": "cen_line_0004",
+        "entity_type": "wall_centerline",
+        "geometry": {
+          "p1": [
+            3064.516129032258,
+            3387.0967741935483
+          ],
+          "p2": [
+            3064.516129032258,
+            1532.258064516129
+          ]
+        },
+        "sources": [
+          "fallback",
+          "line_to_centerline"
+        ],
+        "confidence": 0.55,
+        "provenance": {
+          "thickness_source": "standard_fallback"
+        },
+        "warnings": []
+      },
+      "target_layer": "QA-REVIEW",
+      "color": null,
+      "linetype": null,
+      "lineweight": null,
+      "text_style": null,
+      "text_height": null,
+      "dimstyle": null,
+      "block_name": null,
+      "needs_review": true,
+      "style_confidence": 0.41,
+      "style_reason": "no style source loaded",
+      "style_source": "fallback"
+    },
+    {
+      "original_entity": {
+        "id": "wall_line_0004",
+        "entity_type": "wall_polygon",
+        "geometry": {
+          "points": [
+            [
+              3139.516129032258,
+              3387.0967741935483
+            ],
+            [
+              3139.516129032258,
+              1532.258064516129
+            ],
+            [
+              2989.516129032258,
+              1532.258064516129
+            ],
+            [
+              2989.516129032258,
+              3387.0967741935483
+            ]
+          ],
+          "layer": "WAL1",
+          "thickness": 150.0
+        },
+        "sources": [
+          "fallback",
+          "standard_fallback"
+        ],
+        "confidence": 0.35,
+        "provenance": {
+          "hatch_layer": "WAL_HATCH"
+        },
+        "warnings": []
+      },
+      "target_layer": "QA-REVIEW",
+      "color": null,
+      "linetype": null,
+      "lineweight": null,
+      "text_style": null,
+      "text_height": null,
+      "dimstyle": null,
+      "block_name": null,
+      "needs_review": true,
+      "style_confidence": 0.29,
+      "style_reason": "no style source loaded",
+      "style_source": "fallback"
+    },
+    {
+      "original_entity": {
+        "id": "raw_line_0005",
+        "entity_type": "raw_line",
+        "geometry": {
+          "p1": [
+            3064.516129032258,
+            1169.3548387096773
+          ],
+          "p2": [
+            3064.516129032258,
+            645.1612903225806
+          ]
+        },
+        "sources": [
+          "fallback"
+        ],
+        "confidence": 0.55,
+        "provenance": {
+          "image_points": [
+            [
+              760.0,
+              710.0
+            ],
+            [
+              760.0,
+              840.0
+            ]
+          ],
+          "layer": "RAW_LINES"
+        },
+        "warnings": []
+      },
+      "target_layer": "QA-REVIEW",
+      "color": null,
+      "linetype": null,
+      "lineweight": null,
+      "text_style": null,
+      "text_height": null,
+      "dimstyle": null,
+      "block_name": null,
+      "needs_review": true,
+      "style_confidence": 0.69,
+      "style_reason": "raw line isolated for existing DWG preview",
+      "style_source": "policy"
+    },
+    {
+      "original_entity": {
+        "id": "cen_line_0005",
+        "entity_type": "wall_centerline",
+        "geometry": {
+          "p1": [
+            3064.516129032258,
+            1169.3548387096773
+          ],
+          "p2": [
+            3064.516129032258,
+            645.1612903225806
+          ]
+        },
+        "sources": [
+          "fallback",
+          "line_to_centerline"
+        ],
+        "confidence": 0.55,
+        "provenance": {
+          "thickness_source": "standard_fallback"
+        },
+        "warnings": []
+      },
+      "target_layer": "QA-REVIEW",
+      "color": null,
+      "linetype": null,
+      "lineweight": null,
+      "text_style": null,
+      "text_height": null,
+      "dimstyle": null,
+      "block_name": null,
+      "needs_review": true,
+      "style_confidence": 0.41,
+      "style_reason": "no style source loaded",
+      "style_source": "fallback"
+    },
+    {
+      "original_entity": {
+        "id": "wall_line_0005",
+        "entity_type": "wall_polygon",
+        "geometry": {
+          "points": [
+            [
+              3139.516129032258,
+              1169.3548387096773
+            ],
+            [
+              3139.516129032258,
+              645.1612903225806
+            ],
+            [
+              2989.516129032258,
+              645.1612903225806
+            ],
+            [
+              2989.516129032258,
+              1169.3548387096773
+            ]
+          ],
+          "layer": "WAL1",
+          "thickness": 150.0
+        },
+        "sources": [
+          "fallback",
+          "standard_fallback"
+        ],
+        "confidence": 0.35,
+        "provenance": {
+          "hatch_layer": "WAL_HATCH"
+        },
+        "warnings": []
+      },
+      "target_layer": "QA-REVIEW",
+      "color": null,
+      "linetype": null,
+      "lineweight": null,
+      "text_style": null,
+      "text_height": null,
+      "dimstyle": null,
+      "block_name": null,
+      "needs_review": true,
+      "style_confidence": 0.29,
+      "style_reason": "no style source loaded",
+      "style_source": "fallback"
+    },
+    {
+      "original_entity": {
+        "id": "raw_line_0006",
+        "entity_type": "raw_line",
+        "geometry": {
+          "p1": [
+            725.8064516129032,
+            1975.8064516129032
+          ],
+          "p2": [
+            3064.516129032258,
+            1975.8064516129032
+          ]
+        },
+        "sources": [
+          "fallback"
+        ],
+        "confidence": 0.55,
+        "provenance": {
+          "image_points": [
+            [
+              180.0,
+              510.0
+            ],
+            [
+              760.0,
+              510.0
+            ]
+          ],
+          "layer": "RAW_LINES"
+        },
+        "warnings": []
+      },
+      "target_layer": "QA-REVIEW",
+      "color": null,
+      "linetype": null,
+      "lineweight": null,
+      "text_style": null,
+      "text_height": null,
+      "dimstyle": null,
+      "block_name": null,
+      "needs_review": true,
+      "style_confidence": 0.69,
+      "style_reason": "raw line isolated for existing DWG preview",
+      "style_source": "policy"
+    },
+    {
+      "original_entity": {
+        "id": "cen_line_0006",
+        "entity_type": "wall_centerline",
+        "geometry": {
+          "p1": [
+            725.8064516129032,
+            1975.8064516129032
+          ],
+          "p2": [
+            3064.516129032258,
+            1975.8064516129032
+          ]
+        },
+        "sources": [
+          "fallback",
+          "line_to_centerline"
+        ],
+        "confidence": 0.55,
+        "provenance": {
+          "thickness_source": "standard_fallback"
+        },
+        "warnings": []
+      },
+      "target_layer": "QA-REVIEW",
+      "color": null,
+      "linetype": null,
+      "lineweight": null,
+      "text_style": null,
+      "text_height": null,
+      "dimstyle": null,
+      "block_name": null,
+      "needs_review": true,
+      "style_confidence": 0.41,
+      "style_reason": "no style source loaded",
+      "style_source": "fallback"
+    },
+    {
+      "original_entity": {
+        "id": "wall_line_0006",
+        "entity_type": "wall_polygon",
+        "geometry": {
+          "points": [
+            [
+              725.8064516129032,
+              2050.8064516129034
+            ],
+            [
+              3064.516129032258,
+              2050.8064516129034
+            ],
+            [
+              3064.516129032258,
+              1900.8064516129032
+            ],
+            [
+              725.8064516129032,
+              1900.8064516129032
+            ]
+          ],
+          "layer": "WAL1",
+          "thickness": 150.0
+        },
+        "sources": [
+          "fallback",
+          "standard_fallback"
+        ],
+        "confidence": 0.35,
+        "provenance": {
+          "hatch_layer": "WAL_HATCH"
+        },
+        "warnings": []
+      },
+      "target_layer": "QA-REVIEW",
+      "color": null,
+      "linetype": null,
+      "lineweight": null,
+      "text_style": null,
+      "text_height": null,
+      "dimstyle": null,
+      "block_name": null,
+      "needs_review": true,
+      "style_confidence": 0.29,
+      "style_reason": "no style source loaded",
+      "style_source": "fallback"
+    },
+    {
+      "original_entity": {
+        "id": "raw_line_0007",
+        "entity_type": "raw_line",
+        "geometry": {
+          "p1": [
+            3709.677419354838,
+            3387.0967741935483
+          ],
+          "p2": [
+            3709.677419354838,
+            645.1612903225806
+          ]
+        },
+        "sources": [
+          "fallback"
+        ],
+        "confidence": 0.55,
+        "provenance": {
+          "image_points": [
+            [
+              919.9999999999999,
+              160.0
+            ],
+            [
+              919.9999999999999,
+              840.0
+            ]
+          ],
+          "layer": "RAW_LINES"
+        },
+        "warnings": []
+      },
+      "target_layer": "QA-REVIEW",
+      "color": null,
+      "linetype": null,
+      "lineweight": null,
+      "text_style": null,
+      "text_height": null,
+      "dimstyle": null,
+      "block_name": null,
+      "needs_review": true,
+      "style_confidence": 0.69,
+      "style_reason": "raw line isolated for existing DWG preview",
+      "style_source": "policy"
+    },
+    {
+      "original_entity": {
+        "id": "cen_line_0007",
+        "entity_type": "wall_centerline",
+        "geometry": {
+          "p1": [
+            3709.677419354838,
+            3387.0967741935483
+          ],
+          "p2": [
+            3709.677419354838,
+            645.1612903225806
+          ]
+        },
+        "sources": [
+          "fallback",
+          "line_to_centerline"
+        ],
+        "confidence": 0.55,
+        "provenance": {
+          "thickness_source": "standard_fallback"
+        },
+        "warnings": []
+      },
+      "target_layer": "QA-REVIEW",
+      "color": null,
+      "linetype": null,
+      "lineweight": null,
+      "text_style": null,
+      "text_height": null,
+      "dimstyle": null,
+      "block_name": null,
+      "needs_review": true,
+      "style_confidence": 0.41,
+      "style_reason": "no style source loaded",
+      "style_source": "fallback"
+    },
+    {
+      "original_entity": {
+        "id": "wall_line_0007",
+        "entity_type": "wall_polygon",
+        "geometry": {
+          "points": [
+            [
+              3784.677419354838,
+              3387.0967741935483
+            ],
+            [
+              3784.677419354838,
+              645.1612903225806
+            ],
+            [
+              3634.677419354838,
+              645.1612903225806
+            ],
+            [
+              3634.677419354838,
+              3387.0967741935483
+            ]
+          ],
+          "layer": "WAL1",
+          "thickness": 150.0
+        },
+        "sources": [
+          "fallback",
+          "standard_fallback"
+        ],
+        "confidence": 0.35,
+        "provenance": {
+          "hatch_layer": "WAL_HATCH"
+        },
+        "warnings": []
+      },
+      "target_layer": "QA-REVIEW",
+      "color": null,
+      "linetype": null,
+      "lineweight": null,
+      "text_style": null,
+      "text_height": null,
+      "dimstyle": null,
+      "block_name": null,
+      "needs_review": true,
+      "style_confidence": 0.29,
+      "style_reason": "no style source loaded",
+      "style_source": "fallback"
+    },
+    {
+      "original_entity": {
+        "id": "raw_line_0008",
+        "entity_type": "raw_line",
+        "geometry": {
+          "p1": [
+            3709.677419354838,
+            1975.8064516129032
+          ],
+          "p2": [
+            5725.806451612903,
+            1975.8064516129032
+          ]
+        },
+        "sources": [
+          "fallback"
+        ],
+        "confidence": 0.55,
+        "provenance": {
+          "image_points": [
+            [
+              919.9999999999999,
+              510.0
+            ],
+            [
+              1420.0,
+              510.0
+            ]
+          ],
+          "layer": "RAW_LINES"
+        },
+        "warnings": []
+      },
+      "target_layer": "QA-REVIEW",
+      "color": null,
+      "linetype": null,
+      "lineweight": null,
+      "text_style": null,
+      "text_height": null,
+      "dimstyle": null,
+      "block_name": null,
+      "needs_review": true,
+      "style_confidence": 0.69,
+      "style_reason": "raw line isolated for existing DWG preview",
+      "style_source": "policy"
+    },
+    {
+      "original_entity": {
+        "id": "cen_line_0008",
+        "entity_type": "wall_centerline",
+        "geometry": {
+          "p1": [
+            3709.677419354838,
+            1975.8064516129032
+          ],
+          "p2": [
+            5725.806451612903,
+            1975.8064516129032
+          ]
+        },
+        "sources": [
+          "fallback",
+          "line_to_centerline"
+        ],
+        "confidence": 0.55,
+        "provenance": {
+          "thickness_source": "standard_fallback"
+        },
+        "warnings": []
+      },
+      "target_layer": "QA-REVIEW",
+      "color": null,
+      "linetype": null,
+      "lineweight": null,
+      "text_style": null,
+      "text_height": null,
+      "dimstyle": null,
+      "block_name": null,
+      "needs_review": true,
+      "style_confidence": 0.41,
+      "style_reason": "no style source loaded",
+      "style_source": "fallback"
+    },
+    {
+      "original_entity": {
+        "id": "wall_line_0008",
+        "entity_type": "wall_polygon",
+        "geometry": {
+          "points": [
+            [
+              3709.677419354838,
+              2050.8064516129034
+            ],
+            [
+              5725.806451612903,
+              2050.8064516129034
+            ],
+            [
+              5725.806451612903,
+              1900.8064516129032
+            ],
+            [
+              3709.677419354838,
+              1900.8064516129032
+            ]
+          ],
+          "layer": "WAL1",
+          "thickness": 150.0
+        },
+        "sources": [
+          "fallback",
+          "standard_fallback"
+        ],
+        "confidence": 0.35,
+        "provenance": {
+          "hatch_layer": "WAL_HATCH"
+        },
+        "warnings": []
+      },
+      "target_layer": "QA-REVIEW",
+      "color": null,
+      "linetype": null,
+      "lineweight": null,
+      "text_style": null,
+      "text_height": null,
+      "dimstyle": null,
+      "block_name": null,
+      "needs_review": true,
+      "style_confidence": 0.29,
+      "style_reason": "no style source loaded",
+      "style_source": "fallback"
+    },
+    {
+      "original_entity": {
+        "id": "door_0001",
+        "entity_type": "door",
+        "geometry": {
+          "bbox": [
+            760.0,
+            620.0,
+            849.6,
+            640.0
+          ],
+          "insert": [
+            3064.516129032258,
+            1532.258064516129
+          ]
+        },
+        "sources": [
+          "synthetic_fallback"
+        ],
+        "confidence": 0.48,
+        "provenance": {
+          "fallback_door_width_candidates": [
+            800,
+            850,
+            900,
+            1000
+          ]
+        },
+        "warnings": [
+          "low_confidence_entities"
+        ]
+      },
+      "target_layer": "QA-REVIEW",
+      "color": null,
+      "linetype": null,
+      "lineweight": null,
+      "text_style": null,
+      "text_height": null,
+      "dimstyle": null,
+      "block_name": null,
+      "needs_review": true,
+      "style_confidence": 0.368,
+      "style_reason": "no style source loaded",
+      "style_source": "fallback"
+    },
+    {
+      "original_entity": {
+        "id": "win_0001",
+        "entity_type": "window",
+        "geometry": {
+          "bbox": [
+            369.6,
+            160.0,
+            619.2,
+            178.0
+          ],
+          "insert": [
+            1490.3225806451615,
+            3387.0967741935483
+          ]
+        },
+        "sources": [
+          "synthetic_fallback"
+        ],
+        "confidence": 0.46,
+        "provenance": {
+          "fallback_door_width_candidates": []
+        },
+        "warnings": [
+          "low_confidence_entities"
+        ]
+      },
+      "target_layer": "QA-REVIEW",
+      "color": null,
+      "linetype": null,
+      "lineweight": null,
+      "text_style": null,
+      "text_height": null,
+      "dimstyle": null,
+      "block_name": null,
+      "needs_review": true,
+      "style_confidence": 0.356,
+      "style_reason": "no style source loaded",
+      "style_source": "fallback"
+    },
+    {
+      "original_entity": {
+        "id": "text_room_0001",
+        "entity_type": "text",
+        "geometry": {
+          "text": "ROOM",
+          "point": [
+            1806.451612903226,
+            2620.967741935484
+          ]
+        },
+        "sources": [
+          "synthetic_fallback"
+        ],
+        "confidence": 0.4,
+        "provenance": {
+          "layer": "TEXT"
+        },
+        "warnings": [
+          "low_confidence_entities"
+        ]
+      },
+      "target_layer": "QA-REVIEW",
+      "color": null,
+      "linetype": null,
+      "lineweight": null,
+      "text_style": null,
+      "text_height": null,
+      "dimstyle": null,
+      "block_name": null,
+      "needs_review": true,
+      "style_confidence": 0.32,
+      "style_reason": "no style source loaded",
+      "style_source": "fallback"
+    }
+  ],
+  "warnings": [
+    "model_adapter_missing: Raster2Seq third_party/Raster2Seq not found",
+    "model_adapter_missing: PlanParser third_party/planparser not found",
+    "license_review_required: PlanParser/AGPL style dependencies must be reviewed before commercial use",
+    "optional_dependency_missing: ultralytics is not installed",
+    "wall_thickness_fallback",
+    "low_confidence_entities: 12",
+    "scale_confidence: 0.86",
+    "wall_thickness_source: standard_fallback"
+  ],
+  "style_context": {
+    "version": "stage23-style-context-v1",
+    "generated_at": "2026-05-22T00:45:45",
+    "sources": [
+      {
+        "path": "",
+        "source_type": "local_style_sample",
+        "exists": false,
+        "loaded": false,
+        "warnings": [
+          "path not provided"
+        ]
+      },
+      {
+        "path": "",
+        "source_type": "zium_sheet_area",
+        "exists": false,
+        "loaded": false,
+        "warnings": [
+          "path not provided"
+        ]
+      },
+      {
+        "path": "",
+        "source_type": "active_form_sample",
+        "exists": false,
+        "loaded": false,
+        "warnings": [
+          "path not provided"
+        ]
+      },
+      {
+        "path": "",
+        "source_type": "active_scan",
+        "exists": false,
+        "loaded": false,
+        "warnings": [
+          "path not provided"
+        ]
+      },
+      {
+        "path": "",
+        "source_type": "reference_style_profile",
+        "exists": false,
+        "loaded": false,
+        "warnings": [
+          "path not provided"
+        ]
+      }
+    ],
+    "layer_preferences": [
+      {
+        "role": "fallback",
+        "preferred_layer": "QA-REVIEW",
+        "fallback_layer": null,
+        "confidence": 0.2,
+        "source": "fallback",
+        "reason": "no style source loaded"
+      }
+    ],
+    "line_style_preferences": [],
+    "text_style_preferences": [],
+    "dimension_style_preferences": [],
+    "block_preferences": [],
+    "sheet_context": null,
+    "warnings": [
+      "local_style_sample: path not provided",
+      "zium_sheet_area: path not provided",
+      "active_form_sample: path not provided",
+      "active_scan: path not provided",
+      "reference_style_profile: path not provided"
+    ],
+    "metadata": {
+      "priority": [
+        "user_style",
+        "local_style_sample",
+        "zium_sheet_area",
+        "active_form_sample",
+        "active_scan",
+        "reference_style_profile",
+        "drawing_standards",
+        "QA-REVIEW"
+      ]
+    }
+  }
+}

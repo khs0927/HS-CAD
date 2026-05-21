@@ -1,0 +1,4 @@
+# Optional OCR dependencies. These can be heavy.
+paddleocr
+easyocr
+pillow

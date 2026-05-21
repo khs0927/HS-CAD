@@ -1,4 +1,4 @@
-from __future__ import annotations
+﻿from __future__ import annotations
 
 from pathlib import Path
 from typing import Any, Iterable
@@ -384,3 +384,65 @@ class ZWCADCOMAdapter(CADAdapter):
             if name:
                 blocks.add(str(name))
         return sorted(blocks)
+
+    def consolidate_other_layers(
+        self,
+        target_layer: str = 'ETC',
+        keep_layers: list[str] | None = None,
+        dry_run: bool = True,
+    ) -> dict[str, Any]:
+        standard_layers = {
+            '0', 'DEFPOINTS', 'COL', 'WAL1', 'WAL2', 'WAL3', 'WAL4', 'WAL5', 'WAL6', 'WAL7',
+            'HAT', 'HID', 'DIM', 'DIMLE', 'CEN', 'CEN1', 'ELE', 'ELE1', 'ELE2', 'TEXT',
+            'SYM', 'FURN', target_layer,
+        }
+        aliases = {
+            'HID2': 'HID',
+            'SYM_TEXT': 'SYM',
+        }
+        keep = set(keep_layers or [])
+        source_layers: dict[str, int] = {}
+        review_layers: dict[str, int] = {}
+        mapped_layers: dict[str, int] = {}
+        operations: list[tuple[Any, str, str]] = []
+
+        for obj in self._iter_modelspace():
+            layer = str(self._safe_get(obj, 'Layer', '') or '')
+            if not layer or layer in keep or layer in standard_layers:
+                continue
+            new_layer = aliases.get(layer)
+            if new_layer is None:
+                if '부호' in layer or '몃룄' in layer or '봔' in layer:
+                    new_layer = 'SYM'
+                elif '해치' in layer or '튂' in layer or '곹뒄' in layer:
+                    new_layer = 'HAT'
+                elif '조적' in layer or '議' in layer or '鈺' in layer:
+                    new_layer = 'WAL2'
+                else:
+                    new_layer = target_layer
+            operations.append((obj, layer, new_layer))
+            if new_layer == target_layer:
+                source_layers[layer] = source_layers.get(layer, 0) + 1
+                review_layers[layer] = review_layers.get(layer, 0) + 1
+            else:
+                key = f'{layer} -> {new_layer}'
+                mapped_layers[key] = mapped_layers.get(key, 0) + 1
+
+        if operations and not dry_run:
+            self._ensure_layer(target_layer)
+            for obj, _old_layer, new_layer in operations:
+                try:
+                    obj.Layer = new_layer
+                except Exception as exc:
+                    self.warnings.append({'type': 'layer_consolidation_failed', 'error': str(exc)})
+            self._regen()
+
+        return {
+            'target_layer': target_layer,
+            'dry_run': dry_run,
+            'changed': len(operations),
+            'source_layers': source_layers,
+            'review_layers': review_layers,
+            'mapped_layers': mapped_layers,
+        }
+

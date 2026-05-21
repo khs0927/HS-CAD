@@ -1,0 +1,42 @@
+{
+  "operation": "insert_image_cad_preview",
+  "mode": "existing_dwg_preview",
+  "dry_run": true,
+  "can_execute": true,
+  "save": false,
+  "undo_mark_required": true,
+  "source_dxf": "outputs/demo/result_wallsolid.dxf",
+  "insert_layer": "QA-REVIEW",
+  "base_point": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "scale": 1.0,
+  "rotation": 0.0,
+  "style_context_used": true,
+  "warnings": [
+    "model_adapter_missing: Raster2Seq third_party/Raster2Seq not found",
+    "model_adapter_missing: PlanParser third_party/planparser not found",
+    "license_review_required: PlanParser/AGPL style dependencies must be reviewed before commercial use",
+    "optional_dependency_missing: ultralytics is not installed",
+    "wall_thickness_fallback",
+    "low_confidence_entities: 12",
+    "scale_confidence: 0.86",
+    "wall_thickness_source: standard_fallback",
+    "local_style_sample: path not provided",
+    "zium_sheet_area: path not provided",
+    "active_form_sample: path not provided",
+    "active_scan: path not provided",
+    "reference_style_profile: path not provided"
+  ],
+  "entities_summary": {
+    "raw_line": 9,
+    "wall_centerline": 9,
+    "wall_polygon": 9,
+    "door": 1,
+    "window": 1,
+    "text": 1
+  },
+  "low_confidence_count": 30
+}

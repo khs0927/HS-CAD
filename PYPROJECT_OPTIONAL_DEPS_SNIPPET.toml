@@ -1,0 +1,44 @@
+# pyproject.toml에 수동 병합할 수 있는 선택 의존성 스니펫입니다.
+# 기본 dependencies에는 무거운 패키지를 넣지 마세요.
+
+[project.optional-dependencies]
+image-cad = [
+  "opencv-python",
+  "numpy",
+  "scipy",
+  "scikit-image",
+  "shapely",
+  "ezdxf",
+  "pydantic",
+  "pydantic-settings",
+  "pillow",
+  "matplotlib",
+  "networkx",
+  "rich",
+  "typer",
+  "python-dotenv"
+]
+
+ocr = [
+  "paddleocr",
+  "easyocr"
+]
+
+ml = [
+  "torch",
+  "torchvision"
+]
+
+yolo = [
+  "ultralytics"
+]
+
+api = [
+  "fastapi",
+  "uvicorn"
+]
+
+# 기존 [tool.pytest.ini_options]에 markers가 없다면 추가:
+# markers = [
+#   "integration: tests that require a real ZWCAD or external runtime"
+# ]

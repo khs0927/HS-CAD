@@ -1,0 +1,13 @@
+{
+  "profile_id": "hs_cad_company_profile",
+  "titleblock_rules": {
+    "ZIUM_sheet_architect": {
+      "confidence": 0.9
+    }
+  },
+  "dimension_rules": {
+    "300DIM": {
+      "confidence": 0.9
+    }
+  }
+}

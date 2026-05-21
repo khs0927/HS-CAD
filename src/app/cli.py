@@ -38,6 +38,10 @@ from src.scanners.text_scanner import extract_texts
 
 app = typer.Typer(help='ZWCAD AI Architectural Modifier CLI')
 
+# Register fileizer subcommands
+from src.app.cli_fileizer_commands import fileizer_app
+app.add_typer(fileizer_app, name='fileizer')
+
 
 def get_adapter(dwg: Optional[str] = None) -> ZWCADCOMAdapter:
     adapter = ZWCADCOMAdapter(visible=True)

@@ -20,7 +20,7 @@ class BaseCommand(BaseModel):
 
 
 class ScanCommand(BaseCommand):
-    command: Literal['scan_all','scan_layers','scan_blocks','scan_texts','export_objects_json','generate_quantity_report','analyze_architecture']
+    command: Literal['scan_all','scan_layers','scan_blocks','scan_texts','export_objects_json','generate_quantity_report','analyze_architecture','classify_objects']
     params: dict[str, Any] = Field(default_factory=dict)
 
 
@@ -99,7 +99,7 @@ class CreateGridCommand(BaseCommand):
 
 
 class PlaceColumnsParams(BaseModel):
-    block_name: str
+    block_name: str | None = None
     width: float
     depth: float
     grid_x: float
@@ -155,12 +155,22 @@ class XiCADWorkflowCommand(BaseCommand):
     params: XiCADWorkflowParams
 
 
+class CaptureScreenParams(BaseModel):
+    out: str
+    bbox: list[float] | None = None
+
+
+class CaptureScreenCommand(BaseCommand):
+    command: Literal['capture_screen']
+    params: CaptureScreenParams
+
+
 CADCommand = Union[
     ScanCommand, SaveAsCommand, MoveLayerCommand, MoveObjectCommand,
     ReplaceTextCommand, ReplaceBlockCommand, DeleteLayerCommand,
     CreateBoundaryCommand, CreateGridCommand, PlaceColumnsCommand,
     PlaceBeams2DCommand, LoadXiCADCommand, DetectXiCADCommand,
-    RunXiCADCommand, XiCADWorkflowCommand, XicadSafeCommand,
+    RunXiCADCommand, XiCADWorkflowCommand, CaptureScreenCommand, XicadSafeCommand,
 ]
 
 COMMAND_MODELS = [
@@ -168,7 +178,7 @@ COMMAND_MODELS = [
     ReplaceTextCommand, ReplaceBlockCommand, DeleteLayerCommand,
     CreateBoundaryCommand, CreateGridCommand, PlaceColumnsCommand,
     PlaceBeams2DCommand, LoadXiCADCommand, DetectXiCADCommand,
-    RunXiCADCommand, XiCADWorkflowCommand, XicadSafeCommand,
+    RunXiCADCommand, XiCADWorkflowCommand, CaptureScreenCommand, XicadSafeCommand,
 ]
 
 

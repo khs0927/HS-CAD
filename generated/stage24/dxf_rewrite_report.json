@@ -1,0 +1,256 @@
+{
+  "source_dxf": "outputs\\demo\\result_centerline.dxf",
+  "output_dxf": "generated\\stage24\\styled_result_centerline.dxf",
+  "generated_at": "2026-05-22T01:01:48",
+  "ezdxf_available": true,
+  "source_exists": true,
+  "copied_without_rewrite": true,
+  "inspected_count": 39,
+  "actions": [
+    {
+      "handle": null,
+      "dxftype": "raw_line",
+      "old_layer": null,
+      "new_layer": "QA-REVIEW",
+      "reason": "styled_result target_layer",
+      "applied": false
+    },
+    {
+      "handle": null,
+      "dxftype": "wall_centerline",
+      "old_layer": null,
+      "new_layer": "QA-REVIEW",
+      "reason": "styled_result target_layer",
+      "applied": false
+    },
+    {
+      "handle": null,
+      "dxftype": "wall_polygon",
+      "old_layer": null,
+      "new_layer": "QA-REVIEW",
+      "reason": "styled_result target_layer",
+      "applied": false
+    },
+    {
+      "handle": null,
+      "dxftype": "raw_line",
+      "old_layer": null,
+      "new_layer": "QA-REVIEW",
+      "reason": "styled_result target_layer",
+      "applied": false
+    },
+    {
+      "handle": null,
+      "dxftype": "wall_centerline",
+      "old_layer": null,
+      "new_layer": "QA-REVIEW",
+      "reason": "styled_result target_layer",
+      "applied": false
+    },
+    {
+      "handle": null,
+      "dxftype": "wall_polygon",
+      "old_layer": null,
+      "new_layer": "QA-REVIEW",
+      "reason": "styled_result target_layer",
+      "applied": false
+    },
+    {
+      "handle": null,
+      "dxftype": "raw_line",
+      "old_layer": null,
+      "new_layer": "QA-REVIEW",
+      "reason": "styled_result target_layer",
+      "applied": false
+    },
+    {
+      "handle": null,
+      "dxftype": "wall_centerline",
+      "old_layer": null,
+      "new_layer": "QA-REVIEW",
+      "reason": "styled_result target_layer",
+      "applied": false
+    },
+    {
+      "handle": null,
+      "dxftype": "wall_polygon",
+      "old_layer": null,
+      "new_layer": "QA-REVIEW",
+      "reason": "styled_result target_layer",
+      "applied": false
+    },
+    {
+      "handle": null,
+      "dxftype": "raw_line",
+      "old_layer": null,
+      "new_layer": "QA-REVIEW",
+      "reason": "styled_result target_layer",
+      "applied": false
+    },
+    {
+      "handle": null,
+      "dxftype": "wall_centerline",
+      "old_layer": null,
+      "new_layer": "QA-REVIEW",
+      "reason": "styled_result target_layer",
+      "applied": false
+    },
+    {
+      "handle": null,
+      "dxftype": "wall_polygon",
+      "old_layer": null,
+      "new_layer": "QA-REVIEW",
+      "reason": "styled_result target_layer",
+      "applied": false
+    },
+    {
+      "handle": null,
+      "dxftype": "raw_line",
+      "old_layer": null,
+      "new_layer": "QA-REVIEW",
+      "reason": "styled_result target_layer",
+      "applied": false
+    },
+    {
+      "handle": null,
+      "dxftype": "wall_centerline",
+      "old_layer": null,
+      "new_layer": "QA-REVIEW",
+      "reason": "styled_result target_layer",
+      "applied": false
+    },
+    {
+      "handle": null,
+      "dxftype": "wall_polygon",
+      "old_layer": null,
+      "new_layer": "QA-REVIEW",
+      "reason": "styled_result target_layer",
+      "applied": false
+    },
+    {
+      "handle": null,
+      "dxftype": "raw_line",
+      "old_layer": null,
+      "new_layer": "QA-REVIEW",
+      "reason": "styled_result target_layer",
+      "applied": false
+    },
+    {
+      "handle": null,
+      "dxftype": "wall_centerline",
+      "old_layer": null,
+      "new_layer": "QA-REVIEW",
+      "reason": "styled_result target_layer",
+      "applied": false
+    },
+    {
+      "handle": null,
+      "dxftype": "wall_polygon",
+      "old_layer": null,
+      "new_layer": "QA-REVIEW",
+      "reason": "styled_result target_layer",
+      "applied": false
+    },
+    {
+      "handle": null,
+      "dxftype": "raw_line",
+      "old_layer": null,
+      "new_layer": "QA-REVIEW",
+      "reason": "styled_result target_layer",
+      "applied": false
+    },
+    {
+      "handle": null,
+      "dxftype": "wall_centerline",
+      "old_layer": null,
+      "new_layer": "QA-REVIEW",
+      "reason": "styled_result target_layer",
+      "applied": false
+    },
+    {
+      "handle": null,
+      "dxftype": "wall_polygon",
+      "old_layer": null,
+      "new_layer": "QA-REVIEW",
+      "reason": "styled_result target_layer",
+      "applied": false
+    },
+    {
+      "handle": null,
+      "dxftype": "raw_line",
+      "old_layer": null,
+      "new_layer": "QA-REVIEW",
+      "reason": "styled_result target_layer",
+      "applied": false
+    },
+    {
+      "handle": null,
+      "dxftype": "wall_centerline",
+      "old_layer": null,
+      "new_layer": "QA-REVIEW",
+      "reason": "styled_result target_layer",
+      "applied": false
+    },
+    {
+      "handle": null,
+      "dxftype": "wall_polygon",
+      "old_layer": null,
+      "new_layer": "QA-REVIEW",
+      "reason": "styled_result target_layer",
+      "applied": false
+    },
+    {
+      "handle": null,
+      "dxftype": "raw_line",
+      "old_layer": null,
+      "new_layer": "QA-REVIEW",
+      "reason": "styled_result target_layer",
+      "applied": false
+    },
+    {
+      "handle": null,
+      "dxftype": "wall_centerline",
+      "old_layer": null,
+      "new_layer": "QA-REVIEW",
+      "reason": "styled_result target_layer",
+      "applied": false
+    },
+    {
+      "handle": null,
+      "dxftype": "wall_polygon",
+      "old_layer": null,
+      "new_layer": "QA-REVIEW",
+      "reason": "styled_result target_layer",
+      "applied": false
+    },
+    {
+      "handle": null,
+      "dxftype": "door",
+      "old_layer": null,
+      "new_layer": "QA-REVIEW",
+      "reason": "styled_result target_layer",
+      "applied": false
+    },
+    {
+      "handle": null,
+      "dxftype": "window",
+      "old_layer": null,
+      "new_layer": "QA-REVIEW",
+      "reason": "styled_result target_layer",
+      "applied": false
+    },
+    {
+      "handle": null,
+      "dxftype": "text",
+      "old_layer": null,
+      "new_layer": "QA-REVIEW",
+      "reason": "styled_result target_layer",
+      "applied": false
+    }
+  ],
+  "warnings": [
+    "DXF was copied conservatively; entity-level rewrite requires stable entity handles or explicit mapping."
+  ],
+  "errors": [],
+  "metadata": {}
+}

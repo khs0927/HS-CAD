@@ -1,0 +1,67 @@
+{
+  "mode": "plan_only",
+  "generated_at": "2026-05-22T01:01:21",
+  "can_merge": false,
+  "requires_user_approval": true,
+  "source_preview_session": "generated/stage24/preview_session.json",
+  "merge_groups": [
+    {
+      "group": "raw_line",
+      "action": "review_before_merge",
+      "target_layer": "QA-REVIEW",
+      "confidence": 0.69,
+      "count": 9
+    },
+    {
+      "group": "wall_centerline",
+      "action": "review_before_merge",
+      "target_layer": "QA-REVIEW",
+      "confidence": 0.41,
+      "count": 9
+    },
+    {
+      "group": "wall_polygon",
+      "action": "review_before_merge",
+      "target_layer": "QA-REVIEW",
+      "confidence": 0.29,
+      "count": 9
+    },
+    {
+      "group": "door",
+      "action": "review_before_merge",
+      "target_layer": "QA-REVIEW",
+      "confidence": 0.368,
+      "count": 1
+    },
+    {
+      "group": "window",
+      "action": "review_before_merge",
+      "target_layer": "QA-REVIEW",
+      "confidence": 0.356,
+      "count": 1
+    },
+    {
+      "group": "text",
+      "action": "review_before_merge",
+      "target_layer": "QA-REVIEW",
+      "confidence": 0.32,
+      "count": 1
+    }
+  ],
+  "blocked_actions": [
+    "save",
+    "save_as",
+    "purge",
+    "explode",
+    "explode_block_definition",
+    "bulk_delete_existing_objects",
+    "auto_remap_existing_layers"
+  ],
+  "warnings": [
+    "Stage 24 creates a merge candidate plan only; it does not merge into DWG."
+  ],
+  "metadata": {
+    "style_context_loaded": true,
+    "styled_result_loaded": true
+  }
+}
