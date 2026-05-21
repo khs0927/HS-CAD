@@ -15,20 +15,6 @@
     "context": 1048576,
     "output": 65535
   }
-},
-"gemini-1.5-flash": {
-  "name": "Gemini 1.5 Flash",
-  "limit": {
-    "context": 1048576,
-    "output": 65535
-  }
-},
-"gemini-1.5-pro": {
-  "name": "Gemini 1.5 Pro",
-  "limit": {
-    "context": 4194304,
-    "output": 16384
-  }
 }
       }
     }
