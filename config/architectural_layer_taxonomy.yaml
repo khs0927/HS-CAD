@@ -74,12 +74,25 @@ layers:
   WIN: {meaning: [window], semantic_type: window, category: opening, confidence: 0.98}
   WINBAR: {meaning: [window_frame], semantic_type: window_frame, category: opening, confidence: 0.98}
   WINELE: {meaning: [window_elevation], semantic_type: window_elevation, category: elevation, confidence: 0.98}
+  HAT: {meaning: [hatch_linework, hatch_fill], semantic_type: hatch_pattern, category: hatch, confidence: 0.98}
+  HID: {meaning: [hidden_line, dashed_hidden_line], semantic_type: hidden_dashed_line, category: hidden_line, confidence: 0.98}
+  ZONE: {meaning: [zone_boundary], semantic_type: zone_boundary, category: zone, confidence: 0.98}
+  SEC1: {meaning: [section_line], semantic_type: section_line_primary, category: section, confidence: 0.98}
+  SEC2: {meaning: [section_line], semantic_type: section_line_secondary, category: section, confidence: 0.98}
+  FIN1: {meaning: [finish_line], semantic_type: finish_line_primary, category: finish, confidence: 0.98}
+  FIN2: {meaning: [finish_line], semantic_type: finish_line_secondary, category: finish, confidence: 0.98}
+  TXT: {meaning: [text], semantic_type: text, category: annotation, confidence: 0.98}
+  TXT1: {meaning: [other_text, description], semantic_type: extra_text, category: annotation, confidence: 0.98}
+  TXT2: {meaning: [other_text, description], semantic_type: extra_text, category: annotation, confidence: 0.98}
+  MEP: {meaning: [mep_linework], semantic_type: mep_linework, category: mep, confidence: 0.98}
+  NOTE: {meaning: [note, explanation], semantic_type: note, category: annotation, confidence: 0.98}
   STAIR: {meaning: [stair], semantic_type: stair, category: vertical_circulation, confidence: 0.98}
   DIM: {meaning: [dimension], semantic_type: dimension, category: annotation, confidence: 0.98}
   DIMLE: {meaning: [leader], semantic_type: leader, category: annotation, confidence: 0.98}
   CEN: {meaning: [column_centerline, main_centerline], semantic_type: centerline_main, category: grid_centerline, confidence: 0.98}
   CEN1: {meaning: [aux_centerline, lightweight_wall_centerline, wall_centerline], semantic_type: centerline_aux_wall, category: grid_centerline, confidence: 0.98}
   CEN2: {meaning: [aux_centerline, other_centerline], semantic_type: centerline_aux_other, category: grid_centerline, confidence: 0.98}
+  CEN3: {meaning: [aux_centerline, other_centerline], semantic_type: centerline_aux_other, category: grid_centerline, confidence: 0.98}
   DEFPOINTS:
     meaning: [invisible_guideline, non_print_guide]
     semantic_type: guide_nonplot

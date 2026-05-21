@@ -41,6 +41,33 @@ python -m src.main analyze-architecture --dwg "C:/cad/sample.dwg" --out-dir "out
 python -m src.main collect-debug --dwg "C:/cad/sample.dwg" --out-dir "outputs/debug_bundle"
 ```
 
+## Auto Analysis + Live Preview
+
+For an already-open ZWCAD drawing, HS-CAD can analyze layer aliases and optionally
+apply a reversible live preview. Preview mode does not save the DWG.
+
+```powershell
+python zwcad_auto_analyze_live_preview.py --out-dir outputs/auto_analysis
+python zwcad_auto_analyze_live_preview.py --out-dir outputs/auto_analysis --apply-preview --min-confidence 0.82
+python zwcad_auto_analyze_live_preview.py --undo-preview
+```
+
+Equivalent module commands:
+
+```powershell
+python -m image_to_cad.cli auto-analyze-active --out outputs/auto_analysis
+python -m image_to_cad.cli auto-preview-remap --out outputs/auto_analysis --min-confidence 0.82
+python -m image_to_cad.cli auto-undo-preview
+```
+
+Safety defaults:
+
+- No `Save` or `SaveAs`.
+- Creates an `UNDO MARK` before preview changes.
+- `UNDO BACK` can restore the preview.
+- No purge, delete, explode, or block definition edits.
+- Layer `0` is blocked by default; use `--allow-layer-zero` only for high-confidence previews.
+
 ## Drafting Standards In Code
 
 The drafting defaults live in [drawing_standards.py](src/cad_core/drawing_standards.py).

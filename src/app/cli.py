@@ -159,6 +159,40 @@ def layers(dwg: Optional[str] = typer.Option(None, help='DWG file path (defaults
     console.print(table)
 
 
+@app.command('consolidate-layers')
+def consolidate_layers(
+    dwg: Optional[str] = typer.Option(None, help='DWG file path (defaults to active document)'),
+    target_layer: str = typer.Option('ETC', help='Layer that receives non-standard layers'),
+    keep_layer: list[str] | None = typer.Option(None, help='Extra layer to preserve. Repeat this option as needed.'),
+    execute: bool = typer.Option(False, help='Actually change object layers'),
+    save_as: str | None = typer.Option(None, help='Save modified DWG as'),
+    out: str | None = typer.Option(None, help='Optional JSON report path'),
+):
+    """Merge all layers except the user-defined layer standard into one layer."""
+    if execute and not save_as:
+        raise typer.BadParameter('--save-as is required with --execute.')
+    adapter = get_adapter(dwg)
+    result = adapter.consolidate_other_layers(
+        target_layer=target_layer,
+        keep_layers=keep_layer or [],
+        dry_run=not execute,
+    )
+    if save_as and execute:
+        adapter.save_as(save_as)
+        result['saved_as'] = save_as
+    if out:
+        export_json(result, out)
+    table = Table('Source Layer', 'Object Count')
+    for layer, count in sorted(result.get('source_layers', {}).items()):
+        table.add_row(str(layer), str(count))
+    console.print(table)
+    console.print(result)
+    if execute:
+        success(f"Consolidated {result.get('changed', 0)} objects into {target_layer}")
+    else:
+        warn(f"Dry-run only. {result.get('changed', 0)} objects would move into {target_layer}")
+
+
 @app.command()
 def blocks(dwg: Optional[str] = typer.Option(None, help='DWG file path (defaults to active document)')):
     adapter = get_adapter(dwg)

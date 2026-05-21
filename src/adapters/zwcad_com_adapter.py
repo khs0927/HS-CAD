@@ -15,6 +15,7 @@ from src.cad_core.drawing_standards import (
     resolve_annotation_style,
     text_box_width,
 )
+from src.semantics.layer_taxonomy import canonical_layer_name, get_layer_rule, normalize_layer_name
 from src.testing.environment_check import zwcad_progid_candidates
 from src.utils.geometry import chunk_points
 
@@ -307,6 +308,73 @@ class ZWCADCOMAdapter(CADAdapter):
         if deleted:
             self._regen()
         return deleted
+
+    def consolidate_other_layers(
+        self,
+        target_layer: str = "ETC",
+        keep_layers: Iterable[str] | None = None,
+        dry_run: bool = True,
+    ) -> dict[str, Any]:
+        """Move objects on non-standard layers into one target layer.
+
+        Standard/user-defined layers are preserved using the layer taxonomy.
+        Additional keep layers can be supplied for project-specific exceptions.
+        """
+        target = str(target_layer or "").strip()
+        if not target:
+            raise ValueError("target_layer is required")
+
+        keep = {normalize_layer_name(layer) for layer in (keep_layers or [])}
+        keep.update({"0", "DEFPOINTS", normalize_layer_name(target)})
+        plan: dict[str, Any] = {
+            "target_layer": target,
+            "dry_run": dry_run,
+            "changed": 0,
+            "mapped_layers": {},
+            "source_layers": {},
+            "review_layers": {},
+            "preserved_layers": {},
+            "errors": [],
+        }
+        targets: list[tuple[Any, str]] = []
+        for obj in self._iter_modelspace():
+            layer = str(self._safe_get(obj, "Layer", "") or "").strip()
+            normalized = normalize_layer_name(layer)
+            if not layer:
+                plan["preserved_layers"]["<NO_LAYER>"] = plan["preserved_layers"].get("<NO_LAYER>", 0) + 1
+                continue
+            canonical = canonical_layer_name(layer)
+            if normalized in keep:
+                plan["preserved_layers"][layer] = plan["preserved_layers"].get(layer, 0) + 1
+                continue
+            if canonical and normalize_layer_name(canonical) != normalized:
+                key = f"{layer} -> {canonical}"
+                plan["mapped_layers"][key] = plan["mapped_layers"].get(key, 0) + 1
+                targets.append((obj, canonical))
+                continue
+            if canonical or get_layer_rule(layer) is not None:
+                plan["preserved_layers"][layer] = plan["preserved_layers"].get(layer, 0) + 1
+                continue
+            plan["source_layers"][layer] = plan["source_layers"].get(layer, 0) + 1
+            plan["review_layers"][layer] = plan["review_layers"].get(layer, 0) + 1
+            targets.append((obj, target))
+
+        if dry_run:
+            plan["changed"] = len(targets)
+            return plan
+
+        changed = 0
+        for obj, destination_layer in targets:
+            try:
+                self._ensure_layer(destination_layer)
+                obj.Layer = destination_layer
+                changed += 1
+            except Exception as exc:
+                plan["errors"].append({"handle": self._safe_get(obj, "Handle"), "error": str(exc)})
+        plan["changed"] = changed
+        if changed:
+            self._regen()
+        return plan
 
     def _block_exists(self, block_name: str) -> bool:
         doc = self.doc or self.get_active_document()

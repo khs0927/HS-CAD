@@ -1,0 +1,23 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "provider": {
+    "google": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Google AI Studio",
+      "options": {
+        "baseURL": "https://generativelanguage.googleapis.com/v1beta/openai",
+        "apiKey": "AIzaSyBXqikJfQdIDQJuy7CNlmH0HrKYbJZxbEk"
+      },
+      "models": {
+        "gemini-3.5-flash": {
+          "name": "Gemini 3.5 Flash",
+          "limit": {
+            "context": 1048576,
+            "output": 65535
+          }
+        }
+      }
+    }
+  },
+  "model": "google/gemini-3.5-flash"
+}
