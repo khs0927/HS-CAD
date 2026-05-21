@@ -81,6 +81,9 @@ python -m src.main run-command --dwg "C:/project/sample_copy.dwg" --command "exa
 - `--dry-run`은 실행 계획만 보여줍니다.
 - `delete_layer_objects` 같은 삭제 명령은 초기 버전에서 실제 삭제를 막거나 강한 경고를 냅니다.
 - AI는 Python 코드를 직접 실행하지 않고, 허용된 JSON 명령만 생성해야 합니다.
+- 기존 사무소 DWG를 편집할 때는 샘플링한 주변 레이어와 시각 문법을 우선 사용합니다.
+- 사용자가 명시적으로 요청하지 않는 한 기존 레이어를 리맵하지 않습니다.
+- 명시적 생성 레이어는 독립 생성 도면 또는 검수 격리 워크플로우에서만 사용합니다.
 
 ## 명령 JSON 예시
 
@@ -188,15 +191,27 @@ python -m src.main run-command --dwg "C:/cad/sample.dwg" --command "examples/com
   ```bash
   python tools/fast_scan_active.py
   ```
-  ZWCAD 활성 창의 279개 레이어 및 108개 블록 정보를 초고속 스캔하고 `generated/fast_scan_report.json`을 작성합니다.
+  ZWCAD 활성 창의 레이어 및 블록 정보를 초고속 스캔하고 JSON 리포트를 작성합니다.
   
 * **도면 선/스타일 문법 실시간 샘플링**:
   ```bash
   python tools/analyze_active_form_sample.py
   ```
-  활성 도면 내 중심선(빨강, CEN2), 벽체(노랑, Continuous), 치수 스타일(`300DIM`), 텍스트 스타일(`지움EB`) 등 지움건축 표준 선 및 주석 문법을 1회 패스로 추출하여 `generated/sampled_drawing_grammar.json`에 저장합니다.
+  활성 도면 내 선, 블록, 문자, 치수, 리더, 도곽 삽입 문법을 샘플링하여 JSON 리포트로 저장합니다.
 
-자세한 내용은 [18. 도면 작성 문법 학습 베이스라인](docs/18_architectural_drawing_learning_baseline.md) 및 [19. 지움 도각 및 선 표현 문법 지침서](docs/19_zium_sheet_and_line_grammar.md)를 참고하세요.
+* **선택 객체 주변 로컬 문법 샘플링**:
+  ```bash
+  python tools/sample_style_near_handle.py --handle <HANDLE> --radius 3000 --out-dir outputs/style_sample_current
+  ```
+  특정 객체 주변의 레이어, 색상, 선종류, 선가중치, 문자높이, 치수스타일, 블록 EffectiveName을 샘플링하여 새 객체 생성 시 우선 사용할 로컬 문법을 추천합니다.
+
+* **ZIUM 도곽 사용 가능 영역 측정**:
+  ```bash
+  python tools/measure_zium_sheet_usable_area.py --out-dir outputs/zium_sheet_area_current
+  ```
+  `ZIUM_sheet_architect` 블록의 삽입 스케일과 정의 extents를 분석하여 새 도면을 배치할 usable drawing area 후보를 계산합니다.
+
+자세한 내용은 [18. 도면 작성 문법 학습 베이스라인](docs/18_architectural_drawing_learning_baseline.md), [19. 지움 도각 및 선 표현 문법 지침서](docs/19_zium_sheet_and_line_grammar.md), [20. 도면 문법 기반 생성 절차](docs/20_generation_from_drawing_grammar.md)를 참고하세요.
 
 ## Added after Codex integration report
 
@@ -208,4 +223,4 @@ This package now includes the next-step architecture audit and safer execution l
 - XiCAD Safe Bridge remains isolated under `src/extensions/xicad_safe_bridge/`
 - `docs/07_windows_test_plan.md` and `docs/09_next_development_plan.md`
 
-Always test mutations on DWG copies and use `--save-as`.
+Always test mutations on DWG copies and use `--save-as`. 
