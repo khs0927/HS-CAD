@@ -1,36 +1,76 @@
-import json
-import subprocess
-import pathlib
-import os
+from __future__ import annotations
 
-def test_sample_style_near_handle(tmp_path: pathlib.Path):
-    out_dir = tmp_path / "style_test"
-    # Ensure the output directory does not exist beforehand
-    if out_dir.exists():
-        # Cleanup just in case
-        for f in out_dir.iterdir():
-            f.unlink()
-        out_dir.rmdir()
-    # Run the tool
-    repo_root = pathlib.Path(__file__).resolve().parents[1]
-    subprocess.check_call([
-        "python",
-        "tools/sample_style_near_handle.py",
-        "--handle",
-        "TESTHANDLE",
-        "--radius",
-        "100",
-        "--out-dir",
-        str(out_dir),
-    ], cwd=str(repo_root))
+from tools import sample_style_near_handle as sampler
 
-    json_path = out_dir / "local_style_sample.json"
-    assert json_path.is_file()
-    data = json.load(json_path.open(encoding="utf-8"))
-    assert data["source_handle"] == "TESTHANDLE"
-    # Verify expected keys exist
-    for key in ["dominant_layers", "dominant_entity_types", "recommended_generation_style"]:
-        assert key in data
-    rec = data["recommended_generation_style"]
-    assert rec["line_layer"] == "0"
-    assert rec["line_color"] == "256"
+
+class MockEntity:
+    def __init__(self, **kwargs):
+        self.__dict__.update(kwargs)
+
+
+class MockDoc:
+    def __init__(self, entities):
+        self.Name = "mock.dwg"
+        self.FullName = "C:/cad/mock.dwg"
+        self.ModelSpace = entities
+        self._by_handle = {entity.Handle: entity for entity in entities}
+
+    def HandleToObject(self, handle):
+        return self._by_handle[handle]
+
+
+def test_sample_style_near_handle_with_mocked_active_doc(monkeypatch):
+    source = MockEntity(
+        ObjectName="AcDbLine",
+        Handle="A1",
+        Layer="A-WALL",
+        Color=256,
+        Linetype="ByLayer",
+        Lineweight=-1,
+        StartPoint=[0, 0, 0],
+        EndPoint=[1000, 0, 0],
+    )
+    nearby_text = MockEntity(
+        ObjectName="AcDbText",
+        Handle="T1",
+        Layer="A-TEXT",
+        Color=7,
+        Linetype="ByLayer",
+        Lineweight=-1,
+        InsertionPoint=[100, 100, 0],
+        Height=250.0,
+        StyleName="지움EB",
+    )
+    nearby_block = MockEntity(
+        ObjectName="AcDbBlockReference",
+        Handle="B1",
+        Layer="A-FORM",
+        Color=256,
+        Linetype="ByLayer",
+        Lineweight=-1,
+        InsertionPoint=[200, 200, 0],
+        Name="*U123",
+        EffectiveName="ZIUM_sheet_architect",
+    )
+    far_line = MockEntity(
+        ObjectName="AcDbLine",
+        Handle="F1",
+        Layer="FAR",
+        Color=1,
+        Linetype="Hidden",
+        Lineweight=0,
+        StartPoint=[10000, 10000, 0],
+        EndPoint=[11000, 10000, 0],
+    )
+    doc = MockDoc([source, nearby_text, nearby_block, far_line])
+    monkeypatch.setattr(sampler, "connect_active_document", lambda: (None, doc))
+
+    result = sampler.sample_style_near_handle("A1", active_selection=False, radius=1000, out_dir=None)
+
+    assert result["source_handle"] == "A1"
+    assert result["nearby_entity_count"] == 3
+    assert ["A-WALL", 1] in result["dominant_layers"]
+    assert ["TEXT", 1] in result["dominant_entity_types"]
+    assert ["ZIUM_sheet_architect", 1] in result["block_effective_names"]
+    assert result["recommended_generation_style"]["line_layer"] in {"A-WALL", "A-TEXT", "A-FORM"}
+    assert result["recommended_generation_style"]["leader_style"] == "qleader_l_route"
