@@ -17,12 +17,15 @@ class FileizedRecordWriter:
 
     def write(self, record: FileizedDrawingRecord) -> Path:
         json_path = self.json_dir / f"{record.file_id}.json"
+        # Ensure parent directories exist for nested file_id paths
+        json_path.parent.mkdir(parents=True, exist_ok=True)
         json_path.write_text(record.model_dump_json(indent=2), encoding="utf-8")
 
         with self.jsonl_path.open("a", encoding="utf-8") as f:
             f.write(record.model_dump_json() + "\n")
 
         md_path = self.markdown_dir / f"{record.file_id}.md"
+        md_path.parent.mkdir(parents=True, exist_ok=True)
         md_path.write_text(self.to_markdown(record), encoding="utf-8")
         return json_path
 
