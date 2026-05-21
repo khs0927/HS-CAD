@@ -16,6 +16,8 @@ from src.extensions.xicad_safe_bridge.executor import XicadSafeExecutor
 from src.extensions.xicad_safe_bridge.json_io import load_safe_command
 from src.extensions.xicad_safe_bridge.planner import XicadSafePlanner
 from src.extensions.xicad_safe_bridge.registry import XicadAliasRegistry, default_xicad_registry
+from src.company_profile.hs_cad_profile_loader import build_company_drafting_profile
+import json
 from src.integrations.xicad_command_catalog import filter_architecture_commands, parse_xicad_shortkey
 from src.integrations.xicad_manifest import write_manifest
 from src.integrations.xicad_paths import detect_xicad_profile
@@ -35,6 +37,21 @@ from src.scanners.layer_scanner import layer_counts
 from src.scanners.text_scanner import extract_texts
 
 app = typer.Typer(help='ZWCAD AI Architectural Modifier CLI')
+
+# Register fileizer subcommands
+from src.app.cli_fileizer_commands import fileizer_app
+app.add_typer(fileizer_app, name='fileizer')
+
+# Register next‑phase corpus commands (ingest, learn, query, report)
+from src.app.cli_next_phase_commands import next_phase_app
+app.add_typer(next_phase_app, name='corpus-next')
+# Register operational corpus commands (audit, graph, query-pack, export-jsonl, plan-output, run-operational-report)
+from src.app.cli_operational_commands import corpus_ops_app
+app.add_typer(corpus_ops_app, name='corpus-ops')
+
+# Register corpus-run subcommands
+from src.app.cli_corpus_run_commands import corpus_run_app
+app.add_typer(corpus_run_app, name='corpus-run')
 
 
 def get_adapter(dwg: Optional[str] = None) -> ZWCADCOMAdapter:
@@ -308,6 +325,102 @@ def quantity(dwg: str = typer.Option(..., help='DWG file path'), out: str = type
     success(f'Quantity report -> {out}')
 
 
+@app.command('corpus-scan')
+def corpus_scan(
+    root: str = typer.Option(..., help='Root folder containing drawing files'),
+    out: str = typer.Option('outputs/corpus', help='Output directory for the manifest'),
+) -> None:
+    """Discover files under *root* and write a manifest JSON.
+
+    The command creates a ``manifest.json`` inside *out* that lists the
+    discovered files with basic metadata.
+    """
+    from src.corpus.file_discovery import discover_files, file_metadata
+    from src.corpus.manifest import Manifest
+    from src.corpus.models import CorpusFile
+    root_path = Path(root)
+    out_dir = Path(out)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    manifest_path = out_dir / 'manifest.json'
+    manifest = Manifest.load(manifest_path)
+    for file_path in discover_files(root_path):
+        meta = file_metadata(root_path, file_path)
+        # Convert to Pydantic model for validation (optional)
+        try:
+            CorpusFile(**meta)
+        except Exception:
+            continue
+        manifest.add_or_update(meta)
+    manifest.dump(manifest_path)
+    success(f'Manifest written: {manifest_path}')
+
+
+@app.command('corpus-index')
+def corpus_index(
+    manifest: str = typer.Option(..., help='Path to manifest.json'),
+    out: str = typer.Option('outputs/corpus', help='Output directory for the index'),
+    limit: int = typer.Option(None, help='Maximum number of files to process'),
+) -> None:
+    """Index files listed in *manifest* and create a SQLite knowledge store.
+
+    The command writes ``cad_knowledge.sqlite`` and per‑file JSON records to
+    *out*.
+    """
+    from src.corpus.corpus_indexer import index_manifest
+    manifest_path = Path(manifest)
+    if not manifest_path.is_file():
+        raise typer.BadParameter('Manifest file not found')
+    out_dir = Path(out)
+    index_manifest(manifest_path, out_dir, limit=limit)
+    success(f'Corpus indexed to {out_dir}')
+
+
+@app.command('corpus-learn')
+def corpus_learn(
+    kb: str = typer.Option(..., help='Path to the SQLite knowledge store'),
+    out: str = typer.Option('outputs/corpus', help='Output directory for learning results'),
+) -> None:
+    """Run the learning step on the indexed corpus.
+
+    Currently a placeholder that creates ``learning_summary.json``.
+    """
+    from src.corpus.corpus_learner import learn_corpus
+    kb_path = Path(kb)
+    out_dir = Path(out)
+    learn_corpus(kb_path, out_dir)
+    success(f'Learning completed, summary written to {out_dir / "learning_summary.json"}')
+
+
+@app.command('corpus-query')
+def corpus_query(
+    kb: str = typer.Option(..., help='Path to the SQLite knowledge store'),
+    query: str = typer.Option(..., help='Natural language query string'),
+) -> None:
+    """Execute a query against the corpus knowledge base.
+
+    This is a stub – it returns a placeholder result.
+    """
+    from src.corpus.corpus_query import query_corpus
+    result = query_corpus(Path(kb), query)
+    console.print_json(data=result)
+
+
+@app.command('corpus-report')
+def corpus_report(
+    kb: str = typer.Option(..., help='Path to the SQLite knowledge store'),
+    out: str = typer.Option('outputs/corpus/report.md', help='Output markdown report path'),
+) -> None:
+    """Generate a markdown report for the corpus.
+
+    Placeholder implementation creates a minimal report file.
+    """
+    from src.corpus.report_builder import build_report
+    kb_path = Path(kb)
+    out_path = Path(out)
+    build_report(kb_path, out_path)
+    success(f'Report generated: {out_path}')
+
+
 # ---------------------------------------------------------------------------
 # XiCAD Safe Bridge commands
 # ---------------------------------------------------------------------------
@@ -364,3 +477,33 @@ def xicad_safe_run(
     if save_as and plan.can_execute:
         adapter.save_as(save_as)
         success(f'Saved modified DWG: {save_as}')
+
+
+# ---------------------------------------------------------------------------
+# Company Drafting Profile commands
+# ---------------------------------------------------------------------------
+
+@app.command('company-profile-build')
+def company_profile_build(
+    repo_root: str = typer.Option(..., help='Path to repository root'),
+    out: str = typer.Option('outputs/company_profile', help='Output directory for the profile'),
+) -> None:
+    """Extract drafting rules from repository files and write a profile JSON."""
+    profile = build_company_drafting_profile(Path(repo_root))
+    out_dir = Path(out)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    out_path = out_dir / 'company_drafting_profile.json'
+    profile.save(out_path)
+    success(f'Company drafting profile written: {out_path}')
+
+
+@app.command('company-profile-show')
+def company_profile_show(
+    profile: str = typer.Option(..., help='Path to a company drafting profile JSON file'),
+) -> None:
+    """Print the drafting profile JSON in a pretty format."""
+    p = Path(profile)
+    if not p.is_file():
+        raise typer.BadParameter('Profile file not found')
+    data = json.loads(p.read_text(encoding='utf-8'))
+    console.print_json(data=data)

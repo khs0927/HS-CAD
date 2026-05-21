@@ -1,0 +1,5 @@
+# No heavy required dependencies for this next-phase overlay.
+# Uses existing HS-CAD dependencies:
+# pydantic>=2, typer, rich, ezdxf, pandas/openpyxl optional.
+#
+# Optional fileizer packages remain in requirements-fileizers.txt / requirements-ocr.txt / requirements-ifc.txt.

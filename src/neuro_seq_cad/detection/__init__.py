@@ -1,0 +1,1 @@
+"""Detection optional adapter package."""

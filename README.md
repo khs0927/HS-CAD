@@ -224,3 +224,34 @@ This package now includes the next-step architecture audit and safer execution l
 - `docs/07_windows_test_plan.md` and `docs/09_next_development_plan.md`
 
 Always test mutations on DWG copies and use `--save-as`. 
+
+## Image/PDF to CAD Draft Generator
+
+`src/neuro_seq_cad/` is an isolated module that converts image/PDF floor plans into editable DXF drafts. It is separated from the existing ZWCAD DWG editing workflow and can run a synthetic demo without external models.
+
+```bash
+python -m neuro_seq_cad.app.cli make-sample --out samples/sample_plan.png
+python -m neuro_seq_cad.app.cli export-dxf samples/sample_plan.png --out outputs/demo
+```
+
+See `docs/21_image_to_cad_pipeline.md` for details.
+
+Runtime artifacts are intentionally ignored. Generated files under `generated/`,
+`outputs/`, and temporary overlay folders should be recreated locally and not
+committed to the repository.
+
+## Style Context Bridge
+
+`src/hs_style_context` merges drawing grammar samples into `style_context.json`.
+`src/neuro_seq_cad_bridge` adapts image-to-CAD results to the current drawing
+grammar and creates a dry-run preview insert plan. Existing DWG layers are not
+automatically remapped. Real ZWCAD insertion only runs when `--allow-execute`
+is provided, and preview plans keep `save: false`.
+
+## HS-CAD Clone Subpart Port
+
+`C:\cad\HS-CAD-clone` is a sibling clone of the same GitHub repository, not a
+submodule. Useful missing subparts are ported file-by-file into this PR instead
+of copying the clone wholesale. The ArchiOffice rule engine and rules-based
+drafting action builders are now integrated alongside the XiCAD rule engine;
+see `docs/29_hs_cad_clone_relationship.md`.

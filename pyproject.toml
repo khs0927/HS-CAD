@@ -5,6 +5,42 @@ description = "ZWCAD AI architectural DWG modifier framework"
 requires-python = ">=3.10"
 dependencies = []
 
+[project.optional-dependencies]
+image-cad = [
+  "opencv-python",
+  "numpy",
+  "scipy",
+  "scikit-image",
+  "shapely",
+  "ezdxf",
+  "pydantic",
+  "pydantic-settings",
+  "pillow",
+  "matplotlib",
+  "networkx",
+  "rich",
+  "typer",
+  "python-dotenv",
+]
+ocr = [
+  "paddleocr",
+  "easyocr",
+]
+ml = [
+  "torch",
+  "torchvision",
+]
+yolo = [
+  "ultralytics",
+]
+api = [
+  "fastapi",
+  "uvicorn",
+]
+
 [tool.pytest.ini_options]
 pythonpath = ["."]
 testpaths = ["tests"]
+markers = [
+  "integration: tests that require a real ZWCAD or external runtime",
+]
