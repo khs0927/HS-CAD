@@ -1,14 +1,29 @@
 __pycache__/
 *.py[cod]
 .pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
 .venv/
 venv/
+
+# HS-CAD generated runtime artifacts
+generated/
 outputs/
+temp_overlay/
 backups/
-generated/**/*.log
+*.zip
+
+# CAD/runtime local files
 *.dwg
 *.dxf
 *.bak
 *.tmp
+*.log
 .env
 .DS_Store
+
+# Keep sample folder but avoid committing generated sample images by default
+samples/*.png
+!samples/.gitkeep

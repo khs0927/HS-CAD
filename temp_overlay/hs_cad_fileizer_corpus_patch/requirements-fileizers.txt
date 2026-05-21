@@ -1,6 +1,0 @@
-# Optional fileizer dependencies. Keep base requirements.txt light.
-# Install only when you need these parsers.
-docling
-unstructured
-pymupdf
-pillow

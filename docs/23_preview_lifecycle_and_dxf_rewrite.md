@@ -52,3 +52,29 @@ generated/stage24/qa_review_report.md
 generated/stage24/merge_candidate_plan.json
 generated/stage24/merge_candidate_report.md
 ```
+
+## Regenerating Runtime Artifacts
+
+This repository does not track generated runtime artifacts such as `generated/`,
+`outputs/`, `temp_overlay/`, or generated sample PNG/DXF/JSON files.
+
+Regenerate Stage 23/24 artifacts locally with:
+
+```powershell
+python -m src.neuro_seq_cad_bridge.cli build-style-context --out generated/style_context
+
+python -m src.neuro_seq_cad_bridge.cli run-all-preview-plan `
+  --result outputs/demo/result.json `
+  --centerline-dxf outputs/demo/result_centerline.dxf `
+  --wallsolid-dxf outputs/demo/result_wallsolid.dxf `
+  --out generated/neuro_bridge
+
+python -m src.dxf_style_rewriter.cli rewrite-dxf `
+  --source-dxf outputs/demo/result_wallsolid.dxf `
+  --styled-result generated/neuro_bridge/styled_result.json `
+  --style-context generated/style_context/style_context.json `
+  --out generated/stage24
+```
+
+For synthetic sample images, use the neuro image-to-CAD generator instead of
+committing generated PNG files.

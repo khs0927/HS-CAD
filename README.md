@@ -236,6 +236,10 @@ python -m neuro_seq_cad.app.cli export-dxf samples/sample_plan.png --out outputs
 
 See `docs/21_image_to_cad_pipeline.md` for details.
 
+Runtime artifacts are intentionally ignored. Generated files under `generated/`,
+`outputs/`, and temporary overlay folders should be recreated locally and not
+committed to the repository.
+
 ## Style Context Bridge
 
 `src/hs_style_context` merges drawing grammar samples into `style_context.json`.
