@@ -78,6 +78,159 @@ def place_beams_2d(width: float, depth: float, grid_x: float, grid_y: float, ori
         y += grid_y
     return actions
 
+def _load_rules_from_engine(engine: Any) -> Any:
+    if hasattr(engine, "load_all"):
+        return engine.load_all()
+    if hasattr(engine, "load_all_rules"):
+        engine.load_all_rules()
+        return engine
+    return engine
+
+def _first_number(values: list[float], default: float) -> float:
+    try:
+        return float(values[0])
+    except Exception:
+        return default
+
+def _match_text(value: str, candidates: Iterable[str]) -> bool:
+    needle = value.lower()
+    return any(needle in str(candidate).lower() for candidate in candidates)
+
+def create_xicad_wall_actions(
+    engine: Any,
+    group_name: str,
+    length: float,
+    direction: str = "horizontal",
+    origin: tuple[float, float, float] = (0, 0, 0),
+) -> list[dict[str, Any]]:
+    rules = _load_rules_from_engine(engine)
+    styles = list(getattr(rules, "wall_styles", []) or [])
+    style = next(
+        (
+            item for item in styles
+            if _match_text(group_name, [getattr(item, "name", ""), getattr(item, "raw", "")])
+        ),
+        None,
+    )
+    offsets = list(getattr(style, "offsets", []) or []) if style else []
+    if len(offsets) < 2:
+        thickness = float(getattr(style, "total_thickness", 200.0) or 200.0) if style else 200.0
+        offsets = [-thickness / 2.0, thickness / 2.0]
+
+    x0, y0, z = _origin3(origin)
+    horizontal = direction.lower().startswith("h")
+    actions: list[dict[str, Any]] = []
+    for index, offset in enumerate(sorted(float(v) for v in offsets)):
+        points = (
+            [[x0, y0 + offset, z], [x0 + length, y0 + offset, z]]
+            if horizontal else
+            [[x0 + offset, y0, z], [x0 + offset, y0 + length, z]]
+        )
+        actions.append({
+            "action": "create_polyline",
+            "layer": "A-WALL",
+            "closed": False,
+            "points": points,
+            "name": f"WallLine_{index}",
+            "source": "xicad_rule_engine",
+        })
+    return actions
+
+def _find_steel_spec(engine: Any, is_xicad: bool, steel_type: str, spec_name: str) -> Any | None:
+    rules = _load_rules_from_engine(engine)
+    specs = list(getattr(rules, "steel_specs", []) or [])
+    for spec in specs:
+        category = str(getattr(spec, "category", ""))
+        name = str(getattr(spec, "name", ""))
+        raw = str(getattr(spec, "raw", ""))
+        if _match_text(steel_type, [category, raw]) and _match_text(spec_name, [name, raw]):
+            return spec
+    for spec in specs:
+        name = str(getattr(spec, "name", ""))
+        raw = str(getattr(spec, "raw", ""))
+        if _match_text(spec_name, [name, raw]):
+            return spec
+    return None
+
+def create_steel_beam_actions(
+    engine: Any,
+    is_xicad: bool,
+    steel_type: str,
+    spec_name: str,
+    origin: tuple[float, float, float] = (0, 0, 0),
+) -> list[dict[str, Any]]:
+    spec = _find_steel_spec(engine, is_xicad, steel_type, spec_name)
+    values = list(getattr(spec, "values", []) or []) if spec else []
+    height = _first_number(values, 200.0)
+    width = float(values[1]) if len(values) > 1 else height
+    web_thickness = float(values[2]) if len(values) > 2 else 8.0
+    flange_thickness = float(values[3]) if len(values) > 3 else 12.0
+
+    x, y, z = _origin3(origin)
+    if "h" in steel_type.lower() or len(values) >= 4:
+        tw = min(web_thickness, width)
+        tf = min(flange_thickness, height / 2.0)
+        points = [
+            [x - width / 2, y + height / 2, z],
+            [x + width / 2, y + height / 2, z],
+            [x + width / 2, y + height / 2 - tf, z],
+            [x + tw / 2, y + height / 2 - tf, z],
+            [x + tw / 2, y - height / 2 + tf, z],
+            [x + width / 2, y - height / 2 + tf, z],
+            [x + width / 2, y - height / 2, z],
+            [x - width / 2, y - height / 2, z],
+            [x - width / 2, y - height / 2 + tf, z],
+            [x - tw / 2, y - height / 2 + tf, z],
+            [x - tw / 2, y + height / 2 - tf, z],
+            [x - width / 2, y + height / 2 - tf, z],
+            [x - width / 2, y + height / 2, z],
+        ]
+        name = f"H_Beam_{spec_name}"
+    else:
+        points = [
+            [x - width / 2, y + height / 2, z],
+            [x + width / 2, y + height / 2, z],
+            [x + width / 2, y - height / 2, z],
+            [x - width / 2, y - height / 2, z],
+            [x - width / 2, y + height / 2, z],
+        ]
+        name = f"Box_Beam_{spec_name}"
+
+    return [{
+        "action": "create_polyline",
+        "layer": "A-BEAM-STEEL",
+        "closed": True,
+        "points": points,
+        "name": name,
+        "source": "xicad_rule_engine" if is_xicad else "archioffice_rule_engine",
+    }]
+
+def insert_spec_block_actions(
+    engine: Any,
+    is_xicad: bool,
+    category: str,
+    block_name: str,
+    origin: tuple[float, float, float] = (0, 0, 0),
+) -> list[dict[str, Any]]:
+    rules = _load_rules_from_engine(engine)
+    layer = f"A-AO-SYM-{category.upper()}" if not is_xicad else "A-XICAD-SYM"
+    if is_xicad:
+        for rule in list(getattr(rules, "block_layer_rules", []) or []):
+            pattern = str(getattr(rule, "pattern", ""))
+            if pattern and _match_text(category, [pattern]):
+                layer = f"A-SYM-{getattr(rule, 'layer', 'SYM')}"
+                break
+    x, y, z = _origin3(origin)
+    return [{
+        "action": "insert_block",
+        "block_name": block_name,
+        "layer": layer,
+        "insert": [x, y, z],
+        "rotation": 0,
+        "scale": [1.0, 1.0, 1.0],
+        "source": "xicad_rule_engine" if is_xicad else "archioffice_rule_engine",
+    }]
+
 def execute_planned_actions(adapter: Any, actions: list[dict[str, Any]]) -> dict[str, Any]:
     created = 0
     errors: list[dict[str, Any]] = []

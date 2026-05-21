@@ -247,3 +247,11 @@ committed to the repository.
 grammar and creates a dry-run preview insert plan. Existing DWG layers are not
 automatically remapped. Real ZWCAD insertion only runs when `--allow-execute`
 is provided, and preview plans keep `save: false`.
+
+## HS-CAD Clone Subpart Port
+
+`C:\cad\HS-CAD-clone` is a sibling clone of the same GitHub repository, not a
+submodule. Useful missing subparts are ported file-by-file into this PR instead
+of copying the clone wholesale. The ArchiOffice rule engine and rules-based
+drafting action builders are now integrated alongside the XiCAD rule engine;
+see `docs/29_hs_cad_clone_relationship.md`.
