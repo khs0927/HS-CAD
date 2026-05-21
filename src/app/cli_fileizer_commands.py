@@ -14,10 +14,28 @@ fileizer_app = typer.Typer(help="Drawing fileizer commands")
 
 @fileizer_app.command("fileizer-check")
 def fileizer_check() -> None:
+    """Print detailed availability information for each registered fileizer.
+\n    The output includes the fileizer name, availability status, version (if any),\n    and a human‑readable reason when unavailable. This aids debugging\n    DWG handling where COM or external CLI tools may be missing.
+    """
     registry = FileizerRegistry()
     for row in registry.availability_report():
-        status = "OK" if row["available"] else "unavailable"
-        print(f"[bold]{row['name']}[/bold]: {status} ({row['version']})")
+        name = row["name"]
+        available = row["available"]
+        version = row.get("version", "unknown")
+        status = "OK" if available else "unavailable"
+        # Attempt to fetch a detailed reason if the fileizer implements it.
+        reason = ""
+        try:
+            # ``registry.fileizers`` holds instantiated objects in the same order.
+            f_obj = next((f for f in registry.fileizers if f.get_name() == name), None)
+            if f_obj and not available and hasattr(f_obj, "get_unavailable_reason"):
+                reason = f_obj.get_unavailable_reason()
+        except Exception:
+            reason = ""
+        if reason:
+            print(f"[bold]{name}[/bold]: {status} (v{version}) - {reason}")
+        else:
+            print(f"[bold]{name}[/bold]: {status} (v{version})")
 
 
 @fileizer_app.command("fileize")
