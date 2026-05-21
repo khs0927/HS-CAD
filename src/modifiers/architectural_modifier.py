@@ -1,9 +1,21 @@
+# -*- coding: utf-8 -*-
 from __future__ import annotations
 
 from collections import Counter, defaultdict
 from typing import Any, Iterable
 import yaml
 from pathlib import Path
+
+# XiCAD & ArchiOffice 룰 엔진 연동을 위한 안전 임포트
+try:
+    from src.integrations.xicad_rule_engine import XiCADRuleEngine
+    from src.integrations.archioffice_rule_engine import ArchiOfficeRuleEngine
+except ImportError:
+    # 패스 백업 (테스트 구동용)
+    import sys
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+    from src.integrations.xicad_rule_engine import XiCADRuleEngine
+    from src.integrations.archioffice_rule_engine import ArchiOfficeRuleEngine
 
 def _load_config_layers() -> set[str]:
     default_layers = {
@@ -77,6 +89,200 @@ def place_beams_2d(width: float, depth: float, grid_x: float, grid_y: float, ori
         actions.append({'action':'create_line','layer':layer,'name':f'BY{y:g}','start':[x0,y0+y,z],'end':[x0+width,y0+y,z]})
         y += grid_y
     return actions
+
+# =========================================================================
+# 🔴 [RULES-BASED DRAFTING ACTION BUILDERS UPGRADE]
+# =========================================================================
+
+def create_xicad_wall_actions(
+    engine: XiCADRuleEngine, 
+    group_name: str, 
+    length: float, 
+    direction: str = "horizontal",
+    origin: tuple[float, float, float] = (0, 0, 0)
+) -> list[dict[str, Any]]:
+    """
+    XiCAD에서 추출된 다중선 벽체 스타일 사양을 바탕으로 
+    실제 CAD 도면에 레이어 및 오프셋 두께를 정확히 적용한 Polyline 벽체 액션들을 조립합니다.
+    """
+    if not engine.is_loaded:
+        engine.load_all_rules()
+        
+    # 일치하는 그룹 탐색
+    style_data = None
+    for name, data in engine.wall_styles.items():
+        if group_name.lower() in name.lower():
+            style_data = data
+            break
+            
+    if not style_data:
+        # Fallback: 스타일을 찾지 못하면 200mm 일반 벽체 액션 반환
+        style_data = {
+            "lines": [
+                {"offset": -100.0, "layer": "A-WALL", "linetype": "Continuous", "color": 4},
+                {"offset": 100.0, "layer": "A-WALL", "linetype": "Continuous", "color": 4}
+            ]
+        }
+
+    x0, y0, z = _origin3(origin)
+    actions = []
+    
+    # 스타일 내 개별 오프셋 라인들을 Polyline으로 생성
+    for idx, l in enumerate(style_data.get("lines", [])):
+        offset = l["offset"]
+        layer_name = f"A-WALL-{l['layer']}" if l['layer'] != '0' else 'A-WALL'
+        
+        if direction.lower() == "horizontal":
+            pts = [
+                [x0, y0 + offset, z],
+                [x0 + length, y0 + offset, z]
+            ]
+        else:
+            pts = [
+                [x0 + offset, y0, z],
+                [x0 + offset, y0 + length, z]
+            ]
+            
+        actions.append({
+            'action': 'create_polyline',
+            'layer': layer_name,
+            'closed': False,
+            'points': pts,
+            'name': f"WallLine_{idx}"
+        })
+        
+    return actions
+
+def create_steel_beam_actions(
+    engine: Any, 
+    is_xicad: bool,
+    steel_type: str, 
+    spec_name: str, 
+    origin: tuple[float, float, float] = (0, 0, 0)
+) -> list[dict[str, Any]]:
+    """
+    XiCAD (.dat) 혹은 ArchiOffice (ShapeSteel.txt) 형강 치수 규격 테이블을 조회하여 
+    H형강, 각관 등의 정확한 단면(H-Beam Cross Section)을 그릴 수 있는 Polyline 액션들을 구축합니다.
+    """
+    if not engine.is_loaded:
+        engine.load_all_rules()
+
+    spec = None
+    if is_xicad:
+        # XiCAD spec search
+        specs = engine.structural_steel_specs.get(steel_type, [])
+        for s in specs:
+            if spec_name.lower() in s["name"].lower():
+                spec = s
+                break
+    else:
+        # ArchiOffice spec search
+        for cat, items in engine.steel_specs.items():
+            if steel_type.lower() in cat.lower() or "형강" in cat.lower() or "pipe" in cat.lower():
+                for item in items:
+                    if spec_name.lower() in item["name"].lower():
+                        spec = item
+                        break
+                if spec:
+                    break
+
+    if not spec:
+        # Fallback: 200x200 H형강
+        spec = {
+            "height": 200.0, "width": 200.0, 
+            "web_thickness": 8.0, "flange_thickness": 12.0
+        }
+
+    x, y, z = _origin3(origin)
+    h = spec.get("height", spec.get("width", 200.0))
+    w = spec.get("width", 200.0)
+    
+    actions = []
+    
+    if "web_thickness" in spec and "flange_thickness" in spec:
+        # 1. H형강 단면 그리기 (정교한 12점 외곽선 Polyline)
+        tw = spec["web_thickness"]
+        tf = spec["flange_thickness"]
+        
+        # 중심 정렬 단면 좌표 계산
+        pts = [
+            [x - w/2, y + h/2, z],                          # Top Left Outer
+            [x + w/2, y + h/2, z],                          # Top Right Outer
+            [x + w/2, y + h/2 - tf, z],                     # Top Right Inner-Flange
+            [x + tw/2, y + h/2 - tf, z],                    # Top Right Inner-Web
+            [x + tw/2, y - h/2 + tf, z],                    # Bottom Right Inner-Web
+            [x + w/2, y - h/2 + tf, z],                     # Bottom Right Inner-Flange
+            [x + w/2, y - h/2, z],                          # Bottom Right Outer
+            [x - w/2, y - h/2, z],                          # Bottom Left Outer
+            [x - w/2, y - h/2 + tf, z],                     # Bottom Left Inner-Flange
+            [x - tw/2, y - h/2 + tf, z],                    # Bottom Left Inner-Web
+            [x - tw/2, y + h/2 - tf, z],                    # Top Left Inner-Web
+            [x - w/2, y + h/2 - tf, z],                     # Top Left Inner-Flange
+            [x - w/2, y + h/2, z]                           # Close loop
+        ]
+        actions.append({
+            'action': 'create_polyline',
+            'layer': 'A-BEAM-STEEL',
+            'closed': True,
+            'points': pts,
+            'name': f"H_Beam_{spec_name}"
+        })
+    else:
+        # 2. 각관 단면 (Closed Rectangle)
+        pts = [
+            [x - w/2, y + h/2, z],
+            [x + w/2, y + h/2, z],
+            [x + w/2, y - h/2, z],
+            [x - w/2, y - h/2, z],
+            [x - w/2, y + h/2, z]
+        ]
+        actions.append({
+            'action': 'create_polyline',
+            'layer': 'A-BEAM-STEEL',
+            'closed': True,
+            'points': pts,
+            'name': f"Box_Beam_{spec_name}"
+        })
+        
+    return actions
+
+def insert_spec_block_actions(
+    engine: Any,
+    is_xicad: bool,
+    category: str,
+    block_name: str,
+    origin: tuple[float, float, float] = (0, 0, 0)
+) -> list[dict[str, Any]]:
+    """
+    XiCAD 또는 ArchiOffice의 라이브러리 블록 삽입 액션을 빌드하며, 
+    각 가구/조경/위생 카테고리에 정의된 공식 레이어, 색상, 선 종류 매핑을 자동 부여합니다.
+    """
+    if not engine.is_loaded:
+        engine.load_all_rules()
+
+    layer = "A-XICAD-SYM"
+    
+    if is_xicad:
+        # XiCAD Blk Layer mapping
+        rule = engine.block_layer_rules.get(category)
+        if rule:
+            layer = f"A-SYM-{rule['layer']}"
+    else:
+        # ArchiOffice Category mapping
+        # AO default prefix
+        layer = f"A-AO-SYM-{category.upper()}"
+
+    x, y, z = _origin3(origin)
+    return [{
+        'action': 'insert_block',
+        'block_name': block_name,
+        'layer': layer,
+        'insert': [x, y, z],
+        'rotation': 0,
+        'scale': [1.0, 1.0, 1.0]
+    }]
+
+# =========================================================================
 
 def execute_planned_actions(adapter: Any, actions: list[dict[str, Any]]) -> dict[str, Any]:
     created = 0
