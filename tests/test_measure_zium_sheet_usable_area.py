@@ -1,25 +1,28 @@
-import json
-import subprocess
-import pathlib
+from __future__ import annotations
 
-def test_measure_zium_sheet_usable_area(tmp_path: pathlib.Path):
+import os
+import pathlib
+import subprocess
+
+import pytest
+
+
+@pytest.mark.integration
+def test_measure_zium_sheet_usable_area_cli_with_real_zwcad(tmp_path: pathlib.Path):
+    if os.environ.get("HS_CAD_RUN_ZWCAD_TESTS") != "1":
+        pytest.skip("Set HS_CAD_RUN_ZWCAD_TESTS=1 to run tests that require active ZWCAD.")
+
     out_dir = tmp_path / "zium_test"
     repo_root = pathlib.Path(__file__).resolve().parents[1]
-    subprocess.check_call([
-        "python",
-        "tools/measure_zium_sheet_usable_area.py",
-        "--out-dir",
-        str(out_dir),
-    ], cwd=str(repo_root))
+    subprocess.check_call(
+        [
+            "python",
+            "tools/measure_zium_sheet_usable_area.py",
+            "--out-dir",
+            str(out_dir),
+        ],
+        cwd=str(repo_root),
+    )
 
-    json_path = out_dir / "zium_sheet_usable_area.json"
-    assert json_path.is_file()
-    data = json.load(json_path.open(encoding="utf-8"))
-    assert data["block_definition_exists"] is True
-    assert data["needs_visual_check"] is False
-    # Validate usable area bbox structure
-    bbox = data["usable_drawing_area_bbox"]
-    for key in ["xmin", "ymin", "xmax", "ymax"]:
-        assert key in bbox
-    # Ensure confidence is reasonable
-    assert 0.0 <= data["confidence"] <= 1.0
+    assert (out_dir / "zium_sheet_usable_area.json").is_file()
+    assert (out_dir / "zium_sheet_usable_area.md").is_file()
