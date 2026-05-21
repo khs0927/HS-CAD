@@ -138,7 +138,9 @@ adapter.create_qleader_label(
 - Work on copied DWG files when mutating production drawings.
 - Prefer dry-run or scan/report commands before edit commands.
 - Use `--save-as` style flows for generated outputs.
-- Keep generated layers explicit so changes can be reviewed and removed cleanly.
+- When editing an existing office DWG, prefer the sampled local layer and visual grammar.
+- Do not remap existing layers unless explicitly requested.
+- Use explicit generated layers only for standalone generated drawings or review-isolation workflows.
 - Run tests before publishing changes.
 
 ## Tests

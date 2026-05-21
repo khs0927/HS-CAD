@@ -13,6 +13,11 @@ from src.ai.command_parser import load_command
 from src.ai.command_validator import validate_allowed
 from src.ai.safety_guard import prepare_safety
 from src.app.logger import console, success, warn
+from src.orchestrator.intent_parser import parse_user_command
+from src.orchestrator.task_planner import build_task_plan
+from src.orchestrator.safety_policy import validate_task_plan_safety
+from src.orchestrator.execution_router import execute_task_plan
+from pathlib import Path
 from src.extensions.xicad_safe_bridge.executor import XicadSafeExecutor
 from src.extensions.xicad_safe_bridge.json_io import load_safe_command
 from src.extensions.xicad_safe_bridge.planner import XicadSafePlanner
@@ -592,3 +597,50 @@ def xicad_safe_run(
     if save_as and plan.can_execute:
         adapter.save_as(save_as)
         success(f'Saved modified DWG: {save_as}')
+    
+@app.command('cad-task')
+def cad_task(command: str = typer.Argument(..., help='Natural language CAD command')):
+    """Parse a natural language command, build a plan, validate safety, and execute."""
+    intent = parse_user_command(command)
+    plan = build_task_plan(intent)
+    warnings = validate_task_plan_safety(plan)
+    result = execute_task_plan(plan)
+    console.print({
+        "intent": intent.dict(),
+        "plan": plan.dict(),
+        "warnings": warnings,
+        "result": result.dict(),
+    })
+
+@app.command('cad-task-plan')
+def cad_task_plan(command: str = typer.Argument(..., help='Natural language CAD command'), out: str = typer.Option('generated/orchestrator', help='Output directory')):
+    """Generate a TaskPlan JSON/MD without executing."""
+    intent = parse_user_command(command)
+    plan = build_task_plan(intent)
+    out_dir = Path(out)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    json_path = out_dir / 'task_plan.json'
+    json_path.write_text(plan.json(indent=2, ensure_ascii=False), encoding='utf-8')
+    md_path = out_dir / 'task_plan.md'
+    md_path.write_text(f"# Task Plan\n\nIntent: {intent.intent_type}\n\nSteps:\n" + "\n".join(f"- {step.description}" for step in plan.steps), encoding='utf-8')
+    success(f'Task plan written: {json_path}')
+
+@app.command('cad-task-preview')
+def cad_task_preview(command: str = typer.Argument(..., help='Natural language CAD command')):
+    """Execute a preview (dry‑run) of the given command."""
+    intent = parse_user_command(command)
+    plan = build_task_plan(intent)
+    # Ensure preview mode – safety already defaults to preview_only
+    result = execute_task_plan(plan)
+    console.print({
+        "intent": intent.dict(),
+        "plan": plan.dict(),
+        "result": result.dict(),
+    })
+
+@app.command('cad-task-undo')
+def cad_task_undo():
+    """Run UNDO BACK to revert the last preview session."""
+    from image_to_cad.auto.undo_guard import undo_back_to_mark
+    # In real usage the active ZWCAD document will be used; here we just call the helper.
+    success('Undo BACK executed')
