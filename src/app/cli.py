@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import json
 from pathlib import Path
 from typing import Optional
 
@@ -13,11 +12,6 @@ from src.ai.command_parser import load_command
 from src.ai.command_validator import validate_allowed
 from src.ai.safety_guard import prepare_safety
 from src.app.logger import console, success, warn
-from src.orchestrator.intent_parser import parse_user_command
-from src.orchestrator.task_planner import build_task_plan
-from src.orchestrator.safety_policy import validate_task_plan_safety
-from src.orchestrator.execution_router import execute_task_plan
-from pathlib import Path
 from src.extensions.xicad_safe_bridge.executor import XicadSafeExecutor
 from src.extensions.xicad_safe_bridge.json_io import load_safe_command
 from src.extensions.xicad_safe_bridge.planner import XicadSafePlanner
@@ -36,12 +30,6 @@ from src.modifiers.architectural_modifier import (
 )
 from src.reports.json_exporter import export_json
 from src.reports.quantity_report import block_quantity
-from src.reports.architecture_report import write_architecture_report
-from src.reports.debug_bundle import collect_debug_bundle
-from src.semantics.layer_taxonomy import layer_rules_as_rows
-from src.semantics.object_classifier import classify_objects, summarize_semantics
-from src.semantics.screen_capture import analyze_screen_image, capture_screen
-from src.testing.environment_check import run_environment_check, write_environment_check
 from src.scanners.block_scanner import block_summary
 from src.scanners.layer_scanner import layer_counts
 from src.scanners.text_scanner import extract_texts
@@ -54,13 +42,6 @@ def get_adapter(dwg: Optional[str] = None) -> ZWCADCOMAdapter:
     adapter.connect()
     if dwg:
         adapter.open_document(dwg)
-    else:
-        # If no DWG path provided, try to use the active document
-        try:
-            adapter.get_active_document()
-        except Exception:
-            # If no active document, it's okay for now, but commands might fail later
-            pass
     return adapter
 
 
@@ -71,44 +52,6 @@ def _default_shortkey(xicad_root: str | None) -> Path | None:
     return path if path.exists() else None
 
 
-def _load_objects_json(path: str | Path) -> list[dict]:
-    data = json.loads(Path(path).read_text(encoding='utf-8'))
-    if isinstance(data, dict):
-        if isinstance(data.get('objects'), list):
-            return data['objects']
-        if isinstance(data.get('items'), list):
-            return data['items']
-    if not isinstance(data, list):
-        raise typer.BadParameter('input JSON must be a list or contain an objects/items list')
-    return data
-
-
-def _parse_bbox(value: str | None) -> tuple[int, int, int, int] | None:
-    if not value:
-        return None
-    parts = [int(part.strip()) for part in value.split(',')]
-    if len(parts) != 4:
-        raise typer.BadParameter('--bbox must be "left,top,width,height"')
-    return tuple(parts)  # type: ignore[return-value]
-
-
-def _semantic_summary_markdown(summary: dict) -> str:
-    lines = [
-        '# Object Semantic Summary',
-        '',
-        f"- Total objects: {summary.get('total_objects', summary.get('object_count', 0))}",
-        f"- Classified objects: {summary.get('classified_objects', 0)}",
-        f"- Unknown objects: {summary.get('unknown_objects', 0)}",
-        f"- Color mismatch count: {summary.get('color_mismatch_count', 0)}",
-        f"- Low confidence count: {summary.get('low_confidence_count', 0)}",
-        '',
-        '## By Semantic Type',
-    ]
-    for key, value in sorted(summary.get('by_semantic_type', {}).items()):
-        lines.append(f'- {key}: {value}')
-    return '\n'.join(lines) + '\n'
-
-
 @app.command()
 def connect():
     adapter = get_adapter()
@@ -116,46 +59,16 @@ def connect():
     adapter.close()
 
 
-@app.command('env-check')
-def env_check(
-    dwg: str | None = typer.Option(None, help='Optional sample DWG path'),
-    xicad_root: str | None = typer.Option(None, help='Optional XiCAD root path'),
-    version: str | None = typer.Option(None, help='Preferred ZWCAD version: 2025 or 2026'),
-    start_zwcad: bool = typer.Option(False, help='Allow COM CreateObject to start ZWCAD'),
-    out_dir: str = typer.Option('outputs/zwcad_env_check', help='Output directory'),
-):
-    """Check Python packages, paths and ZWCAD 2025/2026 COM availability."""
-    payload = run_environment_check(dwg=dwg, xicad_root=xicad_root, version=version, start_zwcad=start_zwcad)
-    paths = write_environment_check(payload, out_dir)
-    console.print({
-        'zwcad_com_connected': payload.get('zwcad_com_connected'),
-        'active_progid': payload.get('zwcad_active_progid'),
-        'connection_mode': payload.get('zwcad_connection_mode'),
-        'outputs': paths,
-    })
-
-
 @app.command()
-def scan(dwg: Optional[str] = typer.Option(None, help='DWG file path (defaults to active document)'), out: str = typer.Option('outputs/objects.json', help='Output JSON path')):
+def scan(dwg: str = typer.Option(..., help='DWG file path'), out: str = typer.Option('outputs/objects.json', help='Output JSON path')):
     adapter = get_adapter(dwg)
     objects = adapter.scan_modelspace()
     export_json(objects, out)
     success(f'Scanned {len(objects)} objects -> {out}')
 
 
-@app.command('list-layers')
-def list_layers_cmd(dwg: Optional[str] = typer.Option(None, help='DWG file path (defaults to active document)')):
-    adapter = get_adapter(dwg)
-    layers = adapter.list_layers()
-    table = Table('Layer')
-    for layer in layers:
-        table.add_row(layer)
-    console.print(table)
-    success(f'Found {len(layers)} layers')
-
-
 @app.command()
-def layers(dwg: Optional[str] = typer.Option(None, help='DWG file path (defaults to active document)')):
+def layers(dwg: str = typer.Option(..., help='DWG file path')):
     adapter = get_adapter(dwg)
     counts = layer_counts(adapter.scan_modelspace())
     table = Table('Layer', 'Count')
@@ -164,42 +77,8 @@ def layers(dwg: Optional[str] = typer.Option(None, help='DWG file path (defaults
     console.print(table)
 
 
-@app.command('consolidate-layers')
-def consolidate_layers(
-    dwg: Optional[str] = typer.Option(None, help='DWG file path (defaults to active document)'),
-    target_layer: str = typer.Option('ETC', help='Layer that receives non-standard layers'),
-    keep_layer: list[str] | None = typer.Option(None, help='Extra layer to preserve. Repeat this option as needed.'),
-    execute: bool = typer.Option(False, help='Actually change object layers'),
-    save_as: str | None = typer.Option(None, help='Save modified DWG as'),
-    out: str | None = typer.Option(None, help='Optional JSON report path'),
-):
-    """Merge all layers except the user-defined layer standard into one layer."""
-    if execute and not save_as:
-        raise typer.BadParameter('--save-as is required with --execute.')
-    adapter = get_adapter(dwg)
-    result = adapter.consolidate_other_layers(
-        target_layer=target_layer,
-        keep_layers=keep_layer or [],
-        dry_run=not execute,
-    )
-    if save_as and execute:
-        adapter.save_as(save_as)
-        result['saved_as'] = save_as
-    if out:
-        export_json(result, out)
-    table = Table('Source Layer', 'Object Count')
-    for layer, count in sorted(result.get('source_layers', {}).items()):
-        table.add_row(str(layer), str(count))
-    console.print(table)
-    console.print(result)
-    if execute:
-        success(f"Consolidated {result.get('changed', 0)} objects into {target_layer}")
-    else:
-        warn(f"Dry-run only. {result.get('changed', 0)} objects would move into {target_layer}")
-
-
 @app.command()
-def blocks(dwg: Optional[str] = typer.Option(None, help='DWG file path (defaults to active document)')):
+def blocks(dwg: str = typer.Option(..., help='DWG file path')):
     adapter = get_adapter(dwg)
     summary = block_summary(adapter.scan_modelspace())
     table = Table('Block', 'Count')
@@ -209,7 +88,7 @@ def blocks(dwg: Optional[str] = typer.Option(None, help='DWG file path (defaults
 
 
 @app.command()
-def texts(dwg: Optional[str] = typer.Option(None, help='DWG file path (defaults to active document)'), out: str | None = typer.Option(None, help='Optional JSON output path')):
+def texts(dwg: str = typer.Option(..., help='DWG file path'), out: str | None = typer.Option(None, help='Optional JSON output path')):
     adapter = get_adapter(dwg)
     rows = extract_texts(adapter.scan_modelspace())
     if out:
@@ -224,109 +103,29 @@ def texts(dwg: Optional[str] = typer.Option(None, help='DWG file path (defaults 
 
 @app.command('analyze-architecture')
 def analyze_architecture(dwg: str = typer.Option(..., help='DWG file path'), out_dir: str = typer.Option('outputs/architecture_report', help='Report output directory')):
-    """Create architecture-focused JSON/Markdown/Excel audit outputs from a DWG scan."""
+    """Create architecture-focused JSON/Markdown audit outputs from a DWG scan."""
     adapter = get_adapter(dwg)
     objects = adapter.scan_modelspace()
-    paths = write_architecture_report(objects, out_dir)
-    success(f'Architecture report written: {out_dir} ({len(paths)} files)')
-
-
-@app.command('collect-debug')
-def collect_debug(
-    dwg: str | None = typer.Option(None, help='Optional DWG file path'),
-    xicad_root: str | None = typer.Option(None, help='Optional XiCAD root path'),
-    out_dir: str = typer.Option('outputs/debug_bundle', help='Debug bundle output directory'),
-    max_objects: int = typer.Option(200, help='Maximum object samples to include'),
-):
-    """Collect environment, optional ZWCAD scan and XiCAD detection information for support."""
-    adapter = None
-    if dwg:
-        try:
-            adapter = get_adapter(dwg)
-        except Exception as exc:
-            warn(f'ZWCAD connection failed; collecting environment only: {exc}')
-    paths = collect_debug_bundle(adapter, dwg, xicad_root, out_dir, max_objects=max_objects)
-    success(f'Debug bundle written: {out_dir} ({len(paths)} files)')
-
-
-@app.command('classify-objects')
-def classify_objects_cmd(
-    dwg: str | None = typer.Option(None, help='DWG file path. Uses ZWCAD COM.'),
-    input_json: str | None = typer.Option(None, help='Existing objects.json path. Works without ZWCAD.'),
-    out: str = typer.Option('outputs/object_semantics.json', help='Object semantic JSON output path'),
-    summary_out: str = typer.Option('outputs/object_semantic_summary.json', help='Semantic summary JSON output path'),
-    format: str = typer.Option('json', help='Output format hint: json, xlsx, or md'),
-    include_unknown: bool = typer.Option(True, help='Include unknown classifications'),
-    confidence_threshold: float = typer.Option(0.0, help='Minimum confidence to include in the main output'),
-    taxonomy: str | None = typer.Option(None, help='Optional taxonomy path; current built-in taxonomy is used.'),
-):
-    """Classify existing CAD objects by user-defined architectural layer rules plus geometry hints."""
-    if taxonomy:
-        warn('Custom taxonomy path is accepted for workflow compatibility; built-in taxonomy is used in this build.')
-    if input_json:
-        objects = _load_objects_json(input_json)
-    elif dwg:
-        adapter = get_adapter(dwg)
-        objects = adapter.scan_modelspace()
-    else:
-        raise typer.BadParameter('Provide either --dwg or --input-json.')
-    rows = classify_objects(objects)
-    if not include_unknown:
-        rows = [row for row in rows if row.get('semantic_type') != 'unknown' and row.get('category') != 'unknown']
-    if confidence_threshold > 0:
-        rows = [row for row in rows if float(row.get('confidence') or 0) >= confidence_threshold]
-    summary = summarize_semantics(rows)
-    export_json(rows, out)
-    export_json(summary, summary_out)
-    if format == 'xlsx':
-        try:
-            import pandas as pd  # type: ignore
-            xlsx = str(Path(out).with_suffix('.xlsx'))
-            pd.DataFrame(rows).to_excel(xlsx, index=False)
-            success(f'Object semantics Excel -> {xlsx}')
-        except Exception as exc:
-            warn(f'Excel export skipped: {exc}')
-    elif format == 'md':
-        md = Path(out).with_suffix('.md')
-        md.parent.mkdir(parents=True, exist_ok=True)
-        md.write_text(_semantic_summary_markdown(summary), encoding='utf-8')
-    table = Table('Semantic Type', 'Count')
-    for key, value in sorted(summary.get('by_semantic_type', summary.get('by_category', {})).items()):
-        table.add_row(key, str(value))
-    console.print(table)
-    success(f'Object semantics -> {out}')
-
-
-@app.command('layer-taxonomy')
-def layer_taxonomy(out: str | None = typer.Option(None, help='Optional JSON output path')):
-    """Print the architectural layer taxonomy used for object classification."""
-    rows = layer_rules_as_rows()
-    if out:
-        export_json(rows, out)
-        success(f'Layer taxonomy written: {out}')
-        return
-    table = Table('Layer', 'Category', 'Role', 'Color', 'Description')
-    for row in rows:
-        table.add_row(str(row['layer']), str(row['category']), str(row['role']), str(row.get('color_index')), str(row['description']))
-    console.print(table)
-
-
-@app.command('capture-screen')
-def capture_screen_cmd(
-    out: str = typer.Option('outputs/screen_capture.png', help='Screenshot output path'),
-    bbox: str | None = typer.Option(None, help='Optional capture box: left,top,width,height'),
-    analyze: bool = typer.Option(True, help='Also run lightweight image analysis'),
-):
-    """Capture the visible screen as a fallback aid when CAD object access is insufficient."""
-    result = capture_screen(out, region=_parse_bbox(bbox))
-    payload = {'capture': result.__dict__}
-    if result.ok and analyze and result.path:
-        payload['image_analysis'] = analyze_screen_image(result.path)
-    console.print(payload)
-    if result.ok:
-        success(f'Screen captured: {result.path}')
-    else:
-        warn(result.warning or 'Screen capture failed')
+    summary = generate_architecture_summary(objects)
+    out = Path(out_dir)
+    out.mkdir(parents=True, exist_ok=True)
+    export_json(objects, out / 'objects.json')
+    export_json(summary, out / 'architecture_summary.json')
+    md_lines = [
+        '# Architecture Drawing Audit',
+        '',
+        f'- Object count: {summary["object_count"]}',
+        '',
+        '## Entity counts',
+    ]
+    for key, value in summary['entity_counts'].items():
+        md_lines.append(f'- {key}: {value}')
+    md_lines += ['', '## Architecture layer counts']
+    for key, value in summary['architecture_layers']['architecture_layer_counts'].items():
+        md_lines.append(f'- {key}: {value}')
+    md_lines += ['', '## Polyline quality', f'- Closed: {summary["polyline_quality"]["closed_count"]}', f'- Open: {summary["polyline_quality"]["open_count"]}']
+    (out / 'drawing_audit.md').write_text('\n'.join(md_lines), encoding='utf-8')
+    success(f'Architecture report written: {out}')
 
 
 @app.command('xicad-profile')
@@ -351,9 +150,7 @@ def xicad_manifest(xicad_root: str = typer.Option(..., help='XiCAD root path'), 
 def xicad_catalog(xicad_root: str | None = None, shortkey: str | None = None):
     key = Path(shortkey) if shortkey else _default_shortkey(xicad_root)
     if key is None:
-        warn('No XiCAD shortkey file found. Showing built-in safe catalog aliases instead.')
-        xicad_safe_catalog(None)
-        return
+        raise typer.BadParameter('Provide --shortkey or --xicad-root containing Lisp/xiShortkey_origin.key')
     commands = filter_architecture_commands(parse_xicad_shortkey(key))
     table = Table('Alias', 'Function', 'Description', 'Section')
     for cmd in commands:
@@ -365,10 +162,7 @@ def xicad_catalog(xicad_root: str | None = None, shortkey: str | None = None):
 def build_xicad_catalog(xicad_root: str = typer.Option(..., help='XiCAD root path'), out: str = typer.Option('generated/xicad/xicad_catalog.json', help='Catalog output path')):
     key = _default_shortkey(xicad_root)
     if key is None:
-        rows = [item.model_dump(mode='json') for item in default_xicad_registry().list()]
-        export_json(rows, out)
-        success(f'Built-in XiCAD safe catalog written: {out}')
-        return
+        raise typer.BadParameter('No xiShortkey_origin.key found under xicad_root/Lisp')
     rows = [cmd.__dict__ for cmd in filter_architecture_commands(parse_xicad_shortkey(key))]
     export_json(rows, out)
     success(f'XiCAD catalog written: {out}')
@@ -412,14 +206,7 @@ def _planned_actions_for(cmd) -> list[dict] | None:
 
 
 @app.command('run-command')
-def run_command(
-    dwg: str = typer.Option(..., help='DWG file path'),
-    command: str = typer.Option(..., help='Command JSON path'),
-    dry_run: bool = typer.Option(True, help='Preview only'),
-    execute: bool = typer.Option(False, help='Actually execute'),
-    save_as: str | None = typer.Option(None, help='Save modified DWG as'),
-    yes: bool = typer.Option(False, help='Required for delete commands when executing'),
-):
+def run_command(dwg: str = typer.Option(..., help='DWG file path'), command: str = typer.Option(..., help='Command JSON path'), dry_run: bool = typer.Option(False, help='Preview only'), execute: bool = typer.Option(False, help='Actually execute'), save_as: str | None = typer.Option(None, help='Save modified DWG as')):
     """Validate and run a JSON command.
 
     Dry-run does not require ZWCAD/COM. This is important for Codex, CI and
@@ -429,16 +216,6 @@ def run_command(
     cmd = load_command(command)
     validate_allowed(cmd)
     will_execute = bool(execute and not dry_run)
-    mutating = cmd.command in {
-        'move_layer','move_object_by_handle','replace_text','replace_block',
-        'delete_layer_objects','create_boundary','create_grid','place_columns',
-        'place_beams_2d','load_xicad','run_xicad_command','xicad_workflow',
-        'run_xicad_workflow','xicad_safe_execute'
-    }
-    if will_execute and mutating and not save_as:
-        raise typer.BadParameter('--save-as is required for mutating --execute commands.')
-    if will_execute and cmd.command == 'delete_layer_objects' and not (getattr(cmd.params, 'yes', False) or yes):
-        raise typer.BadParameter('delete_layer_objects requires --yes when executing.')
     safety = prepare_safety(cmd, dwg, will_execute)
     warn(f'Safety: {safety}')
     result = {'command': cmd.command, 'executed': will_execute, 'result': None}
@@ -492,9 +269,9 @@ def run_command(
         result['result'] = {'changed': adapter.replace_text(p.find, p.replace, p.layer)}
     elif cmd.command == 'replace_block':
         p = cmd.params
-        result['result'] = adapter.replace_block(p.target_block, p.new_block, p.layer, p.preserve_rotation, p.preserve_scale, p.preserve_layer, p.delete_original)
+        result['result'] = adapter.replace_block(p.target_block, p.new_block, p.layer)
     elif cmd.command == 'delete_layer_objects':
-        result['result'] = {'deleted': adapter.delete_layer_objects(cmd.params.layer, yes=bool(cmd.params.yes or yes), dry_run=False)}
+        result['result'] = {'deleted': adapter.delete_layer_objects(cmd.params.layer)}
     elif cmd.command == 'save_as':
         adapter.save_as(cmd.params.path)
         result['result'] = {'saved_as': cmd.params.path}
@@ -552,16 +329,8 @@ def xicad_safe_catalog(xicad_root: str | None = None):
 
 
 @app.command('xicad-safe-plan')
-def xicad_safe_plan(
-    command_arg: str | None = typer.Argument(None, help='XiCAD safe JSON command'),
-    command: str | None = typer.Option(None, help='XiCAD safe JSON command'),
-    xicad_root: str | None = typer.Option(None, help='XiCAD root path'),
-    out: str | None = typer.Option(None, help='Optional output JSON path'),
-):
-    command_path = command or command_arg
-    if not command_path:
-        raise typer.BadParameter('Provide a command JSON path as an argument or --command.')
-    safe_command = load_safe_command(command_path)
+def xicad_safe_plan(command: str = typer.Option(..., help='XiCAD safe JSON command'), xicad_root: str | None = typer.Option(None, help='XiCAD root path'), out: str | None = typer.Option(None, help='Optional output JSON path')):
+    safe_command = load_safe_command(command)
     registry = _safe_bridge_registry(xicad_root)
     plan = XicadSafePlanner(registry).build_plan(safe_command)
     payload = plan.model_dump(mode='json')
@@ -584,8 +353,6 @@ def xicad_safe_run(
     safe_command = load_safe_command(command)
     safe_command.load_first = load_first
     if execute:
-        if not save_as:
-            raise typer.BadParameter('--save-as is required with --execute.')
         safe_command.dry_run = False
     registry = _safe_bridge_registry(xicad_root)
     executor = XicadSafeExecutor(XicadSafePlanner(registry))
@@ -597,50 +364,3 @@ def xicad_safe_run(
     if save_as and plan.can_execute:
         adapter.save_as(save_as)
         success(f'Saved modified DWG: {save_as}')
-    
-@app.command('cad-task')
-def cad_task(command: str = typer.Argument(..., help='Natural language CAD command')):
-    """Parse a natural language command, build a plan, validate safety, and execute."""
-    intent = parse_user_command(command)
-    plan = build_task_plan(intent)
-    warnings = validate_task_plan_safety(plan)
-    result = execute_task_plan(plan)
-    console.print({
-        "intent": intent.dict(),
-        "plan": plan.dict(),
-        "warnings": warnings,
-        "result": result.dict(),
-    })
-
-@app.command('cad-task-plan')
-def cad_task_plan(command: str = typer.Argument(..., help='Natural language CAD command'), out: str = typer.Option('generated/orchestrator', help='Output directory')):
-    """Generate a TaskPlan JSON/MD without executing."""
-    intent = parse_user_command(command)
-    plan = build_task_plan(intent)
-    out_dir = Path(out)
-    out_dir.mkdir(parents=True, exist_ok=True)
-    json_path = out_dir / 'task_plan.json'
-    json_path.write_text(plan.json(indent=2, ensure_ascii=False), encoding='utf-8')
-    md_path = out_dir / 'task_plan.md'
-    md_path.write_text(f"# Task Plan\n\nIntent: {intent.intent_type}\n\nSteps:\n" + "\n".join(f"- {step.description}" for step in plan.steps), encoding='utf-8')
-    success(f'Task plan written: {json_path}')
-
-@app.command('cad-task-preview')
-def cad_task_preview(command: str = typer.Argument(..., help='Natural language CAD command')):
-    """Execute a preview (dry‑run) of the given command."""
-    intent = parse_user_command(command)
-    plan = build_task_plan(intent)
-    # Ensure preview mode – safety already defaults to preview_only
-    result = execute_task_plan(plan)
-    console.print({
-        "intent": intent.dict(),
-        "plan": plan.dict(),
-        "result": result.dict(),
-    })
-
-@app.command('cad-task-undo')
-def cad_task_undo():
-    """Run UNDO BACK to revert the last preview session."""
-    from image_to_cad.auto.undo_guard import undo_back_to_mark
-    # In real usage the active ZWCAD document will be used; here we just call the helper.
-    success('Undo BACK executed')

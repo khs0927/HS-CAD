@@ -96,8 +96,8 @@ class XicadAliasRegistry:
         key_path = Path(path)
         if not key_path.exists():
             return registry
-
-        text = key_path.read_text(encoding="utf-8", errors="ignore")
+        from src.integrations.xicad_command_catalog import read_text_korean
+        text = read_text_korean(key_path)
         for line in text.splitlines():
             stripped = line.strip()
             if not stripped or stripped.startswith(("#", ";", "//")):

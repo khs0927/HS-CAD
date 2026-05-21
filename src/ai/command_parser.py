@@ -20,7 +20,7 @@ class BaseCommand(BaseModel):
 
 
 class ScanCommand(BaseCommand):
-    command: Literal['scan_all','scan_layers','scan_blocks','scan_texts','export_objects_json','generate_quantity_report','analyze_architecture','classify_objects','capture_screen']
+    command: Literal['scan_all','scan_layers','scan_blocks','scan_texts','export_objects_json','generate_quantity_report','analyze_architecture']
     params: dict[str, Any] = Field(default_factory=dict)
 
 
@@ -64,10 +64,6 @@ class ReplaceBlockParams(BaseModel):
     target_block: str
     new_block: str
     layer: str | None = None
-    preserve_rotation: bool = True
-    preserve_scale: bool = True
-    preserve_layer: bool = True
-    delete_original: bool = True
 class ReplaceBlockCommand(BaseCommand):
     command: Literal['replace_block']
     params: ReplaceBlockParams
@@ -75,7 +71,6 @@ class ReplaceBlockCommand(BaseCommand):
 
 class DeleteLayerParams(BaseModel):
     layer: str
-    yes: bool = False
 class DeleteLayerCommand(BaseCommand):
     command: Literal['delete_layer_objects']
     params: DeleteLayerParams
@@ -104,16 +99,13 @@ class CreateGridCommand(BaseCommand):
 
 
 class PlaceColumnsParams(BaseModel):
-    block_name: str | None = None
+    block_name: str
     width: float
     depth: float
     grid_x: float
     grid_y: float
     origin: tuple[float, float, float] = (0,0,0)
     layer: str = 'A-COLUMN'
-    column_width: float = 500
-    column_depth: float = 500
-    placeholder: bool = True
 class PlaceColumnsCommand(BaseCommand):
     command: Literal['place_columns']
     params: PlaceColumnsParams
@@ -126,7 +118,6 @@ class PlaceBeams2DParams(BaseModel):
     grid_y: float
     origin: tuple[float, float, float] = (0,0,0)
     layer: str = 'A-BEAM'
-    beam_width: float | None = None
 class PlaceBeams2DCommand(BaseCommand):
     command: Literal['place_beams_2d']
     params: PlaceBeams2DParams

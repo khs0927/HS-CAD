@@ -8,7 +8,7 @@ class LispAdapter:
 
     def load_lisp(self, path: str | Path) -> None:
         doc = self.com_adapter.get_active_document()
-        normalized = str(Path(path)).replace('\\\\', '/')
+        normalized = Path(path).as_posix()
         doc.SendCommand(f'(load "{normalized}")\n')
 
     def send_command(self, command: str) -> None:

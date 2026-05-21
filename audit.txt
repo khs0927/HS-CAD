@@ -1,0 +1,559 @@
+=== LISP DRAWING AUDIT ===
+Total Objects: 103027
+
+--- Entity Counts ---
+TRACE: 6
+SOLID: 22
+POINT: 371
+OLE2FRAME: 3
+MLINE: 450
+WIPEOUT: 87
+LEADER: 292
+ELLIPSE: 288
+SPLINE: 589
+POLYLINE: 84
+MTEXT: 43
+CIRCLE: 2717
+TEXT: 7010
+INSERT: 1940
+ARC: 8478
+DIMENSION: 2272
+HATCH: 470
+LWPOLYLINE: 17094
+LINE: 60811
+
+--- Layer Counts ---
+SOL: 28
+HAT-PAT: 2
+A-FIN: 3
+TEXT-M: 2
+S: 2
+1CENTER: 7
+마감: 2
+4WALL: 18
+2HH: 48
+1FIN: 20
+W2: 61
+1DIM: 54
+DIMENSION: 20
+3FIN: 56
+2FIN: 252
+22: 70
+57: 2
+YELLOW: 1
+MARK: 1
+HA2: 24
+LEADER: 12
+HH: 1
+ALM: 125
+5A: 7
+WA1: 2
+VOID: 32
+FIN1: 17
+GREEN: 30
+9A: 6
+BY: 3
+30: 27
+solid: 1
+COLU: 34
+30A: 12
+1A: 15
+11: 71
+5: 136
+IMSY: 2
+6A: 20
+SOLL: 1
+0-1: 2
+ZOOM: 6
+wire-meshes: 18
+no-water: 6
+MER: 1
+LED: 14
+NDIM: 1
+5-NDIM: 1
+SEC4: 12
+5-SDIM: 1
+A-SECT-FNSH: 36
+MAS: 28
+A-SECT-MCON: 12
+A-NOTE-TEXT-KOR: 3
+GRID: 26
+WALL: 3
+B: 82
+G: 12
+3SEC: 13
+4A: 64
+POINT: 5
+천정마감: 2
+H1: 5
+82: 18
+stone: 5
+254: 7
+BRK: 1
+FEX: 79
+EC1: 4
+EL2: 27
+9: 613
+DIME: 5
+ceil: 8
+HIDL: 19
+FINL: 17
+SEC2: 5
+HATC: 40
+FOR: 13
+A-DET: 10
+3: 624
+TITLE: 88
+A-CON: 11
+ELE-6: 262
+ELE-4: 12
+CON: 60
+A-STAIR: 5
+A-ELE-5: 2
+253: 15
+LEAD: 28
+ELE-3: 9
+AA-XXXX-DIMS: 3
+A-HAT: 33
+A-ELE-8: 10
+A-ELE-4: 50
+A-LEAD: 19
+A'_DIM: 14
+RXANNOT: 10
+COL XX1: 27
+문자박스: 59
+AREA: 7
+__DIM: 5
+INSU: 68
+RO: 314
+LINE: 139
+HATCH1: 92
+PIPE: 23
+INTER2: 19
+단면도: 2
+-attribline: 5
+-TABLE: 1
+HATCH: 260
+0L-조경: 5
+-ATTRIBTXT: 2
+PAPER: 35
+조형가이즈까향: 1
+000: 9
+-14 표 테두리: 116
+-0L-STL플레이트: 2
+_0L-플랜터: 4
+1: 200
+6: 1060
+L1: 13
+L2: 33
+0-LINE: 142
+C: 323
+c-wall: 21
+EQ: 3
+WIN: 29
+7: 361
+TEXT1: 25
+부호도: 268
+RXLEADER: 8
+CAR: 7
+A-STAIR-HANDLE: 18
+WALL3: 23
+1-uw: 1
+1-s: 11
+1-WN: 40
+1-H: 1
+1-TEXT: 4
+HID: 67
+부호: 258
+입면선: 51
+STL: 274
+CENT: 9
+W3: 31
+MISC: 54
+Defpoints: 109
+대지경계선: 87
+COR: 60
+AS-CEIL: 2754
+L8: 96
+ELE1: 25
+콘크리트: 76
+줄눈: 56
+점선: 134
+INSUL: 247
+지시선: 30
+FUR-H: 80
+EL9: 121
+ELE: 809
+T-M: 42
+fin-3: 248
+FU: 40
+치수선: 190
+_0: 17
+CAY: 16
+난간: 903
+입면: 4
+LAN: 32
+DOOR: 273
+ROM: 108
+J-STEEL: 108
+welding: 1080
+J-ETC: 108
+재료: 88
+1-BEAM: 195
+1-B: 320
+HA: 2971
+창호: 205
+수전: 5
+ewai-k.sub: 5
+T: 30
+ELE4: 80
+HIDE: 14
+FPP: 14300
+외부난간: 793
+wall2: 10
+FIN-1: 40
+마감선: 25
+FU-FURM: 26
+etc: 358
+TEX: 34
+DOR: 50
+문자: 1299
+E1: 166
+FINISH: 73
+01-BATH: 135
+furn: 18
+CO-BATH: 55
+HAT: 891
+_FIN: 3
+E: 490
+마감선3: 215
+form_3co: 18
+TXT: 630
+8: 387
+구역계: 278
+CENTER: 521
+W: 251
+FUR: 6709
+2: 160
+4: 472
+1Pad: 66
+HAT9: 58
+Layer4: 72
+전기통신: 120
+_물량표: 103
+TREE: 83
+D: 98
+H: 3758
+위생기: 1200
+DIM1: 68
+실명: 625
+마감선2: 1527
+H2: 55
+MFUR: 19
+Layer5: 16
+변경NOTE: 250
+A-레벨: 570
+STAIR: 2723
+0: 4427
+A-FORM: 102
+SYM: 1198
+LG-Product: 23
+글자: 579
+COMM: 565
+TEXT: 566
+TIT: 949
+알미늄 루버: 3116
+설비: 749
+문틀: 155
+해치선: 269
+WALL1: 301
+테두리: 80
+Layer 1: 1313
+CEN: 1345
+BOX: 632
+FORM: 340
+SL: 160
+방수: 287
+FIN: 1042
+WAL: 412
+중심선: 1543
+DOOR1: 91
+WID: 9313
+DIM: 3136
+조적: 471
+마감선1: 2258
+단열재: 1298
+COL: 6046
+해치: 441
+
+--- Block Counts ---
+SEGIO2: 3
+DOT0: 1
+*X187: 1
+*X189: 1
+*X188: 1
+DIMDOT: 3
+ARROW: 1
+*X195: 2
+ARROWX: 1
+UNITCIRCLE: 6
+*X198: 1
+*X201: 1
+*X202: 1
+*X199: 2
+*X200: 1
+SYMTBS_SYS14: 55
+*X204: 1
+*B210: 1
+*B211: 1
+2P-S109: 1
+*X208: 1
+AN: 5
+*X209: 1
+DOT1: 2
+DOT: 25
+HANDISYM: 1
+SYMTBU_SYS114: 2
+_Dot: 11
+A$C64605616: 1
+arrow1: 11
+실외기: 2
+line: 8
+ARW1: 3
+KITPD08: 1
+LCPLTR31: 1
+*X755: 1
+*X750: 1
+*X752: 1
+*X754: 1
+*X751: 1
+*X753: 1
+*X749: 1
+INSU: 8
+*X748: 1
+*X757: 1
+A$C77CE0888: 2
+_DotSmall: 3
+A$C07FE4FCB: 1
+A$C60481E0E: 4
+A$C71E55132: 1
+A$C2D5752AA: 3
+A$C27357E8E: 1
+2P-T204: 4
+TOIPD02: 4
+handle1: 1
+SHEET_WINDOW: 1
+CCTV: 6
+투수블럭: 1
+지시선2: 3
+1F: 1
+ZIUM LOGO: 7
+F-702: 8
+F-222: 8
+insul1: 14
+루버4: 2
+루버1: 2
+루버3: 2
+루버2: 2
+차면시설: 2
+BB2: 11
+DEC-EL5: 4
+왕벚: 4
+A$C61E56072: 8
+la-ca-025-D-E: 16
+la-ca-112-D-E: 16
+A$C3DE26DB7: 30
+m12 ex anchor: 108
+A$C39115F82: 108
+A$C16310355: 5
+수전2: 5
+eyetryetryty: 5
+삼성 인덕션: 5
+A$C118B31B9: 5
+XREF-평면도$0$bd300-p: 15
+해바라기수전: 21
+가스2구: 20
+세탁기: 20
+싱크볼 500: 20
+싱크수전: 20
+F-125: 10
+변기(690x405): 30
+실외기(평면): 10
+2013_0604_샤워부스 도어 손잡이: 24
+21231a: 9
+12321a: 9
+코너선반-하남: 29
+서대신동3가 61-46 토지: 12
+방위: 13
+TL000073_0: 25
+TL000076_0: 25
+단차: 7
+벤치마크: 151
+세면도(500x425): 35
+수도꼭지: 4
+가구: 6
+ELEV13: 43
+ZIUM_sheet_architect: 61
+AC: 23
+BUBBLE: 514
+BB: 51
+innus_U332: 32
+매립형세면대: 24
+미니세면대: 23
+inus_IC859E: 64
+
+--- Polyline Quality ---
+Closed Count: 10008
+Open Count: 7086
+
+--- Room Texts ---
+1 (Layer: 실명)
+합     계 (Layer: 실명)
+합     계 (Layer: 실명)
+합     계 (Layer: 실명)
+합     계 (Layer: 실명)
+배치도/대지종횡단면/배수배치/조경 (Layer: 실명)
+입면도 (Layer: 실명)
+평면도 (Layer: 실명)
+단면도 (Layer: 실명)
+창호도 (Layer: 실명)
+잡상세도 (Layer: 실명)
+욕실 (Layer: 실명)
+다가구 주택 (Layer: 실명)
+404호 (Layer: 실명)
+다가구 주택 (Layer: 실명)
+403호 (Layer: 실명)
+다가구 주택 (Layer: 실명)
+402호 (Layer: 실명)
+다가구 주택 (Layer: 실명)
+401호 (Layer: 실명)
+욕실 (Layer: 실명)
+욕실 (Layer: 실명)
+욕실 (Layer: 실명)
+제2종근린생활시설 (Layer: 실명)
+의원 (Layer: 실명)
+제1종근린생활시설 (Layer: 실명)
+의원 (Layer: 실명)
+제1종근린생활시설 (Layer: 실명)
+소매점 (Layer: 실명)
+다가구 주택 (Layer: 실명)
+501호 (Layer: 실명)
+화장실 (Layer: 실명)
+복도 (Layer: 실명)
+화장실 (Layer: 실명)
+복도 (Layer: 실명)
+화장실 (Layer: 실명)
+복도 (Layer: 실명)
+보일러실 (Layer: 실명)
+2 (Layer: 실명)
+3 (Layer: 실명)
+4 (Layer: 실명)
+5 (Layer: 실명)
+6 (Layer: 실명)
+7 (Layer: 실명)
+5 (Layer: 실명)
+6 (Layer: 실명)
+7 (Layer: 실명)
+1 (Layer: 실명)
+2 (Layer: 실명)
+3 (Layer: 실명)
+4 (Layer: 실명)
+면적산출/실내재료마감/ (Layer: 실명)
+합     계 (Layer: 실명)
+합     계 (Layer: 실명)
+자연지반 (Layer: 실명)
+조경의무면적 (Layer: 실명)
+식재의무면적 (Layer: 실명)
+= (Layer: 실명)
+327.00 (Layer: 실명)
+0.05 (Layer: 실명)
+16.35 (Layer: 실명)
+X (Layer: 실명)
+조경 면적 계획의 법적기준 (Layer: 실명)
+대 지  면 적 (Layer: 실명)
+대 지 위 치 (Layer: 실명)
+327.00 (Layer: 실명)
+㎡ (Layer: 실명)
+지 역 지 구 (Layer: 실명)
+부산광역시 서구 서대신동3가 61-46 (Layer: 실명)
+제2종일반주거지역, 상대보호구역, 가축사육제한구역 (Layer: 실명)
+1000㎡미만, 대지면적의 5%%%이상 식재 (Layer: 실명)
+관 계 법 령 (Layer: 실명)
+부산광역시 건축조례 제25조 (Layer: 실명)
+(대지안의 조경)1항1호 (Layer: 실명)
+법  정 (Layer: 실명)
+계  획 (Layer: 실명)
+22.37 (Layer: 실명)
+(6.84%%%) (Layer: 실명)
+㎡ (Layer: 실명)
+= (Layer: 실명)
+16.35 (Layer: 실명)
+0.50 (Layer: 실명)
+8.175 (Layer: 실명)
+X (Layer: 실명)
+조경의무면적의 50%%%이상 (Layer: 실명)
+법  정 (Layer: 실명)
+계  획 (Layer: 실명)
+9.87 (Layer: 실명)
+(60.37%%%) (Layer: 실명)
+㎡ (Layer: 실명)
+= (Layer: 실명)
+16.35 (Layer: 실명)
+0.10 (Layer: 실명)
+1.635 (Layer: 실명)
+X (Layer: 실명)
+조경의무면적의10%%%이상 (Layer: 실명)
+법  정 (Layer: 실명)
+계  획 (Layer: 실명)
+4.80 (Layer: 실명)
+(29.36%%%) (Layer: 실명)
+㎡ (Layer: 실명)
+국토교통부 고시 제4조 (Layer: 실명)
+국토교통부 고시 제5조 (Layer: 실명)
+분    류 (Layer: 실명)
+조경면적표 (Layer: 실명)
+산   출   근   거 (Layer: 실명)
+면    적 (Layer: 실명)
+비    고 (Layer: 실명)
+AUTO CAD에 의한 계산 (Layer: 실명)
+1 (Layer: 실명)
+2 (Layer: 실명)
+3 (Layer: 실명)
+구    분 (Layer: 실명)
+지상조경(자연지반) (Layer: 실명)
+옥상조경(인공지반) (Layer: 실명)
+4.80 (Layer: 실명)
+AUTO CAD에 의한 계산 (Layer: 실명)
+7.61 (Layer: 실명)
+식재의무면적 (Layer: 실명)
+*조경시설공간의 면적은 10㎡ 이상 (Layer: 실명)
+지상조경(조경시설물) (Layer: 실명)
+*옥상조경면적은 2/3만 조경면적 산정가능 (Layer: 실명)
+자연지반 (Layer: 실명)
+조경의무면적 (Layer: 실명)
+식재의무면적 (Layer: 실명)
+22.37 (Layer: 실명)
+(6.84%%%) (Layer: 실명)
+9.87 (Layer: 실명)
+(60.37%%%) (Layer: 실명)
+4.80 (Layer: 실명)
+(29.36%%%) (Layer: 실명)
+대지면적의 5%%%이상 식재 (Layer: 실명)
+조경의무면적의 50%%%이상 (Layer: 실명)
+조경의무면적의10%%%이상 (Layer: 실명)
+1 (Layer: 실명)
++ (Layer: 실명)
+2 (Layer: 실명)
++ (Layer: 실명)
+3 (Layer: 실명)
+1 (Layer: 실명)
++ (Layer: 실명)
+3 (Layer: 실명)
+1 (Layer: 실명)
+시목 : 동백나무 (Layer: 실명)
+X            = (Layer: 실명)
+상록비율 (Layer: 실명)
+교 목 (Layer: 실명)
+관 목 (Layer: 실명)
+조경 식재 계획의 법적기준 (Layer: 실명)
+지역특성수 : 교목의 10%식재 (Layer: 실명)

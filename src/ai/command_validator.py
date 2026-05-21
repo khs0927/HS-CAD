@@ -8,7 +8,7 @@ ALLOWED_COMMANDS = {
     'delete_layer_objects','create_boundary','create_grid','place_columns',
     'place_beams_2d','generate_quantity_report','save_as','load_xicad',
     'detect_xicad','build_xicad_catalog','run_xicad_command','xicad_workflow',
-    'run_xicad_workflow','xicad_safe_plan','xicad_safe_execute','analyze_architecture','classify_objects','capture_screen'
+    'run_xicad_workflow','xicad_safe_plan','xicad_safe_execute','analyze_architecture'
 }
 
 

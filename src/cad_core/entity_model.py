@@ -29,6 +29,7 @@ class TextEntity(BaseCADEntity):
 class BlockEntity(BaseCADEntity):
     entity_type: Literal['BLOCK'] = 'BLOCK'
     name: str | None = None
+    effective_name: str | None = None
     insert: list[float] | None = None
     rotation: float | None = None
     x_scale: float | None = None
@@ -60,7 +61,16 @@ def entity_from_raw(raw: dict[str, Any]) -> BaseCADEntity:
     if 'text' in low:
         return TextEntity(**common, insert=raw.get('insert'), text=raw.get('text'), rotation=raw.get('rotation'))
     if 'block' in low or 'insert' in low:
-        return BlockEntity(**common, name=raw.get('name'), insert=raw.get('insert'), rotation=raw.get('rotation'), x_scale=raw.get('x_scale'), y_scale=raw.get('y_scale'), z_scale=raw.get('z_scale'))
+        return BlockEntity(
+            **common,
+            name=raw.get('name') or raw.get('Name'),
+            effective_name=raw.get('effective_name') or raw.get('EffectiveName'),
+            insert=raw.get('insert') or raw.get('InsertionPoint'),
+            rotation=raw.get('rotation') or raw.get('Rotation'),
+            x_scale=raw.get('x_scale') or raw.get('XScaleFactor'),
+            y_scale=raw.get('y_scale') or raw.get('YScaleFactor'),
+            z_scale=raw.get('z_scale') or raw.get('ZScaleFactor'),
+        )
     if 'circle' in low:
         return CircleEntity(**common, center=raw.get('center'), radius=raw.get('radius'))
     return UnknownEntity(**common)

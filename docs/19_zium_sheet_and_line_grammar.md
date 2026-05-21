@@ -1,166 +1,80 @@
-# ZIUM Sheet And Line Grammar
+# 19. 지움 도각 및 선 표현 문법 지침서
+(ZIUM Sheet and Line Grammar Guide)
 
-This document records recurring sheet and line-expression grammar observed in ZIUM office architectural drawings. It is learning material for future generation and modification, not a one-off judgment about a single DWG.
+> [!IMPORTANT]
+> 본 지침서는 지움건축(ZIUM Architects)만의 고유한 도면 도곽(Title Sheet) 활용 규격과 도면의 뼈대를 이루는 선 표현(Line Grammar) 스타일을 체계화한 규격서입니다. 도면 자동 수정 및 생성 엔진은 이 규격을 기준으로 모든 시각 속성을 조율합니다.
 
-## Scope
+---
 
-The analysis focuses on sheet form, entity types, line expression, annotation style, and drawing placement. It intentionally does not propose layer remapping. Existing layers remain as authored unless a later user request explicitly targets them.
+## 1. 도곽 및 블록 속성 표현 문법 (Title Sheet Grammar)
 
-Example evidence captured during analysis:
+지움건축 도면에서 도곽은 정밀한 좌표 정의와 도면 관리를 위한 핵심 컴포넌트입니다.
 
-- Example DWG: `서대신동 상가주택0702.dwg`
-- Example ModelSpace object count: 103,027
-- Analysis output: `outputs/active_form_analysis_current/sample_form_analysis.json`
-- Repro command: `python tools/analyze_active_form_sample.py --out-dir outputs/active_form_analysis_current`
+```mermaid
+classDiagram
+    class ZIUM_Sheet {
+        +String BlockName: ZIUM_sheet_architect
+        +Point Origin: (x, y, z)
+        +Double ScaleFactor: e.g. 300.0
+        +Attribute ProjectName: 프로젝트 이름
+        +Attribute DrawingName: 도면명
+        +Attribute FloorName: 층이름
+        +Attribute ScaleString: 축척 (e.g. 1/300)
+    }
+```
 
-## Sheet Form
+### 1) 도곽 블록 식별 및 좌표 바인딩 규칙
+* **식별자**: 도면 내에 정의된 `ZIUM_sheet_architect` 또는 유사 명칭의 도각 블록을 탐색합니다.
+* **원점 보존**: 도각의 삽입점(Insertion Point)을 도면 영역의 물리적 원점 `(0, 0, 0)`으로 인식하고, 모든 내부 주거 구획 좌표계를 해당 삽입점 기준의 상대 좌표로 계산합니다.
+* **스케일 연동**: 도각 블록의 X/Y 축척값(Scale Factor)을 추출하여, 신규 기입할 치수의 크기(DimScale) 및 텍스트 높이에 곱해줌으로써 도곽 축척과 도면 요소의 축척을 100% 일치시킵니다.
+  * 예: 도곽 블록 스케일이 `300.0`인 경우, 문자 높이 `2.5mm` (도면 기준 `750.0mm`)로 자동 스케일링.
 
-The office title sheet is not drawn ad hoc. It is inserted as a block:
+### 2) 도각 텍스트 정보의 문법적 업데이트
+* 도곽 내부의 선이나 격자는 직접 수정하지 않으며, 도각 블록 내에 내장된 **속성 정의(Attributes)**만을 수정합니다.
+  * **프로젝트명(Project Name)**: `부산광역시 서구 서대신동3가 상가주택`
+  * **도면 번호 및 날짜**: 기존 속성 필드의 문자 값을 갱신하여 도면 정합성을 보장합니다.
 
-- Block name: `ZIUM_sheet_architect`
-- Insert layer observed: `A-FORM`
-- Count in the analyzed example: 61
-- Rotation: `0.0` for sampled inserts
+---
 
-Observed title block insertion scales:
+## 2. 선 및 기하 속성 매칭 문법 (Line Attribute Grammar)
 
-| X/Y scale | Count | Interpretation |
-|---:|---:|---|
-| `0.504032` | 31 | dominant observed sheet scale |
-| `0.5` | 10 | half-scale sheet family |
-| `0.75` | 8 | larger sheet/detail family |
-| `0.604839` | 6 | intermediate sheet family |
-| `0.3` | 4 | reduced sheet/detail family |
-| `0.6` | 1 | isolated sheet scale |
-| `0.05` | 1 | very small reference or marker sheet; needs visual check |
+신규 요소를 그릴 때는 도면에 정의된 레이어 속성 테이블(`sampled_drawing_grammar.json`)을 1순위로 조회하여 **ByLayer** 값에 수렴하게 드로잉합니다.
 
-The analyzed drawings place sheet inserts in rows across ModelSpace rather than only in paper layouts. Future generated sheets should therefore:
+| 레이어 (Layer) | 색상 인덱스 (Color) | 선종류 (Linetype) | 선가중치 (Lineweight) | 주 용도 |
+| :--- | :---: | :--- | :--- | :--- |
+| **WALL1** (벽체) | `2` (Yellow) | `Continuous` | `ByLayer` (`-3`) | 평면상 벽체 구조선 |
+| **COL** (기둥) | `2` (Yellow) | `Continuous` | `ByLayer` | 철근콘크리트 기둥 구조체 |
+| **COL XX1** (기둥 채우기) | `251` (Dark Gray) | `Continuous` | `ByLayer` | 기둥 솔리드 해치 및 마감 경계 |
+| **중심선** | `1` (Red) | `CEN2` (Center 2) | `ByLayer` | 도면의 그리드 기준선 |
+| **치수** | `7` (White) | `Continuous` | `ByLayer` | 치수선, 보조선, 치수 텍스트 |
 
-1. Reuse `ZIUM_sheet_architect`.
-2. Match one of the existing insert scales unless the user specifies otherwise.
-3. Place new drawing geometry inside the sheet's usable drawing area.
-4. Preserve the title block as a block insert, not exploded linework.
-5. Infer drawing scale from the selected sheet insert scale and intended plotted scale.
+---
 
-## Entity Mix
+## 3. 문자 높이 및 치수 스타일 바인딩 문법
 
-A 3,031-object uniform sample from an authored office drawing showed this grammar:
+### 1) 텍스트 높이 문법 (Text Height Grammar)
+지움 도면의 가독성을 유지하기 위한 텍스트 계층 구조는 다음과 같습니다:
 
-| Entity type | Sample count | Reading |
-|---|---:|---|
-| `LINE` | 1,789 | Primary drafting geometry. |
-| `POLYLINE` | 510 | Boundaries, outlines, repeated symbols, hatch-like shapes. |
-| `ARC` | 258 | Door swings, fixtures, rounded symbols. |
-| `TEXT` | 194 | Most annotation is single-line text. |
-| `CIRCLE` | 91 | Symbols, markers, fixtures. |
-| `DIMENSION` | 70 | Real dimension entities are used. |
-| `INSERT` | 69 | Blocks are important and should be preserved. |
-| `HATCH` | 15 | Fills/poche exist but are not dominant. |
-| `LEADER` | 11 | Real leader entities are used. |
+* **1등급 (대제목 / 층이름 / 도곽명)**:
+  * 기준 크기: `5.0mm` (1:300 축척에서 **`1500.0 mm`**)
+  * 스타일: `지움EB` (두꺼운 볼트체)
+* **2등급 (실 이름 / 구획 표기 - 안방, 거실 등)**:
+  * 기준 크기: `0.83mm` (1:300 축척에서 **`250.0 mm`**)
+  * 스타일: `지움EB` 또는 active text style
+* **3등급 (일반 주석 / 지시선 설명)**:
+  * 기준 크기: `0.5mm` (1:300 축척에서 **`150.0 mm`**)
 
-Future edits should prefer the same entity family:
+### 2) 치수 기입 문법 (Dimensioning Grammar)
+* **치수 스타일 강제**: 새로 기입하는 치수는 반드시 현재 도면 내에 존재하는 **`300DIM`** 스타일을 상속받아야 합니다.
+* **ByLayer 치수**: 치수선의 색상과 문자 색상을 강제 오버라이드(Override)하지 않고, `치수` 레이어의 기본 색상 **`7` (White)**에 동기화되도록 드로잉 모듈을 제어합니다.
 
-- Use `LINE`/`POLYLINE` for plan geometry.
-- Use real `DIMENSION` entities for dimensions.
-- Use real leader entities for callouts.
-- Use block inserts where the drawing already uses office symbols or title blocks.
-- Avoid exploding existing blocks unless explicitly requested.
+---
 
-## Line Expression
+## 4. 문법적 도면 생성 흐름 지침 (Drafting Execution Rules)
 
-The drawing is mostly ByLayer/ByBlock driven, with color and linetype used heavily as visual grammar.
+새로운 도면 수정 요청(예: 발코니 축소 및 내벽선 이동)이 있을 때 AI 드로잉 모듈은 아래 단계를 순차적으로 따릅니다:
 
-Observed sample linetypes:
-
-| Linetype | Sample count | Use signal |
-|---|---:|---|
-| `ByLayer` | 2,366 | dominant; inherit authored layer display |
-| `Continuous` | 481 | explicit continuous linework |
-| `HIDDEN` | 28 | hidden/overhead/covered geometry |
-| `H` | 27 | hidden shorthand; preserve as-is |
-| `ByBlock` | 27 | block-dependent symbol display |
-| `CEN` | 25 | center/grid/reference lines |
-| `DASHED2` | 21 | dashed detail/hidden line family |
-| `HIDDENX2` | 15 | scaled hidden line family |
-| `HID2` | 11 | hidden line variant |
-| `D_HIDDEN` | 8 | hidden/detail variant |
-
-Observed sample colors:
-
-| Color | Sample count | Use signal |
-|---:|---:|---|
-| `256` | 1,174 | ByLayer color; default for most authored geometry |
-| `8` | 958 | major gray construction/fixture/furniture line family |
-| `152` | 278 | secondary gray/green-gray family, often arcs/fixtures |
-| `4` | 114 | cyan-like CAD color, used for distinct outline/symbol elements |
-| `40` | 82 | small repeated object/detail line family |
-| `5` | 68 | blue family, often distinct components |
-| `7` | 59 | white/title/text family |
-| `1` | 42 | red/centerline or emphasis family |
-| `3` | 40 | green dimension/detail family |
-
-Observed lineweight use:
-
-| Lineweight | Sample count | Reading |
-|---:|---:|---|
-| `-1` | 2,812 | ByLayer/ByBlock default; dominant |
-| `0` | 216 | explicit 0.00 mm/lightweight lines |
-| `-3` | 3 | default/system lineweight; rare |
-
-Editing policy:
-
-- Do not normalize layers during shape edits.
-- Preserve ByLayer and ByBlock settings unless a new entity needs explicit visual matching.
-- When copying an existing condition, sample nearby entity color/linetype/lineweight and reuse that visual grammar.
-- For center/reference lines, use the existing `CEN`/centerline linetype family.
-- For hidden lines, preserve the drawing's existing hidden variant rather than introducing a new linetype name.
-
-## Text And Annotation
-
-Observed text heights in the sample include:
-
-| Height | Sample count |
-|---:|---:|
-| `208.333` | 21 |
-| `161.5` | 15 |
-| `180.0` | 14 |
-| `250.0` | 13 |
-| `300.0` | 12 |
-| `150.0` | 10 |
-| `90.0` | 9 |
-
-This suggests the office drawings use scale-dependent text heights rather than one global modelspace text height. Future text insertion should infer text height from nearby similar annotation or the containing sheet scale.
-
-Dimension and leader rules:
-
-- Keep dimensions as dimension entities.
-- Keep leaders as leader entities.
-- Do not replace dimensions/leaders with loose linework.
-- Generated dimensions should show measured geometry unless the user explicitly asks for a legacy override.
-- Generated leaders should use the QLEADER-style landing rule already defined in `docs/17_detail_drafting_standards.md`.
-
-## Future Modification Workflow
-
-When the user asks for a drawing change, use this sequence:
-
-1. Identify the target sheet or region by nearest `ZIUM_sheet_architect` insert.
-2. Determine the sheet insert scale and infer working scale.
-3. Sample nearby existing geometry for color, linetype, lineweight, text height, and dimension style.
-4. Create new geometry using the same visual grammar.
-5. Keep existing layers unchanged unless explicitly told otherwise.
-6. Use blocks for office sheet/title forms and repeated symbols.
-7. Save to a copy first unless the user asks to modify the active DWG directly.
-
-If the user says "도곽까지 같이 생성", the expected behavior is:
-
-1. Insert or reuse `ZIUM_sheet_architect`.
-2. Apply a matching title block scale.
-3. Place the requested drawing inside the usable sheet area.
-4. Generate dimensions, leaders, text, and linework using the local grammar.
-5. Leave layer remapping out of scope.
-
-## Open Items
-
-- Need a reliable sheet usable-area measurement from the `ZIUM_sheet_architect` block definition.
-- Need a visual screenshot/PDF step to classify sheet titles, drawing names, and scale text.
-- Need a handle-level tool to sample style from a selected nearby object before generating new geometry.
+1. **도각 탐색**: 현재 도곽(`ZIUM_sheet_architect`)의 존재 여부와 삽입점을 읽어 스케일(`300.0`)을 획득합니다.
+2. **레이어 조회**: 도면 내에 존재하는 벽체용 레이어(`WALL1` 등)를 확인합니다. 레이어를 새로 만들지 않고 기존 `WALL1` 레이어로 드로잉 대상을 세팅합니다.
+3. **주변 선 스타일 샘플링**: `WALL1` 레이어의 색상이 `2 (Yellow)`임을 인식하고, 신규 벽체 폴리라인 생성 시 `Color: 256` (ByLayer) 및 `Linetype: ByLayer`를 세팅하여 완벽한 시각적 통합을 이룹니다.
+4. **문자 기입 시 스타일 매칭**: `글씨` 또는 `평면` 레이어를 식별하고, 해당 레이어가 지정하는 `지움EB` 서체와 `250.0` 높이 규격으로 텍스트 요소를 생성합니다.

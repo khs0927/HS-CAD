@@ -1,11 +1,10 @@
 [project]
-name = "hs-cad"
+name = "zwcad-ai-modifier"
 version = "0.1.0"
-description = "ZWCAD automation and drafting standards toolkit"
+description = "ZWCAD AI architectural DWG modifier framework"
 requires-python = ">=3.10"
 dependencies = []
 
 [tool.pytest.ini_options]
 pythonpath = ["."]
 testpaths = ["tests"]
-markers = ["integration: tests requiring a real Windows ZWCAD installation"]

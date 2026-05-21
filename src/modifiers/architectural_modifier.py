@@ -2,11 +2,30 @@ from __future__ import annotations
 
 from collections import Counter, defaultdict
 from typing import Any, Iterable
+import yaml
+from pathlib import Path
 
-ARCH_LAYERS = {
-    'A-WALL', 'A-COLUMN', 'A-BEAM', 'A-SLAB', 'A-DOOR', 'A-WINDOW',
-    'A-ROOM', 'A-TEXT', 'A-DIMS', 'A-GRID', 'A-BOUNDARY', 'A-XICAD'
-}
+def _load_config_layers() -> set[str]:
+    default_layers = {
+        'A-WALL', 'A-COLUMN', 'A-BEAM', 'A-SLAB', 'A-DOOR', 'A-WINDOW',
+        'A-ROOM', 'A-TEXT', 'A-DIMS', 'A-GRID', 'A-BOUNDARY', 'A-XICAD'
+    }
+    try:
+        config_path = Path(__file__).resolve().parents[2] / 'config' / 'layer_rules.yaml'
+        if config_path.exists():
+            with open(config_path, 'r', encoding='utf-8') as f:
+                data = yaml.safe_load(f)
+                if data and 'architecture_layers' in data:
+                    all_patterns = set()
+                    for key, patterns in data['architecture_layers'].items():
+                        for p in patterns:
+                            all_patterns.add(p.upper())
+                    return all_patterns
+    except Exception:
+        pass
+    return default_layers
+
+ARCH_LAYERS = _load_config_layers()
 
 def _origin3(origin: tuple[float, float, float] | list[float] = (0, 0, 0)) -> tuple[float, float, float]:
     vals = list(origin) + [0, 0, 0]
@@ -34,58 +53,28 @@ def create_grid(width: float, depth: float, grid_x: float, grid_y: float, origin
         y += grid_y
     return actions
 
-def _rectangle_points(cx: float, cy: float, z: float, width: float, depth: float) -> list[list[float]]:
-    hw = width / 2
-    hd = depth / 2
-    return [[cx - hw, cy - hd, z], [cx + hw, cy - hd, z], [cx + hw, cy + hd, z], [cx - hw, cy + hd, z]]
-
-
-def place_columns(
-    block_name: str | None,
-    width: float,
-    depth: float,
-    grid_x: float,
-    grid_y: float,
-    origin: tuple[float,float,float]=(0,0,0),
-    layer: str='A-COLUMN',
-    column_width: float = 500,
-    column_depth: float = 500,
-    placeholder: bool = True,
-) -> list[dict[str, Any]]:
+def place_columns(block_name: str, width: float, depth: float, grid_x: float, grid_y: float, origin: tuple[float,float,float]=(0,0,0), layer: str='A-COLUMN') -> list[dict[str, Any]]:
     x0, y0, z = _origin3(origin)
     actions: list[dict[str, Any]] = []
     x = 0.0
     while x <= width + 1e-6:
         y = 0.0
         while y <= depth + 1e-6:
-            insert = [x0+x, y0+y, z]
-            fallback = {'action':'create_rectangle_placeholder','layer':layer,'points':_rectangle_points(insert[0], insert[1], z, column_width, column_depth)}
-            if block_name:
-                actions.append({'action':'insert_block','block_name':block_name,'layer':layer,'insert':insert,'rotation':0,'scale':[1,1,1], 'fallback': fallback if placeholder else None})
-            else:
-                actions.append(fallback if placeholder else {'action':'create_circle_placeholder','layer':layer,'center':insert,'radius':max(column_width, column_depth) / 2})
+            actions.append({'action':'insert_block','block_name':block_name,'layer':layer,'insert':[x0+x,y0+y,z],'rotation':0,'scale':[1,1,1]})
             y += grid_y
         x += grid_x
     return actions
 
-def place_beams_2d(width: float, depth: float, grid_x: float, grid_y: float, origin: tuple[float,float,float]=(0,0,0), layer: str='A-BEAM', beam_width: float | None = None) -> list[dict[str, Any]]:
+def place_beams_2d(width: float, depth: float, grid_x: float, grid_y: float, origin: tuple[float,float,float]=(0,0,0), layer: str='A-BEAM') -> list[dict[str, Any]]:
     x0, y0, z = _origin3(origin)
     actions: list[dict[str, Any]] = []
     x = 0.0
     while x <= width + 1e-6:
-        if beam_width:
-            half = beam_width / 2
-            actions.append({'action':'create_polyline','layer':layer,'closed':True,'name':f'BX{x:g}','points':[[x0+x-half,y0,z],[x0+x+half,y0,z],[x0+x+half,y0+depth,z],[x0+x-half,y0+depth,z]]})
-        else:
-            actions.append({'action':'create_line','layer':layer,'name':f'BX{x:g}','start':[x0+x,y0,z],'end':[x0+x,y0+depth,z]})
+        actions.append({'action':'create_line','layer':layer,'name':f'BX{x:g}','start':[x0+x,y0,z],'end':[x0+x,y0+depth,z]})
         x += grid_x
     y = 0.0
     while y <= depth + 1e-6:
-        if beam_width:
-            half = beam_width / 2
-            actions.append({'action':'create_polyline','layer':layer,'closed':True,'name':f'BY{y:g}','points':[[x0,y0+y-half,z],[x0+width,y0+y-half,z],[x0+width,y0+y+half,z],[x0,y0+y+half,z]]})
-        else:
-            actions.append({'action':'create_line','layer':layer,'name':f'BY{y:g}','start':[x0,y0+y,z],'end':[x0+width,y0+y,z]})
+        actions.append({'action':'create_line','layer':layer,'name':f'BY{y:g}','start':[x0,y0+y,z],'end':[x0+width,y0+y,z]})
         y += grid_y
     return actions
 
@@ -125,7 +114,19 @@ def scan_architecture_layers(objects: Iterable[dict[str, Any]]) -> dict[str, Any
 
 def extract_room_texts(objects: Iterable[dict[str, Any]]) -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
-    keywords = ('ROOM', 'AREA', '실', '면적', 'A-ROOM')
+    keywords = ['ROOM', 'AREA', '실', '면적', 'A-ROOM', '평면', '글씨']
+    try:
+        config_path = Path(__file__).resolve().parents[2] / 'config' / 'layer_rules.yaml'
+        if config_path.exists():
+            with open(config_path, 'r', encoding='utf-8') as f:
+                data = yaml.safe_load(f)
+                if data and 'architecture_layers' in data:
+                    text_patterns = data['architecture_layers'].get('text', [])
+                    for p in text_patterns:
+                        keywords.append(p.upper())
+    except Exception:
+        pass
+        
     for obj in objects:
         text = obj.get('text')
         layer = str(obj.get('layer') or '')

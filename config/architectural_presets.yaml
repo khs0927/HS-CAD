@@ -1,6 +1,17 @@
+# Seodaeshin-dong legal & structural specifications
 default_layers:
   boundary: A-BOUNDARY
   grid: A-GRID
   column: A-COLUMN
   wall: A-WALL
+  text: A-TEXT
 units: mm
+
+# Legal compliance rules learned from the Seodaeshin-dong blueprint
+design_compliance:
+  max_building_coverage_ratio: 0.60
+  max_floor_area_ratio: 2.20
+  typical_structure: "철근콘크리트조"
+  primary_uses: ["다가구주택", "근린생활시설", "단독주택"]
+  parking_ratio_requirement: "1세대당 1대 수준 (다가구), 상가 시설면적당 기준"
+  landscaping_requirement: 0.05  # 5% of land area

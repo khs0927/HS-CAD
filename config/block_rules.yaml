@@ -1,3 +1,14 @@
+# Seodaeshin-dong block libraries & symbols
 column_prefixes: [C, COL, COLUMN]
 door_prefixes: [D, DOOR]
 window_prefixes: [W, WIN, WINDOW]
+
+# Standard architectural brand fixture mapping
+fixtures:
+  toilet: [inus_IC859E, TOIPD02]
+  sink: [innus_U332, KITPD08]
+
+# Title stamp and office brand block symbols
+stamps:
+  title_block: ZIUM_sheet_architect
+  logo: ZIUM LOGO

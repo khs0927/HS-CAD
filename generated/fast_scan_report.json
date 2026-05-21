@@ -1,0 +1,2093 @@
+{
+  "drawing_name": "서대신동 상가주택0702.dwg",
+  "drawing_path": "Z:\\내 드라이브\\9.공부\\건축공사\\계획\\거제동 496-13\\서대신동 상가주택0702.dwg",
+  "total_objects": 103027,
+  "layers_observed": [
+    {
+      "name": "0",
+      "color": 7,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "TIT",
+      "color": 2,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "Defpoints",
+      "color": 7,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "COL",
+      "color": 2,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "WID",
+      "color": 4,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "CENTER",
+      "color": 1,
+      "linetype": "CENTER",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "구역계",
+      "color": 6,
+      "linetype": "PHANTOM2",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "PAPER",
+      "color": 3,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "방위표",
+      "color": 7,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "STAIR",
+      "color": 4,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "실명",
+      "color": 7,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "H2",
+      "color": 8,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "HA",
+      "color": 8,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "Layer 1",
+      "color": 7,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "A-FORM",
+      "color": 93,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "COR",
+      "color": 4,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "LAN",
+      "color": 1,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "치수선",
+      "color": 7,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "TEXT",
+      "color": 2,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "TXT",
+      "color": 3,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "해치",
+      "color": 8,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "BOX",
+      "color": 4,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "DIM",
+      "color": 7,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "글자",
+      "color": 3,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "마감선1",
+      "color": 3,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "해치선",
+      "color": 8,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "ELE",
+      "color": 4,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "WALL",
+      "color": 2,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "창호",
+      "color": 4,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "중심선",
+      "color": 1,
+      "linetype": "CEN2",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "마감선2",
+      "color": 4,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "COMM",
+      "color": 1,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "대지경계선",
+      "color": 6,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "_0",
+      "color": 7,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "A-레벨",
+      "color": 3,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "E1",
+      "color": 8,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "WAL",
+      "color": 3,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "재료",
+      "color": 4,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "W3",
+      "color": 6,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "E",
+      "color": 7,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "ELE1",
+      "color": 8,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "SYM",
+      "color": 7,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "TEX",
+      "color": 3,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "WALL1",
+      "color": 2,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "FUR",
+      "color": 152,
+      "linetype": "HHIDDEN",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "H",
+      "color": 8,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "FIN1",
+      "color": 7,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "HATCH",
+      "color": 8,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "단열재",
+      "color": 8,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "DOOR",
+      "color": 7,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "FIN",
+      "color": 5,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "HAT",
+      "color": 5,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "WALL3",
+      "color": 4,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "CO-BATH",
+      "color": 8,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "D",
+      "color": 4,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "11",
+      "color": 11,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "WIN",
+      "color": 134,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "0-F-BATH",
+      "color": 9,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "설비",
+      "color": 8,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "fur-욕실",
+      "color": 9,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "테두리",
+      "color": 2,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "화장실",
+      "color": 152,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "마감선3",
+      "color": 9,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "문자",
+      "color": 3,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "조적",
+      "color": 6,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "단면도",
+      "color": 7,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "FPP",
+      "color": 3,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "마감선",
+      "color": 9,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "수전",
+      "color": 8,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "전기통신",
+      "color": 191,
+      "linetype": "HIDDENX2",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "ELE4",
+      "color": 9,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "ewai-k.sub",
+      "color": 6,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "form_3co",
+      "color": 3,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "3",
+      "color": 3,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "HID",
+      "color": 252,
+      "linetype": "HIDDEN",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "drawing",
+      "color": 7,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "CEN",
+      "color": 14,
+      "linetype": "CEN",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "4",
+      "color": 4,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "2",
+      "color": 2,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "1Pad",
+      "color": 7,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "1",
+      "color": 1,
+      "linetype": "CENTER",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "6",
+      "color": 6,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "INSUL",
+      "color": 8,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "점선",
+      "color": 4,
+      "linetype": "HIDE60",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "난간",
+      "color": 3,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "줄눈",
+      "color": 8,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "EL9",
+      "color": 9,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "W",
+      "color": 4,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "DIM1",
+      "color": 6,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "FUR-H",
+      "color": 152,
+      "linetype": "HIDDEN2",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "253",
+      "color": 253,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "위생기",
+      "color": 152,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "FIN-1",
+      "color": 8,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "DOOR1",
+      "color": 4,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "LG-Product",
+      "color": 3,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "DOR",
+      "color": 4,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "SL",
+      "color": 6,
+      "linetype": "HIDDEN",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "01-BATH",
+      "color": 12,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "8",
+      "color": 8,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "7",
+      "color": 7,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "fur-dp",
+      "color": 8,
+      "linetype": "HID",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "FINISH",
+      "color": 8,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "방수",
+      "color": 8,
+      "linetype": "D_HIDDEN",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "콘크리트",
+      "color": 2,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "A-FIN",
+      "color": 6,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "EQ",
+      "color": 2,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "_물량표",
+      "color": 7,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "입면선",
+      "color": 7,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "부호",
+      "color": 4,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "입면",
+      "color": 4,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "Layer4",
+      "color": 4,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "wall2",
+      "color": 3,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "Layer5",
+      "color": 5,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "c-wall",
+      "color": 3,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "FORM",
+      "color": 5,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "000",
+      "color": 8,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "AS-CEIL",
+      "color": 6,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "문틀",
+      "color": 3,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "문자박스",
+      "color": 7,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "부호도",
+      "color": 6,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "A-LEAD",
+      "color": 7,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "지시선",
+      "color": 7,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "L8",
+      "color": 8,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "C",
+      "color": 1,
+      "linetype": "CENTER",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "CON",
+      "color": 3,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "AREA",
+      "color": 2,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "LEAD",
+      "color": 7,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "T",
+      "color": 7,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "5",
+      "color": 5,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "TEXT1",
+      "color": 2,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "T-M",
+      "color": 4,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "LED",
+      "color": 7,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "0-LINE",
+      "color": 7,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "통신심벌",
+      "color": 91,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "A-CON",
+      "color": 2,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "TITLE",
+      "color": 2,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "TEXT-M",
+      "color": 3,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "A-HAT",
+      "color": 8,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "ELE-4",
+      "color": 4,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "ELE-3",
+      "color": 3,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "HAT-PAT",
+      "color": 251,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "ELE-6",
+      "color": 6,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "A-STAIR",
+      "color": 7,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "A-ELE-8",
+      "color": 8,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "A-ELE-4",
+      "color": 4,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "A-ELE-5",
+      "color": 5,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "A'_DIM",
+      "color": 7,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "AA-XXXX-DIMS",
+      "color": 7,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "SOL",
+      "color": 8,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "LINE",
+      "color": 2,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "COL XX1",
+      "color": 251,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "etc",
+      "color": 8,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "LEADER",
+      "color": 4,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "9",
+      "color": 9,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "MISC",
+      "color": 6,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "FOR",
+      "color": 7,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "HIDL",
+      "color": 10,
+      "linetype": "HIDDEN",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "254",
+      "color": 254,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "2FIN",
+      "color": 4,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "L1",
+      "color": 6,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "L2",
+      "color": 4,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "MARK",
+      "color": 6,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "ceil",
+      "color": 1,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "STL",
+      "color": 3,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "WA1",
+      "color": 2,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "S",
+      "color": 6,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "W2",
+      "color": 3,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "4WALL",
+      "color": 2,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "3FIN",
+      "color": 4,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "2HH",
+      "color": 3,
+      "linetype": "HH",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "1DIM",
+      "color": 1,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "1CENTER",
+      "color": 1,
+      "linetype": "CENTER",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "1FIN",
+      "color": 5,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "마감",
+      "color": 4,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "HA2",
+      "color": 8,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "DIMENSION",
+      "color": 7,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "DIME",
+      "color": 1,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "SEC2",
+      "color": 2,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "22",
+      "color": 9,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "G",
+      "color": 3,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "YELLOW",
+      "color": 2,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "B",
+      "color": 35,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "GRID",
+      "color": 1,
+      "linetype": "CENTER",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "HATC",
+      "color": 1,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "A-DET",
+      "color": 7,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "3SEC",
+      "color": 3,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "1A",
+      "color": 1,
+      "linetype": "H4",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "HIDE",
+      "color": 7,
+      "linetype": "H4",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "6A",
+      "color": 6,
+      "linetype": "H4",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "VOID",
+      "color": 5,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "57",
+      "color": 7,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "5A",
+      "color": 5,
+      "linetype": "H4",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "ALM",
+      "color": 4,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "HH",
+      "color": 4,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "30",
+      "color": 6,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "GREEN",
+      "color": 3,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "9A",
+      "color": 9,
+      "linetype": "H4",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "4A",
+      "color": 4,
+      "linetype": "H4",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "BY",
+      "color": 7,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "COLU",
+      "color": 2,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "solid",
+      "color": 253,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "IMSY",
+      "color": 7,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "30A",
+      "color": 30,
+      "linetype": "H4",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "FEX",
+      "color": 4,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "EL2",
+      "color": 3,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "fin-3",
+      "color": 4,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "SOLL",
+      "color": 253,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "wire-meshes",
+      "color": 4,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "MER",
+      "color": 7,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "ZOOM",
+      "color": 4,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "0-1",
+      "color": 7,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "no-water",
+      "color": 9,
+      "linetype": "HID",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "RXANNOT",
+      "color": 3,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "RXLEADER",
+      "color": 7,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "MAS",
+      "color": 3,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "NDIM",
+      "color": 7,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "5-NDIM",
+      "color": 7,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "FINL",
+      "color": 6,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "5-SDIM",
+      "color": 4,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "SEC4",
+      "color": 3,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "HAT9",
+      "color": 9,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "A-SECT-FNSH",
+      "color": 6,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "A-SECT-MCON",
+      "color": 4,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "A-NOTE-TEXT-KOR",
+      "color": 3,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "EC1",
+      "color": 7,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "stone",
+      "color": 3,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "POINT",
+      "color": 7,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "천정마감",
+      "color": 9,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "H1",
+      "color": 4,
+      "linetype": "HIDDEN",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "82",
+      "color": 7,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "BRK",
+      "color": 3,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "CENT",
+      "color": 1,
+      "linetype": "CENTER",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "ROM",
+      "color": 7,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "Defpoint",
+      "color": 161,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "welding",
+      "color": 1,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "J-STEEL",
+      "color": 3,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "J-ETC",
+      "color": 8,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "알미늄 루버",
+      "color": 32,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "외부난간",
+      "color": 152,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "B0014112",
+      "color": 7,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "FU-FURM",
+      "color": 1,
+      "linetype": "DH-HID2",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "LG-AIRCON",
+      "color": 3,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "furn",
+      "color": 157,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "TREE",
+      "color": 3,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "-14 표 테두리",
+      "color": 155,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "tc-2",
+      "color": 252,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "HATCH1",
+      "color": 1,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "PIPE",
+      "color": 7,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "0L-조경",
+      "color": 7,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "TEXT_LAYER",
+      "color": 7,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "CADPOWER",
+      "color": 7,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "__DIM",
+      "color": 7,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "INSU",
+      "color": 7,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "RO",
+      "color": 4,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "-TABLE",
+      "color": 3,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "INTER1",
+      "color": 7,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "-attribline",
+      "color": 1,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "-ATTRIBTXT",
+      "color": 4,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "INTER2",
+      "color": 7,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "조형가이즈까향",
+      "color": 7,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "-0L-STL플레이트",
+      "color": 2,
+      "linetype": "DASHED2",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "_0L-플랜터",
+      "color": 3,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "CAY",
+      "color": 94,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "_FIN",
+      "color": 4,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "CAR",
+      "color": 9,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "A-STAIR-HANDLE",
+      "color": 132,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "1-uw",
+      "color": 6,
+      "linetype": "HIDDENS",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "1-s",
+      "color": 7,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "1-BEAM",
+      "color": 4,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "1-B",
+      "color": 3,
+      "linetype": "HIDDENS",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "1-WN",
+      "color": 10,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "1-TEXT",
+      "color": 4,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "1-H",
+      "color": 7,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "1-F",
+      "color": 7,
+      "linetype": "HIDDENS",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "변경NOTE",
+      "color": 10,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "FU",
+      "color": 4,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "TO",
+      "color": 7,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "MFUR",
+      "color": 113,
+      "linetype": "HID",
+      "freeze": false,
+      "on": true
+    },
+    {
+      "name": "1-C",
+      "color": 4,
+      "linetype": "Continuous",
+      "freeze": false,
+      "on": true
+    }
+  ],
+  "user_blocks_observed": [
+    "_ArchTick",
+    "_Dot",
+    "DOT",
+    "ZIUM_sheet_architect",
+    "BUBBLE",
+    "벤치마크",
+    "코너선반-하남",
+    "해바라기수전",
+    "A$C16310355",
+    "세면도(500x425)",
+    "변기(690x405)",
+    "수전2",
+    "_DotSmall",
+    "eyetryetryty",
+    "삼성 인덕션",
+    "A$C118B31B9",
+    "ELEV13",
+    "la-ca-025-D-E",
+    "inus_IC859E",
+    "innus_U332",
+    "매립형세면대",
+    "미니세면대",
+    "_Open30",
+    "방위",
+    "BB",
+    "AC",
+    "2013_0604_샤워부스 손잡이",
+    "2013_0604_샤워부스 도어 손잡이",
+    "XREF-평면도$0$bd300-p",
+    "F-702",
+    "싱크수전",
+    "싱크볼 500",
+    "가스2구",
+    "세탁기",
+    "_Open90",
+    "Z_DOT",
+    "handle1",
+    "ARW1",
+    "2P-T204",
+    "TOIPD02",
+    "KITPD08",
+    "la-ca-112-D-E",
+    "arrow1",
+    "DIMDOT",
+    "지시선2",
+    "insul1",
+    "SHEET_WINDOW",
+    "CCTV",
+    "_RXDOT",
+    "A$C64605616",
+    "SEGIO2",
+    "단차",
+    "DOT0",
+    "DDOT1",
+    "AN",
+    "DOT1",
+    "HANDISYM",
+    "ARROW",
+    "ARROWX",
+    "UNITCIRCLE",
+    "SYMTBS_SYS14",
+    "SYMTBU_SYS114",
+    "DOTK",
+    "2P-S109",
+    "m12 ex anchor",
+    "A$C39115F82",
+    "BB2",
+    "루버1",
+    "루버2",
+    "루버3",
+    "루버4",
+    "TL000076_0",
+    "서대신동3가 61-46 토지",
+    "F-222",
+    "F-125",
+    "실외기",
+    "실외기(평면)",
+    "line",
+    "21231a",
+    "12321a",
+    "TL000073_0",
+    "A$C51837608",
+    "A$C60481E0E",
+    "LCPLTR31",
+    "INSU",
+    "A$C77CE0888",
+    "A$C1905086C",
+    "A$C27357E8E",
+    "A$C2D5752AA",
+    "A$C71E55132",
+    "A$C07FE4FCB",
+    "A$C61E56072",
+    "DEC-EL5",
+    "왕벚",
+    "A$C3DE26DB7",
+    "투수블럭",
+    "ZIUM LOGO",
+    "1F",
+    "TO-08",
+    "A$C669179C9",
+    "수도꼭지",
+    "A$C37B0209A",
+    "55757",
+    "33",
+    "4668",
+    "가구",
+    "A$C7C67674A",
+    "차면시설"
+  ],
+  "zium_title_block_present": true,
+  "zium_logo_present": true,
+  "entity_frequency": {
+    "TRACE": 6,
+    "SOLID": 22,
+    "POINT": 371,
+    "OLE2FRAME": 3,
+    "MLINE": 450,
+    "WIPEOUT": 87,
+    "LEADER": 292,
+    "ELLIPSE": 288,
+    "SPLINE": 589,
+    "POLYLINE": 84,
+    "MTEXT": 43,
+    "CIRCLE": 2717,
+    "TEXT": 7010,
+    "INSERT": 1940,
+    "ARC": 8478,
+    "DIMENSION": 2272,
+    "HATCH": 470,
+    "LWPOLYLINE": 17094,
+    "LINE": 60811
+  }
+}
