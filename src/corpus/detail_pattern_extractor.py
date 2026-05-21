@@ -1,77 +1,98 @@
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from typing import Any
+from dataclasses import asdict, dataclass
+from typing import Iterable, Sequence
 
 
 @dataclass(slots=True)
 class DetailPattern:
     pattern_name: str
     situation_tag: str
-    elements: list[str] = field(default_factory=list)
-    materials: list[str] = field(default_factory=list)
-    typical_dimensions: list[str] = field(default_factory=list)
-    notes: list[str] = field(default_factory=list)
-    evidence_file_ids: list[str] = field(default_factory=list)
-    confidence: float = 0.5
+    elements: list[str]
+    materials: list[str]
+    typical_dimensions: list[str]
+    notes: list[str]
+    evidence_file_ids: list[str]
+    confidence: float = 0.65
+
+    def to_dict(self) -> dict:
+        return asdict(self)
 
 
-def infer_detail_patterns(
+def build_detail_patterns(
     *,
-    file_id: str = "",
-    situations: list[Any] | None = None,
-    materials: list[Any] | None = None,
-    dimensions: list[Any] | None = None,
-    elements: list[Any] | None = None,
+    file_id: str,
+    situations: Sequence[object],
+    elements: Sequence[object],
+    materials: Sequence[object],
+    dimensions: Sequence[object],
 ) -> list[DetailPattern]:
-    situations = situations or []
-    materials = materials or []
-    dimensions = dimensions or []
-    elements = elements or []
+    """단일 파일의 추출 결과에서 상세 패턴 후보를 만든다.
 
-    material_names = [getattr(m, "material_name", str(m)) for m in materials]
-    dim_values = [getattr(d, "raw_text", getattr(d, "value", str(d))) for d in dimensions]
-    elem_names = [getattr(e, "canonical_element", str(e)) for e in elements]
-    out: list[DetailPattern] = []
+    여러 파일을 묶는 강화 학습은 corpus_learner에서 수행한다.
+    """
+    situation_tags = [_get(s, "tag", "unknown") for s in situations] or ["unknown"]
+    element_names = sorted({_get(e, "canonical_element", "UNKNOWN") for e in elements if _get(e, "canonical_element", "UNKNOWN") != "UNKNOWN"})
+    material_names = sorted({_get(m, "normalized_name", _get(m, "material_name", "")) for m in materials if _get(m, "normalized_name", _get(m, "material_name", ""))})
+    dim_values = sorted({_get(d, "value", _get(d, "raw_text", "")) for d in dimensions if _get(d, "value", _get(d, "raw_text", ""))})
 
-    tags = [getattr(s, "tag", str(s)) for s in situations]
-    if "방음시창" in tags:
-        out.append(
+    results: list[DetailPattern] = []
+    for tag in situation_tags:
+        if tag == "unknown" and not (material_names or element_names or dim_values):
+            continue
+
+        pattern_name = _pattern_name(tag, element_names, material_names)
+        notes = []
+        if material_names:
+            notes.append(f"반복 재료 후보: {', '.join(material_names[:6])}")
+        if dim_values:
+            notes.append(f"대표 치수/규격 후보: {', '.join(dim_values[:6])}")
+        if element_names:
+            notes.append(f"관련 건축 요소: {', '.join(element_names[:6])}")
+
+        results.append(
             DetailPattern(
-                "방음시창 기본 상세 구성",
-                "방음시창",
-                elements=sorted(set(elem_names + ["WINDOW", "ACOUSTIC", "MATERIAL_NOTE", "DIMENSION"])),
-                materials=material_names,
-                typical_dimensions=dim_values,
-                notes=["창호 크기, 프레임, 유리 사양, 실란트/코킹, 차음성능 표기를 함께 검토한다."],
-                evidence_file_ids=[file_id] if file_id else [],
-                confidence=0.75,
+                pattern_name=pattern_name,
+                situation_tag=tag,
+                elements=element_names[:12],
+                materials=material_names[:12],
+                typical_dimensions=dim_values[:12],
+                notes=notes,
+                evidence_file_ids=[file_id],
+                confidence=0.55 + min(0.35, 0.04 * (len(material_names) + len(element_names) + len(dim_values))),
             )
         )
-    if "판넬마감" in tags or "H빔접합" in tags:
-        out.append(
-            DetailPattern(
-                "판넬-H빔 접합 상세 구성",
-                "H빔접합" if "H빔접합" in tags else "판넬마감",
-                elements=sorted(set(elem_names + ["STRUCTURAL_STEEL", "PANEL_SYSTEM", "THERMAL_INSULATION", "MATERIAL_NOTE"])),
-                materials=material_names,
-                typical_dimensions=dim_values,
-                notes=["판넬 두께, 하지철물, 후레싱, 실란트, 고정 피스, H빔 돌출 간격을 함께 검토한다."],
-                evidence_file_ids=[file_id] if file_id else [],
-                confidence=0.72,
-            )
-        )
-    if "천장마감" in tags:
-        out.append(
-            DetailPattern(
-                "천장 마감 검토 구성",
-                "천장마감",
-                elements=sorted(set(elem_names + ["CEILING_SYSTEM", "DIMENSION", "MATERIAL_NOTE"])),
-                materials=material_names,
-                typical_dimensions=dim_values,
-                notes=["경량철골 천장틀, 석고텍스, 보 하부 높이, 마감 여유 공간, 최종 천장고를 함께 검토한다."],
-                evidence_file_ids=[file_id] if file_id else [],
-                confidence=0.7,
-            )
-        )
-    return out
+    return results
+
+
+def _get(obj: object, attr: str, default=None):
+    if isinstance(obj, dict):
+        return obj.get(attr, default)
+    return getattr(obj, attr, default)
+
+
+def _pattern_name(tag: str, elements: list[str], materials: list[str]) -> str:
+    if tag and tag != "unknown":
+        return f"{tag} 상세 구성 후보"
+    if "PANEL_SYSTEM" in elements or "panel" in materials:
+        return "판넬/외장 상세 구성 후보"
+    if "STRUCTURAL_STEEL" in elements:
+        return "철골 접합 상세 구성 후보"
+    if "WINDOW" in elements:
+        return "창호 상세 구성 후보"
+    return "일반 건축 상세 구성 후보"
+
+
+def infer_detail_patterns(*, file_id: str, situations: list[object], elements: list[object] = [], materials: list[object] = [], dimensions: list[object] = []) -> list[DetailPattern]:
+    """Compatibility wrapper expected by tests.
+
+    ``elements`` is optional because many callers only provide situations,
+    materials and dimensions.  An empty list is used when omitted.
+    """
+    return build_detail_patterns(
+        file_id=file_id,
+        situations=situations,
+        elements=elements,
+        materials=materials,
+        dimensions=dimensions,
+    )

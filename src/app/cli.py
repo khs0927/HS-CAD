@@ -42,6 +42,17 @@ app = typer.Typer(help='ZWCAD AI Architectural Modifier CLI')
 from src.app.cli_fileizer_commands import fileizer_app
 app.add_typer(fileizer_app, name='fileizer')
 
+# Register next‑phase corpus commands (ingest, learn, query, report)
+from src.app.cli_next_phase_commands import next_phase_app
+app.add_typer(next_phase_app, name='corpus-next')
+# Register operational corpus commands (audit, graph, query-pack, export-jsonl, plan-output, run-operational-report)
+from src.app.cli_operational_commands import corpus_ops_app
+app.add_typer(corpus_ops_app, name='corpus-ops')
+
+# Register corpus-run subcommands
+from src.app.cli_corpus_run_commands import corpus_run_app
+app.add_typer(corpus_run_app, name='corpus-run')
+
 
 def get_adapter(dwg: Optional[str] = None) -> ZWCADCOMAdapter:
     adapter = ZWCADCOMAdapter(visible=True)
