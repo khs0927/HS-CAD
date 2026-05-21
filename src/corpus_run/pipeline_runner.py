@@ -48,7 +48,7 @@ def _process_fileize(workspace: Path) -> Dict[str, Any]:
     config = load_config(workspace)
     manifest = load_manifest(workspace)
     # Files that have not yet been fileized
-    pending = [f for f in manifest.files if f.status not in {"fileized", "indexed", "learned"}]
+    pending = [f for f in manifest.files if f.status == "pending"]
     summary = fileize_run_files(
         run_files=pending,
         root_path=config.root,
