@@ -359,6 +359,21 @@ class ZWCADCOMAdapter(CADAdapter):
             pass
         return ent
 
+    def create_text(self, text: str, insert: Iterable[float], height: float = 150.0, layer: str = '0', color: int = 256) -> Any:
+        doc = self.doc or self.get_active_document()
+        self._ensure_layer(layer)
+        ent = doc.ModelSpace.AddText(text, list(insert), height)
+        try:
+            ent.Layer = layer
+        except Exception:
+            pass
+        try:
+            if color != 256:
+                ent.Color = color
+        except Exception:
+            pass
+        return ent
+
     def run_command(self, command_text: str) -> None:
         if not command_text or not str(command_text).strip():
             raise ValueError('command_text is empty')

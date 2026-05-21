@@ -27,6 +27,7 @@ from src.modifiers.architectural_modifier import (
     generate_architecture_summary,
     place_beams_2d,
     place_columns,
+    draft_section_details,
 )
 from src.reports.json_exporter import export_json
 from src.reports.quantity_report import block_quantity
@@ -202,8 +203,9 @@ def _planned_actions_for(cmd) -> list[dict] | None:
         return place_columns(**cmd.params.model_dump())
     if cmd.command == 'place_beams_2d':
         return place_beams_2d(**cmd.params.model_dump())
+    if cmd.command == 'draft_section_details':
+        return draft_section_details(**cmd.params.model_dump())
     return None
-
 
 @app.command('run-command')
 def run_command(dwg: str = typer.Option(..., help='DWG file path'), command: str = typer.Option(..., help='Command JSON path'), dry_run: bool = typer.Option(False, help='Preview only'), execute: bool = typer.Option(False, help='Actually execute'), save_as: str | None = typer.Option(None, help='Save modified DWG as')):
@@ -286,7 +288,7 @@ def run_command(dwg: str = typer.Option(..., help='DWG file path'), command: str
         wf = get_workflow(cmd.params.workflow)
         XiCADAdapter(adapter, cmd.params.xicad_root or '.').run_alias(wf['alias'])
         result['result'] = {'workflow': cmd.params.workflow, 'queued_alias': wf['alias']}
-    elif cmd.command in {'create_boundary','create_grid','place_columns','place_beams_2d'}:
+    elif cmd.command in {'create_boundary','create_grid','place_columns','place_beams_2d','draft_section_details'}:
         actions = _planned_actions_for(cmd) or []
         result['result'] = execute_planned_actions(adapter, actions)
     else:

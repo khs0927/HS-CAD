@@ -90,6 +90,33 @@ def place_beams_2d(width: float, depth: float, grid_x: float, grid_y: float, ori
         y += grid_y
     return actions
 
+def draft_section_details(base_x: float, base_y: float) -> list[dict[str, Any]]:
+    actions = []
+    
+    # 1. 지붕 단열재 (T180) - XiCAD 표준
+    layer_xi = "A-XICAD-TEXT"
+    color_xi = 4 # Cyan
+    tx1, ty1 = base_x - 1000, base_y + 3500
+    actions.append({'action': 'create_line', 'start': [tx1, ty1, 0], 'end': [tx1+500, ty1+500, 0], 'layer': layer_xi, 'color': color_xi})
+    actions.append({'action': 'create_line', 'start': [tx1+500, ty1+500, 0], 'end': [tx1+3000, ty1+500, 0], 'layer': layer_xi, 'color': color_xi})
+    actions.append({'action': 'create_text', 'text': 'T180 그라스울 판넬 (지붕단열) - XiCAD 표준', 'insert': [tx1+600, ty1+650, 0], 'height': 200.0, 'layer': layer_xi, 'color': color_xi})
+    
+    # 2. 벽체 단열재 (T100) - XiCAD 표준
+    tx2, ty2 = base_x - 3000, base_y + 1000
+    actions.append({'action': 'create_line', 'start': [tx2, ty2, 0], 'end': [tx2-500, ty2+500, 0], 'layer': layer_xi, 'color': color_xi})
+    actions.append({'action': 'create_line', 'start': [tx2-500, ty2+500, 0], 'end': [tx2-3000, ty2+500, 0], 'layer': layer_xi, 'color': color_xi})
+    actions.append({'action': 'create_text', 'text': 'T100 그라스울 판넬 (벽체단열) - XiCAD 표준', 'insert': [tx2-2900, ty2+650, 0], 'height': 200.0, 'layer': layer_xi, 'color': color_xi})
+    
+    # 3. 실내재료마감 - ArchiOffice 표준
+    layer_ao = "A-AO-SYM-FINISH"
+    color_ao = 3 # Green
+    tx3, ty3 = base_x + 2000, base_y - 2500
+    actions.append({'action': 'create_line', 'start': [tx3, ty3, 0], 'end': [tx3+500, ty3+500, 0], 'layer': layer_ao, 'color': color_ao})
+    actions.append({'action': 'create_line', 'start': [tx3+500, ty3+500, 0], 'end': [tx3+3000, ty3+500, 0], 'layer': layer_ao, 'color': color_ao})
+    actions.append({'action': 'create_text', 'text': '실내재료마감 - ArchiOffice 표준', 'insert': [tx3+600, ty3+650, 0], 'height': 200.0, 'layer': layer_ao, 'color': color_ao})
+    
+    return actions
+
 # =========================================================================
 # 🔴 [RULES-BASED DRAFTING ACTION BUILDERS UPGRADE]
 # =========================================================================
@@ -328,13 +355,24 @@ def execute_planned_actions(adapter: Any, actions: list[dict[str, Any]]) -> dict
         try:
             kind = action.get('action')
             if kind == 'create_line':
-                adapter.create_line(action['start'], action['end'], action.get('layer', '0'))
+                ent = adapter.create_line(action['start'], action['end'], action.get('layer', '0'))
+                color = action.get('color')
+                if color is not None:
+                    try: ent.Color = color
+                    except: pass
                 created += 1
             elif kind == 'create_polyline':
-                adapter.create_polyline(action['points'], action.get('layer', '0'), action.get('closed', True))
+                ent = adapter.create_polyline(action['points'], action.get('layer', '0'), action.get('closed', True))
+                color = action.get('color')
+                if color is not None:
+                    try: ent.Color = color
+                    except: pass
                 created += 1
             elif kind == 'insert_block':
                 adapter.insert_block(action['block_name'], action['insert'], action.get('layer', '0'), action.get('rotation', 0), action.get('scale', [1,1,1]))
+                created += 1
+            elif kind == 'create_text':
+                adapter.create_text(action['text'], action['insert'], action.get('height', 150.0), action.get('layer', '0'), action.get('color', 256))
                 created += 1
             else:
                 errors.append({'action': action, 'error': f'Unsupported planned action: {kind}'})

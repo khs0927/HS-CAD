@@ -155,12 +155,21 @@ class XiCADWorkflowCommand(BaseCommand):
     params: XiCADWorkflowParams
 
 
+class DraftSectionDetailsParams(BaseModel):
+    base_x: float
+    base_y: float
+class DraftSectionDetailsCommand(BaseCommand):
+    command: Literal['draft_section_details']
+    params: DraftSectionDetailsParams
+
+
 CADCommand = Union[
     ScanCommand, SaveAsCommand, MoveLayerCommand, MoveObjectCommand,
     ReplaceTextCommand, ReplaceBlockCommand, DeleteLayerCommand,
     CreateBoundaryCommand, CreateGridCommand, PlaceColumnsCommand,
     PlaceBeams2DCommand, LoadXiCADCommand, DetectXiCADCommand,
     RunXiCADCommand, XiCADWorkflowCommand, XicadSafeCommand,
+    DraftSectionDetailsCommand,
 ]
 
 COMMAND_MODELS = [
@@ -169,6 +178,7 @@ COMMAND_MODELS = [
     CreateBoundaryCommand, CreateGridCommand, PlaceColumnsCommand,
     PlaceBeams2DCommand, LoadXiCADCommand, DetectXiCADCommand,
     RunXiCADCommand, XiCADWorkflowCommand, XicadSafeCommand,
+    DraftSectionDetailsCommand,
 ]
 
 
