@@ -68,6 +68,18 @@ def verify_archioffice_and_xicad_coexistence():
         print(f"   - Total standard room labels loaded: {len(ao_engine.standard_rooms)} labels")
         print(f"     * Standard rooms: {', '.join(ao_engine.standard_rooms[:12])} ...")
 
+    # 5. 블록 카탈로그 검증
+    if not ao_engine.block_catalog:
+        errors.append("ArchiOffice: block catalog is empty.")
+        print("[FAIL] Block catalog load failed")
+    else:
+        total = ao_engine.block_catalog.get("total_blocks", 0)
+        print(f"   - Total indexed library blocks: {total} items")
+        cats = ao_engine.block_catalog.get("categories", {})
+        print(f"     * Categories found: {len(cats)}")
+        for cat, count in list(cats.items())[:5]:
+            print(f"       - {cat}: {count} blocks")
+
     # ----------------------------------------------------
     # 🛡️ [XiCAD 와의 네임스페이스 격리 및 무충돌성 검증]
     # ----------------------------------------------------

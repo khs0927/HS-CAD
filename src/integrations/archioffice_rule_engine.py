@@ -28,6 +28,7 @@ class ArchiOfficeRuleEngine:
         self.steel_specs: Dict[str, Any] = {}
         self.xpress_aliases: Dict[str, str] = {}
         self.standard_rooms: List[str] = []
+        self.block_catalog: Dict[str, Any] = {}
         
         # 엔진 상태
         self.is_loaded = False
@@ -43,6 +44,7 @@ class ArchiOfficeRuleEngine:
         self.steel_specs = self.parse_shape_steel()
         self.xpress_aliases = self.parse_xpress_pgp()
         self.standard_rooms = self.parse_room_names()
+        self.block_catalog = self.parse_block_catalog()
         
         self.is_loaded = True
         return True
@@ -189,6 +191,36 @@ class ArchiOfficeRuleEngine:
                     rooms.append(line_str)
         return rooms
 
+    def parse_block_catalog(self) -> Dict[str, Any]:
+        """InerCAD/Library 내의 아키오피스 실무 블록(약 1,400개) DWG 파일들을 카탈로그화합니다."""
+        library_path = self.inercad_path / "Library"
+        if not library_path.exists():
+            return {}
+
+        catalog: Dict[str, List[str]] = {}
+        total_blocks = 0
+        
+        for root, _, files in os.walk(library_path):
+            for file in files:
+                if file.lower().endswith(".dwg"):
+                    total_blocks += 1
+                    # 폴더 경로를 기반으로 카테고리 추출 (예: Library/가구/주방가구 -> 가구)
+                    rel_path = Path(root).relative_to(library_path)
+                    if len(rel_path.parts) > 0:
+                        cat = rel_path.parts[0]
+                    else:
+                        cat = "기타"
+                        
+                    if cat not in catalog:
+                        catalog[cat] = []
+                    catalog[cat].append(file)
+
+        return {
+            "total_blocks": total_blocks,
+            "categories": {cat: len(files) for cat, files in catalog.items()},
+            "catalog_detail": catalog
+        }
+
     def generate_ao_drafting_prompt(self) -> str:
         """파싱된 아키오피스 도면 제약 조건을 AI 전용 마크다운 가이드 프롬프트로 작성합니다."""
         if not self.is_loaded:
@@ -247,6 +279,15 @@ class ArchiOfficeRuleEngine:
             lines.append(f"- **실무용 표준 공간 명칭**: {', '.join(self.standard_rooms)}")
         else:
             lines.append("- (실명 정보 없음)")
+            
+        lines.append("")
+        
+        # 5. 블록 카탈로그
+        lines.append("#### 5. ArchiOffice 실무 라이브러리 블록 (Block Catalog)")
+        if self.block_catalog:
+            lines.append(f"- 총 라이브러리 블록 수: {self.block_catalog.get('total_blocks')}개")
+            for cat, count in self.block_catalog.get("categories", {}).items():
+                lines.append(f"  * {cat:<15} : {count}개 블록 보유")
 
         return "\n".join(lines)
 
@@ -259,7 +300,11 @@ class ArchiOfficeRuleEngine:
             "onekey_shortcuts": self.onekeys,
             "steel_specs": self.steel_specs,
             "xpress_aliases": self.xpress_aliases,
-            "standard_rooms": self.standard_rooms
+            "standard_rooms": self.standard_rooms,
+            "block_catalog": {
+                "total_blocks": self.block_catalog.get("total_blocks", 0),
+                "categories": self.block_catalog.get("categories", {})
+            }
         }
         
         with open(out_path, "w", encoding="utf-8") as f:
@@ -273,5 +318,6 @@ if __name__ == "__main__":
         print(f"- Steel Specs    : {len(engine.steel_specs)} categories")
         print(f"- XPress Aliases : {len(engine.xpress_aliases)} items")
         print(f"- Standard Rooms : {len(engine.standard_rooms)} labels")
+        print(f"- AO Blocks      : {engine.block_catalog.get('total_blocks')} blocks")
     else:
         print("Failed to initialize ArchiOffice Rule Engine.")

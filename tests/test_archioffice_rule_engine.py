@@ -34,6 +34,10 @@ def test_archioffice_rule_engine_load_flow():
         # 4. 실명 표준 리스트 검사
         assert len(engine.standard_rooms) > 0
         
+        # 4-1. 블록 카탈로그 검사
+        assert engine.block_catalog.get("total_blocks", 0) > 0
+        assert len(engine.block_catalog.get("categories", {})) > 0
+        
         # 5. 프롬프트 생성 검사
         prompt = engine.generate_ao_drafting_prompt()
         assert "SYSTEM DRAFTING CONSTRAINTS" in prompt
