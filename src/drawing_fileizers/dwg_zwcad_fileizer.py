@@ -90,10 +90,13 @@ class ZWCADCOMFileizer(BaseDrawingFileizer):
         try:
             adapter = ZWCADCOMAdapter(visible=False)
             adapter.open_document(str(path))
-            data: Dict[str, Any] = adapter.scan_modelspace()
-            warnings: List[str] = list(adapter.warnings)
+            data: List[Dict[str, Any]] = adapter.scan_modelspace()
+            warnings: List[str] = []
 
-            raw_entities: List[Dict[str, Any]] = data.get("entities", [])
+            # -----------------------------------------------------------------
+            # Transform raw adapter data into the standardized model.
+            # -----------------------------------------------------------------
+            raw_entities: List[Dict[str, Any]] = data
 
             layers_set: set[str] = set()
             block_set: set[str] = set()
