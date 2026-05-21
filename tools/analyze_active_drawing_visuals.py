@@ -9,6 +9,10 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
+from src.integrations.xicad_rule_engine import XiCADRuleEngine
+from src.integrations.archioffice_rule_engine import ArchiOfficeRuleEngine
+from src.integrations.hssteel_rule_engine import HSSteelRuleEngine
+
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
@@ -199,6 +203,70 @@ def analyze_pdf_files(out_dir: Path) -> list[dict[str, Any]]:
     return rows
 
 
+def evaluate_hybrid_compliance(inventory: dict[str, Any]) -> dict[str, Any]:
+    print("Loading Hybrid Rule Engines (XiCAD & ArchiOffice & HSSTEEL)...")
+    try:
+        xicad = XiCADRuleEngine()
+        xicad.load_all()
+        xicad_layers = xicad.get_layer_standards()
+        xicad_layer_names = {k.upper(): v for k, v in xicad_layers.items()}
+    except Exception as e:
+        print(f"Warning: Failed to load XiCAD rules: {e}")
+        xicad_layer_names = {}
+        
+    try:
+        ao = ArchiOfficeRuleEngine()
+        ao.load_all()
+        ao_catalog = ao.get_block_catalog()
+        ao_block_names = set(ao_catalog.get("all_blocks", []))
+    except Exception as e:
+        print(f"Warning: Failed to load ArchiOffice rules: {e}")
+        ao_block_names = set()
+
+    try:
+        hssteel = HSSteelRuleEngine()
+        hssteel.load_all()
+        hs_catalog = hssteel.get_block_catalog()
+        hs_block_names = set(hs_catalog.get("all_blocks", []))
+    except Exception as e:
+        print(f"Warning: Failed to load HSSTEEL rules: {e}")
+        hs_block_names = set()
+        
+    layers = inventory.get("layers", []) if isinstance(inventory, dict) else []
+    blocks = inventory.get("blocks", []) if isinstance(inventory, dict) else []
+    
+    layer_compliance = []
+    for lyr in layers:
+        lname = str(lyr.get("name", "")).upper()
+        if not lname or lname == "0":
+            continue
+        if lname in xicad_layer_names:
+            layer_compliance.append({"name": lname, "standard": "XiCAD", "status": "Compliant", "desc": xicad_layer_names[lname].get("description", "")})
+        else:
+            layer_compliance.append({"name": lname, "standard": "Unknown", "status": "Non-Compliant"})
+            
+    block_compliance = []
+    for blk in blocks:
+        bname = str(blk.get("name", "")).upper()
+        if not bname or bname.startswith("*"):
+            continue
+        if bname in {b.upper() for b in ao_block_names}:
+            block_compliance.append({"name": bname, "standard": "ArchiOffice", "status": "Compliant"})
+        elif bname in {b.upper() for b in hs_block_names}:
+            block_compliance.append({"name": bname, "standard": "HSSTEEL", "status": "Compliant"})
+        else:
+            block_compliance.append({"name": bname, "standard": "Unknown", "status": "Non-Compliant"})
+            
+    return {
+        "xicad_layer_compliance_rate": f"{(len([l for l in layer_compliance if l['status'] == 'Compliant']) / max(1, len(layer_compliance)) * 100):.1f}%",
+        "archioffice_block_compliance_rate": f"{(len([b for b in block_compliance if b['standard'] == 'ArchiOffice']) / max(1, len(block_compliance)) * 100):.1f}%",
+        "hssteel_block_compliance_rate": f"{(len([b for b in block_compliance if b['standard'] == 'HSSTEEL']) / max(1, len(block_compliance)) * 100):.1f}%",
+        "total_block_compliance_rate": f"{(len([b for b in block_compliance if b['status'] == 'Compliant']) / max(1, len(block_compliance)) * 100):.1f}%",
+        "non_compliant_layers": [l["name"] for l in layer_compliance if l["status"] == "Non-Compliant"],
+        "non_compliant_blocks": [b["name"] for b in block_compliance if b["status"] == "Non-Compliant"]
+    }
+
+
 def build_visual_code_model(inventory: dict[str, Any], layout_targets: list[dict[str, Any]], pdf_analysis: list[dict[str, Any]]) -> dict[str, Any]:
     layers = inventory.get("layers", []) if isinstance(inventory, dict) else []
     unknown = inventory.get("unknown_layers", []) if isinstance(inventory, dict) else []
@@ -210,6 +278,7 @@ def build_visual_code_model(inventory: dict[str, Any], layout_targets: list[dict
         "source_inventory": str(INVENTORY_PATH),
         "purpose": "Convert visual/PDF review needs back into machine-readable cleanup rules.",
         "drawing_summary": inventory.get("summary", {}),
+        "hybrid_compliance_audit": evaluate_hybrid_compliance(inventory),
         "layout_plot_targets": layout_targets,
         "pdf_analysis": pdf_analysis,
         "visual_check_rules": [asdict(rule) for rule in VISUAL_CHECK_RULES],
@@ -259,6 +328,16 @@ def write_report(model: dict[str, Any], out_dir: Path) -> None:
     lines += ["", "## Visual Checks To Convert Back To Code", "| Key | Visual Signal | Code Output |", "|---|---|---|"]
     for rule in model.get("visual_check_rules", []):
         lines.append(f"| {rule['key']} | {rule['visual_signal']} | {rule['code_output']} |")
+        
+    lines += ["", "## Hybrid CAD Standard Compliance Audit (XiCAD + ArchiOffice + HSSTEEL)"]
+    compliance = model.get("hybrid_compliance_audit", {})
+    lines.append(f"- **XiCAD Layer Compliance Rate**: {compliance.get('xicad_layer_compliance_rate', '0%')}")
+    lines.append(f"- **ArchiOffice Block Compliance Rate**: {compliance.get('archioffice_block_compliance_rate', '0%')}")
+    lines.append(f"- **HSSTEEL Structural Block Compliance Rate**: {compliance.get('hssteel_block_compliance_rate', '0%')}")
+    lines.append(f"- **Total Standard Block Compliance Rate**: {compliance.get('total_block_compliance_rate', '0%')}")
+    lines.append(f"- **Non-Compliant Layers (Count: {len(compliance.get('non_compliant_layers', []))})**: {', '.join(compliance.get('non_compliant_layers', [])[:10])} ...")
+    lines.append(f"- **Non-Compliant Blocks (Count: {len(compliance.get('non_compliant_blocks', []))})**: {', '.join(compliance.get('non_compliant_blocks', [])[:10])} ...")
+
     lines += ["", "## Next Code Tasks"]
     for task in model.get("next_code_tasks", []):
         lines.append(f"- {task['task']}: {task['status']}")
