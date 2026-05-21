@@ -16,7 +16,7 @@ from src.extensions.xicad_safe_bridge.executor import XicadSafeExecutor
 from src.extensions.xicad_safe_bridge.json_io import load_safe_command
 from src.extensions.xicad_safe_bridge.planner import XicadSafePlanner
 from src.extensions.xicad_safe_bridge.registry import XicadAliasRegistry, default_xicad_registry
-from src.company_profile.hs_cad_profile_loader import build_company_drafting_profile, write_profile_to_file
+from src.company_profile.hs_cad_profile_loader import build_company_drafting_profile
 import json
 from src.integrations.xicad_command_catalog import filter_architecture_commands, parse_xicad_shortkey
 from src.integrations.xicad_manifest import write_manifest
@@ -482,7 +482,7 @@ def company_profile_build(
     out_dir = Path(out)
     out_dir.mkdir(parents=True, exist_ok=True)
     out_path = out_dir / 'company_drafting_profile.json'
-    write_profile_to_file(profile, out_path)
+    profile.save(out_path)
     success(f'Company drafting profile written: {out_path}')
 
 

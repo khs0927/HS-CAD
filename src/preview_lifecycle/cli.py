@@ -4,6 +4,7 @@ from pathlib import Path
 
 from .manager import create_session_from_plan_and_insert_result, remove_preview, replace_preview
 from .report import write_json, write_session_md
+from .schema import now_iso
 from .store import list_preview_sessions, load_preview_session, save_preview_session
 
 
@@ -28,6 +29,14 @@ def cmd_remove_preview(args):
     out.mkdir(parents=True, exist_ok=True)
     session = load_preview_session(args.session)
     result = remove_preview(session, allow_execute=args.allow_execute)
+    if args.allow_execute and result.executed:
+        session.metadata["previous_inserted_handle"] = session.inserted_handle
+        session.metadata["removed_at"] = now_iso()
+        session.inserted_handle = None
+        session.status = "removed"
+        session.saved = False
+        save_preview_session(session, Path(args.out) / "preview_session.json")
+        write_session_md(session, Path(args.out) / "preview_session.md")
     write_json(result, out / "preview_remove_result.json")
     print(out / "preview_remove_result.json")
     return 0 if not result.errors else 1
