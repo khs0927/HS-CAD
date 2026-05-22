@@ -6,43 +6,56 @@ from pathlib import Path
 from typing import Any
 
 from src.adapters.zwcad_com_adapter import ZWCADCOMAdapter
+from src.converters.oda_file_converter import ODAFileConverter
 from src.corpus.schema import FileizedDrawingRecord
 from src.fileizers.base import DrawingFileizer
 from src.fileizers.dxf_ezdxf_fileizer import DXFEzdxfFileizer
 
 
 class DWGToDXFEzdxfFileizer(DrawingFileizer):
-    """Fast DWG corpus fileizer: save DWG as DXF, then parse with ezdxf.
+    """Fast DWG corpus fileizer: convert DWG to DXF, then parse with ezdxf.
 
-    COM is used only for CAD-native Open/SaveAs. Python does not walk
-    ModelSpace through COM, avoiding per-object IPC bottlenecks on large DWGs.
+    Preferred order:
+    1. External headless converter, currently ODA File Converter when available.
+    2. ZWCAD COM Open/SaveAs.
+    3. ZWCAD SendCommand Open/SaveAs/DXFOUT fallback.
+
+    Python never walks ModelSpace through COM for bulk fileization.
     """
 
     engine_name = 'zwcad_saveas_dxf_ezdxf'
     supported_extensions = ('.dwg',)
 
-    def __init__(self, temp_root: str | Path | None = None, *, command_timeout_seconds: float = 45.0):
+    def __init__(self, temp_root: str | Path | None = None, *, command_timeout_seconds: float = 45.0, prefer_external_converter: bool = True):
         self.temp_root = Path(temp_root) if temp_root else None
         self.command_timeout_seconds = command_timeout_seconds
+        self.prefer_external_converter = prefer_external_converter
         self.command_fallback_used = False
+        self.external_converter_used = False
+        self.external_converter_result: dict[str, Any] | None = None
 
     def is_available(self) -> tuple[bool, str]:
-        try:
-            import comtypes.client  # noqa: F401
-        except Exception as exc:
-            return False, f'comtypes unavailable: {exc}'
         ok, reason = DXFEzdxfFileizer().is_available()
         if not ok:
             return False, reason
+        oda_ok, oda_reason = ODAFileConverter().is_available()
+        if oda_ok:
+            return True, f'ODA File Converter and ezdxf available: {oda_reason}'
+        try:
+            import comtypes.client  # noqa: F401
+        except Exception as exc:
+            return False, f'No external converter and comtypes unavailable: {exc}'
         try:
             adapter = ZWCADCOMAdapter(visible=False)
             adapter.connect()
-            return True, 'ZWCAD COM and ezdxf available'
+            return True, f'ZWCAD COM and ezdxf available; external converter unavailable: {oda_reason}'
         except Exception as exc:
-            return False, f'ZWCAD COM unavailable: {exc}'
+            return False, f'No external converter and ZWCAD COM unavailable: {exc}; converter={oda_reason}'
 
     def fileize(self, path: str | Path, *, file_id: str, relative_path: str | Path) -> FileizedDrawingRecord:
         self.command_fallback_used = False
+        self.external_converter_used = False
+        self.external_converter_result = None
         src = Path(path)
         available, reason = self.is_available()
         if not available:
@@ -61,10 +74,12 @@ class DWGToDXFEzdxfFileizer(DrawingFileizer):
         started = time.time()
         adapter = ZWCADCOMAdapter(visible=False)
         try:
-            adapter.connect()
-            self._open_document(adapter, staged_dwg)
-            self._save_as_dxf(adapter, temp_dxf)
-            adapter.close()
+            external_error = self._try_external_converter(staged_dwg, temp_dxf) if self.prefer_external_converter else None
+            if not temp_dxf.exists() or temp_dxf.stat().st_size == 0:
+                adapter.connect()
+                self._open_document(adapter, staged_dwg)
+                self._save_as_dxf(adapter, temp_dxf)
+                adapter.close()
             record = DXFEzdxfFileizer().fileize(temp_dxf, file_id=file_id, relative_path=relative_path)
             record.source_path = str(src)
             record.extension = src.suffix.lower()
@@ -73,9 +88,16 @@ class DWGToDXFEzdxfFileizer(DrawingFileizer):
             record.metadata['converted_dxf_path'] = str(temp_dxf)
             record.metadata['conversion_seconds'] = round(time.time() - started, 3)
             record.metadata['command_fallback_used'] = self.command_fallback_used
+            record.metadata['external_converter_used'] = self.external_converter_used
+            if self.external_converter_result:
+                record.metadata['external_converter_result'] = self.external_converter_result
             record.warnings.append({'type': 'dwg_converted_to_dxf', 'path': str(temp_dxf)})
+            if self.external_converter_used:
+                record.warnings.append({'type': 'external_converter_used', 'engine': 'oda_file_converter'})
             if self.command_fallback_used:
                 record.warnings.append({'type': 'zwcad_sendcommand_fallback_used'})
+            if external_error:
+                record.warnings.append({'type': 'external_converter_failed_then_fallback', 'reason': external_error})
             return record
         except DwgOpenError as exc:
             return FileizedDrawingRecord.failed(
@@ -111,6 +133,14 @@ class DWGToDXFEzdxfFileizer(DrawingFileizer):
                 adapter.close()
             except Exception:
                 pass
+
+    def _try_external_converter(self, staged_dwg: Path, temp_dxf: Path) -> str | None:
+        result = ODAFileConverter().convert_to_dxf(staged_dwg, temp_dxf)
+        self.external_converter_result = result.to_dict()
+        if result.ok and temp_dxf.exists() and temp_dxf.stat().st_size > 0:
+            self.external_converter_used = True
+            return None
+        return result.reason or 'external converter did not create DXF'
 
     def _temp_dir(self, file_id: str) -> Path:
         root = self.temp_root or Path('outputs') / 'corpus_tmp_dxf'
