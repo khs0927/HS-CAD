@@ -10,6 +10,7 @@ from src.corpus.report_builder import CorpusReportBuilder
 from src.corpus.schema import FileizedDrawingRecord
 from src.corpus_run.manifest import ManifestEntry, read_manifest, scan_manifest, write_manifest
 from src.fileizers.base import FileizedRecordWriter
+from src.fileizers.dwg_dxf_ezdxf_fileizer import DWGToDXFEzdxfFileizer
 from src.fileizers.dwg_zwcad_fileizer import ZWCADDWGFileizer
 from src.fileizers.dxf_ezdxf_fileizer import DXFEzdxfFileizer
 from src.fileizers.image_fileizer import ImageMetadataFileizer
@@ -17,12 +18,19 @@ from src.fileizers.pdf_pymupdf_fileizer import PDFPyMuPDFFileizer
 
 
 class CorpusPipelineRunner:
-    def __init__(self, workspace: str | Path):
+    def __init__(self, workspace: str | Path, *, include_com_fallback: bool = False):
         self.workspace = Path(workspace)
         self.manifest_path = self.workspace / 'run_manifest.json'
         self.sqlite_path = self.workspace / 'cad_knowledge.sqlite'
         self.writer = FileizedRecordWriter(self.workspace)
-        self.fileizers = [ZWCADDWGFileizer(), DXFEzdxfFileizer(), PDFPyMuPDFFileizer(), ImageMetadataFileizer()]
+        self.fileizers = [
+            DWGToDXFEzdxfFileizer(temp_root=self.workspace / 'tmp' / 'dxf'),
+            DXFEzdxfFileizer(),
+            PDFPyMuPDFFileizer(),
+            ImageMetadataFileizer(),
+        ]
+        if include_com_fallback:
+            self.fileizers.append(ZWCADDWGFileizer())
 
     def prepare(self, root: str | Path, *, sample: int = 0) -> dict:
         entries = scan_manifest(root, sample=sample)
