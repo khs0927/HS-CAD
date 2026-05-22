@@ -15,12 +15,27 @@ python -m pip install pytest requests
 ## 2. Run fast unit tests first
 
 ```powershell
-python -m pytest tests/test_route_defaults.py tests/test_task_router.py tests/test_route_plan_writer.py tests/test_large_dwg_strategy.py tests/test_open_tools_catalog.py tests/test_encoding_and_webhard_cli.py tests/test_dwg_dxf_fileizer_errors.py -q
+python -m pytest tests/test_route_defaults.py tests/test_task_router.py tests/test_route_plan_writer.py tests/test_large_dwg_strategy.py tests/test_open_tools_catalog.py tests/test_encoding_and_webhard_cli.py tests/test_dwg_dxf_fileizer_errors.py tests/test_oda_converter_adapter.py -q
 ```
 
 Expected result: all tests pass.
 
-## 3. Generate a route plan for the Webhard DWG corpus
+## 3. Check external converter discovery
+
+```powershell
+python -X utf8 -m src.main hscad-converters --probe
+```
+
+If ODA File Converter is installed in a non-standard location, set:
+
+```powershell
+$env:ODA_FILE_CONVERTER="C:\Path\To\ODAFileConverter.exe"
+python -X utf8 -m src.main hscad-converters --probe
+```
+
+The DWG fileizer now tries ODA File Converter before ZWCAD COM when the executable is available.
+
+## 4. Generate a route plan for the Webhard DWG corpus
 
 Set UTF-8 first:
 
@@ -57,7 +72,7 @@ zwcad_saveas_dxf_ezdxf
 
 and does not use Python COM ModelSpace bulk iteration as the default.
 
-## 4. Safer Webhard sample command
+## 5. Safer Webhard sample command
 
 If PowerShell still has Korean path quoting or output encoding issues, use the dedicated command below. It assembles this path inside Python instead of receiving it from the shell:
 
@@ -83,7 +98,7 @@ and writes:
 outputs\webhard_real_sample\webhard_sample_run.json
 ```
 
-## 5. Run the generated review script only after inspection
+## 6. Run the generated review script only after inspection
 
 The PowerShell file is a review artifact. Inspect it first.
 
@@ -93,39 +108,16 @@ Get-Content -Encoding UTF8 outputs\codex_route_plan\task_route_review.ps1
 
 If the source root and workspace look correct, run the commands manually step by step instead of blindly executing the file.
 
-## 6. Real ZWCAD test for DWG conversion
-
-After route plan validation, run a real 1 to 5 file sample. Prefer the dedicated command from section 4. Manual stage-by-stage commands are still available:
-
-```powershell
-python -X utf8 -m src.main corpus-run prepare --root "Z:\내 드라이브\#웹하드" --workspace "outputs\webhard_real_sample" --sample 5
-python -X utf8 -m src.main corpus-run fileize --workspace "outputs\webhard_real_sample" --limit 5
-python -X utf8 -m src.main corpus-run validate --workspace "outputs\webhard_real_sample"
-python -X utf8 -m src.main corpus-run index --workspace "outputs\webhard_real_sample"
-python -X utf8 -m src.main corpus-run learn --workspace "outputs\webhard_real_sample"
-python -X utf8 -m src.main corpus-run quality --workspace "outputs\webhard_real_sample"
-python -X utf8 -m src.main corpus-run report --workspace "outputs\webhard_real_sample"
-```
-
-Check:
-
-```text
-outputs\webhard_real_sample\QUALITY_AUDIT.md
-outputs\webhard_real_sample\FINAL_REPORT.md
-outputs\webhard_real_sample\webhard_sample_run.json
-outputs\webhard_real_sample\failures
-outputs\webhard_real_sample\tmp\dxf
-```
-
-## 7. DWG Open/SaveAs fallback and failure classification
+## 7. DWG conversion order and failure classification
 
 The DWG fileizer now tries this order:
 
 ```text
-1. Documents.Open(staged_dwg)
-2. If Open fails: SendCommand _.OPEN
-3. SaveAs DXF using COM SaveAs format candidates
-4. If SaveAs fails: SendCommand _.SAVEAS / _.DXFOUT candidates
+1. ODA File Converter, if available
+2. ZWCAD Documents.Open(staged_dwg)
+3. If Open fails: SendCommand _.OPEN
+4. SaveAs DXF using COM SaveAs format candidates
+5. If SaveAs fails: SendCommand _.SAVEAS / _.DXFOUT candidates
 ```
 
 If DWG conversion fails, inspect the failure JSON files:
@@ -142,7 +134,19 @@ save_as_dxf_failed
 fileize_failed
 ```
 
-If conversion succeeds after the command fallback, the fileized JSON should contain:
+If ODA conversion succeeds, the fileized JSON should contain:
+
+```text
+"external_converter_used": true
+```
+
+and warnings should include:
+
+```text
+external_converter_used
+```
+
+If conversion succeeds after the ZWCAD command fallback, the fileized JSON should contain:
 
 ```text
 "command_fallback_used": true
@@ -154,18 +158,17 @@ and warnings should include:
 zwcad_sendcommand_fallback_used
 ```
 
-If `open_document_failed` still appears, ZWCAD could not open the staged local DWG through both COM Open and SendCommand Open. The next development step is an external converter path such as ODA File Converter or vendor batch conversion.
-
-If `save_as_dxf_failed` appears, ZWCAD opened the file but failed while exporting DXF through both COM SaveAs and SendCommand SaveAs/DXFOUT.
+If `open_document_failed` still appears and ODA is unavailable, install/configure ODA File Converter or add a vendor batch conversion path.
 
 ## Pass criteria
 
 - DWG records use `zwcad_saveas_dxf_ezdxf`.
 - Temporary staged DWG files are created under the workspace.
-- Temporary DXF files are created when SaveAs succeeds.
+- Temporary DXF files are created when any converter path succeeds.
 - `validate` succeeds.
 - `quality` and `report` files are created.
 - Korean path/prompt output does not crash stdout/stderr.
 - Any failures are captured as JSON instead of crashing the run.
 - DWG failures are classified as `open_document_failed` or `save_as_dxf_failed` when possible.
-- If fallback succeeds, `command_fallback_used` is recorded.
+- If external converter succeeds, `external_converter_used` is recorded.
+- If ZWCAD fallback succeeds, `command_fallback_used` is recorded.
