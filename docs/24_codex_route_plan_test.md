@@ -14,15 +14,24 @@ python -m pip install pytest requests
 ## 2. Run fast unit tests first
 
 ```powershell
-python -m pytest tests/test_route_defaults.py tests/test_task_router.py tests/test_route_plan_writer.py tests/test_large_dwg_strategy.py tests/test_open_tools_catalog.py -q
+python -m pytest tests/test_route_defaults.py tests/test_task_router.py tests/test_route_plan_writer.py tests/test_large_dwg_strategy.py tests/test_open_tools_catalog.py tests/test_encoding_and_webhard_cli.py -q
 ```
 
 Expected result: all tests pass.
 
 ## 3. Generate a route plan for the Webhard DWG corpus
 
+Set UTF-8 first:
+
 ```powershell
-python -m src.main hscad-route-plan "웹하드 도면을 샘플 분석해줘" --source "Z:\내 드라이브\#웹하드\sample.dwg" --sample 20 --limit 20 --out-dir "outputs\codex_route_plan"
+chcp 65001
+$env:PYTHONIOENCODING="utf-8"
+```
+
+Then generate the plan:
+
+```powershell
+python -X utf8 -m src.main hscad-route-plan "웹하드 도면을 샘플 분석해줘" --source "Z:\내 드라이브\#웹하드\sample.dwg" --sample 20 --limit 20 --out-dir "outputs\codex_route_plan"
 ```
 
 If the sample DWG path does not exist, replace it with any real DWG under:
@@ -47,28 +56,54 @@ zwcad_saveas_dxf_ezdxf
 
 and does not use Python COM ModelSpace bulk iteration as the default.
 
-## 4. Run the generated review script only after inspection
+## 4. Safer Webhard sample command
+
+If PowerShell still has Korean path quoting or output encoding issues, use the dedicated command below. It assembles this path inside Python instead of receiving it from the shell:
+
+```text
+Z:/내 드라이브/#웹하드
+```
+
+Run:
+
+```powershell
+python -X utf8 -m src.main hscad-webhard-sample --drive "Z:/" --workspace "outputs\webhard_real_sample" --sample 5 --limit 5
+```
+
+This runs:
+
+```text
+prepare -> fileize -> validate -> index -> learn -> quality -> report
+```
+
+and writes:
+
+```text
+outputs\webhard_real_sample\webhard_sample_run.json
+```
+
+## 5. Run the generated review script only after inspection
 
 The PowerShell file is a review artifact. Inspect it first.
 
 ```powershell
-Get-Content outputs\codex_route_plan\task_route_review.ps1
+Get-Content -Encoding UTF8 outputs\codex_route_plan\task_route_review.ps1
 ```
 
 If the source root and workspace look correct, run the commands manually step by step instead of blindly executing the file.
 
-## 5. Real ZWCAD test for DWG conversion
+## 6. Real ZWCAD test for DWG conversion
 
-After route plan validation, run a real 1 to 5 file sample:
+After route plan validation, run a real 1 to 5 file sample. Prefer the dedicated command from section 4. Manual stage-by-stage commands are still available:
 
 ```powershell
-python -m src.main corpus-run prepare --root "Z:\내 드라이브\#웹하드" --workspace "outputs\webhard_real_sample" --sample 5
-python -m src.main corpus-run fileize --workspace "outputs\webhard_real_sample" --limit 5
-python -m src.main corpus-run validate --workspace "outputs\webhard_real_sample"
-python -m src.main corpus-run index --workspace "outputs\webhard_real_sample"
-python -m src.main corpus-run learn --workspace "outputs\webhard_real_sample"
-python -m src.main corpus-run quality --workspace "outputs\webhard_real_sample"
-python -m src.main corpus-run report --workspace "outputs\webhard_real_sample"
+python -X utf8 -m src.main corpus-run prepare --root "Z:\내 드라이브\#웹하드" --workspace "outputs\webhard_real_sample" --sample 5
+python -X utf8 -m src.main corpus-run fileize --workspace "outputs\webhard_real_sample" --limit 5
+python -X utf8 -m src.main corpus-run validate --workspace "outputs\webhard_real_sample"
+python -X utf8 -m src.main corpus-run index --workspace "outputs\webhard_real_sample"
+python -X utf8 -m src.main corpus-run learn --workspace "outputs\webhard_real_sample"
+python -X utf8 -m src.main corpus-run quality --workspace "outputs\webhard_real_sample"
+python -X utf8 -m src.main corpus-run report --workspace "outputs\webhard_real_sample"
 ```
 
 Check:
@@ -76,6 +111,7 @@ Check:
 ```text
 outputs\webhard_real_sample\QUALITY_AUDIT.md
 outputs\webhard_real_sample\FINAL_REPORT.md
+outputs\webhard_real_sample\webhard_sample_run.json
 outputs\webhard_real_sample\failures
 outputs\webhard_real_sample\tmp\dxf
 ```
@@ -86,4 +122,5 @@ outputs\webhard_real_sample\tmp\dxf
 - Temporary DXF files are created under the workspace.
 - `validate` succeeds.
 - `quality` and `report` files are created.
+- Korean path/prompt output does not crash stdout/stderr.
 - Any failures are captured as JSON instead of crashing the run.
