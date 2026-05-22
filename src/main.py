@@ -1,5 +1,9 @@
 from __future__ import annotations
 
+from src.utils.encoding import ensure_utf8_stdio
+
+ensure_utf8_stdio()
+
 from src.app.cli import app
 
 import src.app.intelligent_cli  # noqa: F401,E402
