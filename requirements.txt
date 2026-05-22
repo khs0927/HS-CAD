@@ -8,4 +8,6 @@ typer
 pandas
 openpyxl
 ezdxf
+pymupdf
+pillow
 pyyaml
