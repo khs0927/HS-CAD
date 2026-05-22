@@ -8,7 +8,13 @@ def test_task_router_routes_dwg_to_dxf_pipeline(tmp_path: Path):
     assert route.intent == 'dwg_index'
     assert route.pipeline == 'dwg_bulk_index'
     assert route.tools[0].name == 'DWG SaveAs DXF fileizer'
+    assert route.source_root == str(tmp_path)
+    assert route.sample == 20
+    assert route.limit == 20
+    assert route.workspace
     assert any('SaveAs DXF' in item for item in route.warnings)
+    assert any('--sample 20' in tool.command for tool in route.tools)
+    assert any('--limit 20' in tool.command for tool in route.tools)
 
 
 def test_task_router_routes_pdf_to_pdf_pipeline(tmp_path: Path):
@@ -28,3 +34,11 @@ def test_task_router_routes_ifc_to_bim_pipeline(tmp_path: Path):
     route = TaskRouter().route('IFC 물량 산출해줘', tmp_path / 'model.ifc')
     assert route.intent == 'bim_extract'
     assert route.pipeline == 'ifc_bim'
+
+
+def test_task_router_accepts_manual_sample_limit(tmp_path: Path):
+    route = TaskRouter().route('전체 도면을 분석해줘', tmp_path / 'sample.dwg', sample=100, limit=100)
+    assert route.sample == 100
+    assert route.limit == 100
+    assert any('--sample 100' in tool.command for tool in route.tools)
+    assert any('--limit 100' in tool.command for tool in route.tools)
