@@ -24,7 +24,7 @@ def test_floorplan_image_task_prefers_floorplan_pipeline():
 
 
 def test_dwg_change_is_review_gated():
-    plan = plan_hscad_workflow("기존 dwg의 벽체와 문자를 수정해줘", has_dwg=True, wants_write=True)
+    plan = plan_hscad_workflow("기존 dwg의 도면 객체와 문자를 수정해줘", has_dwg=True, wants_write=True)
     assert plan.selected_intent == "dwg_change_review_first"
     assert any(step.command == "run-command --dry-run" for step in plan.steps)
     assert any(step.needs_review for step in plan.steps)
