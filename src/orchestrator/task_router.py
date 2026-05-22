@@ -4,6 +4,8 @@ from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Any
 
+from src.orchestrator.route_defaults import build_route_defaults
+
 
 @dataclass
 class RoutedTool:
@@ -25,6 +27,10 @@ class TaskRoute:
     intent: str
     pipeline: str
     tools: list[RoutedTool]
+    workspace: str | None = None
+    sample: int | None = None
+    limit: int | None = None
+    source_root: str | None = None
     warnings: list[str] = field(default_factory=list)
     missing_context: list[str] = field(default_factory=list)
 
@@ -35,6 +41,10 @@ class TaskRoute:
             'source_extension': self.source_extension,
             'intent': self.intent,
             'pipeline': self.pipeline,
+            'workspace': self.workspace,
+            'sample': self.sample,
+            'limit': self.limit,
+            'source_root': self.source_root,
             'tools': [tool.to_dict() for tool in self.tools],
             'warnings': self.warnings,
             'missing_context': self.missing_context,
@@ -42,20 +52,42 @@ class TaskRoute:
 
 
 class TaskRouter:
-    def route(self, user_prompt: str, source_path: str | Path | None = None, *, workspace: str | Path = 'outputs/routed_corpus') -> TaskRoute:
+    def route(
+        self,
+        user_prompt: str,
+        source_path: str | Path | None = None,
+        *,
+        workspace: str | Path | None = None,
+        sample: int | None = None,
+        limit: int | None = None,
+    ) -> TaskRoute:
         text = user_prompt.lower()
         source = str(source_path) if source_path else None
         ext = Path(source).suffix.lower() if source else None
+        defaults = build_route_defaults(user_prompt, source_path, workspace=workspace, sample=sample, limit=limit)
         intent = self._intent(text, ext)
         pipeline = self._pipeline(intent)
-        tools = self._tools(pipeline, source, str(workspace))
-        warnings: list[str] = []
+        tools = self._tools(pipeline, defaults.source_root, defaults.workspace, defaults.sample, defaults.limit)
+        warnings: list[str] = list(defaults.warnings)
         missing: list[str] = []
         if not source and pipeline != 'safe_inspection':
             missing.append('source_path is required for this route')
         if ext == '.dwg':
             warnings.append('DWG bulk import should use SaveAs DXF plus ezdxf, not COM ModelSpace iteration.')
-        return TaskRoute(user_prompt, source, ext, intent, pipeline, tools, warnings, missing)
+        return TaskRoute(
+            user_prompt=user_prompt,
+            source_path=source,
+            source_extension=ext,
+            intent=intent,
+            pipeline=pipeline,
+            tools=tools,
+            workspace=defaults.workspace,
+            sample=defaults.sample,
+            limit=defaults.limit,
+            source_root=defaults.source_root,
+            warnings=warnings,
+            missing_context=missing,
+        )
 
     def _intent(self, text: str, ext: str | None) -> str:
         if ext == '.ifc' or _has(text, ('ifc', 'bim', '물량')):
@@ -82,18 +114,24 @@ class TaskRouter:
             'spatial_graph': 'spatial_graph',
         }.get(intent, 'safe_inspection')
 
-    def _tools(self, pipeline: str, source: str | None, workspace: str) -> list[RoutedTool]:
-        src = source or '<source_path>'
-        root = str(Path(src).parent) if source else '<source_folder>'
+    def _tools(self, pipeline: str, source_root: str | None, workspace: str, sample: int, limit: int) -> list[RoutedTool]:
+        root = source_root or '<source_folder>'
         if pipeline == 'dwg_bulk_index':
             return [
                 RoutedTool('DWG SaveAs DXF fileizer', 'zwcad_saveas_dxf_ezdxf', 'Convert DWG to temporary DXF and parse with ezdxf.', 'fileize'),
-                RoutedTool('corpus prepare', f'corpus-run prepare --root "{root}" --workspace "{workspace}" --sample 20', 'Build a safe sample manifest.', 'prepare'),
-                RoutedTool('corpus fileize', f'corpus-run fileize --workspace "{workspace}" --limit 20', 'Fileize using the selected engine.', 'fileize'),
-                RoutedTool('corpus quality', f'corpus-run validate --workspace "{workspace}"', 'Validate fileized JSON before indexing.', 'qa'),
+                RoutedTool('corpus prepare', f'corpus-run prepare --root "{root}" --workspace "{workspace}" --sample {sample}', 'Build a safe sample manifest.', 'prepare'),
+                RoutedTool('corpus fileize', f'corpus-run fileize --workspace "{workspace}" --limit {limit}', 'Fileize using the selected engine.', 'fileize'),
+                RoutedTool('corpus validate', f'corpus-run validate --workspace "{workspace}"', 'Validate fileized JSON before indexing.', 'qa'),
+                RoutedTool('corpus index', f'corpus-run index --workspace "{workspace}"', 'Build SQLite knowledge base.', 'index'),
+                RoutedTool('corpus learn', f'corpus-run learn --workspace "{workspace}"', 'Write learning summary.', 'learn'),
+                RoutedTool('corpus quality', f'corpus-run quality --workspace "{workspace}"', 'Write quality audit.', 'qa'),
+                RoutedTool('corpus report', f'corpus-run report --workspace "{workspace}"', 'Write final report.', 'report'),
             ]
         if pipeline == 'dxf_index':
-            return [RoutedTool('ezdxf', 'corpus-run fileize', 'Read DXF directly.', 'fileize')]
+            return [
+                RoutedTool('ezdxf', 'corpus-run fileize', 'Read DXF directly.', 'fileize'),
+                RoutedTool('corpus validate/index', f'corpus-run validate --workspace "{workspace}"', 'Validate DXF extraction before index.', 'qa'),
+            ]
         if pipeline == 'pdf_index':
             return [RoutedTool('PyMuPDF', 'corpus-run fileize', 'Extract PDF page and text blocks.', 'fileize')]
         if pipeline == 'image_analysis':
