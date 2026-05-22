@@ -19,6 +19,7 @@ import src.app.open_tools_cli  # noqa: F401,E402
 import src.app.router_cli  # noqa: F401,E402
 import src.app.route_plan_cli  # noqa: F401,E402
 import src.app.webhard_cli  # noqa: F401,E402
+import src.app.converters_cli  # noqa: F401,E402
 
 if __name__ == '__main__':
     app()
