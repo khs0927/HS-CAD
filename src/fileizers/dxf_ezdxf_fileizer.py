@@ -3,7 +3,13 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
-from src.corpus.schema import FileizedDrawingRecord, layer_rows_from_entities, text_rows_from_entities
+from src.corpus.schema import (
+    FileizedDrawingRecord,
+    block_rows_from_entities,
+    dimension_rows_from_entities,
+    layer_rows_from_entities,
+    text_rows_from_entities,
+)
 from src.fileizers.base import DrawingFileizer
 
 
@@ -31,6 +37,8 @@ class DXFEzdxfFileizer(DrawingFileizer):
             'handle': getattr(entity.dxf, 'handle', None),
             'entity_type': etype,
             'layer': getattr(entity.dxf, 'layer', None),
+            'color': getattr(entity.dxf, 'color', None),
+            'linetype': getattr(entity.dxf, 'linetype', None),
         }
         if etype == 'LINE':
             item['start'] = self._xyz(entity.dxf.start)
@@ -38,20 +46,49 @@ class DXFEzdxfFileizer(DrawingFileizer):
         elif etype == 'TEXT':
             item['text'] = getattr(entity.dxf, 'text', None)
             item['insert'] = self._xyz(getattr(entity.dxf, 'insert', None))
+            item['height'] = getattr(entity.dxf, 'height', None)
+            item['rotation'] = getattr(entity.dxf, 'rotation', None)
+            item['style_name'] = getattr(entity.dxf, 'style', None)
         elif etype == 'MTEXT':
             item['text'] = getattr(entity, 'text', '')
             item['insert'] = self._xyz(getattr(entity.dxf, 'insert', None))
+            item['height'] = getattr(entity.dxf, 'char_height', None)
+            item['rotation'] = getattr(entity.dxf, 'rotation', None)
+            item['style_name'] = getattr(entity.dxf, 'style', None)
         elif etype == 'INSERT':
             item['name'] = getattr(entity.dxf, 'name', None)
             item['effective_name'] = getattr(entity.dxf, 'name', None)
             item['insert'] = self._xyz(getattr(entity.dxf, 'insert', None))
+            item['rotation'] = getattr(entity.dxf, 'rotation', None)
+            item['x_scale'] = getattr(entity.dxf, 'xscale', None)
+            item['y_scale'] = getattr(entity.dxf, 'yscale', None)
+            item['z_scale'] = getattr(entity.dxf, 'zscale', None)
         elif etype == 'CIRCLE':
             item['center'] = self._xyz(entity.dxf.center)
             item['radius'] = getattr(entity.dxf, 'radius', None)
-        elif 'POLYLINE' in etype:
+        elif etype == 'ARC':
+            item['center'] = self._xyz(entity.dxf.center)
+            item['radius'] = getattr(entity.dxf, 'radius', None)
+            item['start_angle'] = getattr(entity.dxf, 'start_angle', None)
+            item['end_angle'] = getattr(entity.dxf, 'end_angle', None)
+        elif etype == 'LWPOLYLINE':
             item['entity_type'] = 'POLYLINE'
+            try:
+                item['points'] = [[float(x), float(y), 0.0] for x, y, *_ in entity.get_points()]
+            except Exception:
+                item['points'] = []
+            item['closed'] = bool(getattr(entity, 'closed', False))
+        elif etype == 'POLYLINE':
+            item['entity_type'] = 'POLYLINE'
+            try:
+                item['points'] = [self._xyz(vertex.dxf.location) for vertex in entity.vertices]
+            except Exception:
+                item['points'] = []
+            item['closed'] = bool(getattr(entity, 'is_closed', False))
         elif 'DIMENSION' in etype:
             item['entity_type'] = 'DIMENSION'
+            item['text_override'] = getattr(entity.dxf, 'text', None)
+            item['measurement'] = getattr(entity, 'get_measurement', lambda: None)()
         return item
 
     def fileize(self, path: str | Path, *, file_id: str, relative_path: str | Path) -> FileizedDrawingRecord:
@@ -74,9 +111,11 @@ class DXFEzdxfFileizer(DrawingFileizer):
                 status='ok',
                 engine=self.engine_name,
                 layers=layer_rows_from_entities(entities),
+                blocks=block_rows_from_entities(entities),
                 entities=entities,
                 texts=text_rows_from_entities(entities),
-                metadata={'object_count': len(entities)},
+                dimensions=dimension_rows_from_entities(entities),
+                metadata={'object_count': len(entities), 'dxf_version': getattr(doc, 'dxfversion', None)},
             )
         except Exception as exc:
             return FileizedDrawingRecord.failed(
