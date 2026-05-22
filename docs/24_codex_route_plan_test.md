@@ -7,6 +7,7 @@ Use this guide on a Windows machine with the PR branch checked out.
 ```powershell
 git fetch origin pull/3/head:pr-3-corpus-foundation
 git switch pr-3-corpus-foundation
+git reset --hard FETCH_HEAD
 python -m pip install -r requirements.txt
 python -m pip install pytest requests
 ```
@@ -14,7 +15,7 @@ python -m pip install pytest requests
 ## 2. Run fast unit tests first
 
 ```powershell
-python -m pytest tests/test_route_defaults.py tests/test_task_router.py tests/test_route_plan_writer.py tests/test_large_dwg_strategy.py tests/test_open_tools_catalog.py tests/test_encoding_and_webhard_cli.py -q
+python -m pytest tests/test_route_defaults.py tests/test_task_router.py tests/test_route_plan_writer.py tests/test_large_dwg_strategy.py tests/test_open_tools_catalog.py tests/test_encoding_and_webhard_cli.py tests/test_dwg_dxf_fileizer_errors.py -q
 ```
 
 Expected result: all tests pass.
@@ -116,11 +117,33 @@ outputs\webhard_real_sample\failures
 outputs\webhard_real_sample\tmp\dxf
 ```
 
+## 7. DWG Open/SaveAs failure classification
+
+If DWG conversion fails, inspect the failure JSON files:
+
+```powershell
+Get-ChildItem outputs\webhard_real_sample\failures -Filter *.json | Select-Object -First 5 | ForEach-Object { Get-Content -Encoding UTF8 $_.FullName }
+```
+
+Expected error types:
+
+```text
+open_document_failed
+save_as_dxf_failed
+fileize_failed
+```
+
+If `open_document_failed` appears, ZWCAD COM could not open the staged local DWG. The next development step is a command-based fallback such as ZWCAD `SendCommand` `_OPEN` and `_SAVEAS DXF`, or an external converter path.
+
+If `save_as_dxf_failed` appears, ZWCAD opened the file but failed while saving DXF. The next step is refining SaveAs format constants or command-based SaveAs.
+
 ## Pass criteria
 
 - DWG records use `zwcad_saveas_dxf_ezdxf`.
-- Temporary DXF files are created under the workspace.
+- Temporary staged DWG files are created under the workspace.
+- Temporary DXF files are created when SaveAs succeeds.
 - `validate` succeeds.
 - `quality` and `report` files are created.
 - Korean path/prompt output does not crash stdout/stderr.
 - Any failures are captured as JSON instead of crashing the run.
+- DWG failures are classified as `open_document_failed` or `save_as_dxf_failed` when possible.
