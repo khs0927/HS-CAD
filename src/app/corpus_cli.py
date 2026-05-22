@@ -42,6 +42,16 @@ def corpus_index(
     success('Corpus index stage complete')
 
 
+@corpus_app.command('learn')
+def corpus_learn(
+    workspace: Path = typer.Option(Path('outputs/corpus_workspace'), '--workspace'),
+    out: Path | None = typer.Option(None, '--out'),
+):
+    result = CorpusPipelineRunner(workspace).learn(out)
+    console.print(result)
+    success('Corpus learn stage complete')
+
+
 @corpus_app.command('query')
 def corpus_query(
     text: str = typer.Argument(...),
@@ -49,6 +59,15 @@ def corpus_query(
     limit: int = typer.Option(20, '--limit'),
 ):
     console.print(CorpusPipelineRunner(workspace).query(text, limit=limit))
+
+
+@corpus_app.command('evidence')
+def corpus_evidence(
+    text: str = typer.Argument(...),
+    workspace: Path = typer.Option(Path('outputs/corpus_workspace'), '--workspace'),
+    limit: int = typer.Option(20, '--limit'),
+):
+    console.print(CorpusPipelineRunner(workspace).evidence(text, limit=limit))
 
 
 @corpus_app.command('report')
