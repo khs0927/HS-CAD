@@ -366,3 +366,17 @@ def xicad_safe_run(
     if save_as and plan.can_execute:
         adapter.save_as(save_as)
         success(f'Saved modified DWG: {save_as}')
+
+
+@app.command('floorplan-analyze')
+def floorplan_analyze(
+    image: Path = typer.Option(..., '--image', help='분석 대상 도면 이미지 경로 (PNG, JPG, BMP 등)'),
+    out_dir: Path = typer.Option(Path('outputs/floorplan_out'), '--out-dir', help='DXF 및 레포트 출력 폴더'),
+    dry_run: bool = typer.Option(True, '--dry-run/--production', help='Dry-run 모드 실행 여부 (기본값 True)'),
+    vlm_refine: bool = typer.Option(True, '--vlm/--no-vlm', help='VLM 피드백 리뷰 실행 여부'),
+):
+    """Unified Floorplan-to-CAD 파이프라인을 실행합니다 (기본값 Dry-Run)."""
+    from neuro_seq_cad.app.cli import analyze as ns_analyze
+    # ZWCAD 수정 등은 절대 하지 않고, 순수 파일 변환 파이프라인 호출
+    ns_analyze(image=image, output_dir=out_dir, dry_run=dry_run, vlm_refine=vlm_refine)
+

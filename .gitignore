@@ -12,3 +12,4 @@ generated/**/*.log
 *.tmp
 .env
 .DS_Store
+output/

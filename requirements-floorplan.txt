@@ -1,0 +1,14 @@
+# AI/이미지 도면 파이프라인용 전용 의존성 라이브러리 (Unified Floorplan-to-CAD Framework)
+numpy
+opencv-python
+pillow
+shapely
+networkx
+matplotlib
+pymupdf
+requests
+scipy
+scikit-image
+gdown
+fastapi
+uvicorn
