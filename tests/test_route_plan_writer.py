@@ -11,4 +11,4 @@ def test_route_plan_writer_outputs_review_files(tmp_path: Path):
     assert Path(paths['markdown']).exists()
     assert Path(paths['powershell']).exists()
     assert 'zwcad_saveas_dxf_ezdxf' in Path(paths['json']).read_text(encoding='utf-8')
-    assert 'python -m src.main corpus-run prepare' in Path(paths['powershell']).read_text(encoding='utf-8')
+    assert 'python -X utf8 -m src.main corpus-run prepare' in Path(paths['powershell']).read_text(encoding='utf-8-sig')
