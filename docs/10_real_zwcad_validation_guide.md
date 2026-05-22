@@ -56,3 +56,9 @@ python -m src.main collect-debug --dwg "C:/cad/sample_copy.dwg" --xicad-root "C:
 ```
 
 Share the debug bundle when reporting issues.
+
+## 8. Operational finish process
+
+For the standard working flow, including GitHub synchronization, final text-in-cell verification, and XiCAD `TOA` left/center/right text alignment, follow:
+
+- `docs/22_operational_sync_and_cad_finish_process.md`

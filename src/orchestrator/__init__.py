@@ -17,3 +17,5 @@ __all__ = [
     "build_default_registry",
     "plan_hscad_workflow",
 ]
+
+from .intelligent_router import IntelligentRouteResult, build_intelligent_route

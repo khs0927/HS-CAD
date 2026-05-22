@@ -32,7 +32,7 @@ def hscad_tools(
         success(f'HS-CAD tool registry written: {out}')
 
 
-@app.command('hscad-tool-plan')
+@app.command('hscad-workflow-plan')
 def hscad_tool_plan(
     task: str = typer.Argument(..., help='Natural-language CAD task to plan.'),
     has_image: bool = typer.Option(False, '--has-image', help='The task includes an image/PDF floorplan input.'),

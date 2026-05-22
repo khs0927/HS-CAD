@@ -309,7 +309,6 @@ def quantity(dwg: str = typer.Option(..., help='DWG file path'), out: str = type
     export_json(rows, out)
     success(f'Quantity report -> {out}')
 
-
 # ---------------------------------------------------------------------------
 # XiCAD Safe Bridge commands
 # ---------------------------------------------------------------------------
