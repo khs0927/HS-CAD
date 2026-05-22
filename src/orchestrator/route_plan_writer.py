@@ -24,7 +24,7 @@ class RoutePlanWriter:
         ps1_path = self.out_dir / 'task_route_review.ps1'
         json_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding='utf-8')
         md_path.write_text(self.to_markdown(payload), encoding='utf-8')
-        ps1_path.write_text(self.to_powershell(payload), encoding='utf-8')
+        ps1_path.write_text(self.to_powershell(payload), encoding='utf-8-sig')
         return {'json': str(json_path), 'markdown': str(md_path), 'powershell': str(ps1_path)}
 
     @staticmethod
@@ -37,6 +37,9 @@ class RoutePlanWriter:
             f'- Extension: {payload.get("source_extension") or "unknown"}',
             f'- Intent: {payload.get("intent")}',
             f'- Pipeline: {payload.get("pipeline")}',
+            f'- Workspace: {payload.get("workspace") or "not set"}',
+            f'- Sample: {payload.get("sample")}',
+            f'- Limit: {payload.get("limit")}',
             '',
             '## Ordered Commands',
             '| # | Stage | Tool | Command | Review | Reason |',
@@ -59,9 +62,13 @@ class RoutePlanWriter:
             '# HS-CAD routed command review script',
             '# Generated for review. Inspect before running any command.',
             '$ErrorActionPreference = "Stop"',
+            'chcp 65001 | Out-Null',
+            '$env:PYTHONIOENCODING = "utf-8"',
+            '[Console]::OutputEncoding = [System.Text.UTF8Encoding]::new()',
             '',
             f'# Prompt: {payload.get("user_prompt")}',
             f'# Pipeline: {payload.get("pipeline")}',
+            f'# Workspace: {payload.get("workspace")}',
             '',
         ]
         for index, tool in enumerate(payload.get('tools', []), start=1):
@@ -72,7 +79,7 @@ class RoutePlanWriter:
             if tool.get('review_required'):
                 lines.append(f'# REVIEW REQUIRED: {command}')
             elif command.startswith('corpus-run') or command.startswith('hscad-') or command.startswith('floorplan-'):
-                lines.append(f'python -m src.main {command}')
+                lines.append(f'python -X utf8 -m src.main {command}')
             else:
                 lines.append(f'# External or planned command: {command}')
             lines.append('')
