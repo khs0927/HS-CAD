@@ -117,7 +117,16 @@ outputs\webhard_real_sample\failures
 outputs\webhard_real_sample\tmp\dxf
 ```
 
-## 7. DWG Open/SaveAs failure classification
+## 7. DWG Open/SaveAs fallback and failure classification
+
+The DWG fileizer now tries this order:
+
+```text
+1. Documents.Open(staged_dwg)
+2. If Open fails: SendCommand _.OPEN
+3. SaveAs DXF using COM SaveAs format candidates
+4. If SaveAs fails: SendCommand _.SAVEAS / _.DXFOUT candidates
+```
 
 If DWG conversion fails, inspect the failure JSON files:
 
@@ -133,9 +142,21 @@ save_as_dxf_failed
 fileize_failed
 ```
 
-If `open_document_failed` appears, ZWCAD COM could not open the staged local DWG. The next development step is a command-based fallback such as ZWCAD `SendCommand` `_OPEN` and `_SAVEAS DXF`, or an external converter path.
+If conversion succeeds after the command fallback, the fileized JSON should contain:
 
-If `save_as_dxf_failed` appears, ZWCAD opened the file but failed while saving DXF. The next step is refining SaveAs format constants or command-based SaveAs.
+```text
+"command_fallback_used": true
+```
+
+and warnings should include:
+
+```text
+zwcad_sendcommand_fallback_used
+```
+
+If `open_document_failed` still appears, ZWCAD could not open the staged local DWG through both COM Open and SendCommand Open. The next development step is an external converter path such as ODA File Converter or vendor batch conversion.
+
+If `save_as_dxf_failed` appears, ZWCAD opened the file but failed while exporting DXF through both COM SaveAs and SendCommand SaveAs/DXFOUT.
 
 ## Pass criteria
 
@@ -147,3 +168,4 @@ If `save_as_dxf_failed` appears, ZWCAD opened the file but failed while saving D
 - Korean path/prompt output does not crash stdout/stderr.
 - Any failures are captured as JSON instead of crashing the run.
 - DWG failures are classified as `open_document_failed` or `save_as_dxf_failed` when possible.
+- If fallback succeeds, `command_fallback_used` is recorded.
