@@ -8,8 +8,10 @@ import ezdxf
 from src.corpus.evidence import EvidencePackageBuilder
 from src.corpus.indexer import CorpusIndexer
 from src.corpus.learner import CorpusLearner
+from src.corpus.quality import CorpusQualityAuditor
 from src.corpus.query import CorpusQuery
 from src.corpus.report_builder import CorpusReportBuilder
+from src.corpus.validator import FileizedRecordValidator
 from src.corpus_run.manifest import scan_manifest, write_manifest
 from src.corpus_run.pipeline_runner import CorpusPipelineRunner
 from src.fileizers.dxf_ezdxf_fileizer import DXFEzdxfFileizer
@@ -111,6 +113,8 @@ def test_pipeline_prepare_fileize_index_learn_report(tmp_path: Path) -> None:
     assert prepared['file_count'] == 3
     fileized = runner.fileize()
     assert fileized['ok'] == 3
+    validation = FileizedRecordValidator().validate_json_dir(workspace / 'fileized' / 'json')
+    assert validation['invalid_count'] == 0
     indexed = runner.index()
     assert indexed['indexed'] == 3
     learned = runner.learn()
@@ -119,5 +123,7 @@ def test_pipeline_prepare_fileize_index_learn_report(tmp_path: Path) -> None:
     assert queried['matches']
     evidence = runner.evidence('T180')
     assert evidence['evidence']
+    quality_md = CorpusQualityAuditor(workspace).write_markdown()
+    assert Path(quality_md).exists()
     reported = runner.report()
     assert Path(reported['report']).exists()
