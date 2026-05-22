@@ -9,6 +9,7 @@ import src.app.intelligent_cli  # noqa: F401,E402
 # hscad-workflow-plan available from `python -m src.main`.
 import src.app.orchestrated_cli  # noqa: F401,E402
 import src.app.xicad_stage2_cli  # noqa: F401,E402
+import src.app.xicad_contract_cli  # noqa: F401,E402
 
 if __name__ == '__main__':
     app()
