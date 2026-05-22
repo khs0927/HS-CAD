@@ -13,8 +13,9 @@ from src.fileizers.dxf_ezdxf_fileizer import DXFEzdxfFileizer
 class DWGToDXFEzdxfFileizer(DrawingFileizer):
     """Fast DWG corpus fileizer: save DWG as DXF, then parse with ezdxf.
 
-    COM is used only for the CAD-native SaveAs operation. Python does not walk
-    ModelSpace through COM, avoiding per-object IPC bottlenecks on large DWGs.
+    COM is used only for the CAD-native Open/SaveAs operation. Python does not
+    walk ModelSpace through COM, avoiding per-object IPC bottlenecks on large
+    DWGs.
     """
 
     engine_name = 'zwcad_saveas_dxf_ezdxf'
@@ -50,23 +51,46 @@ class DWGToDXFEzdxfFileizer(DrawingFileizer):
                 engine=self.engine_name,
                 reason=reason,
             )
+
         temp_dir = self._temp_dir(file_id)
+        staged_dwg = self._stage_dwg(src, temp_dir, file_id)
         temp_dxf = temp_dir / f'{file_id}.dxf'
         started = time.time()
         adapter = ZWCADCOMAdapter(visible=False)
         try:
             adapter.connect()
-            adapter.open_document(str(src))
+            self._open_document(adapter, staged_dwg)
             self._save_as_dxf(adapter, temp_dxf)
             adapter.close()
             record = DXFEzdxfFileizer().fileize(temp_dxf, file_id=file_id, relative_path=relative_path)
             record.source_path = str(src)
             record.extension = src.suffix.lower()
             record.engine = self.engine_name
+            record.metadata['staged_dwg_path'] = str(staged_dwg)
             record.metadata['converted_dxf_path'] = str(temp_dxf)
             record.metadata['conversion_seconds'] = round(time.time() - started, 3)
             record.warnings.append({'type': 'dwg_converted_to_dxf', 'path': str(temp_dxf)})
             return record
+        except DwgOpenError as exc:
+            return FileizedDrawingRecord.failed(
+                file_id=file_id,
+                source_path=src,
+                relative_path=relative_path,
+                extension=src.suffix,
+                engine=self.engine_name,
+                reason=str(exc),
+                error_type='open_document_failed',
+            )
+        except DwgSaveAsError as exc:
+            return FileizedDrawingRecord.failed(
+                file_id=file_id,
+                source_path=src,
+                relative_path=relative_path,
+                extension=src.suffix,
+                engine=self.engine_name,
+                reason=str(exc),
+                error_type='save_as_dxf_failed',
+            )
         except Exception as exc:
             return FileizedDrawingRecord.failed(
                 file_id=file_id,
@@ -88,13 +112,31 @@ class DWGToDXFEzdxfFileizer(DrawingFileizer):
         path.mkdir(parents=True, exist_ok=True)
         return path
 
+    def _stage_dwg(self, src: Path, temp_dir: Path, file_id: str) -> Path:
+        staged = temp_dir / f'{file_id}.dwg'
+        staged.parent.mkdir(parents=True, exist_ok=True)
+        if staged.exists():
+            staged.unlink()
+        shutil.copy2(src, staged)
+        return staged.resolve()
+
+    def _open_document(self, adapter: ZWCADCOMAdapter, staged_dwg: Path) -> None:
+        try:
+            adapter.open_document(str(staged_dwg))
+        except Exception as exc:
+            raise DwgOpenError(f'ZWCAD Documents.Open failed for staged DWG: {staged_dwg}; {exc}') from exc
+
     def _save_as_dxf(self, adapter: ZWCADCOMAdapter, target: Path) -> None:
         target.parent.mkdir(parents=True, exist_ok=True)
         if target.exists():
             target.unlink()
         doc = adapter.doc or adapter.get_active_document()
         last_error: Exception | None = None
-        for fmt in (24, 12, 0, None):
+
+        # ZWCAD/AutoCAD COM SaveAs format constants vary by vendor/version.
+        # Try DXF-oriented candidates first, then fall back to older values and
+        # extension inference. Any failure is reported separately from Open.
+        for fmt in (13, 25, 26, 27, 28, 29, 24, 12, 0, None):
             try:
                 if fmt is None:
                     doc.SaveAs(str(target))
@@ -105,5 +147,13 @@ class DWGToDXFEzdxfFileizer(DrawingFileizer):
             except Exception as exc:
                 last_error = exc
         if last_error:
-            raise RuntimeError(f'DWG SaveAs DXF failed: {last_error}')
-        raise RuntimeError('DWG SaveAs DXF did not create output file')
+            raise DwgSaveAsError(f'DWG SaveAs DXF failed for target {target}: {last_error}')
+        raise DwgSaveAsError(f'DWG SaveAs DXF did not create output file: {target}')
+
+
+class DwgOpenError(RuntimeError):
+    pass
+
+
+class DwgSaveAsError(RuntimeError):
+    pass
