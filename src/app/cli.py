@@ -32,7 +32,11 @@ from src.modifiers.architectural_modifier import (
 from src.reports.json_exporter import export_json
 from src.reports.quantity_report import block_quantity
 from src.scanners.block_scanner import block_summary
+from src.scanners.dxf_indexer import convert_dwg_to_dxf, index_dxf_to_sqlite, query_index as query_sqlite_index
 from src.scanners.layer_scanner import layer_counts
+from src.scanners.native_audit import run_native_audit
+from src.scanners.native_fast_scan import fast_scan_active
+from src.scanners.scan_strategy import recommend_scan_strategy
 from src.scanners.text_scanner import extract_texts
 
 app = typer.Typer(help='ZWCAD AI Architectural Modifier CLI')
@@ -61,17 +65,137 @@ def connect():
 
 
 @app.command()
-def scan(dwg: str = typer.Option(..., help='DWG file path'), out: str = typer.Option('outputs/objects.json', help='Output JSON path')):
+def scan(
+    dwg: str = typer.Option(..., help='DWG file path'),
+    out: str = typer.Option('outputs/objects.json', help='Output JSON path'),
+    mode: str = typer.Option('minimal', help='Scan mode: minimal, index, or full'),
+    confirm_heavy: bool = typer.Option(False, help='Allow explicit heavy full COM scans on large drawings'),
+):
     adapter = get_adapter(dwg)
-    objects = adapter.scan_modelspace()
+    objects = adapter.scan_modelspace(mode=mode, confirm_heavy=confirm_heavy)
     export_json(objects, out)
-    success(f'Scanned {len(objects)} objects -> {out}')
+    success(f'Scanned {len(objects)} objects in {mode} mode -> {out}')
+
+
+@app.command('fast-scan')
+def fast_scan(active: bool = typer.Option(False, help='Use the active ZWCAD document'), out: str = typer.Option('generated/fast_scan_report.json', help='Output JSON path')):
+    if not active:
+        raise typer.BadParameter('fast-scan currently requires --active')
+    adapter = get_adapter()
+    payload = fast_scan_active(adapter)
+    export_json(payload, out)
+    success(f'Fast scan written: {out}')
+
+
+@app.command('audit-native')
+def audit_native(active: bool = typer.Option(False, help='Use the active ZWCAD document'), out: str = typer.Option('generated/native_audit.json', help='Output JSON path')):
+    if not active:
+        raise typer.BadParameter('audit-native currently requires --active')
+    adapter = get_adapter()
+    payload = run_native_audit(adapter, out)
+    export_json(payload, out)
+    success(f'Native audit written: {out}')
+
+
+@app.command('index-dxf')
+def index_dxf(
+    dwg: str = typer.Option(..., help='DWG or DXF path'),
+    out: str = typer.Option('generated/index.sqlite', help='SQLite index path'),
+    oda_converter: str | None = typer.Option(None, help='Optional ODA File Converter executable path for DWG input'),
+):
+    source = Path(dwg)
+    dxf = source
+    if source.suffix.lower() == '.dwg':
+        dxf = convert_dwg_to_dxf(source, Path(out).with_suffix('') / 'dxf', oda_converter)
+    payload = index_dxf_to_sqlite(dxf, Path(out))
+    export_json(payload, Path(out).with_suffix('.json'))
+    success(f'DXF index written: {out}')
+
+
+@app.command('query-index')
+def query_index(index: str = typer.Option('generated/index.sqlite', help='SQLite index path'), where: str = typer.Option(..., help='SQL WHERE expression'), limit: int = typer.Option(200, help='Maximum rows')):
+    rows = query_sqlite_index(Path(index), where, limit)
+    console.print(rows)
+
+
+@app.command('scan-layer')
+def scan_layer(
+    layer: str = typer.Option(..., help='Layer name'),
+    active: bool = typer.Option(False, help='Use active document'),
+    dwg: str | None = typer.Option(None, help='Optional DWG path'),
+    types: str = typer.Option('', help='Comma-separated entity types'),
+    detail: str = typer.Option('minimal', help='minimal or index'),
+    out: str | None = typer.Option(None, help='Optional JSON output path'),
+):
+    if not active and not dwg:
+        raise typer.BadParameter('Provide --active or --dwg')
+    adapter = get_adapter(None if active else dwg)
+    wanted = {t.strip().upper() for t in types.split(',') if t.strip()}
+    rows = [
+        item for item in adapter.scan_modelspace(mode=detail)
+        if str(item.get('layer')) == layer and (not wanted or str(item.get('entity_type')).upper() in wanted)
+    ]
+    if out:
+        export_json(rows, out)
+        success(f'Scanned {len(rows)} layer objects -> {out}')
+    else:
+        console.print(rows[:200])
+
+
+@app.command('scan-window')
+def scan_window(
+    bbox: str = typer.Option(..., help='xmin,ymin,xmax,ymax'),
+    active: bool = typer.Option(False, help='Use active document'),
+    dwg: str | None = typer.Option(None, help='Optional DWG path'),
+    types: str = typer.Option('', help='Comma-separated entity types'),
+    out: str | None = typer.Option(None, help='Optional JSON output path'),
+):
+    if not active and not dwg:
+        raise typer.BadParameter('Provide --active or --dwg')
+    xmin, ymin, xmax, ymax = [float(p.strip()) for p in bbox.split(',')]
+    adapter = get_adapter(None if active else dwg)
+    wanted = {t.strip().upper() for t in types.split(',') if t.strip()}
+    rows = []
+    for item in adapter.scan_modelspace(mode='index'):
+        if wanted and str(item.get('entity_type')).upper() not in wanted:
+            continue
+        ibox = item.get('bbox')
+        if not ibox:
+            continue
+        if ibox[2] >= xmin and ibox[0] <= xmax and ibox[3] >= ymin and ibox[1] <= ymax:
+            rows.append(item)
+    if out:
+        export_json(rows, out)
+        success(f'Scanned {len(rows)} window objects -> {out}')
+    else:
+        console.print(rows[:200])
+
+
+@app.command('scan-selection')
+def scan_selection(active: bool = typer.Option(False, help='Use active document'), out: str = typer.Option('generated/selection.json', help='Output JSON path')):
+    if not active:
+        raise typer.BadParameter('scan-selection currently requires --active')
+    adapter = get_adapter()
+    doc = adapter.get_active_document()
+    rows = []
+    for i in range(doc.SelectionSets.Count):
+        ss = doc.SelectionSets.Item(i)
+        for j in range(ss.Count):
+            rows.append(adapter._entity_to_dict_index(ss.Item(j)))
+    export_json(rows, out)
+    success(f'Selection scan written: {out}')
+
+
+@app.command('scan-strategy')
+def scan_strategy(total_objects: int = typer.Option(..., help='Object count'), requested_detail: str = typer.Option('minimal', help='minimal, index, or full')):
+    strategy = recommend_scan_strategy(total_objects, requested_detail)
+    console.print(strategy.__dict__)
 
 
 @app.command()
 def layers(dwg: str = typer.Option(..., help='DWG file path')):
     adapter = get_adapter(dwg)
-    counts = layer_counts(adapter.scan_modelspace())
+    counts = layer_counts(adapter.scan_modelspace(mode='minimal'))
     table = Table('Layer', 'Count')
     for key, value in counts.items():
         table.add_row(key, str(value))
@@ -81,7 +205,7 @@ def layers(dwg: str = typer.Option(..., help='DWG file path')):
 @app.command()
 def blocks(dwg: str = typer.Option(..., help='DWG file path')):
     adapter = get_adapter(dwg)
-    summary = block_summary(adapter.scan_modelspace())
+    summary = block_summary(adapter.scan_modelspace(mode='index'))
     table = Table('Block', 'Count')
     for key, value in summary.items():
         table.add_row(key, str(value['count']))
@@ -91,7 +215,7 @@ def blocks(dwg: str = typer.Option(..., help='DWG file path')):
 @app.command()
 def texts(dwg: str = typer.Option(..., help='DWG file path'), out: str | None = typer.Option(None, help='Optional JSON output path')):
     adapter = get_adapter(dwg)
-    rows = extract_texts(adapter.scan_modelspace())
+    rows = extract_texts(adapter.scan_modelspace(mode='index'))
     if out:
         export_json(rows, out)
         success(f'Exported {len(rows)} texts -> {out}')
@@ -103,10 +227,15 @@ def texts(dwg: str = typer.Option(..., help='DWG file path'), out: str | None = 
 
 
 @app.command('analyze-architecture')
-def analyze_architecture(dwg: str = typer.Option(..., help='DWG file path'), out_dir: str = typer.Option('outputs/architecture_report', help='Report output directory')):
+def analyze_architecture(
+    dwg: str = typer.Option(..., help='DWG file path'),
+    out_dir: str = typer.Option('outputs/architecture_report', help='Report output directory'),
+    mode: str = typer.Option('index', help='Scan mode for the report'),
+    confirm_heavy: bool = typer.Option(False, help='Allow full scan on large drawings'),
+):
     """Create architecture-focused JSON/Markdown audit outputs from a DWG scan."""
     adapter = get_adapter(dwg)
-    objects = adapter.scan_modelspace()
+    objects = adapter.scan_modelspace(mode=mode, confirm_heavy=confirm_heavy)
     summary = generate_architecture_summary(objects)
     out = Path(out_dir)
     out.mkdir(parents=True, exist_ok=True)
@@ -252,7 +381,7 @@ def run_command(dwg: str = typer.Option(..., help='DWG file path'), command: str
         return
 
     adapter = get_adapter(dwg)
-    objects_before = adapter.scan_modelspace()
+    before_count = adapter._modelspace_count()
 
     if cmd.command in {'xicad_safe_plan', 'xicad_safe_execute'}:
         safe_command = cmd.model_copy(update={'dry_run': cmd.command != 'xicad_safe_execute'})
@@ -297,15 +426,15 @@ def run_command(dwg: str = typer.Option(..., help='DWG file path'), command: str
     if save_as:
         adapter.save_as(save_as)
         result['saved_as'] = save_as
-    objects_after = adapter.scan_modelspace()
-    result['summary'] = {'before_count': len(objects_before), 'after_count': len(objects_after)}
+    after_count = adapter._modelspace_count()
+    result['summary'] = {'before_count': before_count, 'after_count': after_count}
     console.print(result)
 
 
 @app.command('quantity')
 def quantity(dwg: str = typer.Option(..., help='DWG file path'), out: str = typer.Option('outputs/quantity.json', help='Output path')):
     adapter = get_adapter(dwg)
-    rows = block_quantity(adapter.scan_modelspace())
+    rows = block_quantity(adapter.scan_modelspace(mode='index'))
     export_json(rows, out)
     success(f'Quantity report -> {out}')
 

@@ -22,6 +22,8 @@ class ZWCADCOMAdapter(CADAdapter):
         self.app: Any = None
         self.doc: Any = None
         self.warnings: list[dict[str, Any]] = []
+        self.full_scan_warning_threshold = 20_000
+        self.full_scan_hard_warning_threshold = 100_000
 
     def connect(self) -> None:
         import comtypes.client  # type: ignore
@@ -134,6 +136,67 @@ class ZWCADCOMAdapter(CADAdapter):
             return []
 
     def _entity_to_dict(self, obj: Any) -> dict[str, Any]:
+        return self._entity_to_dict_full(obj)
+
+    def _entity_to_dict_minimal(self, obj: Any) -> dict[str, Any]:
+        object_name = str(self._safe_get(obj, 'ObjectName', '') or '')
+        entity_type = self._entity_type(object_name)
+        return {
+            'handle': self._safe_get(obj, 'Handle'),
+            'object_name': object_name,
+            'entity_type': entity_type,
+            'layer': self._safe_get(obj, 'Layer'),
+        }
+
+    @staticmethod
+    def _bbox_from_points(points: list[list[float]]) -> list[float] | None:
+        clean = [p for p in points if len(p) >= 2]
+        if not clean:
+            return None
+        xs = [float(p[0]) for p in clean]
+        ys = [float(p[1]) for p in clean]
+        return [min(xs), min(ys), max(xs), max(ys)]
+
+    def _entity_to_dict_index(self, obj: Any) -> dict[str, Any]:
+        item = self._entity_to_dict_minimal(obj)
+        entity_type = str(item.get('entity_type') or '')
+        bbox: list[float] | None = None
+        if entity_type == 'LINE':
+            start = self._to_list(self._safe_get(obj, 'StartPoint'))
+            end = self._to_list(self._safe_get(obj, 'EndPoint'))
+            bbox = self._bbox_from_points([start, end])
+        elif entity_type == 'POLYLINE':
+            coords = self._to_list(self._safe_get(obj, 'Coordinates'))
+            bbox = self._bbox_from_points(chunk_points(coords, 2))
+        elif entity_type in {'TEXT', 'MTEXT'}:
+            insert = self._to_list(self._safe_get(obj, 'InsertionPoint'))
+            text = self._safe_get(obj, 'TextString')
+            item['insert'] = insert
+            item['text'] = text[:200] if isinstance(text, str) else text
+            item['height'] = self._safe_get(obj, 'Height')
+            item['rotation'] = self._safe_get(obj, 'Rotation')
+            bbox = self._bbox_from_points([insert])
+        elif entity_type == 'INSERT':
+            insert = self._to_list(self._safe_get(obj, 'InsertionPoint'))
+            item['name'] = self._safe_get(obj, 'Name')
+            item['effective_name'] = self._safe_get(obj, 'EffectiveName')
+            item['insert'] = insert
+            bbox = self._bbox_from_points([insert])
+        elif entity_type == 'CIRCLE':
+            center = self._to_list(self._safe_get(obj, 'Center'))
+            radius = self._safe_get(obj, 'Radius')
+            if center and radius is not None:
+                r = float(radius)
+                bbox = [float(center[0]) - r, float(center[1]) - r, float(center[0]) + r, float(center[1]) + r]
+        elif entity_type == 'DIMENSION':
+            item['text_override'] = self._safe_get(obj, 'TextOverride')
+            item['measurement'] = self._safe_get(obj, 'Measurement')
+            pos = self._to_list(self._safe_get(obj, 'TextPosition'))
+            bbox = self._bbox_from_points([pos])
+        item['bbox'] = bbox
+        return item
+
+    def _entity_to_dict_full(self, obj: Any) -> dict[str, Any]:
         object_name = str(self._safe_get(obj, 'ObjectName', '') or '')
         entity_type = self._entity_type(object_name)
         item: dict[str, Any] = {
@@ -186,13 +249,53 @@ class ZWCADCOMAdapter(CADAdapter):
             item['text_position'] = self._to_list(self._safe_get(obj, 'TextPosition'))
         return item
 
-    def scan_modelspace(self) -> list[dict[str, Any]]:
+    def _modelspace_count(self) -> int | None:
+        doc = self.doc or self.get_active_document()
+        try:
+            return int(doc.ModelSpace.Count)
+        except Exception:
+            return None
+
+    def _scan_reader(self, mode: str):
+        normalized = str(mode or 'minimal').lower()
+        if normalized == 'minimal':
+            return self._entity_to_dict_minimal
+        if normalized == 'index':
+            return self._entity_to_dict_index
+        if normalized == 'full':
+            return self._entity_to_dict_full
+        raise ValueError(f'Unsupported scan mode: {mode}')
+
+    def scan_modelspace(self, mode: str = 'minimal', confirm_heavy: bool = False) -> list[dict[str, Any]]:
+        """Scan modelspace in minimal, index, or full mode.
+
+        ``full`` preserves the legacy detailed JSON shape, but it is guarded on
+        large drawings because every extra COM property is a cross-process call.
+        """
         doc = self.doc or self.get_active_document()
         self.warnings.clear()
+        normalized = str(mode or 'minimal').lower()
+        count = self._modelspace_count()
+        if normalized == 'full' and count is not None and count >= self.full_scan_warning_threshold and not confirm_heavy:
+            self.warnings.append({
+                'type': 'full_scan_blocked',
+                'object_count': count,
+                'threshold': self.full_scan_warning_threshold,
+                'hint': 'Use mode="index" or pass confirm_heavy=True for an explicit heavy scan.',
+            })
+            raise RuntimeError(f'Full COM scan blocked for large drawing ({count} objects). Use confirm_heavy=True to continue.')
+        if normalized == 'full' and count is not None and count >= self.full_scan_hard_warning_threshold:
+            self.warnings.append({
+                'type': 'full_scan_strong_warning',
+                'object_count': count,
+                'threshold': self.full_scan_hard_warning_threshold,
+                'hint': 'Prefer native audit or DXF index for drawings this large.',
+            })
+        reader = self._scan_reader(normalized)
         results: list[dict[str, Any]] = []
         for obj in doc.ModelSpace:
             try:
-                results.append(self._entity_to_dict(obj))
+                results.append(reader(obj))
             except Exception as exc:
                 warning = {'object_name': self._safe_get(obj, 'ObjectName'), 'handle': self._safe_get(obj, 'Handle'), 'error': str(exc)}
                 self.warnings.append(warning)
@@ -211,6 +314,13 @@ class ZWCADCOMAdapter(CADAdapter):
             pass
 
     def move_entity(self, handle: str, dx: float, dy: float, dz: float = 0) -> int:
+        try:
+            obj = self.get_entity_by_handle(handle)
+            obj.Move([0, 0, 0], [dx, dy, dz])
+            self._regen()
+            return 1
+        except Exception as exc:
+            self.warnings.append({'type': 'handle_direct_access_failed', 'handle': handle, 'error': str(exc), 'fallback': 'modelspace_scan'})
         moved = 0
         for obj in self._iter_modelspace():
             if str(self._safe_get(obj, 'Handle')) == str(handle):
@@ -219,6 +329,18 @@ class ZWCADCOMAdapter(CADAdapter):
         if moved:
             self._regen()
         return moved
+
+    def get_entity_by_handle(self, handle: str) -> Any:
+        if not handle:
+            raise ValueError('handle is empty')
+        doc = self.doc or self.get_active_document()
+        try:
+            return doc.HandleToObject(str(handle))
+        except Exception:
+            utility = self._safe_get(doc, 'Utility')
+            if utility is not None:
+                return utility.HandleToObject(str(handle))
+            raise
 
     def move_layer(self, layer: str, dx: float, dy: float, dz: float = 0) -> int:
         moved = 0
@@ -387,14 +509,14 @@ class ZWCADCOMAdapter(CADAdapter):
 
     def list_layers(self) -> list[str]:
         layers: set[str] = set()
-        for item in self.scan_modelspace():
+        for item in self.scan_modelspace(mode='minimal'):
             if item.get('layer'):
                 layers.add(str(item['layer']))
         return sorted(layers)
 
     def list_blocks(self) -> list[str]:
         blocks: set[str] = set()
-        for item in self.scan_modelspace():
+        for item in self.scan_modelspace(mode='index'):
             name = item.get('effective_name') or item.get('name')
             if name:
                 blocks.add(str(name))

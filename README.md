@@ -223,4 +223,24 @@ This package now includes the next-step architecture audit and safer execution l
 - XiCAD Safe Bridge remains isolated under `src/extensions/xicad_safe_bridge/`
 - `docs/07_windows_test_plan.md` and `docs/09_next_development_plan.md`
 
-Always test mutations on DWG copies and use `--save-as`. 
+## Large Drawing Workflow
+
+For production DWGs, avoid making Python COM full ModelSpace scans the default.
+Use a staged workflow instead:
+
+```bash
+python -m src.main fast-scan --active --out generated/fast_scan_report.json
+python -m src.main audit-native --active --out generated/native_audit.json
+python -m src.main index-dxf --dwg "C:/cad/sample.dwg" --out generated/index.sqlite
+python -m src.main query-index --where "layer='WAL1' and type='LWPOLYLINE'"
+python -m src.main scan --dwg "C:/cad/sample.dwg" --mode minimal
+python -m src.main scan --dwg "C:/cad/sample.dwg" --mode index
+python -m src.main scan --dwg "C:/cad/sample.dwg" --mode full --confirm-heavy
+```
+
+`scan --mode full` is now a heavy fallback. For large drawings, prefer fast
+metadata, native LISP audit, optional DXF/SQLite indexing, and targeted
+execution by handle, layer, selection, or window. See
+`docs/30_large_drawing_scan_strategy.md`.
+
+Always test mutations on DWG copies and use `--save-as`.
