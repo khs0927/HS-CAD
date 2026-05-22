@@ -2,7 +2,9 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from src.corpus.evidence import EvidencePackageBuilder
 from src.corpus.indexer import CorpusIndexer
+from src.corpus.learner import CorpusLearner
 from src.corpus.query import CorpusQuery
 from src.corpus.report_builder import CorpusReportBuilder
 from src.corpus.schema import FileizedDrawingRecord
@@ -10,6 +12,8 @@ from src.corpus_run.manifest import ManifestEntry, read_manifest, scan_manifest,
 from src.fileizers.base import FileizedRecordWriter
 from src.fileizers.dwg_zwcad_fileizer import ZWCADDWGFileizer
 from src.fileizers.dxf_ezdxf_fileizer import DXFEzdxfFileizer
+from src.fileizers.image_fileizer import ImageMetadataFileizer
+from src.fileizers.pdf_pymupdf_fileizer import PDFPyMuPDFFileizer
 
 
 class CorpusPipelineRunner:
@@ -18,7 +22,7 @@ class CorpusPipelineRunner:
         self.manifest_path = self.workspace / 'run_manifest.json'
         self.sqlite_path = self.workspace / 'cad_knowledge.sqlite'
         self.writer = FileizedRecordWriter(self.workspace)
-        self.fileizers = [ZWCADDWGFileizer(), DXFEzdxfFileizer()]
+        self.fileizers = [ZWCADDWGFileizer(), DXFEzdxfFileizer(), PDFPyMuPDFFileizer(), ImageMetadataFileizer()]
 
     def prepare(self, root: str | Path, *, sample: int = 0) -> dict:
         entries = scan_manifest(root, sample=sample)
@@ -42,8 +46,16 @@ class CorpusPipelineRunner:
         count = CorpusIndexer(self.sqlite_path).index_json_dir(json_dir)
         return {'sqlite': str(self.sqlite_path), 'indexed': count}
 
+    def learn(self, out: str | Path | None = None) -> dict:
+        target = Path(out) if out else self.workspace / 'learning_summary.json'
+        path = CorpusLearner(self.sqlite_path).write(target)
+        return {'learning_summary': path}
+
     def query(self, text: str, *, limit: int = 20) -> dict:
         return CorpusQuery(self.sqlite_path).search_text(text, limit=limit)
+
+    def evidence(self, text: str, *, limit: int = 20) -> dict:
+        return EvidencePackageBuilder(self.sqlite_path).build(text, limit=limit)
 
     def report(self, out: str | Path | None = None) -> dict:
         target = Path(out) if out else self.workspace / 'FINAL_REPORT.md'
@@ -55,6 +67,7 @@ class CorpusPipelineRunner:
             'prepare': self.prepare(root, sample=sample),
             'fileize': self.fileize(limit=limit),
             'index': self.index(),
+            'learn': self.learn(),
             'report': self.report(),
         }
 
