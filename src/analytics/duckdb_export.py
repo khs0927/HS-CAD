@@ -109,6 +109,11 @@ def _source_artifacts(base: Path) -> list[str]:
     return [str(path) for path in candidates if path.exists()]
 
 
+def collect_workspace_rows(workspace: str | Path) -> dict[str, list[dict[str, Any]]]:
+    """Collect normalized analytics rows without requiring DuckDB."""
+    return _load_workspace_tables(Path(workspace))
+
+
 def _load_workspace_tables(base: Path) -> dict[str, list[dict[str, Any]]]:
     return {
         'files': _rows_files(base),
@@ -145,7 +150,6 @@ def _rows_entities(base: Path) -> list[dict[str, Any]]:
             bbox = entity.get('bbox') or []
             rows.append({'file_id': file_id, 'handle': str(entity.get('handle') or ''), 'entity_type': str(entity.get('entity_type') or entity.get('type') or ''), 'layer': str(entity.get('layer') or ''), 'color': str(entity.get('color') or ''), 'linetype': str(entity.get('linetype') or ''), 'bbox_min_x': _bbox_value(bbox, 0), 'bbox_min_y': _bbox_value(bbox, 1), 'bbox_max_x': _bbox_value(bbox, 2), 'bbox_max_y': _bbox_value(bbox, 3), 'payload_json': json.dumps(entity, ensure_ascii=False)})
     return rows
-
 
 def _rows_layers(base: Path) -> list[dict[str, Any]]:
     payload = _read_json(base / 'LAYER_SEMANTICS.json')

@@ -36,7 +36,7 @@ def run_worker(worker_input: WorkerInput) -> WorkerOutput:
         return WorkerOutput.error(
             worker_name=WORKER_NAME,
             backend=BACKEND,
-            message=str(result.get('reason') or 'duckdb unavailable'),
+            message=f"not implemented: optional DuckDB backend unavailable ({result.get('reason') or 'duckdb unavailable'})",
             status='unavailable',
             provenance=provenance,
         )
