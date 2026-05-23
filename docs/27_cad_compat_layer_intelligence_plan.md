@@ -88,6 +88,29 @@ Example:
 }
 ```
 
+## Layer audit
+
+Layer audit does not create company-specific mappings. It only finds layers that need review before calibration.
+
+Outputs:
+
+```text
+LAYER_AUDIT.json
+LAYER_AUDIT.md
+```
+
+Audit findings include:
+
+```text
+unknown_layer_semantic
+low_confidence_layer_semantic
+mixed_entity_type_layer
+text_layer_with_linework
+semantic_without_evidence
+```
+
+This creates a practical review list for later Webhard corpus calibration.
+
 ## Layer-aware graph integration
 
 The spatial graph should include layer nodes so later analysis can understand how layer semantics affected text and area inference.
@@ -139,9 +162,10 @@ LAYER_MAPPING_REVIEW.md
 Run:
 
 ```powershell
-python -m pytest tests/test_cad_platforms.py tests/test_layer_semantic_inferer.py tests/test_spatial_graph_exporter.py -q
+python -m pytest tests/test_cad_platforms.py tests/test_layer_semantic_inferer.py tests/test_layer_audit.py tests/test_spatial_graph_exporter.py -q
 python -X utf8 -m src.main hscad-cad-platforms --out-json outputs\CAD_PLATFORMS.json
 python -X utf8 -m src.main hscad-layer-semantics --workspace outputs\webhard_batch_100
+python -X utf8 -m src.main hscad-layer-audit --workspace outputs\webhard_batch_100
 python -X utf8 -m src.main hscad-spatial-graph --workspace outputs\webhard_batch_100
 ```
 
@@ -151,6 +175,8 @@ Expected files:
 outputs\CAD_PLATFORMS.json
 outputs\webhard_batch_100\LAYER_SEMANTICS.json
 outputs\webhard_batch_100\LAYER_SEMANTICS.md
+outputs\webhard_batch_100\LAYER_AUDIT.json
+outputs\webhard_batch_100\LAYER_AUDIT.md
 outputs\webhard_batch_100\SPATIAL_GRAPH.json
 ```
 
@@ -159,11 +185,12 @@ outputs\webhard_batch_100\SPATIAL_GRAPH.json
 After this foundation:
 
 1. Validate generic layer inference on Webhard sample batches.
-2. Tune generic layer confidence rules without company-specific hardcoding.
-3. Add layer-aware spatial/text/area inference.
-4. Add deeper layer-aware graph export.
-5. Add company-specific profile learner only after enough real corpus results are reviewed.
-6. Only after analysis stabilizes: mutation plan / drawing automation.
+2. Review LAYER_AUDIT findings before adding any company-specific overrides.
+3. Tune generic layer confidence rules without company-specific hardcoding.
+4. Add layer-aware spatial/text/area inference.
+5. Add deeper layer-aware graph export.
+6. Add company-specific profile learner only after enough real corpus results are reviewed.
+7. Only after analysis stabilizes: mutation plan / drawing automation.
 
 ## Deferred TODO
 
