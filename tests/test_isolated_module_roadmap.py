@@ -54,6 +54,9 @@ def test_scanner_helper_contracts_on_synthetic_objects():
     dimensions = dimension_scanner.extract_dimensions(objects)
 
     assert len(boundaries) == 1
-    assert boundaries[0]["bbox"] == [0, 0, 10, 5]
+    assert boundaries[0]["bbox"]["min_x"] == 0
+    assert boundaries[0]["bbox"]["min_y"] == 0
+    assert boundaries[0]["bbox"]["max_x"] == 10
+    assert boundaries[0]["bbox"]["max_y"] == 5
     assert len(dimensions) == 1
     assert dimensions[0]["measurement"] == 3000
