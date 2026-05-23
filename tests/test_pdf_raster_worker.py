@@ -3,6 +3,12 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from src.pdf_raster.contour_classification import (
+    classify_contour,
+    classify_contour_rows,
+    contour_class_summary,
+    postprocess_raster_contours,
+)
 from src.pdf_raster.pdf_raster_analysis import (
     PDFRasterAnalyzer,
     bbox_iou,
@@ -27,12 +33,7 @@ def test_pdf_raster_availability_never_raises():
 
 
 def test_bbox_helpers_for_future_vector_raster_iou():
-    contract = {
-        'pixel_to_pdf_scale_x': 0.5,
-        'pixel_to_pdf_scale_y': 0.25,
-        'page_width_pdf': 100.0,
-        'page_height_pdf': 50.0,
-    }
+    contract = {'pixel_to_pdf_scale_x': 0.5, 'pixel_to_pdf_scale_y': 0.25, 'page_width_pdf': 100.0, 'page_height_pdf': 50.0}
     pdf_bbox = pixel_bbox_to_pdf_bbox([10, 20, 30, 60], contract)
     assert pdf_bbox == [5.0, 5.0, 15.0, 15.0]
     assert normalize_bbox(pdf_bbox, 100.0, 50.0) == [0.05, 0.1, 0.15, 0.3]
@@ -40,40 +41,43 @@ def test_bbox_helpers_for_future_vector_raster_iou():
     assert bbox_iou([0, 0, 1, 1], [2, 2, 3, 3]) == 0.0
 
 
+def test_contour_classification_helpers():
+    assert classify_contour(width=200, height=4, area=600)['contour_class'] == 'line_candidate'
+    assert classify_contour(width=100, height=80, area=700)['contour_class'] == 'table_candidate'
+    assert classify_contour(width=30, height=20, area=250)['contour_class'] == 'text_blob_candidate'
+    rows = classify_contour_rows([
+        {'width': 200, 'height': 4, 'area': 600},
+        {'width': 30, 'height': 20, 'area': 250},
+    ])
+    summary = contour_class_summary(rows)
+    assert summary['class_counts']['line_candidate'] == 1
+    assert summary['class_counts']['text_blob_candidate'] == 1
+    assert rows[0]['aspect_ratio'] >= 18
+
+
+def test_postprocess_raster_contours_writes_class_artifact(tmp_path: Path):
+    (tmp_path / 'RASTER_CONTOURS.json').write_text(json.dumps({
+        'contours': [
+            {'width': 200, 'height': 4, 'area': 600},
+            {'width': 30, 'height': 20, 'area': 250},
+        ]
+    }), encoding='utf-8')
+    result = postprocess_raster_contours(tmp_path)
+    assert result['status'] == 'ok'
+    assert (tmp_path / 'RASTER_CONTOUR_CLASSES.json').exists()
+    payload = json.loads((tmp_path / 'RASTER_CONTOURS.json').read_text(encoding='utf-8'))
+    assert payload['class_summary']['class_counts']['line_candidate'] == 1
+    assert 'contour_class' in payload['contours'][0]
+
+
 def test_vector_raster_iou_report_matches_same_page_contract():
     vector_objects = [
-        {
-            'source_pdf': 'sample.pdf',
-            'page_index': 0,
-            'page_contract_id': 'sample:p1',
-            'object_type': 'rect',
-            'text': None,
-            'pdf_bbox': [0, 0, 10, 10],
-        },
-        {
-            'source_pdf': 'sample.pdf',
-            'page_index': 0,
-            'page_contract_id': 'sample:p1',
-            'object_type': 'char',
-            'text': 'A',
-            'pdf_bbox': [100, 100, 110, 110],
-        },
+        {'source_pdf': 'sample.pdf', 'page_index': 0, 'page_contract_id': 'sample:p1', 'object_type': 'rect', 'text': None, 'pdf_bbox': [0, 0, 10, 10]},
+        {'source_pdf': 'sample.pdf', 'page_index': 0, 'page_contract_id': 'sample:p1', 'object_type': 'char', 'text': 'A', 'pdf_bbox': [100, 100, 110, 110]},
     ]
     contours = [
-        {
-            'source_pdf': 'sample.pdf',
-            'page_index': 0,
-            'page_contract_id': 'sample:p1',
-            'contour_index': 7,
-            'pdf_bbox': [0, 0, 10, 10],
-        },
-        {
-            'source_pdf': 'sample.pdf',
-            'page_index': 1,
-            'page_contract_id': 'sample:p2',
-            'contour_index': 8,
-            'pdf_bbox': [100, 100, 110, 110],
-        },
+        {'source_pdf': 'sample.pdf', 'page_index': 0, 'page_contract_id': 'sample:p1', 'contour_index': 7, 'pdf_bbox': [0, 0, 10, 10], 'contour_class': 'rectangle_candidate'},
+        {'source_pdf': 'sample.pdf', 'page_index': 1, 'page_contract_id': 'sample:p2', 'contour_index': 8, 'pdf_bbox': [100, 100, 110, 110], 'contour_class': 'text_blob_candidate'},
     ]
     report = build_vector_raster_iou_report(vector_objects, contours)
     assert report['summary']['vector_count'] == 2
@@ -82,6 +86,7 @@ def test_vector_raster_iou_report_matches_same_page_contract():
     assert report['summary']['unmatched_vector_count'] == 1
     assert report['summary']['avg_iou'] == 1.0
     assert report['matches'][0]['contour_index'] == 7
+    assert report['matches'][0]['contour_class'] == 'rectangle_candidate'
     assert report['summary']['object_type_summary']['rect']['match_count'] == 1
 
 
@@ -113,17 +118,13 @@ def test_pdf_raster_worker_registered_and_plans_command():
     assert plan['worker']['name'] == 'pdf_raster'
     assert 'PDF_COORDINATE_CONTRACT.json' in plan['worker']['outputs']
     assert 'PDF_VECTOR_RASTER_IOU.json' in plan['worker']['outputs']
+    assert 'RASTER_CONTOUR_CLASSES.json' in plan['worker']['outputs']
     assert 'src.workers.pdf_raster_worker' in plan['command']
 
 
 def test_pdf_raster_worker_run_no_pdf_does_not_crash(tmp_path: Path):
     runner = WorkerRunner(record_runs=True)
-    worker_input = WorkerInput(
-        worker_name='pdf_raster',
-        task='run',
-        workspace=str(tmp_path),
-        options={'dpi': 72, 'max_pages': 1},
-    )
+    worker_input = WorkerInput(worker_name='pdf_raster', task='run', workspace=str(tmp_path), options={'dpi': 72, 'max_pages': 1})
     output = runner.run('pdf_raster', worker_input)
     assert output.status in {'ok', 'warning'}
     assert (tmp_path / 'WORKER_RUNS.json').exists()
@@ -131,5 +132,7 @@ def test_pdf_raster_worker_run_no_pdf_does_not_crash(tmp_path: Path):
     assert any(path.endswith('PDF_RASTER_ANALYSIS.json') for path in output.artifacts)
     assert any(path.endswith('PDF_COORDINATE_CONTRACT.json') for path in output.artifacts)
     assert any(path.endswith('PDF_VECTOR_RASTER_IOU.json') for path in output.artifacts)
+    assert any(path.endswith('RASTER_CONTOUR_CLASSES.json') for path in output.artifacts)
     assert 'page_contract_count' in output.metrics
     assert 'iou_summary' in output.metrics
+    assert 'contour_class_summary' in output.metrics
