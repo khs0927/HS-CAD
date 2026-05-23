@@ -145,6 +145,17 @@
       "gpu_required": false,
       "outputs": ["TEXT_FUSION_WEIGHT_SUGGESTIONS.json", "TEXT_FUSION_WEIGHT_SUGGESTIONS.md"]
     },
+    "analysis_core_megapack": {
+      "worker_type": "analysis_core",
+      "env_manager": "current_python",
+      "python": "3.12",
+      "requirements": [],
+      "entry": "python -m src.workers.analysis_core_megapack_worker",
+      "timeout_sec": 600,
+      "max_memory_mb": 8192,
+      "gpu_required": false,
+      "outputs": ["TEXT_ROLE_INFERENCE.json", "TEXT_ROLE_INFERENCE.md", "AREA_BOUNDARY_INFERENCE.json", "AREA_BOUNDARY_INFERENCE.md", "LEADER_NOTE_INFERENCE.json", "LEADER_NOTE_INFERENCE.md", "DIMENSION_TEXT_INFERENCE.json", "DIMENSION_TEXT_INFERENCE.md", "TABLE_REGION_INFERENCE.json", "TABLE_REGION_INFERENCE.md", "TITLEBLOCK_INFERENCE.json", "TITLEBLOCK_INFERENCE.md"]
+    },
     "vision_layout": {
       "worker_type": "vision",
       "env_manager": "uv",
