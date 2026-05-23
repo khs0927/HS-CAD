@@ -21,11 +21,16 @@ def hscad_cross_validate(
     text_path = workspace / 'TEXT_ROLE_INFERENCE.json'
     layer_path = workspace / 'LAYER_SEMANTICS.json'
     graph_path = workspace / 'SPATIAL_GRAPH.json'
+    shapely_path = workspace / 'SHAPELY_TOPOLOGY.json'
+    shapely_signals = _shapely_area_signal_index(shapely_path)
 
     if area_path.exists():
         areas = json.loads(area_path.read_text(encoding='utf-8'))
         for area in areas.get('areas') or []:
-            results.append(scorer.score('area_element', _area_id(area), _area_signals(area)))
+            signals = _area_signals(area)
+            if shapely_signals:
+                signals['shapely_polygonize_area'] = shapely_signals
+            results.append(scorer.score('area_element', _area_id(area), signals))
     if text_path.exists():
         texts = json.loads(text_path.read_text(encoding='utf-8'))
         for role in texts.get('roles') or []:
@@ -43,6 +48,13 @@ def hscad_cross_validate(
         'result_count': len(results),
         'avg_agreement_score': round(sum(float(item.get('agreement_score') or 0) for item in results) / len(results), 6) if results else 0.0,
         'avg_confidence': round(sum(float(item.get('confidence') or 0) for item in results) / len(results), 6) if results else 0.0,
+        'inputs': {
+            'area_elements': area_path.exists(),
+            'text_roles': text_path.exists(),
+            'layer_semantics': layer_path.exists(),
+            'spatial_graph': graph_path.exists(),
+            'shapely_topology': shapely_path.exists(),
+        },
         'results': results,
     }
     json_path = out_json or workspace / 'CROSS_VALIDATION.json'
@@ -122,3 +134,16 @@ def _graph_signals(graph: dict) -> dict[str, dict]:
     if counts.get('LAYER_HAS_AREA', 0):
         signals['layer_has_area'] = {'score': 0.8, 'evidence': [f"LAYER_HAS_AREA={counts.get('LAYER_HAS_AREA')}"]}
     return signals
+
+
+def _shapely_area_signal_index(path: Path) -> dict[str, object]:
+    if not path.exists():
+        return {}
+    payload = json.loads(path.read_text(encoding='utf-8'))
+    polygon_count = int(payload.get('polygon_count') or 0)
+    if polygon_count <= 0:
+        return {}
+    return {
+        'score': 0.8,
+        'evidence': [f'shapely polygonize produced {polygon_count} polygon candidate(s)'],
+    }
