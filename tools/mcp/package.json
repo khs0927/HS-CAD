@@ -1,0 +1,17 @@
+{
+  "name": "hs-cad-mcp-suite",
+  "version": "1.0.0",
+  "description": "MCP servers suite for HS-CAD local workspace integration",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 0"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.1",
+    "@modelcontextprotocol/server-git": "^0.6.2",
+    "@modelcontextprotocol/server-memory": "^0.6.2",
+    "@modelcontextprotocol/server-sequential-thinking": "^0.6.2",
+    "@modelcontextprotocol/server-sqlite": "^0.6.2"
+  },
+  "private": true
+}
