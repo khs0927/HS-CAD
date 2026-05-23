@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import json
 import sys
 from pathlib import Path
 
@@ -15,7 +14,7 @@ BACKEND = 'duckdb_export'
 
 def run_worker(worker_input: WorkerInput) -> WorkerOutput:
     workspace = Path(worker_input.workspace)
-    provenance = build_provenance(
+    fallback_provenance = build_provenance(
         workspace=workspace,
         backend=BACKEND,
         algorithm='json_artifacts_to_duckdb_parquet',
@@ -24,15 +23,14 @@ def run_worker(worker_input: WorkerInput) -> WorkerOutput:
     )
     try:
         result = write_duckdb_export(workspace)
-        result['provenance'] = provenance
-        (workspace / 'DUCKDB_EXPORT.json').write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding='utf-8')
     except Exception as exc:
         return WorkerOutput.error(
             worker_name=WORKER_NAME,
             backend=BACKEND,
             message=str(exc),
-            provenance=provenance,
+            provenance=fallback_provenance,
         )
+    provenance = result.get('provenance') or fallback_provenance
     status = str(result.get('status') or 'ok')
     if status == 'unavailable':
         return WorkerOutput.error(
