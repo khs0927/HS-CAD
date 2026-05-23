@@ -31,7 +31,7 @@ def test_networkx_graph_audit_never_raises():
     assert 'finding_count' in result
 
 
-def test_networkx_graph_audit_detects_findings_when_available():
+def test_networkx_graph_audit_detects_findings_and_quality_metrics_when_available():
     result = NetworkXGraphAuditor().audit_graph_payload(_graph_payload())
     if result['status'] == 'unavailable':
         return
@@ -39,11 +39,21 @@ def test_networkx_graph_audit_detects_findings_when_available():
     assert 'unlabeled_area' in types
     assert 'isolated_text' in types
     assert 'layer_semantic_conflict' in types
+    metrics = result['metrics']
+    assert metrics['graph_quality_score'] <= 1.0
+    assert metrics['graph_penalty'] >= 0.0
+    assert metrics['weighted_finding_rate'] >= 0.0
+    assert metrics['severity_counts']
+    assert metrics['finding_type_counts']
 
 
-def test_write_graph_audit_creates_json_and_md(tmp_path: Path):
+def test_write_graph_audit_creates_json_and_md_with_quality_metrics(tmp_path: Path):
     (tmp_path / 'SPATIAL_GRAPH.json').write_text(json.dumps(_graph_payload(), ensure_ascii=False), encoding='utf-8')
     result = write_graph_audit(tmp_path)
     assert result['status'] in {'ok', 'unavailable'}
     assert (tmp_path / 'GRAPH_AUDIT.json').exists()
     assert (tmp_path / 'GRAPH_AUDIT.md').exists()
+    if result['status'] == 'ok':
+        md = (tmp_path / 'GRAPH_AUDIT.md').read_text(encoding='utf-8')
+        assert 'Graph quality score' in md
+        assert 'Graph penalty' in md
