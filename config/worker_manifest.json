@@ -46,6 +46,17 @@
       "gpu_required": false,
       "outputs": ["PDF_RASTER_ANALYSIS.json", "PDF_COORDINATE_CONTRACT.json", "PDF_VECTOR_OBJECTS.json", "RASTER_CONTOURS.json", "RASTER_CONTOUR_CLASSES.json", "PDF_VECTOR_RASTER_IOU.json", "PDF_RASTER_REPORT.md", "pdf_raster/rendered/*.png"]
     },
+    "ocr_text_region": {
+      "worker_type": "ocr",
+      "env_manager": "current_python",
+      "python": "3.12",
+      "requirements": ["paddleocr"],
+      "entry": "python -m src.workers.ocr_text_region_worker",
+      "timeout_sec": 1200,
+      "max_memory_mb": 16384,
+      "gpu_required": false,
+      "outputs": ["OCR_REGION_ANALYSIS.json", "OCR_TEXT_REGIONS.json", "OCR_REGION_REPORT.md"]
+    },
     "vision_layout": {
       "worker_type": "vision",
       "env_manager": "uv",
