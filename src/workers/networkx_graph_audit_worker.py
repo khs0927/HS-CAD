@@ -44,6 +44,8 @@ def run_worker(worker_input: WorkerInput) -> WorkerOutput:
             status='unavailable',
             provenance=provenance,
         )
+    score = _score_from_result(result)
+    metrics = result.get('metrics') or {}
     return WorkerOutput.ok(
         worker_name=WORKER_NAME,
         backend=BACKEND,
@@ -51,13 +53,20 @@ def run_worker(worker_input: WorkerInput) -> WorkerOutput:
         signals=[
             {
                 'id': 'networkx_component_check',
-                'score': _score_from_result(result),
-                'evidence': [f"finding_count={result.get('finding_count')}", f"node_count={result.get('node_count')}"],
+                'score': score,
+                'evidence': [
+                    f"finding_count={result.get('finding_count')}",
+                    f"node_count={result.get('node_count')}",
+                    f"graph_quality_score={metrics.get('graph_quality_score')}",
+                ],
             },
             {
                 'id': 'orphan_detection',
-                'score': _score_from_result(result),
-                'evidence': [f"finding_count={result.get('finding_count')}"],
+                'score': score,
+                'evidence': [
+                    f"finding_count={result.get('finding_count')}",
+                    f"weighted_finding_rate={metrics.get('weighted_finding_rate')}",
+                ],
             },
         ],
         warnings=[] if not result.get('findings') else ['graph audit produced findings'],
@@ -65,7 +74,12 @@ def run_worker(worker_input: WorkerInput) -> WorkerOutput:
             'node_count': result.get('node_count'),
             'edge_count': result.get('edge_count'),
             'finding_count': result.get('finding_count'),
-            'finding_rate': (result.get('metrics') or {}).get('finding_rate'),
+            'finding_rate': metrics.get('finding_rate'),
+            'weighted_finding_rate': metrics.get('weighted_finding_rate'),
+            'graph_penalty': metrics.get('graph_penalty'),
+            'graph_quality_score': metrics.get('graph_quality_score'),
+            'severity_counts': metrics.get('severity_counts'),
+            'finding_type_counts': metrics.get('finding_type_counts'),
         },
         provenance=provenance,
     )
@@ -73,6 +87,8 @@ def run_worker(worker_input: WorkerInput) -> WorkerOutput:
 
 def _score_from_result(result: dict) -> float:
     metrics = result.get('metrics') or {}
+    if metrics.get('graph_quality_score') is not None:
+        return float(metrics.get('graph_quality_score') or 0.0)
     rate = float(metrics.get('finding_rate') or 0.0)
     return round(max(0.0, min(1.0, 1.0 - rate)), 6)
 
