@@ -1,0 +1,15 @@
+{
+  "tools": [
+    {"name": "ezdxf", "role": "DXF read write parse", "status": "active", "default_use": "DWG converted DXF parsing", "priority": 10},
+    {"name": "PyMuPDF", "role": "PDF text page extraction", "status": "active", "default_use": "PDF fileizer", "priority": 20},
+    {"name": "Pillow", "role": "image metadata raster IO", "status": "active", "default_use": "image fileizer", "priority": 30},
+    {"name": "OpenCV", "role": "raster preprocessing line detection", "status": "planned_optional", "default_use": "floorplan image stage", "priority": 40},
+    {"name": "Shapely", "role": "2D geometry topology", "status": "planned_optional", "default_use": "spatial QA", "priority": 50},
+    {"name": "NetworkX", "role": "room object graph", "status": "planned_optional", "default_use": "semantic graph", "priority": 60},
+    {"name": "LibreDWG", "role": "external DWG conversion", "status": "candidate_optional", "default_use": "fallback converter", "priority": 70},
+    {"name": "IfcOpenShell", "role": "IFC BIM parsing", "status": "candidate_optional", "default_use": "BIM fileizer", "priority": 80},
+    {"name": "FreeCAD", "role": "parametric CAD automation", "status": "candidate_optional", "default_use": "3D automation bridge", "priority": 90},
+    {"name": "OpenCascade", "role": "solid geometry kernel", "status": "candidate_optional", "default_use": "STEP IGES solids", "priority": 100},
+    {"name": "XiCAD", "role": "ZWCAD architecture command automation", "status": "active_external", "default_use": "safe command workflow", "priority": 110}
+  ]
+}
