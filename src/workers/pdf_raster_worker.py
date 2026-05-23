@@ -3,6 +3,7 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
+from src.pdf_raster.contour_classification import postprocess_raster_contours
 from src.pdf_raster.pdf_raster_analysis import write_pdf_raster_analysis
 from src.workers.contracts import WorkerInput, WorkerOutput
 from src.workers.provenance import build_provenance
@@ -25,6 +26,7 @@ def run_worker(worker_input: WorkerInput) -> WorkerOutput:
     )
     try:
         result = write_pdf_raster_analysis(workspace, dpi=dpi, max_pages=max_pages)
+        contour_classes = postprocess_raster_contours(workspace)
     except Exception as exc:
         return WorkerOutput.error(
             worker_name=WORKER_NAME,
@@ -36,39 +38,22 @@ def run_worker(worker_input: WorkerInput) -> WorkerOutput:
     status = str(result.get('status') or 'warning')
     artifacts = list(result.get('artifacts') or [])
     artifacts.append(str(workspace / 'PDF_RASTER_ANALYSIS.json'))
+    artifacts.append(str(workspace / 'RASTER_CONTOUR_CLASSES.json'))
     score = 1.0 if status == 'ok' else 0.4
     iou_summary = result.get('iou_summary') or {}
+    contour_class_summary = contour_classes.get('summary') or {}
     return WorkerOutput(
         worker_name=WORKER_NAME,
         backend=BACKEND,
         status='ok' if status in {'ok', 'warning'} else 'warning',
         artifacts=artifacts,
         signals=[
-            {
-                'id': 'pdf_coordinate_contract',
-                'score': 1.0 if result.get('page_contract_count') else 0.0,
-                'evidence': [f"page_contract_count={result.get('page_contract_count')}"],
-            },
-            {
-                'id': 'pdf_vector_objects',
-                'score': 1.0 if result.get('vector_object_count') else 0.0,
-                'evidence': [f"vector_object_count={result.get('vector_object_count')}"],
-            },
-            {
-                'id': 'raster_contours',
-                'score': 1.0 if result.get('contour_count') else 0.0,
-                'evidence': [f"contour_count={result.get('contour_count')}"],
-            },
-            {
-                'id': 'vector_raster_iou',
-                'score': float(iou_summary.get('avg_iou') or 0.0),
-                'evidence': [f"match_count={iou_summary.get('match_count')}", f"avg_iou={iou_summary.get('avg_iou')}"],
-            },
-            {
-                'id': 'pdf_raster_analysis_complete',
-                'score': score,
-                'evidence': [f"pdf_count={result.get('pdf_count')}", f"status={status}"],
-            },
+            {'id': 'pdf_coordinate_contract', 'score': 1.0 if result.get('page_contract_count') else 0.0, 'evidence': [f"page_contract_count={result.get('page_contract_count')}"],},
+            {'id': 'pdf_vector_objects', 'score': 1.0 if result.get('vector_object_count') else 0.0, 'evidence': [f"vector_object_count={result.get('vector_object_count')}"],},
+            {'id': 'raster_contours', 'score': 1.0 if result.get('contour_count') else 0.0, 'evidence': [f"contour_count={result.get('contour_count')}"],},
+            {'id': 'raster_contour_classification', 'score': 1.0 if contour_class_summary.get('total') else 0.0, 'evidence': [f"class_counts={contour_class_summary.get('class_counts')}"],},
+            {'id': 'vector_raster_iou', 'score': float(iou_summary.get('avg_iou') or 0.0), 'evidence': [f"match_count={iou_summary.get('match_count')}", f"avg_iou={iou_summary.get('avg_iou')}"],},
+            {'id': 'pdf_raster_analysis_complete', 'score': score, 'evidence': [f"pdf_count={result.get('pdf_count')}", f"status={status}"],},
         ],
         warnings=list(result.get('warnings') or []),
         metrics={
@@ -76,6 +61,7 @@ def run_worker(worker_input: WorkerInput) -> WorkerOutput:
             'page_contract_count': result.get('page_contract_count'),
             'vector_object_count': result.get('vector_object_count'),
             'contour_count': result.get('contour_count'),
+            'contour_class_summary': contour_class_summary,
             'render_output_count': result.get('render_output_count'),
             'iou_summary': iou_summary,
             'availability': result.get('availability'),
@@ -87,11 +73,7 @@ def run_worker(worker_input: WorkerInput) -> WorkerOutput:
 def main(argv: list[str] | None = None) -> int:
     args = argv or sys.argv[1:]
     if not args:
-        output = WorkerOutput.error(
-            worker_name=WORKER_NAME,
-            backend=BACKEND,
-            message='missing WorkerInput path argument',
-        )
+        output = WorkerOutput.error(worker_name=WORKER_NAME, backend=BACKEND, message='missing WorkerInput path argument')
         print(output.to_json())
         return 2
     worker_input = WorkerInput.from_json_file(args[0])
