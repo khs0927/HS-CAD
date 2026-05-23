@@ -1,0 +1,100 @@
+{
+  "protocol_version": "1.0",
+  "description": "HS-CAD optional backend workers. Workers are isolated subprocesses and must return WorkerOutput JSON.",
+  "workers": {
+    "shapely_topology": {
+      "worker_type": "topology",
+      "env_manager": "current_python",
+      "python": "3.12",
+      "requirements": [
+        "shapely>=2.1"
+      ],
+      "entry": "python -m src.workers.shapely_topology_worker",
+      "timeout_sec": 300,
+      "max_memory_mb": 4096,
+      "gpu_required": false,
+      "outputs": [
+        "SHAPELY_TOPOLOGY.json",
+        "SHAPELY_AREA_MATCHES.json",
+        "SHAPELY_TOPOLOGY_AUDIT.json"
+      ]
+    },
+    "networkx_graph_audit": {
+      "worker_type": "graph",
+      "env_manager": "uv",
+      "python": "3.12",
+      "requirements": [
+        "networkx>=3.6"
+      ],
+      "entry": "python -m src.workers.networkx_graph_audit_worker",
+      "timeout_sec": 300,
+      "max_memory_mb": 4096,
+      "gpu_required": false,
+      "outputs": [
+        "GRAPH_AUDIT.json",
+        "GRAPH_AUDIT.md"
+      ],
+      "status": "planned_pr7b"
+    },
+    "duckdb_export": {
+      "worker_type": "analytics",
+      "env_manager": "uv",
+      "python": "3.12",
+      "requirements": [
+        "duckdb>=1.5",
+        "polars>=1.41",
+        "pyarrow>=24"
+      ],
+      "entry": "python -m src.workers.duckdb_export_worker",
+      "timeout_sec": 600,
+      "max_memory_mb": 8192,
+      "gpu_required": false,
+      "outputs": [
+        "hscad_analysis.duckdb",
+        "DUCKDB_EXPORT_REPORT.md"
+      ],
+      "status": "planned_pr8"
+    },
+    "vision_layout": {
+      "worker_type": "vision",
+      "env_manager": "uv",
+      "python": "3.12",
+      "requirements": [
+        "opencv-python-headless",
+        "paddleocr",
+        "torch",
+        "transformers"
+      ],
+      "entry": "python -m src.workers.vision_layout_worker",
+      "timeout_sec": 900,
+      "max_memory_mb": 16384,
+      "gpu_required": true,
+      "outputs": [
+        "RASTER_CONTOURS.json",
+        "OCR_TEXT_REGIONS.json",
+        "TABLE_REGIONS.json",
+        "TITLEBLOCK_REGIONS.json",
+        "VLM_BOUNDING_BOXES.json"
+      ],
+      "status": "planned_pr9_pr10"
+    },
+    "bim_projection": {
+      "worker_type": "bim",
+      "env_manager": "uv",
+      "python": "3.12",
+      "requirements": [
+        "ifcopenshell",
+        "numpy"
+      ],
+      "entry": "python -m src.workers.bim_projection_worker",
+      "timeout_sec": 600,
+      "max_memory_mb": 8192,
+      "gpu_required": false,
+      "outputs": [
+        "BIM_PROJECTION_PLAN.json",
+        "MODEL.ifc"
+      ],
+      "status": "planned_pr13"
+    }
+  }
+}
