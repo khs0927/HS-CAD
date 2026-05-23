@@ -5,9 +5,9 @@ from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Any
 
+from src.spatial.backends import get_spatial_backend
 from src.spatial.boundary_extractor import BoundaryCandidate, extract_boundary_candidates
-from src.spatial.geometry import Point2D, bbox_from_points
-from src.spatial.polygon import point_in_polygon
+from src.spatial.geometry import Point2D
 from src.spatial.text_entities import iter_texts, text_content
 from src.spatial.text_roles import TextRoleInferer
 
@@ -32,10 +32,18 @@ class AreaElement:
 class AreaElementInferer:
     """Infer room/area-like elements from fileized vector CAD JSON."""
 
-    def __init__(self, *, tolerance: float = 1e-3, circle_segments: int = 64, min_area: float = 1.0):
+    def __init__(
+        self,
+        *,
+        tolerance: float = 1e-3,
+        circle_segments: int = 64,
+        min_area: float = 1.0,
+        backend: str = 'auto',
+    ):
         self.tolerance = tolerance
         self.circle_segments = circle_segments
         self.min_area = min_area
+        self.backend = get_spatial_backend(backend)
 
     def infer_record(self, record: dict[str, Any]) -> dict[str, Any]:
         file_id = str(record.get('file_id') or '')
@@ -46,12 +54,16 @@ class AreaElementInferer:
         texts = iter_texts(entities)
         area_elements: list[AreaElement] = []
         for candidate in boundaries:
-            area = abs(polygon_area(candidate.polygon))
-            bbox = bbox_from_points(candidate.polygon)
+            area = abs(self.backend.polygon_area(candidate.polygon))
+            bbox = self.backend.bounds(candidate.polygon)
             if bbox is None or area < self.min_area:
                 continue
             label_entity, label_role = self._best_label(candidate, texts, role_by_handle)
-            evidence = [f'boundary_source={candidate.source_type}', f'computed_polygon_area={round(area, 3)}']
+            evidence = [
+                f'boundary_source={candidate.source_type}',
+                f'computed_polygon_area={round(area, 3)}',
+                f'spatial_backend={self.backend.backend_id}',
+            ]
             confidence = self._confidence(candidate, label_role, area)
             if label_role:
                 evidence.append(f'label_role={label_role.get("role")}; label_confidence={label_role.get("confidence")}')
@@ -73,6 +85,7 @@ class AreaElementInferer:
         return {
             'file_id': file_id,
             'relative_path': record.get('relative_path'),
+            'backend': self.backend.backend_id,
             'area_count': len(area_elements),
             'source_counts': source_counts,
             'areas': [item.to_dict() for item in area_elements],
@@ -96,6 +109,7 @@ class AreaElementInferer:
                 source_counts[area['source_type']] = source_counts.get(area['source_type'], 0) + 1
         return {
             'json_dir': str(base),
+            'backend': self.backend.backend_id,
             'file_count': len(files),
             'area_count': len(areas),
             'source_counts': source_counts,
@@ -113,7 +127,7 @@ class AreaElementInferer:
         best_role = None
         best_score = -1.0
         for entity, point in texts:
-            if not point_in_polygon(point, candidate.polygon):
+            if not self.backend.contains_point(candidate.polygon, point):
                 continue
             role = role_by_handle.get(entity.get('handle'))
             role_name = role.get('role') if role else None
@@ -151,11 +165,4 @@ class AreaElementInferer:
 
 
 def polygon_area(points: list[Point2D]) -> float:
-    if len(points) < 3:
-        return 0.0
-    area = 0.0
-    previous = points[-1]
-    for current in points:
-        area += previous.x * current.y - current.x * previous.y
-        previous = current
-    return area / 2.0
+    return get_spatial_backend('pure').polygon_area(points)
