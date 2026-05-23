@@ -37,12 +37,10 @@
     },
     "duckdb_export": {
       "worker_type": "analytics",
-      "env_manager": "uv",
+      "env_manager": "current_python",
       "python": "3.12",
       "requirements": [
-        "duckdb>=1.5",
-        "polars>=1.41",
-        "pyarrow>=24"
+        "duckdb>=1.5"
       ],
       "entry": "python -m src.workers.duckdb_export_worker",
       "timeout_sec": 600,
@@ -50,9 +48,17 @@
       "gpu_required": false,
       "outputs": [
         "hscad_analysis.duckdb",
+        "analytics/files.parquet",
+        "analytics/layers.parquet",
+        "analytics/texts.parquet",
+        "analytics/areas.parquet",
+        "analytics/graph_nodes.parquet",
+        "analytics/graph_edges.parquet",
+        "analytics/cross_validation_results.parquet",
+        "analytics/graph_audit_findings.parquet",
+        "DUCKDB_EXPORT.json",
         "DUCKDB_EXPORT_REPORT.md"
-      ],
-      "status": "planned_pr8"
+      ]
     },
     "vision_layout": {
       "worker_type": "vision",
