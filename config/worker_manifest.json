@@ -57,6 +57,17 @@
       "gpu_required": false,
       "outputs": ["OCR_REGION_ANALYSIS.json", "OCR_TEXT_REGIONS.json", "OCR_REGION_REPORT.md"]
     },
+    "ocr_vector_text_match": {
+      "worker_type": "ocr_fusion",
+      "env_manager": "current_python",
+      "python": "3.12",
+      "requirements": [],
+      "entry": "python -m src.workers.ocr_vector_text_match_worker",
+      "timeout_sec": 300,
+      "max_memory_mb": 4096,
+      "gpu_required": false,
+      "outputs": ["OCR_VECTOR_TEXT_MATCHES.json", "OCR_VECTOR_TEXT_MATCH_REPORT.md"]
+    },
     "vision_layout": {
       "worker_type": "vision",
       "env_manager": "uv",
