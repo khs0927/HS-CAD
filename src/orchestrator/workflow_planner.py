@@ -82,12 +82,14 @@ def infer_intent(task: str, *, has_image: bool = False, has_dwg: bool = False, w
         if _contains(text, ("insert", "삽입", "active", "활성", "zwcad", "dwg에")):
             return "floorplan_to_active_dwg"
         return "floorplan_to_cad"
+    # Explicit mutation requests must stay on the dry-run/review-gated DWG path,
+    # even when the task also mentions XiCAD or construction-specific terms.
+    if wants_write or _contains(text, ("수정", "실행", "변경", "replace", "move", "저장")):
+        return "dwg_change_review_first"
     if _contains(text, ("xicad", "벽체", "단열", "alias")):
         return "xicad_safe_workflow"
     if _contains(text, ("hssteel", "철골", "h빔", "beam", "기둥", "보")):
         return "hybrid_steel_workflow"
-    if wants_write or _contains(text, ("수정", "실행", "변경", "replace", "move", "저장")):
-        return "dwg_change_review_first"
     if has_dwg or _contains(text, ("dwg", "레이어", "블록", "문자", "수량", "검토", "audit")):
         return "dwg_inspection"
     return "general_safe_inspection"
