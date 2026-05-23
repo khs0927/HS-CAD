@@ -16,9 +16,15 @@ def hscad_spatial_containment(
     out_json: Path | None = typer.Option(None, '--out-json'),
     out_md: Path | None = typer.Option(None, '--out-md'),
     max_cells_per_polygon: int = typer.Option(256, '--max-cells-per-polygon'),
+    tolerance: float = typer.Option(1e-3, '--tolerance'),
+    circle_segments: int = typer.Option(48, '--circle-segments'),
 ):
     json_dir = workspace / 'fileized' / 'json'
-    result = TextContainmentAnalyzer(max_cells_per_polygon=max_cells_per_polygon).analyze_json_dir(json_dir)
+    result = TextContainmentAnalyzer(
+        max_cells_per_polygon=max_cells_per_polygon,
+        tolerance=tolerance,
+        circle_segments=circle_segments,
+    ).analyze_json_dir(json_dir)
     json_path = out_json or workspace / 'SPATIAL_CONTAINMENT.json'
     md_path = out_md or workspace / 'SPATIAL_CONTAINMENT.md'
     json_path.parent.mkdir(parents=True, exist_ok=True)
@@ -38,18 +44,21 @@ def _to_markdown(result: dict) -> str:
         f'- Files: {result.get("file_count")}',
         f'- Relations: {result.get("relation_count")}',
         '',
+        '## Boundary sources',
+        f'- Boundary candidates: {stats.get("boundary_count", stats.get("polygon_count", 0))}',
+        f'- Boundary source counts: `{json.dumps(stats.get("boundary_source_counts", {}), ensure_ascii=False)}`',
+        '',
         '## Performance stats',
-        f'- Closed polygons: {stats.get("polygon_count", 0)}',
         f'- Text/MTEXT inserts: {stats.get("text_count", 0)}',
         f'- Brute-force pairs avoided baseline: {stats.get("brute_force_pairs", 0)}',
         f'- Actual candidate checks after grid filtering: {stats.get("candidate_checks", 0)}',
         f'- Reduction ratio: {stats.get("reduction_ratio", 0)}%',
         '',
-        '## Text in closed polyline relations',
+        '## Text in boundary relations',
     ]
     for relation in result.get('relations', [])[:200]:
         lines.append(
             f'- `{relation.get("text")}` text `{relation.get("text_handle")}` on `{relation.get("text_layer")}` '
-            f'inside polygon `{relation.get("polygon_handle")}` on `{relation.get("polygon_layer")}`'
+            f'inside `{relation.get("boundary_source_type")}` boundary `{relation.get("polygon_handle")}` on `{relation.get("polygon_layer")}`'
         )
     return '\n'.join(lines) + '\n'
