@@ -21,7 +21,7 @@
     },
     "networkx_graph_audit": {
       "worker_type": "graph",
-      "env_manager": "uv",
+      "env_manager": "current_python",
       "python": "3.12",
       "requirements": [
         "networkx>=3.6"
@@ -33,8 +33,7 @@
       "outputs": [
         "GRAPH_AUDIT.json",
         "GRAPH_AUDIT.md"
-      ],
-      "status": "planned_pr7b"
+      ]
     },
     "duckdb_export": {
       "worker_type": "analytics",
