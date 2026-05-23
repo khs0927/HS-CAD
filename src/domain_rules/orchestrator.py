@@ -38,6 +38,14 @@ class DomainRuleOrchestrator:
 
         for engine in (self.xicad, self.archioffice, self.hssteel):
             try:
+                # Add warnings from engine rules loading step
+                pack = engine.build_knowledge_pack()
+                if pack.warnings:
+                    warnings.extend(pack.warnings)
+            except Exception as exc:
+                warnings.append(f'{engine.__class__.__name__} pack build failed: {exc}')
+
+            try:
                 engine_findings, engine_actions = engine.review_drawing(objects)
                 findings.extend(engine_findings)
                 actions.extend(engine_actions)
