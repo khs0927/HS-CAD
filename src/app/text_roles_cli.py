@@ -7,6 +7,7 @@ import typer
 
 from src.app.cli import app
 from src.app.logger import console, success
+from src.spatial.area_elements import AreaElementInferer
 from src.spatial.text_roles import TextRoleInferer
 
 
@@ -28,6 +29,21 @@ def hscad_text_roles(
     success('CAD text role inference written')
 
 
+@app.command('hscad-area-elements')
+def hscad_area_elements(
+    workspace: Path = typer.Option(..., '--workspace', '-w'),
+    out_json: Path | None = typer.Option(None, '--out-json'),
+    min_area: float = typer.Option(1.0, '--min-area'),
+):
+    json_dir = workspace / 'fileized' / 'json'
+    result = AreaElementInferer(min_area=min_area).infer_json_dir(json_dir)
+    json_path = out_json or workspace / 'AREA_ELEMENTS.json'
+    json_path.parent.mkdir(parents=True, exist_ok=True)
+    json_path.write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding='utf-8')
+    console.print({'json': str(json_path), 'area_count': result.get('area_count'), 'source_counts': result.get('source_counts')})
+    success('CAD area element inference written')
+
+
 def _to_markdown(result: dict) -> str:
     lines = [
         '# HS-CAD Text Role Inference Report',
@@ -42,7 +58,7 @@ def _to_markdown(result: dict) -> str:
     for role in result.get('roles', [])[:300]:
         evidence = '; '.join(role.get('evidence') or [])
         lines.append(
-            f'- `{role.get("text")}` → **{role.get("role")}** '
+            f'- `{role.get("text")}` -> **{role.get("role")}** '
             f'({role.get("confidence")}) layer=`{role.get("layer")}` evidence={evidence}'
         )
     return '\n'.join(lines) + '\n'
