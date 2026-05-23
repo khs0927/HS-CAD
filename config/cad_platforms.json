@@ -1,0 +1,76 @@
+{
+  "version": 1,
+  "principle": "CAD programs and converters are optional capability providers. HS-CAD analysis must not depend on a single CAD vendor.",
+  "platforms": [
+    {
+      "id": "autocad",
+      "display_name": "AutoCAD",
+      "vendor_family": "Autodesk",
+      "capabilities": ["dwg_open", "dwg_saveas_dxf", "com_automation", "lisp", "script", "core_console_possible"],
+      "analysis_role": "fallback CAD automation provider when headless conversion is unavailable",
+      "mutation_role": "future review-gated drawing automation provider",
+      "required_for_analysis": false,
+      "notes": ["Do not use ModelSpace bulk COM scan as default", "Prefer DWG to DXF conversion then ezdxf parsing"]
+    },
+    {
+      "id": "zwcad",
+      "display_name": "ZWCAD",
+      "vendor_family": "ZWSOFT",
+      "capabilities": ["dwg_open", "dwg_saveas_dxf", "com_automation", "lisp", "sendcommand"],
+      "analysis_role": "Windows fallback converter and command automation provider",
+      "mutation_role": "future XiCAD/LISP/ZWCAD workflow automation provider",
+      "required_for_analysis": false,
+      "notes": ["Current PR #3 fallback path uses staged DWG then ZWCAD Open/SaveAs/SendCommand when ODA is unavailable"]
+    },
+    {
+      "id": "gstarcad",
+      "display_name": "GstarCAD",
+      "vendor_family": "Gstarsoft",
+      "capabilities": ["dwg_open", "dwg_saveas_dxf", "com_automation_possible", "lisp_possible", "sendcommand_possible"],
+      "analysis_role": "future CAD automation compatibility target",
+      "mutation_role": "future LISP/command workflow automation target",
+      "required_for_analysis": false,
+      "notes": ["Treat as AutoCAD-like compatible CAD, but validate COM ProgID and command behavior per installed version"]
+    },
+    {
+      "id": "bricscad",
+      "display_name": "BricsCAD",
+      "vendor_family": "Bricsys",
+      "capabilities": ["dwg_open", "dwg_saveas_dxf", "com_automation_possible", "lisp_possible", "script_possible"],
+      "analysis_role": "future CAD automation compatibility target",
+      "mutation_role": "future command/LISP automation target",
+      "required_for_analysis": false,
+      "notes": ["Treat as AutoCAD-like compatible CAD; adapter must be capability-detected, not assumed"]
+    },
+    {
+      "id": "oda_file_converter",
+      "display_name": "ODA File Converter",
+      "vendor_family": "Open Design Alliance",
+      "capabilities": ["headless_dwg_to_dxf", "batch_conversion"],
+      "analysis_role": "preferred headless DWG to DXF conversion provider",
+      "mutation_role": "none",
+      "required_for_analysis": false,
+      "notes": ["Preferred before CAD COM automation for large corpus analysis"]
+    },
+    {
+      "id": "libredwg",
+      "display_name": "LibreDWG",
+      "vendor_family": "GNU",
+      "capabilities": ["dwg_read_possible", "cli_possible"],
+      "analysis_role": "optional open-source DWG reader/converter candidate",
+      "mutation_role": "none",
+      "required_for_analysis": false,
+      "notes": ["Use only behind adapter with validation; DWG coverage may vary"]
+    },
+    {
+      "id": "ezdxf",
+      "display_name": "ezdxf",
+      "vendor_family": "Open Source Python",
+      "capabilities": ["dxf_read", "dxf_write", "entity_iteration", "layout_access"],
+      "analysis_role": "core DXF parser after DWG conversion",
+      "mutation_role": "future safe DXF generation helper, not direct original DWG mutation",
+      "required_for_analysis": true,
+      "notes": ["HS-CAD's stable CAD-vector parsing layer"]
+    }
+  ]
+}

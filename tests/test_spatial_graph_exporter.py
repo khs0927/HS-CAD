@@ -6,7 +6,7 @@ from pathlib import Path
 from src.spatial.graph_exporter import SpatialGraphExporter
 
 
-def test_spatial_graph_exporter_record_links_area_to_label_text():
+def test_spatial_graph_exporter_record_links_area_to_label_text_and_layers():
     record = {
         'file_id': 'room',
         'relative_path': 'room.dxf',
@@ -16,17 +16,20 @@ def test_spatial_graph_exporter_record_links_area_to_label_text():
         ],
     }
     graph = SpatialGraphExporter(area_backend='pure').export_record(record)
-    assert graph['node_count'] >= 3
-    assert graph['edge_count'] >= 3
+    assert graph['node_count'] >= 5
+    assert graph['edge_count'] >= 6
     edge_relations = {edge['relation'] for edge in graph['edges']}
     assert 'HAS_TEXT' in edge_relations
     assert 'HAS_AREA' in edge_relations
     assert 'HAS_LABEL' in edge_relations
+    assert 'HAS_LAYER' in edge_relations
+    assert 'LAYER_HAS_TEXT' in edge_relations
+    assert 'LAYER_HAS_AREA' in edge_relations
     kinds = {node['kind'] for node in graph['nodes']}
-    assert {'file', 'text', 'area'} <= kinds
+    assert {'file', 'text', 'area', 'layer'} <= kinds
 
 
-def test_spatial_graph_exporter_json_dir(tmp_path: Path):
+def test_spatial_graph_exporter_json_dir_includes_layer_counts(tmp_path: Path):
     json_dir = tmp_path / 'fileized' / 'json'
     json_dir.mkdir(parents=True)
     record = {
@@ -43,4 +46,8 @@ def test_spatial_graph_exporter_json_dir(tmp_path: Path):
     assert graph['node_kind_counts']['file'] == 1
     assert graph['node_kind_counts']['text'] == 1
     assert graph['node_kind_counts']['area'] == 1
+    assert graph['node_kind_counts']['layer'] == 2
     assert graph['edge_relation_counts']['HAS_LABEL'] == 1
+    assert graph['edge_relation_counts']['HAS_LAYER'] == 2
+    assert graph['edge_relation_counts']['LAYER_HAS_TEXT'] == 1
+    assert graph['edge_relation_counts']['LAYER_HAS_AREA'] == 1

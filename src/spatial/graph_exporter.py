@@ -6,6 +6,7 @@ from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Any
 
+from src.analysis.layer_semantics import LayerSemanticInferer
 from src.spatial.area_elements import AreaElementInferer
 from src.spatial.text_roles import TextRoleInferer
 
@@ -34,11 +35,7 @@ class GraphEdge:
 
 
 class SpatialGraphExporter:
-    """Export deterministic JSON graph from inferred area and text artifacts.
-
-    The JSON graph is the stable contract. NetworkX can be used later as an
-    optional analysis backend, but is not required to generate the graph.
-    """
+    """Export deterministic JSON graph from inferred layer, area, and text artifacts."""
 
     def __init__(self, *, area_backend: str = 'auto'):
         self.area_backend = area_backend
@@ -47,11 +44,14 @@ class SpatialGraphExporter:
         file_id = str(record.get('file_id') or '')
         text_result = TextRoleInferer().infer_record(record)
         area_result = AreaElementInferer(backend=self.area_backend).infer_record(record)
+        layer_result = LayerSemanticInferer().infer_record(record)
         nodes: dict[str, GraphNode] = {}
         edges: list[GraphEdge] = []
 
         file_node = GraphNode(id=f'file:{file_id}', kind='file', label=str(record.get('relative_path') or file_id), properties={'file_id': file_id})
         nodes[file_node.id] = file_node
+
+        layer_nodes = self._add_layer_nodes(file_id, file_node.id, layer_result, nodes, edges)
 
         for role in text_result.get('roles') or []:
             text_id = self._text_node_id(file_id, role)
@@ -69,6 +69,9 @@ class SpatialGraphExporter:
                 },
             )
             edges.append(GraphEdge(source=file_node.id, target=text_id, relation='HAS_TEXT', confidence=float(role.get('confidence') or 0.0)))
+            layer_id = layer_nodes.get(str(role.get('layer') or 'UNKNOWN'))
+            if layer_id:
+                edges.append(GraphEdge(source=layer_id, target=text_id, relation='LAYER_HAS_TEXT', confidence=float(role.get('confidence') or 0.0)))
 
         for area in area_result.get('areas') or []:
             area_id = self._area_node_id(file_id, area)
@@ -87,6 +90,9 @@ class SpatialGraphExporter:
                 },
             )
             edges.append(GraphEdge(source=file_node.id, target=area_id, relation='HAS_AREA', confidence=float(area.get('confidence') or 0.0), evidence=area.get('evidence') or []))
+            layer_id = layer_nodes.get(str(area.get('layer') or 'UNKNOWN'))
+            if layer_id:
+                edges.append(GraphEdge(source=layer_id, target=area_id, relation='LAYER_HAS_AREA', confidence=float(area.get('confidence') or 0.0)))
             label_handle = area.get('label_handle')
             if label_handle:
                 text_id = self._text_node_id(file_id, {'handle': label_handle, 'text': area.get('label')})
@@ -111,6 +117,39 @@ class SpatialGraphExporter:
                 'networkx_available': self.networkx_available(),
             },
         }
+
+    def _add_layer_nodes(
+        self,
+        file_id: str,
+        file_node_id: str,
+        layer_result: dict[str, Any],
+        nodes: dict[str, GraphNode],
+        edges: list[GraphEdge],
+    ) -> dict[str, str]:
+        layer_nodes: dict[str, str] = {}
+        for layer in layer_result.get('layers') or []:
+            layer_name = str(layer.get('layer') or 'UNKNOWN')
+            layer_id = self._layer_node_id(file_id, layer_name)
+            layer_nodes[layer_name] = layer_id
+            nodes[layer_id] = GraphNode(
+                id=layer_id,
+                kind='layer',
+                label=layer_name,
+                properties={
+                    'predicted_semantic': layer.get('predicted_semantic'),
+                    'confidence': layer.get('confidence'),
+                    'evidence': layer.get('evidence') or [],
+                    'counts': layer.get('counts') or {},
+                },
+            )
+            edges.append(GraphEdge(
+                source=file_node_id,
+                target=layer_id,
+                relation='HAS_LAYER',
+                confidence=float(layer.get('confidence') or 0.0),
+                evidence=layer.get('evidence') or [],
+            ))
+        return layer_nodes
 
     def export_json_file(self, path: str | Path) -> dict[str, Any]:
         source = Path(path)
@@ -162,3 +201,7 @@ class SpatialGraphExporter:
     def _area_node_id(file_id: str, area: dict[str, Any]) -> str:
         handle = area.get('handle') or f"area-{abs(hash(json.dumps(area.get('bbox'), ensure_ascii=False)))}"
         return f'area:{file_id}:{handle}'
+
+    @staticmethod
+    def _layer_node_id(file_id: str, layer: str) -> str:
+        return f'layer:{file_id}:{layer}'
