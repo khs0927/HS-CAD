@@ -12,6 +12,7 @@ PR #4 adds foundation modules for:
 - boundary extraction from closed polylines, circles, connected line loops, ARC+LINE segment loops, and HATCH boundary paths
 - text role inference
 - area element inference
+- optional spatial backend abstraction with pure-Python fallback and Shapely adapter
 - optional open-source backend registry and discovery
 
 Generated artifacts:
@@ -45,7 +46,7 @@ git reset --hard FETCH_HEAD
 python -m pip install -r requirements.txt
 python -m pip install pytest
 
-python -m pytest tests/test_spatial_containment.py tests/test_text_roles.py tests/test_area_elements.py tests/test_open_source_backends.py -q
+python -m pytest tests/test_spatial_containment.py tests/test_spatial_backends.py tests/test_text_roles.py tests/test_area_elements.py tests/test_open_source_backends.py -q
 ```
 
 Expected:
@@ -97,7 +98,31 @@ layoutparser
 ifcopenshell
 ```
 
-### 4. Existing 100-file Webhard corpus check
+### 4. Optional spatial backend check
+
+The area inferer now supports:
+
+```text
+--backend auto
+--backend pure
+--backend shapely
+```
+
+Run both pure and auto modes:
+
+```powershell
+python -X utf8 -m src.main hscad-area-elements --workspace "outputs\webhard_batch_100" --backend pure --out-json outputs\AREA_ELEMENTS_PURE.json
+python -X utf8 -m src.main hscad-area-elements --workspace "outputs\webhard_batch_100" --backend auto --out-json outputs\AREA_ELEMENTS_AUTO.json
+```
+
+Expected:
+
+- if Shapely is not installed, `auto` should fall back to `pure_python`
+- if Shapely is installed, `auto` may use `shapely`
+- outputs should include a top-level `backend` field
+- every area evidence should include `spatial_backend=...`
+
+### 5. Existing 100-file Webhard corpus check
 
 Use the PR #3 validated workspace if available:
 
@@ -120,7 +145,7 @@ outputs\webhard_batch_100\TEXT_ROLE_INFERENCE.md
 outputs\webhard_batch_100\AREA_ELEMENTS.json
 ```
 
-### 5. Performance check
+### 6. Performance check
 
 Inspect `SPATIAL_CONTAINMENT.json` stats:
 
@@ -136,7 +161,7 @@ Expected:
 - execution should complete without leaving stuck Python processes
 - if it is still slow, tune `--max-cells-per-polygon`, `--tolerance`, or add Shapely STRtree backend in a follow-up PR
 
-### 6. Boundary source quality check
+### 7. Boundary source quality check
 
 Inspect:
 
@@ -161,7 +186,7 @@ Manual review required:
 - HATCH boundaries should produce plausible area candidates
 - ARC+LINE segment loops should not create incorrect faces from unrelated arcs
 
-### 7. Text role quality check
+### 8. Text role quality check
 
 Inspect:
 
@@ -187,7 +212,7 @@ Manual review required:
 - table/title block text should not be used as room labels
 - dimension/spec text should not be selected as area labels unless no better label exists
 
-### 8. Area element quality check
+### 9. Area element quality check
 
 Inspect:
 
@@ -219,7 +244,7 @@ Do not remove the current pure-Python foundation when adding advanced backends. 
 
 Recommended follow-up PRs:
 
-### PR #5: Shapely backend
+### PR #5: Shapely backend expansion
 
 - optional dependency only
 - use STRtree for fast candidate lookup
@@ -266,5 +291,6 @@ PR #4 can be merged as a foundation if:
 - CLI commands are registered
 - outputs are generated on the 100-file workspace
 - backend discovery runs without requiring optional packages
+- pure and auto spatial backend modes work
 - performance is acceptable on `outputs\webhard_batch_100`
 - false positives are documented for follow-up tuning
