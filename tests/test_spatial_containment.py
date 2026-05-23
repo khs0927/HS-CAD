@@ -56,6 +56,7 @@ def test_text_containment_analyzer_record():
     assert result['relation_count'] == 1
     assert result['relations'][0]['text'] == '사무실'
     assert result['relations'][0]['polygon_handle'] == 'P1'
+    assert result['relations'][0]['boundary_source_type'] == 'closed_polyline'
     assert result['stats']['candidate_checks'] < result['stats']['brute_force_pairs']
 
 
@@ -76,6 +77,33 @@ def test_text_containment_analyzer_json_dir(tmp_path: Path):
     assert result['relation_count'] == 1
     assert result['stats']['brute_force_pairs'] == 1
     assert result['stats']['candidate_checks'] == 1
+
+
+def test_line_loop_can_act_as_boundary():
+    entities = [
+        {'handle': 'L1', 'entity_type': 'LINE', 'layer': 'WALL', 'start': [0, 0], 'end': [10, 0]},
+        {'handle': 'L2', 'entity_type': 'LINE', 'layer': 'WALL', 'start': [10, 0], 'end': [10, 10]},
+        {'handle': 'L3', 'entity_type': 'LINE', 'layer': 'WALL', 'start': [10, 10], 'end': [0, 10]},
+        {'handle': 'L4', 'entity_type': 'LINE', 'layer': 'WALL', 'start': [0, 10], 'end': [0, 0]},
+        {'handle': 'T1', 'entity_type': 'TEXT', 'layer': 'TEXT', 'text': '선분실', 'insert': [5, 5]},
+    ]
+    result = TextContainmentAnalyzer().analyze_record({'file_id': 'line-loop', 'entities': entities})
+    assert result['relation_count'] == 1
+    assert result['relations'][0]['boundary_source_type'] == 'line_loop'
+    assert result['stats']['boundary_source_counts']['line_loop'] == 1
+
+
+def test_circle_can_act_as_boundary():
+    entities = [
+        {'handle': 'C1', 'entity_type': 'CIRCLE', 'layer': 'AREA', 'center': [0, 0], 'radius': 10},
+        {'handle': 'T1', 'entity_type': 'TEXT', 'layer': 'TEXT', 'text': '원형실', 'insert': [1, 1]},
+        {'handle': 'T2', 'entity_type': 'TEXT', 'layer': 'TEXT', 'text': '외부', 'insert': [20, 20]},
+    ]
+    result = TextContainmentAnalyzer(circle_segments=24).analyze_record({'file_id': 'circle', 'entities': entities})
+    assert result['relation_count'] == 1
+    assert result['relations'][0]['text'] == '원형실'
+    assert result['relations'][0]['boundary_source_type'] == 'circle_approx'
+    assert result['stats']['boundary_source_counts']['circle_approx'] == 1
 
 
 def test_uniform_grid_index_limits_candidates_for_sparse_polygons():
