@@ -116,7 +116,7 @@ class LayerSemanticInferer:
         scores = Counter()
 
         for semantic, patterns in NAME_PATTERNS.items():
-            if any(re.search(pattern, name) for pattern in patterns):
+            if any(_token_match(name, pattern) for pattern in patterns):
                 scores[semantic] += 5
                 evidence.append(f'layer name matches {semantic}')
 
@@ -183,3 +183,10 @@ def _norm(value: str) -> str:
 def _contains_any(value: str, needles: list[str]) -> bool:
     upper = value.upper()
     return any(needle.upper() in upper for needle in needles)
+
+
+def _token_match(value: str, pattern: str) -> bool:
+    literal = pattern.replace(r'\b', '')
+    if literal.isalnum():
+        return literal in value
+    return re.search(pattern, value) is not None

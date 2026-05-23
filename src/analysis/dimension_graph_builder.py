@@ -9,15 +9,25 @@ from src.analysis.entity_loader import bbox_center, distance, load_fileized_enti
 TEXT_TYPES = {'TEXT', 'MTEXT'}
 DIM_TYPES = {'DIMENSION', 'ALIGNED_DIMENSION', 'ROTATED_DIMENSION', 'LINEAR_DIMENSION'}
 LINE_TYPES = {'LINE', 'LWPOLYLINE', 'POLYLINE'}
+DEFAULT_MAX_NUMERIC_TEXTS = 2000
+DEFAULT_MAX_LINES = 5000
 NUMERIC_RE = re.compile(r'^[~≈]?[0-9]+([,.][0-9]+)?(\s*(mm|m|cm))?$', re.IGNORECASE)
 
 
-def build_dimension_graph(workspace: str | Path, *, max_distance: float = 800.0) -> dict[str, Any]:
+def build_dimension_graph(
+    workspace: str | Path,
+    *,
+    max_distance: float = 800.0,
+    max_numeric_texts: int = DEFAULT_MAX_NUMERIC_TEXTS,
+    max_lines: int = DEFAULT_MAX_LINES,
+) -> dict[str, Any]:
     base = Path(workspace)
     entities = load_fileized_entities(base)
     dimensions = [e for e in entities if e.get('entity_type') in DIM_TYPES]
-    numeric_texts = [e for e in entities if e.get('entity_type') in TEXT_TYPES and _looks_dimension_text(e.get('text') or e.get('value') or e.get('content'))]
-    lines = [e for e in entities if e.get('entity_type') in LINE_TYPES]
+    all_numeric_texts = [e for e in entities if e.get('entity_type') in TEXT_TYPES and _looks_dimension_text(e.get('text') or e.get('value') or e.get('content'))]
+    all_lines = [e for e in entities if e.get('entity_type') in LINE_TYPES]
+    numeric_texts = all_numeric_texts[:max_numeric_texts]
+    lines = all_lines[:max_lines]
     nodes = []
     edges = []
     for dim in dimensions:
@@ -45,11 +55,13 @@ def build_dimension_graph(workspace: str | Path, *, max_distance: float = 800.0)
     payload = {
         'backend': 'dimension_graph_builder',
         'schema_version': '0.1',
-        'parameters': {'max_distance': max_distance},
+        'parameters': {'max_distance': max_distance, 'max_numeric_texts': max_numeric_texts, 'max_lines': max_lines},
         'summary': {
             'dimension_entity_count': len(dimensions),
-            'numeric_text_count': len(numeric_texts),
-            'line_candidate_count': len(lines),
+            'numeric_text_count': len(all_numeric_texts),
+            'line_candidate_count': len(all_lines),
+            'sampled_numeric_text_count': len(numeric_texts),
+            'sampled_line_candidate_count': len(lines),
             'edge_count': len(edges),
         },
         'nodes': nodes,
@@ -61,7 +73,7 @@ def build_dimension_graph(workspace: str | Path, *, max_distance: float = 800.0)
             'Distinguish true dimensions from room names like A101.',
             'Add geometric projection from text to dimension line.',
         ],
-        'warnings': ['scaffold only; numeric text can include non-dimension labels'],
+        'warnings': _warnings(len(all_numeric_texts), len(all_lines), len(numeric_texts), len(lines)),
     }
     return write_json_and_md(base, 'DIMENSION_GRAPH', payload, _markdown(payload))
 
@@ -94,6 +106,15 @@ def _markdown(payload: dict[str, Any]) -> str:
         f"- Dimension entities: `{s.get('dimension_entity_count')}`",
         f"- Numeric texts: `{s.get('numeric_text_count')}`",
         f"- Line candidates: `{s.get('line_candidate_count')}`",
+        f"- Sampled numeric texts: `{s.get('sampled_numeric_text_count')}`",
+        f"- Sampled line candidates: `{s.get('sampled_line_candidate_count')}`",
         f"- Edges: `{s.get('edge_count')}`",
         '',
     ])
+
+
+def _warnings(total_texts: int, total_lines: int, sampled_texts: int, sampled_lines: int) -> list[str]:
+    warnings = ['scaffold only; numeric text can include non-dimension labels']
+    if sampled_texts < total_texts or sampled_lines < total_lines:
+        warnings.append('large workspace sampled to avoid O(numeric_text*line) scaffold timeout')
+    return warnings

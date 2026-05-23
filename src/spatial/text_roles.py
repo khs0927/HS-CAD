@@ -108,15 +108,15 @@ class TextRoleInferer:
         role = 'general_note'
         confidence = 0.35
 
+        if is_leader:
+            role, confidence = 'leader_note', max(confidence, 0.74)
+            evidence.append('near line endpoint/leader-like segment')
         if is_title:
-            role, confidence = 'titleblock_text', 0.78
+            role, confidence = 'titleblock_text', max(confidence, 0.78)
             evidence.append('near drawing lower/right titleblock zone')
         if is_table:
             role, confidence = 'table_cell_text', max(confidence, 0.82)
             evidence.append('inside dense orthogonal line grid/table-like area')
-        if is_leader:
-            role, confidence = 'leader_note', max(confidence, 0.74)
-            evidence.append('near line endpoint/leader-like segment')
         if _looks_like_dimension_or_spec(text):
             role, confidence = 'dimension_or_spec_note', max(confidence, 0.7)
             evidence.append('text matches dimension/spec pattern')
@@ -224,4 +224,4 @@ def _layer_suggests_table(layer: str) -> bool:
 
 def _layer_suggests_leader(layer: str) -> bool:
     value = layer.upper()
-    return any(token in value for token in ('LEAD', 'DIM', 'NOTE', 'TEXT'))
+    return any(token in value for token in ('LEAD', 'DIM', 'NOTE'))

@@ -54,6 +54,8 @@ def run_worker(worker_input: WorkerInput) -> WorkerOutput:
             'avg_confidence': avg_confidence,
             'review_threshold': review_threshold,
             'conflict_threshold': conflict_threshold,
+            'policy_source': result.get('policy_source'),
+            'weights': result.get('weights'),
         },
         provenance=provenance,
     )
