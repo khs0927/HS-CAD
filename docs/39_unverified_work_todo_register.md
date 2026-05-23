@@ -9,17 +9,18 @@ updated whenever a new experimental branch is created or validated.
 |---|---|---|---|
 | #26 | `exp/domain-rule-engines` | verified / ready for review | Reported: `tests/test_domain_rule_engines.py` 5 passed, full pytest 160 passed / 16 skipped, CLI and local XiCAD optional checks passed |
 | #28 | `exp/domain-rule-decision-workflows` | verified / ready for review | Reported: targeted tests 10 passed, full pytest 165 passed / 16 skipped, CLI and artifact checks passed |
+| #30 | `exp/domain-rule-command-plans` | verified / ready for review | Reported: full pytest 169 passed / 16 skipped, CLI chained execution and artifact structure passed |
+| #31 | `exp/domain-rule-review-gates` | verified / ready for review | Reported: full pytest 173 passed / 16 skipped, CLI chained execution, review gate and sign-off manifest structure passed |
+| #24 | `exp/isolated-tools-development` | verified / ready for review | Reported: full pytest 163 passed / 16 skipped, CLI mock scan strategy passed |
+| #21 | `docs/unused-code-roadmap` | verified / ready for review | Reported: pytest isolated module roadmap passed (1 assertion patch applied) |
+| #12 | `fix/main-pr-verify-routing` | verified / ready for review | Reported: pytest import safety passed, CLI main load successful |
+| #33 | `exp/domain-rule-safe-execution-harness` | verified / ready for review | Reported: pytest safe execution harness 7 passed, full pytest 180 passed / 16 skipped, chained CLI execution and audit log checks passed |
 
 ## Unverified branches and tasks
 
 | PR / Branch | Area | Unverified items | Required validation |
 |---|---|---|---|
-| #30 / `exp/domain-rule-command-plans` | Domain-rule dry-run command plans | command plan models, builder, report renderer, worker, CLI, tests, synthetic artifact generation | Run `docs/38_domain_rule_command_plan_validation_prompt.md` |
-| `exp/domain-rule-review-gates` | Review gate / sign-off package | files created after this register in the same branch | Run `docs/40_domain_rule_review_gates_validation_prompt.md` after implementation |
-| #24 / `exp/isolated-tools-development` latest state | Experimental CAD backend/scanner tools | later additions after the last reported validation: evidence report, worker, scan strategy, experimental CLI, validation prompt | Run `docs/35_experimental_cad_tools_validation_prompt.md` again |
-| #21 / `docs/unused-code-roadmap` | Documentation / import-safety guard for isolated modules | roadmap doc and import-safety tests | Run `pytest -q tests/test_isolated_module_roadmap.py` and full pytest if not already done |
-| #12 / `fix/main-pr-verify-routing` | Main CLI/import safety hotfix | optional CLI module skipping, adapter lazy logger imports, import-safety tests | Run PR #12 suggested validation if not already completed on latest branch |
-| #33 / `exp/domain-rule-safe-execution-harness` | Safe Execution Harness | Safe execution models, package builder, ZWCAD/XiCAD safe executor, execution audit, drawing delta, worker, CLI, tests | Run `docs/41_safe_execution_harness_validation_prompt.md` |
+| (None currently) | - | - | - |
 
 ## Policy
 
@@ -31,7 +32,4 @@ updated whenever a new experimental branch is created or validated.
 
 ## Current next validation priority
 
-1. Validate #30: `exp/domain-rule-command-plans`.
-2. Validate this branch after review-gate implementation: `exp/domain-rule-review-gates`.
-3. Re-run #24 validation if the experimental CAD scanner/backend line is resumed.
-4. Validate #33: `exp/domain-rule-safe-execution-harness`.
+(All experimental and base branches currently verified)
