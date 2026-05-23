@@ -6,6 +6,13 @@ from pathlib import Path
 from typing import Any
 
 
+SEVERITY_WEIGHTS = {
+    'low': 0.25,
+    'medium': 0.6,
+    'high': 1.0,
+}
+
+
 class NetworkXGraphAuditor:
     backend_id = 'networkx_graph_audit'
 
@@ -218,6 +225,7 @@ def _metrics(graph: Any, findings: list[dict[str, Any]]) -> dict[str, Any]:
     severity_counts: dict[str, int] = {}
     type_counts: dict[str, int] = {}
     kind_counts: dict[str, int] = {}
+    weighted_issue_score = 0.0
     for _, data in graph.nodes(data=True):
         kind = _node_kind(data) or 'unknown'
         kind_counts[kind] = kind_counts.get(kind, 0) + 1
@@ -226,11 +234,20 @@ def _metrics(graph: Any, findings: list[dict[str, Any]]) -> dict[str, Any]:
         ftype = str(finding.get('type') or 'unknown')
         severity_counts[severity] = severity_counts.get(severity, 0) + 1
         type_counts[ftype] = type_counts.get(ftype, 0) + 1
+        weighted_issue_score += SEVERITY_WEIGHTS.get(severity, 0.5)
+    finding_rate = len(findings) / node_count if node_count else 0.0
+    weighted_finding_rate = weighted_issue_score / node_count if node_count else 0.0
+    graph_penalty = min(0.35, weighted_finding_rate * 0.25)
+    graph_quality_score = round(max(0.0, min(1.0, 1.0 - graph_penalty)), 6)
     return {
         'kind_counts': kind_counts,
         'severity_counts': severity_counts,
         'finding_type_counts': type_counts,
-        'finding_rate': round(len(findings) / node_count, 6) if node_count else 0.0,
+        'finding_rate': round(finding_rate, 6),
+        'weighted_issue_score': round(weighted_issue_score, 6),
+        'weighted_finding_rate': round(weighted_finding_rate, 6),
+        'graph_penalty': round(graph_penalty, 6),
+        'graph_quality_score': graph_quality_score,
     }
 
 
@@ -245,6 +262,7 @@ def _finding(ftype: str, severity: str, node_id: str, message: str) -> dict[str,
 
 
 def _markdown(result: dict[str, Any]) -> str:
+    metrics = result.get('metrics') or {}
     lines = [
         '# Graph Audit',
         '',
@@ -253,6 +271,15 @@ def _markdown(result: dict[str, Any]) -> str:
         f"- Nodes: `{result.get('node_count')}`",
         f"- Edges: `{result.get('edge_count')}`",
         f"- Findings: `{result.get('finding_count')}`",
+        f"- Graph quality score: `{metrics.get('graph_quality_score')}`",
+        f"- Graph penalty: `{metrics.get('graph_penalty')}`",
+        '',
+        '## Metrics',
+        '',
+        f"- Finding rate: `{metrics.get('finding_rate')}`",
+        f"- Weighted finding rate: `{metrics.get('weighted_finding_rate')}`",
+        f"- Severity counts: `{metrics.get('severity_counts')}`",
+        f"- Finding type counts: `{metrics.get('finding_type_counts')}`",
         '',
         '## Findings',
         '',
