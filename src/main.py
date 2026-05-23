@@ -26,6 +26,7 @@ import src.app.domain_rules_cli  # noqa: F401,E402
 import src.app.domain_rule_decision_cli  # noqa: F401,E402
 import src.app.domain_rule_command_plan_cli  # noqa: F401,E402
 import src.app.domain_rule_review_gate_cli  # noqa: F401,E402
+import src.app.safe_execution_cli  # noqa: F401,E402
 
 if __name__ == '__main__':
     app()
