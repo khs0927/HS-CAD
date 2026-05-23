@@ -159,7 +159,7 @@ class LayerSemanticInferer:
 
 
 NAME_PATTERNS = {
-    'wall': [r'\bWALL\b', r'\bWAL\b', r'벽', r'벽체'],
+    'wall': [r'(?:^|_)WALL(?:_|$)', r'(?:^|_)WAL\d*(?:_|$)', r'벽', r'벽체'],
     'door': [r'\bDOOR\b', r'\bDR\b', r'문'],
     'window': [r'\bWIN\b', r'\bWINDOW\b', r'창'],
     'column': [r'\bCOL\b', r'COLUMN', r'기둥'],
