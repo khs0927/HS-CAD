@@ -19,6 +19,7 @@ updated whenever a new experimental branch is created or validated.
 | #24 / `exp/isolated-tools-development` latest state | Experimental CAD backend/scanner tools | later additions after the last reported validation: evidence report, worker, scan strategy, experimental CLI, validation prompt | Run `docs/35_experimental_cad_tools_validation_prompt.md` again |
 | #21 / `docs/unused-code-roadmap` | Documentation / import-safety guard for isolated modules | roadmap doc and import-safety tests | Run `pytest -q tests/test_isolated_module_roadmap.py` and full pytest if not already done |
 | #12 / `fix/main-pr-verify-routing` | Main CLI/import safety hotfix | optional CLI module skipping, adapter lazy logger imports, import-safety tests | Run PR #12 suggested validation if not already completed on latest branch |
+| #33 / `exp/domain-rule-safe-execution-harness` | Safe Execution Harness | Safe execution models, package builder, ZWCAD/XiCAD safe executor, execution audit, drawing delta, worker, CLI, tests | Run `docs/41_safe_execution_harness_validation_prompt.md` |
 
 ## Policy
 
@@ -33,3 +34,4 @@ updated whenever a new experimental branch is created or validated.
 1. Validate #30: `exp/domain-rule-command-plans`.
 2. Validate this branch after review-gate implementation: `exp/domain-rule-review-gates`.
 3. Re-run #24 validation if the experimental CAD scanner/backend line is resumed.
+4. Validate #33: `exp/domain-rule-safe-execution-harness`.
