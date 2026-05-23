@@ -65,6 +65,7 @@ class PDFRasterAnalyzer:
             source_artifacts=[str(path) for path in pdfs],
             worker_name='pdf_raster',
         )
+        iou_payload = build_vector_raster_iou_report(vector_objects, contours, provenance=provenance)
         coordinate_payload = {
             'backend': self.backend_id,
             'contract_version': '1.0',
@@ -94,6 +95,7 @@ class PDFRasterAnalyzer:
         (base / 'PDF_COORDINATE_CONTRACT.json').write_text(json.dumps(coordinate_payload, ensure_ascii=False, indent=2), encoding='utf-8')
         (base / 'PDF_VECTOR_OBJECTS.json').write_text(json.dumps(vector_payload, ensure_ascii=False, indent=2), encoding='utf-8')
         (base / 'RASTER_CONTOURS.json').write_text(json.dumps(contour_payload, ensure_ascii=False, indent=2), encoding='utf-8')
+        (base / 'PDF_VECTOR_RASTER_IOU.json').write_text(json.dumps(iou_payload, ensure_ascii=False, indent=2), encoding='utf-8')
         report_path = base / 'PDF_RASTER_REPORT.md'
         result = {
             'backend': self.backend_id,
@@ -105,10 +107,12 @@ class PDFRasterAnalyzer:
             'vector_object_count': len(vector_objects),
             'contour_count': len(contours),
             'render_output_count': len(render_outputs),
+            'iou_summary': iou_payload.get('summary'),
             'artifacts': [
                 str(base / 'PDF_COORDINATE_CONTRACT.json'),
                 str(base / 'PDF_VECTOR_OBJECTS.json'),
                 str(base / 'RASTER_CONTOURS.json'),
+                str(base / 'PDF_VECTOR_RASTER_IOU.json'),
                 str(report_path),
             ],
             'warnings': warnings,
@@ -123,6 +127,69 @@ def write_pdf_raster_analysis(workspace: str | Path, *, dpi: int = 180, max_page
     result = PDFRasterAnalyzer().analyze_workspace(base, dpi=dpi, max_pages=max_pages)
     (base / 'PDF_RASTER_ANALYSIS.json').write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding='utf-8')
     return result
+
+
+def build_vector_raster_iou_report(vector_objects: list[dict[str, Any]], contours: list[dict[str, Any]], *, provenance: dict[str, Any] | None = None, min_iou: float = 0.01) -> dict[str, Any]:
+    matches: list[dict[str, Any]] = []
+    unmatched_vectors = 0
+    contours_by_page: dict[tuple[str, int, str], list[dict[str, Any]]] = {}
+    for contour in contours:
+        key = (str(contour.get('source_pdf')), int(contour.get('page_index') or 0), str(contour.get('page_contract_id') or ''))
+        contours_by_page.setdefault(key, []).append(contour)
+
+    for vector_index, vector in enumerate(vector_objects):
+        vector_bbox = vector.get('pdf_bbox') or []
+        key = (str(vector.get('source_pdf')), int(vector.get('page_index') or 0), str(vector.get('page_contract_id') or ''))
+        candidates = contours_by_page.get(key, [])
+        best: dict[str, Any] | None = None
+        best_iou = 0.0
+        for contour in candidates:
+            iou = bbox_iou(vector_bbox, contour.get('pdf_bbox') or [])
+            if iou > best_iou:
+                best_iou = iou
+                best = contour
+        if best is None or best_iou < min_iou:
+            unmatched_vectors += 1
+            continue
+        matches.append({
+            'vector_index': vector_index,
+            'object_type': vector.get('object_type'),
+            'text': vector.get('text'),
+            'source_pdf': vector.get('source_pdf'),
+            'page_index': vector.get('page_index'),
+            'page_contract_id': vector.get('page_contract_id'),
+            'vector_pdf_bbox': vector_bbox,
+            'contour_index': best.get('contour_index'),
+            'contour_pdf_bbox': best.get('pdf_bbox'),
+            'iou': round(best_iou, 6),
+        })
+    object_type_summary: dict[str, dict[str, Any]] = {}
+    for match in matches:
+        object_type = str(match.get('object_type') or 'unknown')
+        row = object_type_summary.setdefault(object_type, {'match_count': 0, 'iou_sum': 0.0, 'max_iou': 0.0})
+        row['match_count'] += 1
+        row['iou_sum'] += float(match.get('iou') or 0.0)
+        row['max_iou'] = max(row['max_iou'], float(match.get('iou') or 0.0))
+    for row in object_type_summary.values():
+        count = int(row['match_count'] or 0)
+        row['avg_iou'] = round(float(row.pop('iou_sum')) / count, 6) if count else 0.0
+        row['max_iou'] = round(float(row['max_iou']), 6)
+    avg_iou = round(sum(float(m.get('iou') or 0.0) for m in matches) / len(matches), 6) if matches else 0.0
+    return {
+        'backend': PDFRasterAnalyzer.backend_id,
+        'source': 'pdf_vector_objects+raster_contours',
+        'min_iou': min_iou,
+        'summary': {
+            'vector_count': len(vector_objects),
+            'contour_count': len(contours),
+            'match_count': len(matches),
+            'unmatched_vector_count': unmatched_vectors,
+            'avg_iou': avg_iou,
+            'object_type_summary': object_type_summary,
+        },
+        'matches': matches,
+        'provenance': provenance or {},
+    }
 
 
 def bbox_iou(a: list[float] | tuple[float, float, float, float], b: list[float] | tuple[float, float, float, float]) -> float:
@@ -308,6 +375,7 @@ def _float(value: Any) -> float | None:
 
 def _markdown(result: dict[str, Any]) -> str:
     availability = result.get('availability') or {}
+    iou_summary = result.get('iou_summary') or {}
     lines = [
         '# PDF Raster Report',
         '',
@@ -325,6 +393,15 @@ def _markdown(result: dict[str, Any]) -> str:
         '- Pixel-space bbox: `pixel_top_left`',
         '- Normalized bbox: `normalized_page`',
         '- Contours include both `pixel_bbox` and `pdf_bbox` for vector-raster comparison.',
+        '',
+        '## Vector-Raster IoU',
+        '',
+        f"- Vector count: `{iou_summary.get('vector_count')}`",
+        f"- Contour count: `{iou_summary.get('contour_count')}`",
+        f"- Match count: `{iou_summary.get('match_count')}`",
+        f"- Unmatched vector count: `{iou_summary.get('unmatched_vector_count')}`",
+        f"- Average IoU: `{iou_summary.get('avg_iou')}`",
+        f"- Object type summary: `{iou_summary.get('object_type_summary')}`",
         '',
         '## Backend Availability',
         '',
