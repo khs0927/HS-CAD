@@ -34,13 +34,14 @@ def hscad_area_elements(
     workspace: Path = typer.Option(..., '--workspace', '-w'),
     out_json: Path | None = typer.Option(None, '--out-json'),
     min_area: float = typer.Option(1.0, '--min-area'),
+    backend: str = typer.Option('auto', '--backend', help='auto, pure, or shapely'),
 ):
     json_dir = workspace / 'fileized' / 'json'
-    result = AreaElementInferer(min_area=min_area).infer_json_dir(json_dir)
+    result = AreaElementInferer(min_area=min_area, backend=backend).infer_json_dir(json_dir)
     json_path = out_json or workspace / 'AREA_ELEMENTS.json'
     json_path.parent.mkdir(parents=True, exist_ok=True)
     json_path.write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding='utf-8')
-    console.print({'json': str(json_path), 'area_count': result.get('area_count'), 'source_counts': result.get('source_counts')})
+    console.print({'json': str(json_path), 'backend': result.get('backend'), 'area_count': result.get('area_count'), 'source_counts': result.get('source_counts')})
     success('CAD area element inference written')
 
 
