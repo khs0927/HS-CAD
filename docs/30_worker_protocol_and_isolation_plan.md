@@ -25,6 +25,7 @@ SAM / ColPali / future experimental models
 5. Every WorkerOutput must include provenance.
 6. Original DWG/DXF/PDF/image files must not be mutated by workers.
 7. License-sensitive or GPU-heavy dependencies must stay outside the default core install.
+8. Every worker execution should be auditable through WORKER_RUNS.json, WORKER_AUDIT.json, and JSONL logs.
 
 ## Files added in PR #7A
 
@@ -34,10 +35,12 @@ src/workers/contracts.py
 src/workers/provenance.py
 src/workers/registry.py
 src/workers/runner.py
+src/workers/run_log.py
 src/workers/shapely_topology_worker.py
 src/app/worker_cli.py
 tests/test_worker_contracts.py
 tests/test_worker_runner.py
+tests/test_worker_run_log.py
 ```
 
 ## Worker manifest
@@ -79,12 +82,20 @@ Run the sample Shapely worker:
 python -X utf8 -m src.main hscad-worker-run shapely_topology --workspace outputs\webhard_batch_100 --snap-tolerance 0.0
 ```
 
-Expected artifacts:
+Expected worker artifacts:
 
 ```text
 outputs\webhard_batch_100\SHAPELY_TOPOLOGY.json
 outputs\webhard_batch_100\SHAPELY_AREA_MATCHES.json
 outputs\webhard_batch_100\SHAPELY_TOPOLOGY_AUDIT.json
+```
+
+Expected worker operation artifacts:
+
+```text
+outputs\webhard_batch_100\WORKER_RUNS.json
+outputs\webhard_batch_100\WORKER_AUDIT.json
+outputs\webhard_batch_100\worker_logs\shapely_topology.jsonl
 ```
 
 ## WorkerInput
@@ -121,6 +132,52 @@ outputs\webhard_batch_100\SHAPELY_TOPOLOGY_AUDIT.json
 }
 ```
 
+## Worker run log
+
+Every non-dry-run worker execution is appended to:
+
+```text
+WORKER_RUNS.json
+worker_logs/<worker_name>.jsonl
+```
+
+Each run record includes:
+
+```text
+run_id
+created_at
+worker_name
+task
+workspace
+status
+backend
+artifacts
+warning_count
+metrics
+signals_count
+command
+duration_ms
+returncode
+provenance_present
+artifact_provenance
+```
+
+## Worker audit
+
+`WORKER_AUDIT.json` is regenerated after each run.
+
+Audit finding types:
+
+```text
+worker_error
+worker_timeout
+worker_unavailable
+worker_output_missing_provenance
+artifact_missing_provenance
+```
+
+Planned workers should return structured `unavailable` instead of failing the pipeline.
+
 ## Isolation levels
 
 PR #7A implements the contract and subprocess runner first.
@@ -140,7 +197,7 @@ Level 5: Ray / Dagster / Prefect orchestration wrapper
 Run:
 
 ```powershell
-python -m pytest tests/test_worker_contracts.py tests/test_worker_runner.py -q
+python -m pytest tests/test_worker_contracts.py tests/test_worker_runner.py tests/test_worker_run_log.py -q
 python -X utf8 -m src.main hscad-workers --out-json outputs\WORKERS.json
 python -X utf8 -m src.main hscad-worker-run shapely_topology --workspace outputs\webhard_batch_100 --dry-run
 python -X utf8 -m src.main hscad-worker-run shapely_topology --workspace outputs\webhard_batch_100 --snap-tolerance 0.0
@@ -153,6 +210,9 @@ outputs\WORKERS.json
 outputs\webhard_batch_100\SHAPELY_TOPOLOGY.json
 outputs\webhard_batch_100\SHAPELY_AREA_MATCHES.json
 outputs\webhard_batch_100\SHAPELY_TOPOLOGY_AUDIT.json
+outputs\webhard_batch_100\WORKER_RUNS.json
+outputs\webhard_batch_100\WORKER_AUDIT.json
+outputs\webhard_batch_100\worker_logs\shapely_topology.jsonl
 ```
 
 ## Follow-up PRs
