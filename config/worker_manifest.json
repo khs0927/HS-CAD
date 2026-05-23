@@ -134,6 +134,17 @@
       "gpu_required": false,
       "outputs": ["TEXT_CALIBRATION_REPORT.json", "TEXT_CALIBRATION_REPORT.md"]
     },
+    "text_weight_suggestions": {
+      "worker_type": "calibration",
+      "env_manager": "current_python",
+      "python": "3.12",
+      "requirements": [],
+      "entry": "python -m src.workers.text_weight_suggestions_worker",
+      "timeout_sec": 300,
+      "max_memory_mb": 4096,
+      "gpu_required": false,
+      "outputs": ["TEXT_FUSION_WEIGHT_SUGGESTIONS.json", "TEXT_FUSION_WEIGHT_SUGGESTIONS.md"]
+    },
     "vision_layout": {
       "worker_type": "vision",
       "env_manager": "uv",
