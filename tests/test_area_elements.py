@@ -47,6 +47,20 @@ def test_area_element_inferer_handles_line_loop():
     assert area['label'] == '창고'
 
 
+def test_area_element_inferer_handles_arc_line_segment_loop():
+    entities = [
+        {'handle': 'A1', 'entity_type': 'ARC', 'layer': 'AREA', 'center': [0, 0], 'radius': 10, 'start_angle': 0, 'end_angle': 180},
+        {'handle': 'L1', 'entity_type': 'LINE', 'layer': 'AREA', 'start': [-10, 0], 'end': [10, 0]},
+        {'handle': 'T1', 'entity_type': 'TEXT', 'layer': 'TEXT', 'text': '반원실', 'insert': [0, 4]},
+    ]
+    result = AreaElementInferer(circle_segments=96).infer_record({'file_id': 'arc-loop', 'entities': entities})
+    assert result['area_count'] == 1
+    area = result['areas'][0]
+    assert area['source_type'] == 'segment_loop'
+    assert math.isclose(area['area'], math.pi * 50, rel_tol=0.06)
+    assert area['label'] == '반원실'
+
+
 def test_area_element_inferer_handles_circle():
     entities = [
         {'handle': 'C1', 'entity_type': 'CIRCLE', 'layer': 'AREA', 'center': [0, 0], 'radius': 10},
@@ -58,6 +72,24 @@ def test_area_element_inferer_handles_circle():
     assert area['source_type'] == 'circle_approx'
     assert math.isclose(area['area'], math.pi * 100, rel_tol=0.02)
     assert area['label'] == '원형실'
+
+
+def test_area_element_inferer_handles_hatch_boundary():
+    entities = [
+        {
+            'handle': 'H1',
+            'entity_type': 'HATCH',
+            'layer': 'HATCH',
+            'paths': [{'points': [[0, 0], [30, 0], [30, 10], [0, 10]]}],
+        },
+        {'handle': 'T1', 'entity_type': 'TEXT', 'layer': 'TEXT', 'text': '해치실', 'insert': [5, 5]},
+    ]
+    result = AreaElementInferer().infer_record({'file_id': 'hatch', 'entities': entities})
+    assert result['area_count'] == 1
+    area = result['areas'][0]
+    assert area['source_type'] == 'hatch_boundary'
+    assert area['area'] == 300
+    assert area['label'] == '해치실'
 
 
 def test_area_element_inferer_json_dir(tmp_path: Path):
