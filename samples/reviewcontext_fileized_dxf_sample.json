@@ -1,0 +1,56 @@
+{
+  "file_id": "reviewcontext_sample_001",
+  "source_path": "samples/reviewcontext_sample.dxf",
+  "relative_path": "reviewcontext_sample.dxf",
+  "extension": ".dxf",
+  "status": "ok",
+  "engine": "ezdxf",
+  "metadata": {
+    "units": "mm",
+    "object_count": 5,
+    "note": "Sample for no-COM ReviewContext QA bridge"
+  },
+  "warnings": [],
+  "entities": [
+    {
+      "handle": "room_001",
+      "entity_type": "POLYLINE",
+      "layer": "ROOM",
+      "closed": true,
+      "points": [[0, 0, 0], [5000, 0, 0], [5000, 4000, 0], [0, 4000, 0]]
+    },
+    {
+      "handle": "txt_001",
+      "entity_type": "TEXT",
+      "layer": "TEXT",
+      "text": "바닥: 데코타일",
+      "insert": [1200, 1200, 0]
+    },
+    {
+      "handle": "col_001",
+      "entity_type": "POLYLINE",
+      "layer": "WAL1",
+      "closed": true,
+      "points": [[200, 200, 0], [600, 200, 0], [600, 600, 0], [200, 600, 0]],
+      "name": "기둥"
+    },
+    {
+      "handle": "beam_001",
+      "entity_type": "LINE",
+      "layer": "BEAM",
+      "start": [1000, 3000, 0],
+      "end": [4000, 3000, 0]
+    },
+    {
+      "handle": "txt_002",
+      "entity_type": "TEXT",
+      "layer": "TEXT",
+      "text": "H-300x150",
+      "insert": [2500, 3200, 0]
+    }
+  ],
+  "texts": [],
+  "layers": [],
+  "blocks": [],
+  "dimensions": []
+}
