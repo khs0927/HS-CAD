@@ -44,7 +44,7 @@
       "timeout_sec": 900,
       "max_memory_mb": 16384,
       "gpu_required": false,
-      "outputs": ["PDF_RASTER_ANALYSIS.json", "PDF_COORDINATE_CONTRACT.json", "PDF_VECTOR_OBJECTS.json", "RASTER_CONTOURS.json", "PDF_VECTOR_RASTER_IOU.json", "PDF_RASTER_REPORT.md", "pdf_raster/rendered/*.png"]
+      "outputs": ["PDF_RASTER_ANALYSIS.json", "PDF_COORDINATE_CONTRACT.json", "PDF_VECTOR_OBJECTS.json", "RASTER_CONTOURS.json", "RASTER_CONTOUR_CLASSES.json", "PDF_VECTOR_RASTER_IOU.json", "PDF_RASTER_REPORT.md", "pdf_raster/rendered/*.png"]
     },
     "vision_layout": {
       "worker_type": "vision",
