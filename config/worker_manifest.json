@@ -90,6 +90,17 @@
       "gpu_required": false,
       "outputs": ["TEXT_EVIDENCE_FUSION.json", "TEXT_EVIDENCE_FUSION_REPORT.md"]
     },
+    "text_review_queue": {
+      "worker_type": "review_queue",
+      "env_manager": "current_python",
+      "python": "3.12",
+      "requirements": [],
+      "entry": "python -m src.workers.text_review_queue_worker",
+      "timeout_sec": 300,
+      "max_memory_mb": 4096,
+      "gpu_required": false,
+      "outputs": ["TEXT_REVIEW_QUEUE.json", "TEXT_REVIEW_QUEUE.md"]
+    },
     "vision_layout": {
       "worker_type": "vision",
       "env_manager": "uv",
