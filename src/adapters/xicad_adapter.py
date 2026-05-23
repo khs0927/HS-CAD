@@ -4,8 +4,25 @@ from pathlib import Path
 from typing import Any
 
 from src.adapters.lisp_adapter import LispAdapter
-from src.app.logger import warn, success
 from src.integrations.xicad_paths import detect_xicad_profile, XiCADPathProfile
+
+
+def _log_success(message: str) -> None:
+    try:
+        from rich.console import Console
+
+        Console().print(f"[green]{message}[/green]")
+    except Exception:
+        print(message)
+
+
+def _log_warn(message: str) -> None:
+    try:
+        from rich.console import Console
+
+        Console().print(f"[yellow]{message}[/yellow]")
+    except Exception:
+        print(message)
 
 
 class XiCADAdapter:
@@ -65,19 +82,19 @@ class XiCADAdapter:
                 '(princ))'
             )
             self._send_lisp_expr(expr)
-        success(f"XiCAD support paths queued: {len(self.support_paths())}")
+        _log_success(f"XiCAD support paths queued: {len(self.support_paths())}")
 
     def load(self) -> Path | None:
         if not self.exists():
-            warn(f"XiCAD root not found or incomplete: {self.root}")
+            _log_warn(f"XiCAD root not found or incomplete: {self.root}")
             return None
         self.add_support_paths()
         for candidate in self.loader_candidates():
             if candidate.exists():
                 self.lisp.load_lisp(candidate)
-                success(f"XiCAD loader queued: {candidate}")
+                _log_success(f"XiCAD loader queued: {candidate}")
                 return candidate
-        warn("No XiCAD loader found. Check xi.zelx / xi.fas / _ZWCad/zwcad.lsp")
+        _log_warn("No XiCAD loader found. Check xi.zelx / xi.fas / _ZWCad/zwcad.lsp")
         return None
 
     def load_menu_hint(self) -> list[str]:

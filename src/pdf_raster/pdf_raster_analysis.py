@@ -160,6 +160,7 @@ def build_vector_raster_iou_report(vector_objects: list[dict[str, Any]], contour
             'page_contract_id': vector.get('page_contract_id'),
             'vector_pdf_bbox': vector_bbox,
             'contour_index': best.get('contour_index'),
+            'contour_class': best.get('contour_class'),
             'contour_pdf_bbox': best.get('pdf_bbox'),
             'iou': round(best_iou, 6),
         })

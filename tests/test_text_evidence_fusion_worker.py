@@ -63,6 +63,29 @@ def test_write_text_evidence_fusion_with_artifacts(tmp_path: Path):
     payload = json.loads((tmp_path / 'TEXT_EVIDENCE_FUSION.json').read_text(encoding='utf-8'))
     assert payload['items'][0]['confidence'] > 0.9
     assert payload['items'][0]['review_required'] is False
+    assert payload['policy']['source'] == 'DEFAULT_TEXT_POLICY'
+
+
+def test_text_evidence_fusion_uses_workspace_policy(tmp_path: Path):
+    (tmp_path / 'TEXT_FUSION_POLICY.json').write_text(json.dumps({
+        'version': 'custom-test-policy',
+        'weights': {
+            'ocr_confidence': 0.10,
+            'vector_match': 0.0,
+            'cad_match': 0.0,
+            'coverage': 0.0,
+            'conflict_penalty': 0.0,
+        },
+    }), encoding='utf-8')
+    (tmp_path / 'OCR_TEXT_REGIONS.json').write_text(json.dumps({
+        'regions': [{'text': 'A101', 'confidence': 0.9}]
+    }), encoding='utf-8')
+    result = write_text_evidence_fusion(tmp_path)
+    payload = json.loads((tmp_path / 'TEXT_EVIDENCE_FUSION.json').read_text(encoding='utf-8'))
+    assert result['policy_source'] == 'TEXT_FUSION_POLICY.json'
+    assert payload['policy']['version'] == 'custom-test-policy'
+    assert payload['policy']['weights']['ocr_confidence'] == 0.10
+    assert payload['items'][0]['confidence'] == 0.09
 
 
 def test_text_evidence_fusion_worker_registered_and_plans_command():

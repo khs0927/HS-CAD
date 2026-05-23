@@ -208,7 +208,9 @@ def _rows_graph_audit(base: Path) -> list[dict[str, Any]]:
 def _create_table(con: Any, table_name: str, rows: list[dict[str, Any]]) -> None:
     con.execute(f'DROP TABLE IF EXISTS {table_name}')
     if rows:
-        con.register('_hscad_rows', rows)
+        import pandas as pd
+
+        con.register('_hscad_rows', pd.DataFrame(rows))
         try:
             con.execute(f'CREATE TABLE {table_name} AS SELECT * FROM _hscad_rows')
         finally:

@@ -3,9 +3,17 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any, Iterable
 
-from src.app import logger
 from src.cad_core.base import CADAdapter
 from src.utils.geometry import chunk_points
+
+
+def _log_success(message: str) -> None:
+    try:
+        from rich.console import Console
+
+        Console().print(f"[green]{message}[/green]")
+    except Exception:
+        print(message)
 
 
 class ZWCADCOMAdapter(CADAdapter):
@@ -31,7 +39,7 @@ class ZWCADCOMAdapter(CADAdapter):
         for progid in progids:
             try:
                 self.app = comtypes.client.GetActiveObject(progid)
-                logger.success(f'Connected to active ZWCAD via COM: {progid}')
+                _log_success(f'Connected to active ZWCAD via COM: {progid}')
                 return
             except Exception:
                 continue
@@ -41,7 +49,7 @@ class ZWCADCOMAdapter(CADAdapter):
             try:
                 self.app = comtypes.client.CreateObject(progid)
                 self.app.Visible = self.visible
-                logger.success(f'Created new ZWCAD instance via COM: {progid}')
+                _log_success(f'Created new ZWCAD instance via COM: {progid}')
                 return
             except Exception:
                 continue

@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 from typing import Any
 
+from src.ocr.policy_loader import load_text_fusion_policy
 from src.workers.provenance import build_provenance
 
 
@@ -15,6 +16,7 @@ def write_text_evidence_fusion(workspace: str | Path, *, review_threshold: float
     ocr_regions = ocr_payload.get('regions') or []
     vector_matches = vector_payload.get('matches') or []
     cad_matches = cad_payload.get('matches') or []
+    policy = load_text_fusion_policy(base)
     provenance = build_provenance(
         workspace=base,
         backend='text_evidence_fusion',
@@ -32,6 +34,7 @@ def write_text_evidence_fusion(workspace: str | Path, *, review_threshold: float
         cad_matches,
         review_threshold=review_threshold,
         conflict_threshold=conflict_threshold,
+        policy=policy,
         provenance=provenance,
     )
     out_json = base / 'TEXT_EVIDENCE_FUSION.json'
@@ -45,6 +48,8 @@ def write_text_evidence_fusion(workspace: str | Path, *, review_threshold: float
         'item_count': report['summary']['item_count'],
         'review_required_count': report['summary']['review_required_count'],
         'avg_confidence': report['summary']['avg_confidence'],
+        'policy_source': report['policy']['source'],
+        'weights': report['policy']['weights'],
         'artifacts': [str(out_json), str(out_report)],
         'warnings': report.get('warnings') or [],
         'provenance': provenance,
@@ -58,8 +63,11 @@ def build_text_evidence_fusion(
     *,
     review_threshold: float = 0.55,
     conflict_threshold: float = 0.35,
+    policy: dict[str, Any] | None = None,
     provenance: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
+    active_policy = policy or load_text_fusion_policy(Path())
+    weights = active_policy.get('weights') or {}
     vector_by_ocr = _best_match_by_ocr(vector_matches)
     cad_by_ocr = _best_match_by_ocr(cad_matches)
     items: list[dict[str, Any]] = []
@@ -71,7 +79,13 @@ def build_text_evidence_fusion(
         cad_score = _safe_float(cad.get('match_score')) if cad else 0.0
         coverage = sum(1 for value in [ocr_confidence, vector_score, cad_score] if value > 0) / 3.0
         conflict = _text_conflict(region, vector, cad)
-        confidence = _clamp((0.45 * ocr_confidence) + (0.30 * vector_score) + (0.20 * cad_score) + (0.05 * coverage) - (0.25 * conflict))
+        confidence = _clamp(
+            (_weight(weights, 'ocr_confidence') * ocr_confidence)
+            + (_weight(weights, 'vector_match') * vector_score)
+            + (_weight(weights, 'cad_match') * cad_score)
+            + (_weight(weights, 'coverage') * coverage)
+            - (_weight(weights, 'conflict_penalty') * conflict)
+        )
         review_required = confidence < review_threshold or conflict >= conflict_threshold
         items.append({
             'target_id': f'ocr:{index}',
@@ -102,8 +116,9 @@ def build_text_evidence_fusion(
         'backend': 'text_evidence_fusion',
         'source': 'OCR_TEXT_REGIONS+OCR_VECTOR_TEXT_MATCHES+OCR_CAD_TEXT_MATCHES',
         'policy': {
-            'version': 'weighted_text_evidence_score_v1',
-            'weights': {'ocr_confidence': 0.45, 'vector_match': 0.30, 'cad_match': 0.20, 'coverage': 0.05, 'conflict_penalty': 0.25},
+            'version': active_policy.get('version') or 'weighted_text_evidence_score_v1',
+            'source': active_policy.get('source') or 'DEFAULT_TEXT_POLICY',
+            'weights': weights,
             'review_threshold': review_threshold,
             'conflict_threshold': conflict_threshold,
         },
@@ -176,6 +191,10 @@ def _safe_float(value: Any) -> float:
         return float(value)
     except Exception:
         return 0.0
+
+
+def _weight(weights: dict[str, Any], key: str) -> float:
+    return _safe_float(weights.get(key))
 
 
 def _clamp(value: float) -> float:

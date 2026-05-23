@@ -142,7 +142,13 @@ def _normalize_core_weights(raw: dict[str, float]) -> dict[str, float]:
     raw_sum = sum(max(0.0, float(raw.get(key) or 0.0)) for key in core_keys)
     if raw_sum <= 0:
         return {key: DEFAULT_WEIGHTS[key] for key in core_keys}
-    return {key: round(max(0.0, float(raw.get(key) or 0.0)) / raw_sum * target_sum, 6) for key in core_keys}
+    normalized = {
+        key: round(max(0.0, float(raw.get(key) or 0.0)) / raw_sum * target_sum, 6)
+        for key in core_keys
+    }
+    rounding_drift = round(target_sum - sum(normalized.values()), 6)
+    normalized[core_keys[-1]] = round(normalized[core_keys[-1]] + rounding_drift, 6)
+    return normalized
 
 
 def _suggest_conflict_penalty(summary: dict[str, Any], confidence_buckets: dict[str, Any]) -> float:
