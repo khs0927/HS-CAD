@@ -12,6 +12,7 @@ PR #4 adds foundation modules for:
 - boundary extraction from closed polylines, circles, connected line loops, ARC+LINE segment loops, and HATCH boundary paths
 - text role inference
 - area element inference
+- optional open-source backend registry and discovery
 
 Generated artifacts:
 
@@ -21,6 +22,7 @@ SPATIAL_CONTAINMENT.md
 TEXT_ROLE_INFERENCE.json
 TEXT_ROLE_INFERENCE.md
 AREA_ELEMENTS.json
+OPEN_BACKENDS.json, if requested
 ```
 
 ## Validation status
@@ -43,7 +45,7 @@ git reset --hard FETCH_HEAD
 python -m pip install -r requirements.txt
 python -m pip install pytest
 
-python -m pytest tests/test_spatial_containment.py tests/test_text_roles.py tests/test_area_elements.py -q
+python -m pytest tests/test_spatial_containment.py tests/test_text_roles.py tests/test_area_elements.py tests/test_open_source_backends.py -q
 ```
 
 Expected:
@@ -60,14 +62,42 @@ Run:
 python -X utf8 -m src.main hscad-spatial-containment --help
 python -X utf8 -m src.main hscad-text-roles --help
 python -X utf8 -m src.main hscad-area-elements --help
+python -X utf8 -m src.main hscad-open-backends --help
 ```
 
 Expected:
 
-- all three commands are registered
+- all four commands are registered
 - help text renders without Unicode/stdout errors
 
-### 3. Existing 100-file Webhard corpus check
+### 3. Optional backend discovery check
+
+Run:
+
+```powershell
+python -X utf8 -m src.main hscad-open-backends --out-json outputs\OPEN_BACKENDS.json
+Get-Content -Encoding UTF8 outputs\OPEN_BACKENDS.json
+```
+
+Expected:
+
+- required count should remain zero for PR #4
+- installed optional backends should be reported as available
+- missing optional backends should not fail the command
+
+Tracked optional backends:
+
+```text
+shapely
+networkx
+duckdb
+opencv
+paddleocr
+layoutparser
+ifcopenshell
+```
+
+### 4. Existing 100-file Webhard corpus check
 
 Use the PR #3 validated workspace if available:
 
@@ -90,7 +120,7 @@ outputs\webhard_batch_100\TEXT_ROLE_INFERENCE.md
 outputs\webhard_batch_100\AREA_ELEMENTS.json
 ```
 
-### 4. Performance check
+### 5. Performance check
 
 Inspect `SPATIAL_CONTAINMENT.json` stats:
 
@@ -106,7 +136,7 @@ Expected:
 - execution should complete without leaving stuck Python processes
 - if it is still slow, tune `--max-cells-per-polygon`, `--tolerance`, or add Shapely STRtree backend in a follow-up PR
 
-### 5. Boundary source quality check
+### 6. Boundary source quality check
 
 Inspect:
 
@@ -131,7 +161,7 @@ Manual review required:
 - HATCH boundaries should produce plausible area candidates
 - ARC+LINE segment loops should not create incorrect faces from unrelated arcs
 
-### 6. Text role quality check
+### 7. Text role quality check
 
 Inspect:
 
@@ -157,7 +187,7 @@ Manual review required:
 - table/title block text should not be used as room labels
 - dimension/spec text should not be selected as area labels unless no better label exists
 
-### 7. Area element quality check
+### 8. Area element quality check
 
 Inspect:
 
@@ -203,11 +233,23 @@ Recommended follow-up PRs:
 - export nodes/edges JSON even if NetworkX is not installed
 - area element -> label -> leader note -> block/equipment -> adjacent area relationships
 
-### PR #7: Vision/OCR/layout backend
+### PR #7: DuckDB analytical backend
+
+- optional DuckDB backend
+- optional DuckDB Spatial export where installed
+- do not replace SQLite corpus in this step
+
+### PR #8: Vision/OCR/layout backend
 
 - optional OpenCV contour backend for PDF/image drawings
 - optional PaddleOCR / PP-Structure / LayoutParser / Table Transformer style adapters
 - must remain separate from CAD-vector deterministic inference
+
+### PR #9: BIM/collaboration backend
+
+- optional IfcOpenShell adapter
+- optional Speckle export experiment
+- keep BIM branch separate from 2D CAD spatial inference
 
 ## Non-goals for PR #4
 
@@ -223,5 +265,6 @@ PR #4 can be merged as a foundation if:
 - unit tests pass
 - CLI commands are registered
 - outputs are generated on the 100-file workspace
+- backend discovery runs without requiring optional packages
 - performance is acceptable on `outputs\webhard_batch_100`
 - false positives are documented for follow-up tuning
