@@ -15,7 +15,7 @@ python -m pip install pytest requests
 ## 2. Run fast unit tests first
 
 ```powershell
-python -m pytest tests/test_route_defaults.py tests/test_task_router.py tests/test_route_plan_writer.py tests/test_large_dwg_strategy.py tests/test_open_tools_catalog.py tests/test_encoding_and_webhard_cli.py tests/test_dwg_dxf_fileizer_errors.py tests/test_oda_converter_adapter.py -q
+python -m pytest tests/test_route_defaults.py tests/test_task_router.py tests/test_route_plan_writer.py tests/test_large_dwg_strategy.py tests/test_open_tools_catalog.py tests/test_encoding_and_webhard_cli.py tests/test_dwg_dxf_fileizer_errors.py tests/test_oda_converter_adapter.py tests/test_run_result_summarizer.py tests/test_batch_runner.py -q
 ```
 
 Expected result: all tests pass.
@@ -98,7 +98,36 @@ and writes:
 outputs\webhard_real_sample\webhard_sample_run.json
 ```
 
-## 6. Run the generated review script only after inspection
+## 6. Resumable Webhard batch command
+
+After the 5-file sample is stable, use batches. This avoids one huge run and lets the process resume safely.
+
+First 100-file manifest, one 50-file batch:
+
+```powershell
+python -X utf8 -m src.main hscad-webhard-batch --drive "Z:/" --workspace "outputs\webhard_batch_100" --sample 100 --batch-size 50 --max-batches 1 --start-offset 0
+```
+
+Second 50-file batch using the same manifest:
+
+```powershell
+python -X utf8 -m src.main hscad-webhard-batch --drive "Z:/" --workspace "outputs\webhard_batch_100" --sample 100 --batch-size 50 --max-batches 1 --start-offset 50 --no-prepare
+```
+
+Resume safely from the beginning without reprocessing successful JSON:
+
+```powershell
+python -X utf8 -m src.main hscad-webhard-batch --drive "Z:/" --workspace "outputs\webhard_batch_100" --sample 100 --batch-size 50 --max-batches 2 --start-offset 0 --skip-existing
+```
+
+Review:
+
+```powershell
+Get-Content -Encoding UTF8 outputs\webhard_batch_100\BATCH_RUN.json
+Get-Content -Encoding UTF8 outputs\webhard_batch_100\RUN_SUMMARY.md
+```
+
+## 7. Run the generated review script only after inspection
 
 The PowerShell file is a review artifact. Inspect it first.
 
@@ -108,7 +137,7 @@ Get-Content -Encoding UTF8 outputs\codex_route_plan\task_route_review.ps1
 
 If the source root and workspace look correct, run the commands manually step by step instead of blindly executing the file.
 
-## 7. DWG conversion order and failure classification
+## 8. DWG conversion order and failure classification
 
 The DWG fileizer now tries this order:
 
@@ -172,3 +201,4 @@ If `open_document_failed` still appears and ODA is unavailable, install/configur
 - DWG failures are classified as `open_document_failed` or `save_as_dxf_failed` when possible.
 - If external converter succeeds, `external_converter_used` is recorded.
 - If ZWCAD fallback succeeds, `command_fallback_used` is recorded.
+- Batch runs write `BATCH_RUN.json` and can resume with `--skip-existing`.
