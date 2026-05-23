@@ -156,6 +156,17 @@
       "gpu_required": false,
       "outputs": ["TEXT_ROLE_INFERENCE.json", "TEXT_ROLE_INFERENCE.md", "AREA_BOUNDARY_INFERENCE.json", "AREA_BOUNDARY_INFERENCE.md", "LEADER_NOTE_INFERENCE.json", "LEADER_NOTE_INFERENCE.md", "DIMENSION_TEXT_INFERENCE.json", "DIMENSION_TEXT_INFERENCE.md", "TABLE_REGION_INFERENCE.json", "TABLE_REGION_INFERENCE.md", "TITLEBLOCK_INFERENCE.json", "TITLEBLOCK_INFERENCE.md"]
     },
+    "analysis_graph_megapack": {
+      "worker_type": "analysis_graph",
+      "env_manager": "current_python",
+      "python": "3.12",
+      "requirements": [],
+      "entry": "python -m src.workers.analysis_graph_megapack_worker",
+      "timeout_sec": 900,
+      "max_memory_mb": 8192,
+      "gpu_required": false,
+      "outputs": ["GEOMETRY_LOOP_BUILDER.json", "GEOMETRY_LOOP_BUILDER.md", "LEADER_GRAPH.json", "LEADER_GRAPH.md", "DIMENSION_GRAPH.json", "DIMENSION_GRAPH.md", "TABLE_GRID_DETECTOR.json", "TABLE_GRID_DETECTOR.md", "TITLEBLOCK_CLASSIFIER.json", "TITLEBLOCK_CLASSIFIER.md"]
+    },
     "vision_layout": {
       "worker_type": "vision",
       "env_manager": "uv",
