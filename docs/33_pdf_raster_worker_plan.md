@@ -51,6 +51,7 @@ run_manifest.json referenced PDF paths, when present
 
 ```text
 PDF_RASTER_ANALYSIS.json
+PDF_COORDINATE_CONTRACT.json
 PDF_VECTOR_OBJECTS.json
 RASTER_CONTOURS.json
 PDF_RASTER_REPORT.md
@@ -89,6 +90,37 @@ find external contours
 filter tiny contours
 ```
 
+## Coordinate contract
+
+PR #10 now defines the first PDF coordinate contract so vector objects and raster contours can be compared in the same space.
+
+Coordinate spaces:
+
+```text
+pdf_points_top_left
+pixel_top_left
+normalized_page
+```
+
+`PDF_COORDINATE_CONTRACT.json` contains one row per rendered page:
+
+```text
+page_contract_id
+source_pdf
+page_index
+dpi
+page_width_pdf
+page_height_pdf
+pixel_width
+pixel_height
+pixel_to_pdf_scale_x
+pixel_to_pdf_scale_y
+pdf_to_pixel_scale_x
+pdf_to_pixel_scale_y
+pdf_origin
+pixel_origin
+```
+
 ## Artifacts
 
 ### PDF_VECTOR_OBJECTS.json
@@ -100,6 +132,12 @@ source_pdf
 page_index
 object_type
 text
+pdf_bbox
+normalized_bbox
+page_width_pdf
+page_height_pdf
+coordinate_space
+page_contract_id
 x0
 top
 x1
@@ -115,7 +153,13 @@ Rows include:
 ```text
 source_pdf
 source_image
+page_index
+page_contract_id
 contour_index
+pixel_bbox
+pdf_bbox
+normalized_bbox
+coordinate_space
 x
 y
 width
@@ -130,10 +174,28 @@ Report includes:
 ```text
 backend availability
 PDF count
+page contract count
 vector object count
 contour count
 render output count
+coordinate contract summary
 warnings
+```
+
+## Vector-raster comparison helpers
+
+The module includes helper functions for future cross-validation:
+
+```text
+pixel_bbox_to_pdf_bbox
+normalize_bbox
+bbox_iou
+```
+
+These prepare the next step:
+
+```text
+PDF vector line/rect/text bbox ↔ OpenCV contour bbox IoU
 ```
 
 ## Safety
@@ -155,6 +217,7 @@ Expected files:
 
 ```text
 outputs\webhard_batch_100\PDF_RASTER_ANALYSIS.json
+outputs\webhard_batch_100\PDF_COORDINATE_CONTRACT.json
 outputs\webhard_batch_100\PDF_VECTOR_OBJECTS.json
 outputs\webhard_batch_100\RASTER_CONTOURS.json
 outputs\webhard_batch_100\PDF_RASTER_REPORT.md
@@ -168,9 +231,8 @@ outputs\webhard_batch_100\worker_logs\pdf_raster.jsonl
 Future PRs can add:
 
 ```text
-vector-raster IoU
+vector-raster IoU report
 line/rectangle/table contour classification
-page coordinate transform contract
 OCR text region worker
 layout/table/titleblock detection
 ```
