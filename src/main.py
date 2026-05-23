@@ -23,6 +23,7 @@ import src.app.webhard_batch_cli  # noqa: F401,E402
 import src.app.converters_cli  # noqa: F401,E402
 import src.app.run_summary_cli  # noqa: F401,E402
 import src.app.domain_rules_cli  # noqa: F401,E402
+import src.app.domain_rule_decision_cli  # noqa: F401,E402
 
 if __name__ == '__main__':
     app()

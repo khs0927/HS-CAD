@@ -1,0 +1,303 @@
+{
+  "statistics": {
+    "total_files": 2418,
+    "ext_.slb": 29,
+    "ext_.shx": 17,
+    "ext_.dvb": 1,
+    "ext_.xml": 2,
+    "ext_.dll": 29,
+    "ext_.banner": 1,
+    "ext_.arx": 19,
+    "ext_.zrx": 5,
+    "ext_.chm": 3,
+    "ext_.txt": 10,
+    "ext_.dfs": 2,
+    "ext_.bmp": 81,
+    "ext_.exe": 3,
+    "ext_.ini": 1,
+    "ext_.lsp": 11,
+    "ext_.dcl": 80,
+    "ext_.dwg": 1700,
+    "ext_.bak": 12,
+    "ext_.des": 28,
+    "ext_.fas": 28,
+    "ext_.zelx": 28,
+    "ext_.dat": 6,
+    "ext_.vls": 1,
+    "ext_.vlx": 1,
+    "ext_.key": 2,
+    "ext_.ctb": 6,
+    "ext_.stb": 1,
+    "ext_.lay": 2,
+    "ext_.lcd": 1,
+    "ext_.cfg": 3,
+    "ext_.zae": 1,
+    "ext_.dwl": 2,
+    "ext_.dwl2": 2,
+    "ext_.sld": 237,
+    "ext_.pat": 13,
+    "ext_.dwt": 12,
+    "ext_.lin": 10,
+    "ext_.mln": 4,
+    "ext_.pgp": 7,
+    "ext_.cuix": 6,
+    "ext_.cui": 2,
+    "ext_.mnr": 4,
+    "ext_.mns": 2,
+    "ext_.menuc": 1,
+    "ext_.menur": 1,
+    "ext_.fmp": 1,
+    ".des": 28,
+    ".fas": 28,
+    ".zelx": 28,
+    ".slb": 2,
+    ".dat": 6,
+    ".vls": 1,
+    ".vlx": 1,
+    ".dcl": 4,
+    ".key": 1,
+    ".lsp": 1
+  },
+  "knowledge": {
+    "auto_leaders": [
+      "필로티(상부)",
+      "도기질타일",
+      "도기칠 타일",
+      "건축한계선",
+      "간선도로",
+      "곰보빵",
+      "곰보빵fkdsal",
+      "우리는",
+      "지시선 문자11",
+      "하하하"
+    ],
+    "layer_settings": [
+      {
+        "file": "Layer_Setting.lay",
+        "content": "10,4,Continuous\nH,4,HIDDEN\nCEN,1,CENTER\nDIMLD,4,Continuous\nHAT,9,Continuous\nDIM,4,Continuous\n1,4,Continuous\n2,4,Continuous\n3,4,Continuous\n4,4,Continuous\n5,4,Continuous\n6,4,Continuous\n7,4,Continuous\n8,4,Continuous\n9,4,Continuous\n"
+      },
+      {
+        "file": "MultiLine2Line.lay",
+        "content": "CEN,1,CENTER\nWAL1,2,Continuous\nWAL2,3,Continuous\nHAT,4,Continuous\nFIN,5,Continuous\n"
+      }
+    ],
+    "common_texts": [
+      "*****Group01*****분류1: 제목",
+      "기존 보 하단 선",
+      "fdgdfsgfds",
+      "대지 내,외부 도로 선형",
+      "앵글, C, L 등 형강 표현",
+      "철물",
+      "천장마감재, 달대 등",
+      "작은 DIM",
+      "입면도에서의 장식적 표현",
+      "앵글, C, L 등 형강 표현",
+      "철물",
+      "천장마감재, 달대 등",
+      "작은 DIM",
+      "입면도에서의 장식적 표현",
+      "*****Group02*****분류2",
+      "천장마감재, 달대 등",
+      "작은 DIM",
+      "입면도에서의 장식적 표현",
+      "앵글, C, L 등 형강 표현",
+      "철물",
+      "천장마감재, 달대 등",
+      "*****Group03*****분류3: 제목 및 설명",
+      "ttttttthgf",
+      "앵글, C, L 등 형강 표현",
+      "철물",
+      "천장마감재, 달대 등",
+      "작은 DIM",
+      "입면도에서의 장식적 표현",
+      "*****Group04*****분류4: 제목 및 설명",
+      "ttttt",
+      "앵글, C, L 등 형강 표현",
+      "철물",
+      "천장마감재, 달대 등",
+      "작은 DIM",
+      "입면도에서의 장식적 표현",
+      "*****Group05*****분류5: 제목 및 설명",
+      "*****Group06*****분류6: 제목 및 설명",
+      "*****Group07*****분류7: 제목 및 설명",
+      "*****Group08*****분류8: 제목 및 설명",
+      "*****Group09*****분류9: 제목 및 설명",
+      "*****Group10*****분류10: 제목 및 설명",
+      "*****Group11*****분류11: 제목 및 설명",
+      "*****Group12*****분류12: 제목 및 설명"
+    ],
+    "text_boxes": [
+      "현관",
+      "계단실",
+      "드레스룸",
+      "안방",
+      "주방",
+      "거실",
+      "화장실",
+      "거   실",
+      "화 장 실",
+      "제2종 근린생활시설",
+      "AB",
+      "A",
+      "A B C"
+    ],
+    "calculators": [],
+    "ini_configs": {
+      "SpecialChar.ini": "[Position]\nTop=300\nLeft=488\n"
+    },
+    "xml_configs": [
+      "ctxmenu.xml",
+      "iDwgTab.xml"
+    ],
+    "slb_libraries": [
+      {
+        "name": "acad.slb",
+        "size_kb": 429.7,
+        "path": "acad.slb"
+      },
+      {
+        "name": "acad12.slb",
+        "size_kb": 96.2,
+        "path": "acad12.slb"
+      },
+      {
+        "name": "han.slb",
+        "size_kb": 85.8,
+        "path": "han.slb"
+      },
+      {
+        "name": "kxi.slb",
+        "size_kb": 227.2,
+        "path": "kxi.slb"
+      },
+      {
+        "name": "ldoor.slb",
+        "size_kb": 65.6,
+        "path": "ldoor.slb"
+      },
+      {
+        "name": "lelev.slb",
+        "size_kb": 30.6,
+        "path": "lelev.slb"
+      },
+      {
+        "name": "lfurn.slb",
+        "size_kb": 106.1,
+        "path": "lfurn.slb"
+      },
+      {
+        "name": "lkitc.slb",
+        "size_kb": 88.9,
+        "path": "lkitc.slb"
+      },
+      {
+        "name": "lland.slb",
+        "size_kb": 49.9,
+        "path": "lland.slb"
+      },
+      {
+        "name": "ltoil.slb",
+        "size_kb": 199.8,
+        "path": "ltoil.slb"
+      },
+      {
+        "name": "lwind.slb",
+        "size_kb": 263.7,
+        "path": "lwind.slb"
+      },
+      {
+        "name": "mcd.slb",
+        "size_kb": 5.7,
+        "path": "mcd.slb"
+      },
+      {
+        "name": "struct.slb",
+        "size_kb": 140.5,
+        "path": "struct.slb"
+      },
+      {
+        "name": "xi1.slb",
+        "size_kb": 143.4,
+        "path": "xi1.slb"
+      },
+      {
+        "name": "xi2.slb",
+        "size_kb": 67.8,
+        "path": "xi2.slb"
+      },
+      {
+        "name": "xi3d.slb",
+        "size_kb": 67.8,
+        "path": "xi3d.slb"
+      },
+      {
+        "name": "xi95.slb",
+        "size_kb": 8.5,
+        "path": "xi95.slb"
+      },
+      {
+        "name": "xilib3d.slb",
+        "size_kb": 194.9,
+        "path": "xilib3d.slb"
+      },
+      {
+        "name": "xiMark.slb",
+        "size_kb": 0.4,
+        "path": "xiMark.slb"
+      },
+      {
+        "name": "xiToilet.slb",
+        "size_kb": 16.9,
+        "path": "xiToilet.slb"
+      },
+      {
+        "name": "xiUtil.slb",
+        "size_kb": 141.4,
+        "path": "xiUtil.slb"
+      },
+      {
+        "name": "xi_fur3.slb",
+        "size_kb": 287.3,
+        "path": "xi_fur3.slb"
+      },
+      {
+        "name": "xi_tr_3.slb",
+        "size_kb": 489.0,
+        "path": "xi_tr_3.slb"
+      },
+      {
+        "name": "xi_tr_e.slb",
+        "size_kb": 428.0,
+        "path": "xi_tr_e.slb"
+      },
+      {
+        "name": "xi_tr_p.slb",
+        "size_kb": 553.9,
+        "path": "xi_tr_p.slb"
+      },
+      {
+        "name": "xiBeam.slb",
+        "size_kb": 42.6,
+        "path": "Lisp\\xiBeam.slb"
+      },
+      {
+        "name": "xilib3d.slb",
+        "size_kb": 194.9,
+        "path": "Lisp\\xilib3d.slb"
+      },
+      {
+        "name": "gcad.slb",
+        "size_kb": 429.7,
+        "path": "_GstarCad\\gcad.slb"
+      },
+      {
+        "name": "zwcad.slb",
+        "size_kb": 429.7,
+        "path": "_ZWCad\\zwcad.slb"
+      }
+    ],
+    "lisp_files": [
+      "_onekey.lsp"
+    ]
+  }
+}
