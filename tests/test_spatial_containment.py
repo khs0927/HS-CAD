@@ -1,0 +1,132 @@
+from __future__ import annotations
+
+import json
+from pathlib import Path
+
+from src.spatial.containment import TextContainmentAnalyzer
+from src.spatial.geometry import Point2D, bbox_from_points
+from src.spatial.grid_index import IndexedPolygon, UniformGridIndex
+from src.spatial.polygon import point_in_polygon
+
+
+def test_point_in_polygon_basic_square():
+    polygon = [Point2D(0, 0), Point2D(10, 0), Point2D(10, 10), Point2D(0, 10)]
+    assert point_in_polygon(Point2D(5, 5), polygon) is True
+    assert point_in_polygon(Point2D(15, 5), polygon) is False
+    assert point_in_polygon(Point2D(0, 5), polygon) is True
+
+
+def test_bbox_from_points():
+    bbox = bbox_from_points([Point2D(1, 2), Point2D(3, 4), Point2D(-1, 5)])
+    assert bbox is not None
+    assert bbox.min_x == -1
+    assert bbox.max_y == 5
+    assert bbox.contains(Point2D(1, 3)) is True
+
+
+def test_text_containment_analyzer_record():
+    record = {
+        'file_id': 'sample',
+        'relative_path': 'sample.dxf',
+        'entities': [
+            {
+                'handle': 'P1',
+                'entity_type': 'POLYLINE',
+                'layer': 'ROOM',
+                'closed': True,
+                'points': [[0, 0, 0], [100, 0, 0], [100, 100, 0], [0, 100, 0]],
+            },
+            {
+                'handle': 'T1',
+                'entity_type': 'TEXT',
+                'layer': 'TEXT',
+                'text': '사무실',
+                'insert': [50, 50, 0],
+            },
+            {
+                'handle': 'T2',
+                'entity_type': 'TEXT',
+                'layer': 'TEXT',
+                'text': '외부',
+                'insert': [200, 200, 0],
+            },
+        ],
+    }
+    result = TextContainmentAnalyzer().analyze_record(record)
+    assert result['relation_count'] == 1
+    assert result['relations'][0]['text'] == '사무실'
+    assert result['relations'][0]['polygon_handle'] == 'P1'
+    assert result['relations'][0]['boundary_source_type'] == 'closed_polyline'
+    assert result['stats']['candidate_checks'] < result['stats']['brute_force_pairs']
+
+
+def test_text_containment_analyzer_json_dir(tmp_path: Path):
+    json_dir = tmp_path / 'fileized' / 'json'
+    json_dir.mkdir(parents=True)
+    record = {
+        'file_id': 'sample',
+        'relative_path': 'sample.dxf',
+        'entities': [
+            {'handle': 'P1', 'entity_type': 'POLYLINE', 'layer': 'ROOM', 'closed': True, 'points': [[0, 0], [10, 0], [10, 10], [0, 10]]},
+            {'handle': 'T1', 'entity_type': 'MTEXT', 'layer': 'TEXT', 'text': '창고', 'insert': [5, 5]},
+        ],
+    }
+    (json_dir / 'sample.json').write_text(json.dumps(record, ensure_ascii=False), encoding='utf-8')
+    result = TextContainmentAnalyzer().analyze_json_dir(json_dir)
+    assert result['file_count'] == 1
+    assert result['relation_count'] == 1
+    assert result['stats']['brute_force_pairs'] == 1
+    assert result['stats']['candidate_checks'] == 1
+
+
+def test_line_loop_can_act_as_boundary():
+    entities = [
+        {'handle': 'L1', 'entity_type': 'LINE', 'layer': 'WALL', 'start': [0, 0], 'end': [10, 0]},
+        {'handle': 'L2', 'entity_type': 'LINE', 'layer': 'WALL', 'start': [10, 0], 'end': [10, 10]},
+        {'handle': 'L3', 'entity_type': 'LINE', 'layer': 'WALL', 'start': [10, 10], 'end': [0, 10]},
+        {'handle': 'L4', 'entity_type': 'LINE', 'layer': 'WALL', 'start': [0, 10], 'end': [0, 0]},
+        {'handle': 'T1', 'entity_type': 'TEXT', 'layer': 'TEXT', 'text': '선분실', 'insert': [5, 5]},
+    ]
+    result = TextContainmentAnalyzer().analyze_record({'file_id': 'line-loop', 'entities': entities})
+    assert result['relation_count'] == 1
+    assert result['relations'][0]['boundary_source_type'] == 'line_loop'
+    assert result['stats']['boundary_source_counts']['line_loop'] == 1
+
+
+def test_circle_can_act_as_boundary():
+    entities = [
+        {'handle': 'C1', 'entity_type': 'CIRCLE', 'layer': 'AREA', 'center': [0, 0], 'radius': 10},
+        {'handle': 'T1', 'entity_type': 'TEXT', 'layer': 'TEXT', 'text': '원형실', 'insert': [1, 1]},
+        {'handle': 'T2', 'entity_type': 'TEXT', 'layer': 'TEXT', 'text': '외부', 'insert': [20, 20]},
+    ]
+    result = TextContainmentAnalyzer(circle_segments=24).analyze_record({'file_id': 'circle', 'entities': entities})
+    assert result['relation_count'] == 1
+    assert result['relations'][0]['text'] == '원형실'
+    assert result['relations'][0]['boundary_source_type'] == 'circle_approx'
+    assert result['stats']['boundary_source_counts']['circle_approx'] == 1
+
+
+def test_uniform_grid_index_limits_candidates_for_sparse_polygons():
+    polygons: list[IndexedPolygon] = []
+    for index in range(100):
+        x = index * 20
+        poly = [Point2D(x, 0), Point2D(x + 5, 0), Point2D(x + 5, 5), Point2D(x, 5)]
+        bbox = bbox_from_points(poly)
+        assert bbox is not None
+        polygons.append(IndexedPolygon(index=index, entity={'handle': f'P{index}'}, polygon=poly, bbox=bbox))
+    grid = UniformGridIndex(polygons)
+    candidates = grid.candidates(Point2D(2, 2))
+    assert len(candidates) < 10
+    assert any(item.entity['handle'] == 'P0' for item in candidates)
+
+
+def test_text_containment_grid_reduces_large_sparse_pair_count():
+    entities = []
+    for index in range(100):
+        x = index * 20
+        entities.append({'handle': f'P{index}', 'entity_type': 'POLYLINE', 'layer': 'ROOM', 'closed': True, 'points': [[x, 0], [x + 5, 0], [x + 5, 5], [x, 5]]})
+        entities.append({'handle': f'T{index}', 'entity_type': 'TEXT', 'layer': 'TEXT', 'text': f'room {index}', 'insert': [x + 2, 2]})
+    result = TextContainmentAnalyzer().analyze_record({'file_id': 'large', 'entities': entities})
+    assert result['stats']['brute_force_pairs'] == 10000
+    assert result['stats']['candidate_checks'] < 1000
+    assert result['relation_count'] == 100

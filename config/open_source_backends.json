@@ -1,0 +1,61 @@
+{
+  "version": 1,
+  "backends": [
+    {
+      "id": "shapely",
+      "capability": "vector_geometry",
+      "python_import": "shapely",
+      "purpose": "GEOS-backed polygonize, line_merge, snap, STRtree, area and topology operations",
+      "required": false,
+      "planned_pr": "PR #5"
+    },
+    {
+      "id": "networkx",
+      "capability": "graph_analysis",
+      "python_import": "networkx",
+      "purpose": "area/text/block/leader adjacency and containment graph analysis",
+      "required": false,
+      "planned_pr": "PR #6"
+    },
+    {
+      "id": "duckdb",
+      "capability": "analytical_storage",
+      "python_import": "duckdb",
+      "purpose": "fast analytical SQL and future DuckDB Spatial exports",
+      "required": false,
+      "planned_pr": "PR #7"
+    },
+    {
+      "id": "opencv",
+      "capability": "raster_vision",
+      "python_import": "cv2",
+      "purpose": "PDF/image contour and connected-component extraction",
+      "required": false,
+      "planned_pr": "PR #8"
+    },
+    {
+      "id": "paddleocr",
+      "capability": "ocr_layout",
+      "python_import": "paddleocr",
+      "purpose": "OCR and PP-Structure-style table/layout extraction",
+      "required": false,
+      "planned_pr": "PR #8"
+    },
+    {
+      "id": "layoutparser",
+      "capability": "document_layout",
+      "python_import": "layoutparser",
+      "purpose": "document layout regions for tables/title blocks/notes",
+      "required": false,
+      "planned_pr": "PR #8"
+    },
+    {
+      "id": "ifcopenshell",
+      "capability": "bim_ifc",
+      "python_import": "ifcopenshell",
+      "purpose": "IFC/BIM object extraction and CAD-BIM bridge",
+      "required": false,
+      "planned_pr": "PR #9"
+    }
+  ]
+}
