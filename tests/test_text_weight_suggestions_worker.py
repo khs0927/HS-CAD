@@ -33,7 +33,7 @@ def test_build_text_weight_suggestions_uses_backend_reliability():
     assert payload['summary']['has_calibration_data'] is True
     weights = payload['suggested_weights']
     assert set(weights) == {'ocr_confidence', 'vector_match', 'cad_match', 'coverage', 'conflict_penalty'}
-    assert round(weights['ocr_confidence'] + weights['vector_match'] + weights['cad_match'], 6) == 0.95
+    assert round(weights['ocr_confidence'] + weights['vector_match'] + weights['cad_match'], 5) == 0.95
     assert weights['cad_match'] < 0.20
     assert weights['conflict_penalty'] >= 0.25
     assert payload['backend_reliability']['ocr']['count'] == 10

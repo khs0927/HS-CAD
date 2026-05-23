@@ -111,23 +111,23 @@ class TextRoleInferer:
         if is_title:
             role, confidence = 'titleblock_text', 0.78
             evidence.append('near drawing lower/right titleblock zone')
-        if is_table:
-            role, confidence = 'table_cell_text', max(confidence, 0.82)
+        elif is_table:
+            role, confidence = 'table_cell_text', 0.82
             evidence.append('inside dense orthogonal line grid/table-like area')
-        if is_leader:
-            role, confidence = 'leader_note', max(confidence, 0.74)
+        elif is_leader:
+            role, confidence = 'leader_note', 0.74
             evidence.append('near line endpoint/leader-like segment')
-        if _looks_like_dimension_or_spec(text):
-            role, confidence = 'dimension_or_spec_note', max(confidence, 0.7)
-            evidence.append('text matches dimension/spec pattern')
-        if containment and not is_table and not is_leader and not _looks_like_dimension_or_spec(text):
-            role, confidence = 'room_or_space_name', max(confidence, 0.68)
+        elif containment:
+            role, confidence = 'room_or_space_name', 0.68
             evidence.append(f'inside {len(containment)} boundary candidate(s)')
-        if _layer_suggests_table(layer):
-            role, confidence = 'table_cell_text', max(confidence, 0.7)
+        elif _looks_like_dimension_or_spec(text):
+            role, confidence = 'dimension_or_spec_note', 0.7
+            evidence.append('text matches dimension/spec pattern')
+        elif _layer_suggests_table(layer):
+            role, confidence = 'table_cell_text', 0.7
             evidence.append('layer suggests table/title/grid')
-        if _layer_suggests_leader(layer):
-            role, confidence = 'leader_note', max(confidence, 0.68)
+        elif _layer_suggests_leader(layer):
+            role, confidence = 'leader_note', 0.68
             evidence.append('layer suggests leader/note')
 
         return TextRole(

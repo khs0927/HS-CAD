@@ -4,7 +4,6 @@ from pathlib import Path
 from typing import Any
 
 from src.adapters.lisp_adapter import LispAdapter
-from src.app.logger import warn, success
 from src.integrations.xicad_paths import detect_xicad_profile, XiCADPathProfile
 
 
@@ -55,6 +54,7 @@ class XiCADAdapter:
         return str(path).replace('\\', '/').replace('"', '\\"')
 
     def add_support_paths(self) -> None:
+        from src.app.logger import success
         for path in self.support_paths():
             normalized = self._lisp_path(path)
             expr = (
@@ -68,6 +68,7 @@ class XiCADAdapter:
         success(f"XiCAD support paths queued: {len(self.support_paths())}")
 
     def load(self) -> Path | None:
+        from src.app.logger import warn, success
         if not self.exists():
             warn(f"XiCAD root not found or incomplete: {self.root}")
             return None

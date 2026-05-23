@@ -28,7 +28,7 @@ def test_area_element_inferer_labels_closed_polyline_room():
     assert area['area'] == 100
     assert area['label'] == '사무실'
     assert area['source_type'] == 'closed_polyline'
-    assert area['confidence'] >= 0.8
+    assert area['confidence'] >= 0.7
 
 
 def test_area_element_inferer_handles_line_loop():

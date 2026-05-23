@@ -28,6 +28,6 @@ def test_worker_runner_returns_unavailable_for_missing_worker():
 
 def test_worker_runner_returns_unavailable_for_planned_worker():
     runner = WorkerRunner(WorkerRegistry('config/worker_manifest.json'))
-    output = runner.run('duckdb_export', WorkerInput(worker_name='duckdb_export', task='run', workspace='outputs/sample'))
+    output = runner.run('bim_projection', WorkerInput(worker_name='bim_projection', task='run', workspace='outputs/sample'))
     assert output.status == 'unavailable'
     assert 'not implemented' in output.warnings[0]

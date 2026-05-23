@@ -159,25 +159,25 @@ class LayerSemanticInferer:
 
 
 NAME_PATTERNS = {
-    'wall': [r'\bWALL\b', r'\bWAL\b', r'벽', r'벽체'],
-    'door': [r'\bDOOR\b', r'\bDR\b', r'문'],
-    'window': [r'\bWIN\b', r'\bWINDOW\b', r'창'],
-    'column': [r'\bCOL\b', r'COLUMN', r'기둥'],
-    'beam': [r'\bBEAM\b', r'\bBM\b', r'보'],
-    'grid': [r'\bGRID\b', r'\bCEN\b', r'중심', r'축선'],
-    'dimension': [r'\bDIM\b', r'치수'],
-    'text_note': [r'\bTEXT\b', r'\bNOTE\b', r'주기', r'문자'],
-    'hatch_area': [r'\bHATCH\b', r'해치', r'마감'],
-    'furniture': [r'FURN', r'가구'],
-    'equipment': [r'EQPM', r'EQUIP', r'설비'],
-    'plumbing': [r'PLUMB', r'위생', r'배관'],
-    'electrical': [r'ELEC', r'전기'],
-    'fire': [r'FIRE', r'소방'],
+    'wall': [r'\bWALL\d*\b', r'\bWAL\d*\b', r'벽', r'벽체'],
+    'door': [r'\bDOOR\d*\b', r'\bDR\d*\b', r'문'],
+    'window': [r'\bWIN\d*\b', r'\bWINDOW\d*\b', r'창'],
+    'column': [r'\bCOL\d*\b', r'COLUMN\d*', r'기둥'],
+    'beam': [r'\bBEAM\d*\b', r'\bBM\d*\b', r'보'],
+    'grid': [r'\bGRID\d*\b', r'\bCEN\d*\b', r'중심', r'축선'],
+    'dimension': [r'\bDIM\d*\b', r'치수'],
+    'text_note': [r'\bTEXT\d*\b', r'\bNOTE\d*\b', r'주기', r'문자'],
+    'hatch_area': [r'\bHATCH\d*\b', r'해치', r'마감'],
+    'furniture': [r'FURN\d*', r'가구'],
+    'equipment': [r'EQPM\d*', r'EQUIP\d*', r'설비'],
+    'plumbing': [r'PLUMB\d*', r'위생', r'배관'],
+    'electrical': [r'ELEC\d*', r'전기'],
+    'fire': [r'FIRE\d*', r'소방'],
 }
 
 
 def _norm(value: str) -> str:
-    return value.upper().replace('-', '_').replace('$', '_')
+    return value.upper().replace('-', ' ').replace('_', ' ').replace('$', ' ')
 
 
 def _contains_any(value: str, needles: list[str]) -> bool:

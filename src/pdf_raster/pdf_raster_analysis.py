@@ -161,6 +161,7 @@ def build_vector_raster_iou_report(vector_objects: list[dict[str, Any]], contour
             'vector_pdf_bbox': vector_bbox,
             'contour_index': best.get('contour_index'),
             'contour_pdf_bbox': best.get('pdf_bbox'),
+            'contour_class': best.get('contour_class'),
             'iou': round(best_iou, 6),
         })
     object_type_summary: dict[str, dict[str, Any]] = {}

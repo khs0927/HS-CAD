@@ -3,7 +3,6 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any, Iterable
 
-from src.app import logger
 from src.cad_core.base import CADAdapter
 from src.utils.geometry import chunk_points
 
@@ -24,6 +23,7 @@ class ZWCADCOMAdapter(CADAdapter):
         self.warnings: list[dict[str, Any]] = []
 
     def connect(self) -> None:
+        from src.app import logger
         import comtypes.client  # type: ignore
         progids = ['ZWCAD.Application.2026', 'ZWCAD.Application.2024', 'ZWCAD.Application']
         
