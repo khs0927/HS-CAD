@@ -6,99 +6,68 @@
       "worker_type": "topology",
       "env_manager": "current_python",
       "python": "3.12",
-      "requirements": [
-        "shapely>=2.1"
-      ],
+      "requirements": ["shapely>=2.1"],
       "entry": "python -m src.workers.shapely_topology_worker",
       "timeout_sec": 300,
       "max_memory_mb": 4096,
       "gpu_required": false,
-      "outputs": [
-        "SHAPELY_TOPOLOGY.json",
-        "SHAPELY_AREA_MATCHES.json",
-        "SHAPELY_TOPOLOGY_AUDIT.json"
-      ]
+      "outputs": ["SHAPELY_TOPOLOGY.json", "SHAPELY_AREA_MATCHES.json", "SHAPELY_TOPOLOGY_AUDIT.json"]
     },
     "networkx_graph_audit": {
       "worker_type": "graph",
       "env_manager": "current_python",
       "python": "3.12",
-      "requirements": [
-        "networkx>=3.6"
-      ],
+      "requirements": ["networkx>=3.6"],
       "entry": "python -m src.workers.networkx_graph_audit_worker",
       "timeout_sec": 300,
       "max_memory_mb": 4096,
       "gpu_required": false,
-      "outputs": [
-        "GRAPH_AUDIT.json",
-        "GRAPH_AUDIT.md"
-      ]
+      "outputs": ["GRAPH_AUDIT.json", "GRAPH_AUDIT.md"]
     },
     "duckdb_export": {
       "worker_type": "analytics",
       "env_manager": "current_python",
       "python": "3.12",
-      "requirements": [
-        "duckdb>=1.5"
-      ],
+      "requirements": ["duckdb>=1.5"],
       "entry": "python -m src.workers.duckdb_export_worker",
       "timeout_sec": 600,
       "max_memory_mb": 8192,
       "gpu_required": false,
-      "outputs": [
-        "hscad_analysis.duckdb",
-        "analytics/files.parquet",
-        "analytics/layers.parquet",
-        "analytics/texts.parquet",
-        "analytics/areas.parquet",
-        "analytics/graph_nodes.parquet",
-        "analytics/graph_edges.parquet",
-        "analytics/cross_validation_results.parquet",
-        "analytics/graph_audit_findings.parquet",
-        "DUCKDB_EXPORT.json",
-        "DUCKDB_EXPORT_REPORT.md"
-      ]
+      "outputs": ["hscad_analysis.duckdb", "analytics/files.parquet", "analytics/entities.parquet", "analytics/layers.parquet", "analytics/texts.parquet", "analytics/areas.parquet", "analytics/graph_nodes.parquet", "analytics/graph_edges.parquet", "analytics/cross_validation_results.parquet", "analytics/graph_audit_findings.parquet", "DUCKDB_EXPORT.json", "DUCKDB_EXPORT_REPORT.md"]
+    },
+    "pdf_raster": {
+      "worker_type": "pdf_raster",
+      "env_manager": "current_python",
+      "python": "3.12",
+      "requirements": ["PyMuPDF", "pdfplumber", "opencv-python-headless", "numpy"],
+      "entry": "python -m src.workers.pdf_raster_worker",
+      "timeout_sec": 900,
+      "max_memory_mb": 16384,
+      "gpu_required": false,
+      "outputs": ["PDF_RASTER_ANALYSIS.json", "PDF_VECTOR_OBJECTS.json", "RASTER_CONTOURS.json", "PDF_RASTER_REPORT.md", "pdf_raster/rendered/*.png"]
     },
     "vision_layout": {
       "worker_type": "vision",
       "env_manager": "uv",
       "python": "3.12",
-      "requirements": [
-        "opencv-python-headless",
-        "paddleocr",
-        "torch",
-        "transformers"
-      ],
+      "requirements": ["paddleocr", "torch", "transformers"],
       "entry": "python -m src.workers.vision_layout_worker",
       "timeout_sec": 900,
       "max_memory_mb": 16384,
       "gpu_required": true,
-      "outputs": [
-        "RASTER_CONTOURS.json",
-        "OCR_TEXT_REGIONS.json",
-        "TABLE_REGIONS.json",
-        "TITLEBLOCK_REGIONS.json",
-        "VLM_BOUNDING_BOXES.json"
-      ],
-      "status": "planned_pr9_pr10"
+      "outputs": ["OCR_TEXT_REGIONS.json", "TABLE_REGIONS.json", "TITLEBLOCK_REGIONS.json", "VLM_BOUNDING_BOXES.json"],
+      "status": "planned_pr10_plus"
     },
     "bim_projection": {
       "worker_type": "bim",
       "env_manager": "uv",
       "python": "3.12",
-      "requirements": [
-        "ifcopenshell",
-        "numpy"
-      ],
+      "requirements": ["ifcopenshell", "numpy"],
       "entry": "python -m src.workers.bim_projection_worker",
       "timeout_sec": 600,
       "max_memory_mb": 8192,
       "gpu_required": false,
-      "outputs": [
-        "BIM_PROJECTION_PLAN.json",
-        "MODEL.ifc"
-      ],
+      "outputs": ["BIM_PROJECTION_PLAN.json", "MODEL.ifc"],
       "status": "planned_pr13"
     }
   }
