@@ -54,6 +54,7 @@ PDF_RASTER_ANALYSIS.json
 PDF_COORDINATE_CONTRACT.json
 PDF_VECTOR_OBJECTS.json
 RASTER_CONTOURS.json
+RASTER_CONTOUR_CLASSES.json
 PDF_VECTOR_RASTER_IOU.json
 PDF_RASTER_REPORT.md
 pdf_raster/rendered/*.png
@@ -122,6 +123,33 @@ pdf_origin
 pixel_origin
 ```
 
+## Contour classification
+
+PR #10 adds a first-pass raster contour classification postprocessor.
+
+Classes:
+
+```text
+line_candidate
+rectangle_candidate
+table_candidate
+text_blob_candidate
+shape_candidate
+noise_candidate
+```
+
+Each contour row receives:
+
+```text
+contour_class
+classification_confidence
+aspect_ratio
+extent
+relative_area
+```
+
+`RASTER_CONTOUR_CLASSES.json` contains the class summary, and `RASTER_CONTOURS.json` is postprocessed in-place to include class fields.
+
 ## Artifacts
 
 ### PDF_VECTOR_OBJECTS.json
@@ -157,6 +185,11 @@ source_image
 page_index
 page_contract_id
 contour_index
+contour_class
+classification_confidence
+aspect_ratio
+extent
+relative_area
 pixel_bbox
 pdf_bbox
 normalized_bbox
@@ -194,6 +227,7 @@ page_index
 page_contract_id
 vector_pdf_bbox
 contour_index
+contour_class
 contour_pdf_bbox
 iou
 ```
@@ -218,25 +252,24 @@ vector object count
 contour count
 render output count
 coordinate contract summary
+contour classification summary
 vector-raster IoU summary
 warnings
 ```
 
-## Vector-raster comparison helpers
+## Helpers
 
-The module includes helper functions:
+The modules include helper functions:
 
 ```text
 pixel_bbox_to_pdf_bbox
 normalize_bbox
 bbox_iou
 build_vector_raster_iou_report
-```
-
-These prepare the next step:
-
-```text
-PDF vector line/rect/text bbox ↔ OpenCV contour bbox IoU
+classify_contour
+classify_contour_rows
+contour_class_summary
+postprocess_raster_contours
 ```
 
 ## Safety
@@ -261,6 +294,7 @@ outputs\webhard_batch_100\PDF_RASTER_ANALYSIS.json
 outputs\webhard_batch_100\PDF_COORDINATE_CONTRACT.json
 outputs\webhard_batch_100\PDF_VECTOR_OBJECTS.json
 outputs\webhard_batch_100\RASTER_CONTOURS.json
+outputs\webhard_batch_100\RASTER_CONTOUR_CLASSES.json
 outputs\webhard_batch_100\PDF_VECTOR_RASTER_IOU.json
 outputs\webhard_batch_100\PDF_RASTER_REPORT.md
 outputs\webhard_batch_100\WORKER_RUNS.json
@@ -273,7 +307,6 @@ outputs\webhard_batch_100\worker_logs\pdf_raster.jsonl
 Future PRs can add:
 
 ```text
-line/rectangle/table contour classification
 OCR text region worker
 layout/table/titleblock detection
 IoU-based confidence fusion
