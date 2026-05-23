@@ -21,10 +21,12 @@ def hscad_cross_validate(
     text_path = workspace / 'TEXT_ROLE_INFERENCE.json'
     layer_path = workspace / 'LAYER_SEMANTICS.json'
     graph_path = workspace / 'SPATIAL_GRAPH.json'
+    graph_audit_path = workspace / 'GRAPH_AUDIT.json'
     shapely_path = workspace / 'SHAPELY_TOPOLOGY.json'
     shapely_match_path = workspace / 'SHAPELY_AREA_MATCHES.json'
     shapely_global_signal = _shapely_area_signal_index(shapely_path)
     shapely_match_signals = _shapely_area_match_index(shapely_match_path)
+    graph_audit_signals = _graph_audit_signals(graph_audit_path)
 
     if area_path.exists():
         areas = json.loads(area_path.read_text(encoding='utf-8'))
@@ -46,7 +48,9 @@ def hscad_cross_validate(
             results.append(scorer.score('layer_semantic', _layer_id(layer), _layer_signals(layer)))
     if graph_path.exists():
         graph = json.loads(graph_path.read_text(encoding='utf-8'))
-        results.append(scorer.score('graph_relationship', 'graph:workspace', _graph_signals(graph)))
+        signals = _graph_signals(graph)
+        signals.update(graph_audit_signals)
+        results.append(scorer.score('graph_relationship', 'graph:workspace', signals))
 
     payload = {
         'workspace': str(workspace),
@@ -58,6 +62,7 @@ def hscad_cross_validate(
             'text_roles': text_path.exists(),
             'layer_semantics': layer_path.exists(),
             'spatial_graph': graph_path.exists(),
+            'graph_audit': graph_audit_path.exists(),
             'shapely_topology': shapely_path.exists(),
             'shapely_area_matches': shapely_match_path.exists(),
         },
@@ -140,6 +145,22 @@ def _graph_signals(graph: dict) -> dict[str, dict]:
     if counts.get('LAYER_HAS_AREA', 0):
         signals['layer_has_area'] = {'score': 0.8, 'evidence': [f"LAYER_HAS_AREA={counts.get('LAYER_HAS_AREA')}"]}
     return signals
+
+
+def _graph_audit_signals(path: Path) -> dict[str, dict]:
+    if not path.exists():
+        return {}
+    payload = json.loads(path.read_text(encoding='utf-8'))
+    if payload.get('status') != 'ok':
+        return {}
+    metrics = payload.get('metrics') or {}
+    finding_rate = float(metrics.get('finding_rate') or 0.0)
+    score = round(max(0.0, min(1.0, 1.0 - finding_rate)), 6)
+    evidence = [f"finding_count={payload.get('finding_count')}", f"finding_rate={finding_rate}"]
+    return {
+        'networkx_component_check': {'score': score, 'evidence': evidence},
+        'orphan_detection': {'score': score, 'evidence': evidence},
+    }
 
 
 def _shapely_area_signal_index(path: Path) -> dict[str, object]:
