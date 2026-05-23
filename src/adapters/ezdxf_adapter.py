@@ -54,8 +54,10 @@ class EzDxfAdapter:
         }
 
     def _entity_to_dict(self, entity: Any) -> dict[str, Any]:
+        dxftype = entity.dxftype()
         row: dict[str, Any] = {
-            'dxftype': entity.dxftype(),
+            'dxftype': dxftype,
+            'entity_type': dxftype,
             'layer': getattr(entity.dxf, 'layer', None),
             'handle': getattr(entity.dxf, 'handle', None),
             'color': getattr(entity.dxf, 'color', None),
