@@ -37,6 +37,7 @@ def run_worker(worker_input: WorkerInput) -> WorkerOutput:
     artifacts = list(result.get('artifacts') or [])
     artifacts.append(str(workspace / 'PDF_RASTER_ANALYSIS.json'))
     score = 1.0 if status == 'ok' else 0.4
+    iou_summary = result.get('iou_summary') or {}
     return WorkerOutput(
         worker_name=WORKER_NAME,
         backend=BACKEND,
@@ -59,6 +60,11 @@ def run_worker(worker_input: WorkerInput) -> WorkerOutput:
                 'evidence': [f"contour_count={result.get('contour_count')}"],
             },
             {
+                'id': 'vector_raster_iou',
+                'score': float(iou_summary.get('avg_iou') or 0.0),
+                'evidence': [f"match_count={iou_summary.get('match_count')}", f"avg_iou={iou_summary.get('avg_iou')}"],
+            },
+            {
                 'id': 'pdf_raster_analysis_complete',
                 'score': score,
                 'evidence': [f"pdf_count={result.get('pdf_count')}", f"status={status}"],
@@ -71,6 +77,7 @@ def run_worker(worker_input: WorkerInput) -> WorkerOutput:
             'vector_object_count': result.get('vector_object_count'),
             'contour_count': result.get('contour_count'),
             'render_output_count': result.get('render_output_count'),
+            'iou_summary': iou_summary,
             'availability': result.get('availability'),
         },
         provenance=provenance,
