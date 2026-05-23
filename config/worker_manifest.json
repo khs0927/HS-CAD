@@ -123,6 +123,17 @@
       "gpu_required": false,
       "outputs": ["TEXT_CORRECTIONS_APPLIED.json", "TEXT_EVIDENCE_FUSION_CORRECTED.json", "TEXT_CORRECTIONS_APPLY_REPORT.md"]
     },
+    "text_calibration_report": {
+      "worker_type": "calibration",
+      "env_manager": "current_python",
+      "python": "3.12",
+      "requirements": [],
+      "entry": "python -m src.workers.text_calibration_report_worker",
+      "timeout_sec": 300,
+      "max_memory_mb": 4096,
+      "gpu_required": false,
+      "outputs": ["TEXT_CALIBRATION_REPORT.json", "TEXT_CALIBRATION_REPORT.md"]
+    },
     "vision_layout": {
       "worker_type": "vision",
       "env_manager": "uv",
