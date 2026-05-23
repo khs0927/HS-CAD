@@ -79,6 +79,17 @@
       "gpu_required": false,
       "outputs": ["OCR_CAD_TEXT_MATCHES.json", "OCR_CAD_TEXT_MATCH_REPORT.md"]
     },
+    "text_evidence_fusion": {
+      "worker_type": "evidence_fusion",
+      "env_manager": "current_python",
+      "python": "3.12",
+      "requirements": [],
+      "entry": "python -m src.workers.text_evidence_fusion_worker",
+      "timeout_sec": 300,
+      "max_memory_mb": 4096,
+      "gpu_required": false,
+      "outputs": ["TEXT_EVIDENCE_FUSION.json", "TEXT_EVIDENCE_FUSION_REPORT.md"]
+    },
     "vision_layout": {
       "worker_type": "vision",
       "env_manager": "uv",
