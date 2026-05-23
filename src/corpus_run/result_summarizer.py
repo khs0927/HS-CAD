@@ -15,6 +15,7 @@ class CorpusRunResultSummarizer:
         failures_dir = self.workspace / 'failures'
         tmp_dxf_dir = self.workspace / 'tmp' / 'dxf'
         webhard_log = self.workspace / 'webhard_sample_run.json'
+        batch_log = self.workspace / 'BATCH_RUN.json'
         quality_md = self.workspace / 'QUALITY_AUDIT.md'
         final_report = self.workspace / 'FINAL_REPORT.md'
 
@@ -26,11 +27,12 @@ class CorpusRunResultSummarizer:
         engines = Counter(str(r.get('engine') or 'unknown') for r in fileized_records)
         status_counts = Counter(str(r.get('status') or 'unknown') for r in fileized_records)
 
-        staged_dwgs = sorted(tmp_dxf_dir.rglob('*.dwg')) if tmp_dxf_dir.exists() else []
-        dxf_files = sorted(tmp_dxf_dir.rglob('*.dxf')) + sorted(tmp_dxf_dir.rglob('*.DXF')) if tmp_dxf_dir.exists() else []
+        staged_dwgs = self._find_files_case_insensitive(tmp_dxf_dir, '.dwg')
+        dxf_files = self._find_files_case_insensitive(tmp_dxf_dir, '.dxf')
 
         checklist = {
             'webhard_sample_run_json_exists': webhard_log.exists(),
+            'batch_run_json_exists': batch_log.exists(),
             'quality_audit_md_exists': quality_md.exists(),
             'final_report_md_exists': final_report.exists(),
             'staged_dwg_count': len(staged_dwgs),
@@ -40,7 +42,7 @@ class CorpusRunResultSummarizer:
             'external_converter_warning_count': self._warning_count(dwg_records, 'external_converter_used'),
             'zwcad_fallback_attempted_when_oda_unavailable_or_failed': self._fallback_observed(dwg_records, failure_records),
             'failure_error_types': dict(failure_error_types),
-            'all_pipeline_stages_completed_without_abort': self._all_stages_completed(webhard_log),
+            'all_pipeline_stages_completed_without_abort': self._all_stages_completed(webhard_log, batch_log),
         }
 
         return {
@@ -62,6 +64,7 @@ class CorpusRunResultSummarizer:
             'staged_dwg_samples': [str(p) for p in staged_dwgs[:20]],
             'files': {
                 'webhard_sample_run_json': str(webhard_log),
+                'batch_run_json': str(batch_log),
                 'quality_audit_md': str(quality_md),
                 'final_report_md': str(final_report),
                 'fileized_dir': str(fileized_dir),
@@ -90,6 +93,7 @@ class CorpusRunResultSummarizer:
             '',
             '## Checklist',
             f'1. `webhard_sample_run.json`: {self._yes(checklist["webhard_sample_run_json_exists"])}',
+            f'1b. `BATCH_RUN.json`: {self._yes(checklist["batch_run_json_exists"])}',
             f'2. `QUALITY_AUDIT.md`: {self._yes(checklist["quality_audit_md_exists"])}',
             f'3. `FINAL_REPORT.md`: {self._yes(checklist["final_report_md_exists"])}',
             f'4. Staged DWG count under `tmp/dxf`: {checklist["staged_dwg_count"]}',
@@ -129,6 +133,17 @@ class CorpusRunResultSummarizer:
         return rows
 
     @staticmethod
+    def _find_files_case_insensitive(directory: Path, suffix: str) -> list[Path]:
+        if not directory.exists():
+            return []
+        normalized_suffix = suffix.lower()
+        found: dict[str, Path] = {}
+        for path in directory.rglob('*'):
+            if path.is_file() and path.suffix.lower() == normalized_suffix:
+                found[str(path.resolve()).casefold()] = path
+        return sorted(found.values(), key=lambda item: str(item).casefold())
+
+    @staticmethod
     def _error_type(record: dict[str, Any]) -> str:
         errors = record.get('errors') or []
         if errors and isinstance(errors, list):
@@ -151,17 +166,24 @@ class CorpusRunResultSummarizer:
         return any('sendcommand' in json.dumps(r, ensure_ascii=False).lower() for r in failure_records)
 
     @staticmethod
-    def _all_stages_completed(webhard_log: Path) -> bool:
-        if not webhard_log.exists():
-            return False
-        try:
-            payload = json.loads(webhard_log.read_text(encoding='utf-8'))
-        except Exception:
-            return False
-        stages = payload.get('stages') or []
-        names = [item.get('stage') for item in stages if item.get('status') == 'ok']
-        required = ['prepare', 'fileize', 'validate', 'index', 'learn', 'quality', 'report']
-        return all(name in names for name in required)
+    def _all_stages_completed(webhard_log: Path, batch_log: Path | None = None) -> bool:
+        if webhard_log.exists():
+            try:
+                payload = json.loads(webhard_log.read_text(encoding='utf-8'))
+                stages = payload.get('stages') or []
+                names = [item.get('stage') for item in stages if item.get('status') == 'ok']
+                required = ['prepare', 'fileize', 'validate', 'index', 'learn', 'quality', 'report']
+                return all(name in names for name in required)
+            except Exception:
+                return False
+        if batch_log and batch_log.exists():
+            try:
+                payload = json.loads(batch_log.read_text(encoding='utf-8'))
+                final = payload.get('finalize') or {}
+                return all(name in final for name in ['validate', 'index', 'learn', 'quality', 'report'])
+            except Exception:
+                return False
+        return False
 
     @staticmethod
     def _failure_sample(record: dict[str, Any]) -> dict[str, str]:
