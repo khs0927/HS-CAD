@@ -10,3 +10,4 @@ import src.app.fusion_matrix_cli  # noqa: F401,E402
 import src.app.cross_validate_cli  # noqa: F401,E402
 import src.app.shapely_topology_cli  # noqa: F401,E402
 import src.app.shapely_area_match_cli  # noqa: F401,E402
+import src.app.shapely_topology_audit_cli  # noqa: F401,E402
