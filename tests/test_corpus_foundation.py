@@ -11,9 +11,11 @@ from src.corpus.learner import CorpusLearner
 from src.corpus.quality import CorpusQualityAuditor
 from src.corpus.query import CorpusQuery
 from src.corpus.report_builder import CorpusReportBuilder
+from src.corpus.schema import FileizedDrawingRecord
 from src.corpus.validator import FileizedRecordValidator
 from src.corpus_run.manifest import scan_manifest, write_manifest
 from src.corpus_run.pipeline_runner import CorpusPipelineRunner
+from src.fileizers.base import FileizedRecordWriter
 from src.fileizers.dxf_ezdxf_fileizer import DXFEzdxfFileizer
 from src.fileizers.image_fileizer import ImageMetadataFileizer
 from src.fileizers.pdf_pymupdf_fileizer import PDFPyMuPDFFileizer
@@ -83,6 +85,31 @@ def test_image_fileizer_records_metadata(tmp_path: Path) -> None:
     assert record.status == 'ok'
     assert record.metadata['width'] == 120
     assert record.metadata['height'] == 80
+
+
+def test_writer_removes_stale_failure_when_record_later_succeeds(tmp_path: Path) -> None:
+    writer = FileizedRecordWriter(tmp_path)
+    failed = FileizedDrawingRecord.failed(
+        file_id='sample',
+        source_path='sample.dwg',
+        relative_path='sample.dwg',
+        extension='.dwg',
+        engine='zwcad_saveas_dxf_ezdxf',
+        reason='first attempt failed',
+    )
+    writer.write(failed)
+    assert (tmp_path / 'failures' / 'sample.json').exists()
+
+    ok = FileizedDrawingRecord(
+        file_id='sample',
+        source_path='sample.dwg',
+        relative_path='sample.dwg',
+        extension='.dwg',
+        status='ok',
+        engine='zwcad_saveas_dxf_ezdxf',
+    )
+    writer.write(ok)
+    assert not (tmp_path / 'failures' / 'sample.json').exists()
 
 
 def test_index_query_report_from_record(tmp_path: Path) -> None:

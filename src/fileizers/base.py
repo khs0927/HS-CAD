@@ -45,10 +45,12 @@ class FileizedRecordWriter:
         md_path.write_text(self.to_markdown(record), encoding='utf-8')
 
         paths = {'json': str(json_path), 'markdown': str(md_path)}
+        failure_path = self.failure_dir / f'{record.file_id}.json'
         if record.status != 'ok':
-            failure_path = self.failure_dir / f'{record.file_id}.json'
             failure_path.write_text(json.dumps(record.to_dict(), ensure_ascii=False, indent=2), encoding='utf-8')
             paths['failure'] = str(failure_path)
+        elif failure_path.exists():
+            failure_path.unlink()
         return paths
 
     @staticmethod
