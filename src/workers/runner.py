@@ -4,16 +4,19 @@ import json
 import subprocess
 import sys
 import tempfile
+import time
 from pathlib import Path
 from typing import Any
 
 from src.workers.contracts import WorkerInput, WorkerOutput
 from src.workers.registry import WorkerRegistry, WorkerSpec
+from src.workers.run_log import append_worker_run
 
 
 class WorkerRunner:
-    def __init__(self, registry: WorkerRegistry | None = None):
+    def __init__(self, registry: WorkerRegistry | None = None, *, record_runs: bool = True):
         self.registry = registry or WorkerRegistry()
+        self.record_runs = record_runs
 
     def command_for(self, spec: WorkerSpec, input_path: str | Path) -> list[str]:
         entry = spec.entry.strip()
@@ -26,21 +29,28 @@ class WorkerRunner:
         raise ValueError(f'Unsupported env_manager for worker {spec.name}: {spec.env_manager}')
 
     def run(self, worker_name: str, worker_input: WorkerInput) -> WorkerOutput:
+        started = time.perf_counter()
+        command: list[str] = []
+        returncode: int | None = None
         spec = self.registry.get(worker_name)
         if spec is None:
-            return WorkerOutput.error(
+            output = WorkerOutput.error(
                 worker_name=worker_name,
                 backend=worker_name,
                 message=f'worker not found in manifest: {worker_name}',
                 status='unavailable',
             )
+            self._record(worker_input, output, command=command, duration_ms=_elapsed_ms(started), returncode=returncode)
+            return output
         if spec.status != 'implemented':
-            return WorkerOutput.error(
+            output = WorkerOutput.error(
                 worker_name=worker_name,
                 backend=worker_name,
                 message=f'worker is not implemented yet: {spec.status}',
                 status='unavailable',
             )
+            self._record(worker_input, output, command=command, duration_ms=_elapsed_ms(started), returncode=returncode)
+            return output
         with tempfile.TemporaryDirectory() as temp_dir:
             input_path = Path(temp_dir) / 'worker_input.json'
             worker_input.write_json(input_path)
@@ -55,20 +65,27 @@ class WorkerRunner:
                     timeout=spec.timeout_sec,
                     check=False,
                 )
+                returncode = result.returncode
             except subprocess.TimeoutExpired:
-                return WorkerOutput.error(
+                output = WorkerOutput.error(
                     worker_name=worker_name,
                     backend=worker_name,
                     message=f'worker timed out after {spec.timeout_sec}s',
                     status='timeout',
                 )
+                self._record(worker_input, output, command=command, duration_ms=_elapsed_ms(started), returncode=returncode)
+                return output
             if result.returncode != 0:
-                return WorkerOutput.error(
+                output = WorkerOutput.error(
                     worker_name=worker_name,
                     backend=worker_name,
                     message=(result.stderr or result.stdout or f'worker exited with {result.returncode}')[:4000],
                 )
-            return _parse_worker_stdout(worker_name, result.stdout)
+                self._record(worker_input, output, command=command, duration_ms=_elapsed_ms(started), returncode=returncode)
+                return output
+            output = _parse_worker_stdout(worker_name, result.stdout)
+            self._record(worker_input, output, command=command, duration_ms=_elapsed_ms(started), returncode=returncode)
+            return output
 
     def dry_run(self, worker_name: str, worker_input: WorkerInput) -> dict[str, Any]:
         spec = self.registry.get(worker_name)
@@ -82,6 +99,26 @@ class WorkerRunner:
                 'command': self.command_for(spec, input_path),
                 'input': worker_input.model_dump(),
             }
+
+    def _record(
+        self,
+        worker_input: WorkerInput,
+        worker_output: WorkerOutput,
+        *,
+        command: list[str],
+        duration_ms: float | None,
+        returncode: int | None,
+    ) -> None:
+        if not self.record_runs:
+            return
+        append_worker_run(
+            workspace=worker_input.workspace,
+            worker_input=worker_input,
+            worker_output=worker_output,
+            command=command,
+            duration_ms=duration_ms,
+            returncode=returncode,
+        )
 
 
 def _python_entry_command(entry: str, input_path: str | Path) -> list[str]:
@@ -124,3 +161,7 @@ def _parse_worker_stdout(worker_name: str, stdout: str) -> WorkerOutput:
                 message='worker stdout was not valid JSON',
             )
     return WorkerOutput.model_validate(payload)
+
+
+def _elapsed_ms(started: float) -> float:
+    return (time.perf_counter() - started) * 1000.0
