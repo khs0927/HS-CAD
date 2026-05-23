@@ -73,9 +73,40 @@ WORKER_AUDIT.json
 worker_logs\networkx_graph_audit.jsonl
 ```
 
+## Graph quality metrics
+
+`GRAPH_AUDIT.json` now includes graph quality metrics usable by confidence scoring.
+
+```text
+finding_rate
+weighted_issue_score
+weighted_finding_rate
+graph_penalty
+graph_quality_score
+severity_counts
+finding_type_counts
+```
+
+Severity weights:
+
+```text
+low    = 0.25
+medium = 0.60
+high   = 1.00
+```
+
+Graph penalty formula:
+
+```text
+graph_penalty = min(0.35, weighted_finding_rate * 0.25)
+graph_quality_score = 1.0 - graph_penalty
+```
+
+`GRAPH_AUDIT.md` reports these metrics for human review.
+
 ## Cross-validation integration
 
-`hscad-cross-validate` now reads:
+`hscad-cross-validate` reads:
 
 ```text
 GRAPH_AUDIT.json
@@ -88,7 +119,7 @@ networkx_component_check
 orphan_detection
 ```
 
-These signals are scored from graph finding rate:
+These signals prefer `graph_quality_score` when present. If missing, they fallback to:
 
 ```text
 score = 1.0 - finding_rate
