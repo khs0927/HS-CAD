@@ -85,6 +85,11 @@ class DXFEzdxfFileizer(DrawingFileizer):
             except Exception:
                 item['points'] = []
             item['closed'] = bool(getattr(entity, 'is_closed', False))
+        elif etype == 'HATCH':
+            item['pattern_name'] = getattr(entity.dxf, 'pattern_name', None)
+            item['solid_fill'] = getattr(entity.dxf, 'solid_fill', None)
+            item['boundary_path_count'] = len(getattr(entity, 'paths', []) or [])
+            item['boundary_hint'] = True
         elif 'DIMENSION' in etype:
             item['entity_type'] = 'DIMENSION'
             item['text_override'] = getattr(entity.dxf, 'text', None)
