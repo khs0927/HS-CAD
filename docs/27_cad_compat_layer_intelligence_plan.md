@@ -70,10 +70,11 @@ block name samples
 dimension/hatch/block signals
 ```
 
-Output:
+Outputs:
 
 ```text
 LAYER_SEMANTICS.json
+LAYER_SEMANTICS.md
 ```
 
 Example:
@@ -86,6 +87,26 @@ Example:
   "evidence": ["layer name matches wall", "linework-heavy layer"]
 }
 ```
+
+## Layer-aware graph integration
+
+The spatial graph should include layer nodes so later analysis can understand how layer semantics affected text and area inference.
+
+Expected graph node kind:
+
+```text
+layer
+```
+
+Expected graph edge relations:
+
+```text
+HAS_LAYER
+LAYER_HAS_TEXT
+LAYER_HAS_AREA
+```
+
+This keeps the graph contract generic while making layer semantics available to future NetworkX, DuckDB, and Graph RAG workflows.
 
 ## Company-specific calibration TODO
 
@@ -118,9 +139,10 @@ LAYER_MAPPING_REVIEW.md
 Run:
 
 ```powershell
-python -m pytest tests/test_cad_platforms.py tests/test_layer_semantic_inferer.py -q
+python -m pytest tests/test_cad_platforms.py tests/test_layer_semantic_inferer.py tests/test_spatial_graph_exporter.py -q
 python -X utf8 -m src.main hscad-cad-platforms --out-json outputs\CAD_PLATFORMS.json
 python -X utf8 -m src.main hscad-layer-semantics --workspace outputs\webhard_batch_100
+python -X utf8 -m src.main hscad-spatial-graph --workspace outputs\webhard_batch_100
 ```
 
 Expected files:
@@ -128,6 +150,8 @@ Expected files:
 ```text
 outputs\CAD_PLATFORMS.json
 outputs\webhard_batch_100\LAYER_SEMANTICS.json
+outputs\webhard_batch_100\LAYER_SEMANTICS.md
+outputs\webhard_batch_100\SPATIAL_GRAPH.json
 ```
 
 ## Follow-up development
@@ -137,7 +161,7 @@ After this foundation:
 1. Validate generic layer inference on Webhard sample batches.
 2. Tune generic layer confidence rules without company-specific hardcoding.
 3. Add layer-aware spatial/text/area inference.
-4. Add layer-aware graph export.
+4. Add deeper layer-aware graph export.
 5. Add company-specific profile learner only after enough real corpus results are reviewed.
 6. Only after analysis stabilizes: mutation plan / drawing automation.
 
