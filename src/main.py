@@ -23,6 +23,14 @@ import src.app.webhard_batch_cli  # noqa: F401,E402
 import src.app.converters_cli  # noqa: F401,E402
 import src.app.run_summary_cli  # noqa: F401,E402
 import src.app.spatial_cli  # noqa: F401,E402
+import src.app.text_roles_cli  # noqa: F401,E402
+import src.app.open_backends_cli  # noqa: F401,E402
+import src.app.spatial_graph_cli  # noqa: F401,E402
+import src.app.cad_platforms_cli  # noqa: F401,E402
+import src.app.layer_analysis_cli  # noqa: F401,E402
+import src.app.layer_audit_cli  # noqa: F401,E402
+import src.app.fusion_matrix_cli  # noqa: F401,E402
+import src.app.cross_validate_cli  # noqa: F401,E402
 
 if __name__ == '__main__':
     app()
