@@ -12,6 +12,7 @@ PR #4 adds foundation modules for:
 - boundary extraction from closed polylines, circles, connected line loops, ARC+LINE segment loops, and HATCH boundary paths
 - text role inference
 - area element inference
+- spatial relationship graph JSON export
 - optional spatial backend abstraction with pure-Python fallback and Shapely adapter
 - optional open-source backend registry and discovery
 
@@ -23,6 +24,7 @@ SPATIAL_CONTAINMENT.md
 TEXT_ROLE_INFERENCE.json
 TEXT_ROLE_INFERENCE.md
 AREA_ELEMENTS.json
+SPATIAL_GRAPH.json
 OPEN_BACKENDS.json, if requested
 ```
 
@@ -46,7 +48,7 @@ git reset --hard FETCH_HEAD
 python -m pip install -r requirements.txt
 python -m pip install pytest
 
-python -m pytest tests/test_spatial_containment.py tests/test_spatial_backends.py tests/test_text_roles.py tests/test_area_elements.py tests/test_open_source_backends.py -q
+python -m pytest tests/test_spatial_containment.py tests/test_spatial_backends.py tests/test_text_roles.py tests/test_area_elements.py tests/test_spatial_graph_exporter.py tests/test_open_source_backends.py -q
 ```
 
 Expected:
@@ -63,12 +65,13 @@ Run:
 python -X utf8 -m src.main hscad-spatial-containment --help
 python -X utf8 -m src.main hscad-text-roles --help
 python -X utf8 -m src.main hscad-area-elements --help
+python -X utf8 -m src.main hscad-spatial-graph --help
 python -X utf8 -m src.main hscad-open-backends --help
 ```
 
 Expected:
 
-- all four commands are registered
+- all five commands are registered
 - help text renders without Unicode/stdout errors
 
 ### 3. Optional backend discovery check
@@ -133,6 +136,7 @@ $env:PYTHONIOENCODING="utf-8"
 python -X utf8 -m src.main hscad-spatial-containment --workspace "outputs\webhard_batch_100"
 python -X utf8 -m src.main hscad-text-roles --workspace "outputs\webhard_batch_100"
 python -X utf8 -m src.main hscad-area-elements --workspace "outputs\webhard_batch_100"
+python -X utf8 -m src.main hscad-spatial-graph --workspace "outputs\webhard_batch_100"
 ```
 
 Expected files:
@@ -143,9 +147,52 @@ outputs\webhard_batch_100\SPATIAL_CONTAINMENT.md
 outputs\webhard_batch_100\TEXT_ROLE_INFERENCE.json
 outputs\webhard_batch_100\TEXT_ROLE_INFERENCE.md
 outputs\webhard_batch_100\AREA_ELEMENTS.json
+outputs\webhard_batch_100\SPATIAL_GRAPH.json
 ```
 
-### 6. Performance check
+### 6. Graph quality check
+
+Inspect:
+
+```text
+SPATIAL_GRAPH.json
+```
+
+Expected top-level fields:
+
+```text
+node_count
+edge_count
+node_kind_counts
+edge_relation_counts
+nodes
+edges
+```
+
+Expected node kinds:
+
+```text
+file
+text
+area
+```
+
+Expected edge relations:
+
+```text
+HAS_TEXT
+HAS_AREA
+HAS_LABEL
+```
+
+Manual review required:
+
+- each file should have a file node
+- text nodes should include text role/confidence/evidence
+- area nodes should include area/source_type/confidence/evidence
+- HAS_LABEL edges should connect area nodes to text nodes when labels are found
+
+### 7. Performance check
 
 Inspect `SPATIAL_CONTAINMENT.json` stats:
 
@@ -161,7 +208,7 @@ Expected:
 - execution should complete without leaving stuck Python processes
 - if it is still slow, tune `--max-cells-per-polygon`, `--tolerance`, or add Shapely STRtree backend in a follow-up PR
 
-### 7. Boundary source quality check
+### 8. Boundary source quality check
 
 Inspect:
 
@@ -186,7 +233,7 @@ Manual review required:
 - HATCH boundaries should produce plausible area candidates
 - ARC+LINE segment loops should not create incorrect faces from unrelated arcs
 
-### 8. Text role quality check
+### 9. Text role quality check
 
 Inspect:
 
@@ -212,7 +259,7 @@ Manual review required:
 - table/title block text should not be used as room labels
 - dimension/spec text should not be selected as area labels unless no better label exists
 
-### 9. Area element quality check
+### 10. Area element quality check
 
 Inspect:
 
@@ -252,11 +299,11 @@ Recommended follow-up PRs:
 - use `snap` / `line_merge` for slightly broken linework
 - keep current pure-Python fallback
 
-### PR #6: Graph backend
+### PR #6: Graph backend expansion
 
 - optional NetworkX backend
-- export nodes/edges JSON even if NetworkX is not installed
-- area element -> label -> leader note -> block/equipment -> adjacent area relationships
+- keep graph JSON contract stable
+- add adjacency/touches/near/block/equipment relationships
 
 ### PR #7: DuckDB analytical backend
 
@@ -290,6 +337,7 @@ PR #4 can be merged as a foundation if:
 - unit tests pass
 - CLI commands are registered
 - outputs are generated on the 100-file workspace
+- graph export generates stable nodes/edges JSON
 - backend discovery runs without requiring optional packages
 - pure and auto spatial backend modes work
 - performance is acceptable on `outputs\webhard_batch_100`
