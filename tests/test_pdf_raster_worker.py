@@ -6,6 +6,7 @@ from pathlib import Path
 from src.pdf_raster.pdf_raster_analysis import (
     PDFRasterAnalyzer,
     bbox_iou,
+    build_vector_raster_iou_report,
     normalize_bbox,
     pixel_bbox_to_pdf_bbox,
     write_pdf_raster_analysis,
@@ -39,6 +40,51 @@ def test_bbox_helpers_for_future_vector_raster_iou():
     assert bbox_iou([0, 0, 1, 1], [2, 2, 3, 3]) == 0.0
 
 
+def test_vector_raster_iou_report_matches_same_page_contract():
+    vector_objects = [
+        {
+            'source_pdf': 'sample.pdf',
+            'page_index': 0,
+            'page_contract_id': 'sample:p1',
+            'object_type': 'rect',
+            'text': None,
+            'pdf_bbox': [0, 0, 10, 10],
+        },
+        {
+            'source_pdf': 'sample.pdf',
+            'page_index': 0,
+            'page_contract_id': 'sample:p1',
+            'object_type': 'char',
+            'text': 'A',
+            'pdf_bbox': [100, 100, 110, 110],
+        },
+    ]
+    contours = [
+        {
+            'source_pdf': 'sample.pdf',
+            'page_index': 0,
+            'page_contract_id': 'sample:p1',
+            'contour_index': 7,
+            'pdf_bbox': [0, 0, 10, 10],
+        },
+        {
+            'source_pdf': 'sample.pdf',
+            'page_index': 1,
+            'page_contract_id': 'sample:p2',
+            'contour_index': 8,
+            'pdf_bbox': [100, 100, 110, 110],
+        },
+    ]
+    report = build_vector_raster_iou_report(vector_objects, contours)
+    assert report['summary']['vector_count'] == 2
+    assert report['summary']['contour_count'] == 2
+    assert report['summary']['match_count'] == 1
+    assert report['summary']['unmatched_vector_count'] == 1
+    assert report['summary']['avg_iou'] == 1.0
+    assert report['matches'][0]['contour_index'] == 7
+    assert report['summary']['object_type_summary']['rect']['match_count'] == 1
+
+
 def test_pdf_raster_no_pdf_workspace_writes_artifacts(tmp_path: Path):
     result = write_pdf_raster_analysis(tmp_path, dpi=72, max_pages=1)
     assert result['status'] in {'ok', 'warning'}
@@ -47,12 +93,17 @@ def test_pdf_raster_no_pdf_workspace_writes_artifacts(tmp_path: Path):
     assert (tmp_path / 'PDF_COORDINATE_CONTRACT.json').exists()
     assert (tmp_path / 'PDF_VECTOR_OBJECTS.json').exists()
     assert (tmp_path / 'RASTER_CONTOURS.json').exists()
+    assert (tmp_path / 'PDF_VECTOR_RASTER_IOU.json').exists()
     assert (tmp_path / 'PDF_RASTER_REPORT.md').exists()
     payload = json.loads((tmp_path / 'PDF_RASTER_ANALYSIS.json').read_text(encoding='utf-8'))
     assert payload['provenance']['backend'] == 'pdf_raster_analysis'
+    assert 'iou_summary' in payload
     contract = json.loads((tmp_path / 'PDF_COORDINATE_CONTRACT.json').read_text(encoding='utf-8'))
     assert contract['contract_version'] == '1.0'
     assert 'pdf_points_top_left' in contract['coordinate_spaces']
+    iou = json.loads((tmp_path / 'PDF_VECTOR_RASTER_IOU.json').read_text(encoding='utf-8'))
+    assert iou['summary']['vector_count'] == 0
+    assert iou['summary']['match_count'] == 0
 
 
 def test_pdf_raster_worker_registered_and_plans_command():
@@ -61,6 +112,7 @@ def test_pdf_raster_worker_registered_and_plans_command():
     plan = runner.dry_run('pdf_raster', worker_input)
     assert plan['worker']['name'] == 'pdf_raster'
     assert 'PDF_COORDINATE_CONTRACT.json' in plan['worker']['outputs']
+    assert 'PDF_VECTOR_RASTER_IOU.json' in plan['worker']['outputs']
     assert 'src.workers.pdf_raster_worker' in plan['command']
 
 
@@ -78,4 +130,6 @@ def test_pdf_raster_worker_run_no_pdf_does_not_crash(tmp_path: Path):
     assert (tmp_path / 'WORKER_AUDIT.json').exists()
     assert any(path.endswith('PDF_RASTER_ANALYSIS.json') for path in output.artifacts)
     assert any(path.endswith('PDF_COORDINATE_CONTRACT.json') for path in output.artifacts)
+    assert any(path.endswith('PDF_VECTOR_RASTER_IOU.json') for path in output.artifacts)
     assert 'page_contract_count' in output.metrics
+    assert 'iou_summary' in output.metrics
