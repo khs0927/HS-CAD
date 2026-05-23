@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
 from src.corpus.evidence import EvidencePackageBuilder
@@ -37,17 +38,31 @@ class CorpusPipelineRunner:
         path = write_manifest(entries, self.manifest_path)
         return {'manifest': path, 'file_count': len(entries)}
 
-    def fileize(self, *, limit: int = 0) -> dict:
+    def fileize(self, *, limit: int = 0, offset: int = 0, skip_existing: bool = False) -> dict:
         entries = read_manifest(self.manifest_path)
+        total_manifest_entries = len(entries)
+        if offset:
+            entries = entries[offset:]
         if limit:
             entries = entries[:limit]
-        counts = {'ok': 0, 'failed': 0, 'unavailable': 0}
+        counts = {'ok': 0, 'failed': 0, 'unavailable': 0, 'skipped': 0}
         outputs: list[dict[str, str]] = []
         for entry in entries:
+            if skip_existing and self._is_existing_success(entry.file_id):
+                counts['skipped'] += 1
+                outputs.append({'skipped': str(self.workspace / 'fileized' / 'json' / f'{entry.file_id}.json')})
+                continue
             record = self._fileize_entry(entry)
             outputs.append(self.writer.write(record))
             counts[record.status] += 1
-        return {'processed': len(entries), **counts, 'outputs': outputs}
+        return {
+            'processed': len(entries),
+            'offset': offset,
+            'limit': limit,
+            'total_manifest_entries': total_manifest_entries,
+            **counts,
+            'outputs': outputs,
+        }
 
     def index(self) -> dict:
         json_dir = self.workspace / 'fileized' / 'json'
@@ -91,3 +106,13 @@ class CorpusPipelineRunner:
             engine='none',
             reason=f'No fileizer registered for extension {entry.extension}',
         )
+
+    def _is_existing_success(self, file_id: str) -> bool:
+        path = self.workspace / 'fileized' / 'json' / f'{file_id}.json'
+        if not path.exists():
+            return False
+        try:
+            payload = json.loads(path.read_text(encoding='utf-8'))
+            return payload.get('status') == 'ok'
+        except Exception:
+            return False
