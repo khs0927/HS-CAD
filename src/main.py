@@ -6,6 +6,9 @@ ensure_utf8_stdio()
 
 from src.app.cli import app
 
+# Import CLI extension modules here, not from src.app.__init__.
+# This keeps package imports side-effect free while preserving command registration
+# for `python -m src.main ...`.
 import src.app.intelligent_cli  # noqa: F401,E402
 import src.app.orchestrated_cli  # noqa: F401,E402
 import src.app.xicad_stage2_cli  # noqa: F401,E402
@@ -23,6 +26,18 @@ import src.app.webhard_batch_cli  # noqa: F401,E402
 import src.app.converters_cli  # noqa: F401,E402
 import src.app.run_summary_cli  # noqa: F401,E402
 import src.app.spatial_cli  # noqa: F401,E402
+import src.app.text_roles_cli  # noqa: F401,E402
+import src.app.open_backends_cli  # noqa: F401,E402
+import src.app.spatial_graph_cli  # noqa: F401,E402
+import src.app.cad_platforms_cli  # noqa: F401,E402
+import src.app.layer_analysis_cli  # noqa: F401,E402
+import src.app.layer_audit_cli  # noqa: F401,E402
+import src.app.fusion_matrix_cli  # noqa: F401,E402
+import src.app.cross_validate_cli  # noqa: F401,E402
+import src.app.shapely_topology_cli  # noqa: F401,E402
+import src.app.shapely_area_match_cli  # noqa: F401,E402
+import src.app.shapely_topology_audit_cli  # noqa: F401,E402
+import src.app.worker_cli  # noqa: F401,E402
 
 if __name__ == '__main__':
     app()
