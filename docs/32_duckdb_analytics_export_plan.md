@@ -65,7 +65,7 @@ CROSS_VALIDATION.json
 GRAPH_AUDIT.json
 ```
 
-Missing files are allowed. Missing artifacts become empty tables.
+Missing files are allowed. Missing artifacts become empty tables with stable schemas.
 
 ## Outputs
 
@@ -74,6 +74,7 @@ DUCKDB_EXPORT.json
 DUCKDB_EXPORT_REPORT.md
 hscad_analysis.duckdb
 analytics/files.parquet
+analytics/entities.parquet
 analytics/layers.parquet
 analytics/texts.parquet
 analytics/areas.parquet
@@ -92,6 +93,7 @@ Initial tables:
 
 ```text
 files
+entities
 layers
 texts
 areas
@@ -101,10 +103,11 @@ cross_validation_results
 graph_audit_findings
 ```
 
+`entities` is now a first-class table. TEXT/MTEXT entities can also populate `texts` as a fallback when `TEXT_ROLE_INFERENCE.json` is not available.
+
 Future tables:
 
 ```text
-entities
 shapely_polygons
 shapely_area_matches
 topology_audit_findings
@@ -120,6 +123,7 @@ Initial report includes:
 ```text
 file_count
 total_entities
+entity_rows
 area_count
 text_count
 graph_node_count
@@ -127,8 +131,15 @@ graph_edge_count
 low_confidence_cross_validation
 graph_audit_findings
 layer_semantic_counts
+entity_type_counts
 area_source_type_counts
 ```
+
+## Provenance
+
+`DUCKDB_EXPORT.json` includes top-level `provenance`.
+
+The worker output also uses the same provenance payload so `WORKER_AUDIT.json` can verify provenance presence.
 
 ## Spatial capability
 
@@ -174,4 +185,4 @@ outputs\webhard_batch_100\worker_logs\duckdb_export.jsonl
 
 ## Safety
 
-DuckDB is optional. If DuckDB is missing, the worker returns structured `unavailable` and still writes `DUCKDB_EXPORT_REPORT.md`. No drawing files are modified.
+DuckDB is optional. If DuckDB is missing, the worker returns structured `unavailable` and still writes `DUCKDB_EXPORT_REPORT.md` and `DUCKDB_EXPORT.json`. No drawing files are modified.
