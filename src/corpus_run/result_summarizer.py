@@ -26,8 +26,8 @@ class CorpusRunResultSummarizer:
         engines = Counter(str(r.get('engine') or 'unknown') for r in fileized_records)
         status_counts = Counter(str(r.get('status') or 'unknown') for r in fileized_records)
 
-        staged_dwgs = sorted(tmp_dxf_dir.rglob('*.dwg')) if tmp_dxf_dir.exists() else []
-        dxf_files = sorted(tmp_dxf_dir.rglob('*.dxf')) + sorted(tmp_dxf_dir.rglob('*.DXF')) if tmp_dxf_dir.exists() else []
+        staged_dwgs = sorted(list(set(tmp_dxf_dir.rglob('*.dwg')) | set(tmp_dxf_dir.rglob('*.DWG')))) if tmp_dxf_dir.exists() else []
+        dxf_files = sorted(list(set(tmp_dxf_dir.rglob('*.dxf')) | set(tmp_dxf_dir.rglob('*.DXF')))) if tmp_dxf_dir.exists() else []
 
         checklist = {
             'webhard_sample_run_json_exists': webhard_log.exists(),
