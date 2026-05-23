@@ -30,6 +30,7 @@ The current priority is not drawing automation. The current priority is reliable
 6. Layer intelligence must start with vendor-neutral signals.
 7. Company-specific layer profiles must remain a calibration TODO until real Webhard drawings are analyzed.
 8. Do not hardcode one office's layer standard as global truth.
+9. Open-source integrations must feed cross-validation signals instead of replacing HS-CAD core results directly.
 
 ## Analysis path priority
 
@@ -77,17 +78,6 @@ LAYER_SEMANTICS.json
 LAYER_SEMANTICS.md
 ```
 
-Example:
-
-```json
-{
-  "layer": "A-WALL",
-  "predicted_semantic": "wall",
-  "confidence": 0.75,
-  "evidence": ["layer name matches wall", "linework-heavy layer"]
-}
-```
-
 ## Layer audit
 
 Layer audit does not create company-specific mappings. It only finds layers that need review before calibration.
@@ -109,8 +99,6 @@ text_layer_with_linework
 semantic_without_evidence
 ```
 
-This creates a practical review list for later Webhard corpus calibration.
-
 ## Layer-aware graph integration
 
 The spatial graph should include layer nodes so later analysis can understand how layer semantics affected text and area inference.
@@ -129,7 +117,66 @@ LAYER_HAS_TEXT
 LAYER_HAS_AREA
 ```
 
-This keeps the graph contract generic while making layer semantics available to future NetworkX, DuckDB, and Graph RAG workflows.
+## Open-source fusion matrix
+
+The fusion matrix defines which open-source or HS-CAD backend provides which evidence signal.
+
+Run:
+
+```powershell
+python -X utf8 -m src.main hscad-fusion-matrix --out-json outputs\FUSION_MATRIX.json
+```
+
+Expected output:
+
+```text
+outputs\FUSION_MATRIX.json
+```
+
+The matrix currently covers:
+
+```text
+area_element
+text_role
+layer_semantic
+graph_relationship
+```
+
+The matrix separates implemented signals from planned or deferred signals. This prevents incomplete future backends such as Shapely polygonize, OpenCV contours, OCR layout, NetworkX graph audits, and DuckDB analytics from being treated as production-ready.
+
+## Cross-validation
+
+Cross-validation reads analysis artifacts and scores how much implemented evidence supports each result.
+
+Run after generating analysis artifacts:
+
+```powershell
+python -X utf8 -m src.main hscad-cross-validate --workspace outputs\webhard_batch_100
+```
+
+Expected output:
+
+```text
+outputs\webhard_batch_100\CROSS_VALIDATION.json
+```
+
+Cross-validation currently reads:
+
+```text
+AREA_ELEMENTS.json
+TEXT_ROLE_INFERENCE.json
+LAYER_SEMANTICS.json
+SPATIAL_GRAPH.json
+```
+
+It produces:
+
+```text
+agreement_score
+confidence
+signals
+warnings
+```
 
 ## Company-specific calibration TODO
 
@@ -162,22 +209,26 @@ LAYER_MAPPING_REVIEW.md
 Run:
 
 ```powershell
-python -m pytest tests/test_cad_platforms.py tests/test_layer_semantic_inferer.py tests/test_layer_audit.py tests/test_spatial_graph_exporter.py -q
+python -m pytest tests/test_cad_platforms.py tests/test_layer_semantic_inferer.py tests/test_layer_audit.py tests/test_spatial_graph_exporter.py tests/test_fusion_matrix.py tests/test_cross_validation.py -q
 python -X utf8 -m src.main hscad-cad-platforms --out-json outputs\CAD_PLATFORMS.json
 python -X utf8 -m src.main hscad-layer-semantics --workspace outputs\webhard_batch_100
 python -X utf8 -m src.main hscad-layer-audit --workspace outputs\webhard_batch_100
 python -X utf8 -m src.main hscad-spatial-graph --workspace outputs\webhard_batch_100
+python -X utf8 -m src.main hscad-fusion-matrix --out-json outputs\FUSION_MATRIX.json
+python -X utf8 -m src.main hscad-cross-validate --workspace outputs\webhard_batch_100
 ```
 
 Expected files:
 
 ```text
 outputs\CAD_PLATFORMS.json
+outputs\FUSION_MATRIX.json
 outputs\webhard_batch_100\LAYER_SEMANTICS.json
 outputs\webhard_batch_100\LAYER_SEMANTICS.md
 outputs\webhard_batch_100\LAYER_AUDIT.json
 outputs\webhard_batch_100\LAYER_AUDIT.md
 outputs\webhard_batch_100\SPATIAL_GRAPH.json
+outputs\webhard_batch_100\CROSS_VALIDATION.json
 ```
 
 ## Follow-up development
@@ -187,10 +238,12 @@ After this foundation:
 1. Validate generic layer inference on Webhard sample batches.
 2. Review LAYER_AUDIT findings before adding any company-specific overrides.
 3. Tune generic layer confidence rules without company-specific hardcoding.
-4. Add layer-aware spatial/text/area inference.
-5. Add deeper layer-aware graph export.
-6. Add company-specific profile learner only after enough real corpus results are reviewed.
-7. Only after analysis stabilizes: mutation plan / drawing automation.
+4. Expand Shapely polygonize / STRtree backend as cross-validation signals.
+5. Expand NetworkX graph audit backend as cross-validation signals.
+6. Add DuckDB analytical exports for corpus-scale cross-checking.
+7. Add OpenCV/PDF/image and OCR/layout backends as cross-validation signals.
+8. Add company-specific profile learner only after enough real corpus results are reviewed.
+9. Only after analysis stabilizes: mutation plan / drawing automation.
 
 ## Deferred TODO
 
