@@ -22,15 +22,20 @@ def hscad_cross_validate(
     layer_path = workspace / 'LAYER_SEMANTICS.json'
     graph_path = workspace / 'SPATIAL_GRAPH.json'
     shapely_path = workspace / 'SHAPELY_TOPOLOGY.json'
-    shapely_signals = _shapely_area_signal_index(shapely_path)
+    shapely_match_path = workspace / 'SHAPELY_AREA_MATCHES.json'
+    shapely_global_signal = _shapely_area_signal_index(shapely_path)
+    shapely_match_signals = _shapely_area_match_index(shapely_match_path)
 
     if area_path.exists():
         areas = json.loads(area_path.read_text(encoding='utf-8'))
         for area in areas.get('areas') or []:
+            target_id = _area_id(area)
             signals = _area_signals(area)
-            if shapely_signals:
-                signals['shapely_polygonize_area'] = shapely_signals
-            results.append(scorer.score('area_element', _area_id(area), signals))
+            if target_id in shapely_match_signals:
+                signals['shapely_polygonize_area'] = shapely_match_signals[target_id]
+            elif shapely_global_signal:
+                signals['shapely_polygonize_area'] = shapely_global_signal
+            results.append(scorer.score('area_element', target_id, signals))
     if text_path.exists():
         texts = json.loads(text_path.read_text(encoding='utf-8'))
         for role in texts.get('roles') or []:
@@ -54,6 +59,7 @@ def hscad_cross_validate(
             'layer_semantics': layer_path.exists(),
             'spatial_graph': graph_path.exists(),
             'shapely_topology': shapely_path.exists(),
+            'shapely_area_matches': shapely_match_path.exists(),
         },
         'results': results,
     }
@@ -147,3 +153,19 @@ def _shapely_area_signal_index(path: Path) -> dict[str, object]:
         'score': 0.8,
         'evidence': [f'shapely polygonize produced {polygon_count} polygon candidate(s)'],
     }
+
+
+def _shapely_area_match_index(path: Path) -> dict[str, dict]:
+    if not path.exists():
+        return {}
+    payload = json.loads(path.read_text(encoding='utf-8'))
+    rows: dict[str, dict] = {}
+    for match in payload.get('matches') or []:
+        target_id = match.get('target_id')
+        if not target_id:
+            continue
+        rows[str(target_id)] = {
+            'score': float(match.get('score') or 0.0),
+            'evidence': match.get('evidence') or [],
+        }
+    return rows
