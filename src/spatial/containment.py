@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Any
 
 from src.spatial.geometry import Point2D, as_point2d, bbox_from_points
+from src.spatial.grid_index import IndexedPolygon, UniformGridIndex
 from src.spatial.polygon import point_in_polygon
 
 
@@ -25,32 +26,46 @@ class TextInPolygonRelation:
 
 
 class TextContainmentAnalyzer:
+    def __init__(self, *, max_cells_per_polygon: int = 256):
+        self.max_cells_per_polygon = max_cells_per_polygon
+
     def analyze_record(self, record: dict[str, Any]) -> dict[str, Any]:
         file_id = str(record.get('file_id') or '')
         entities = record.get('entities') or []
-        polygons = self._closed_polygons(entities)
+        polygons = self._indexed_polygons(entities)
         texts = self._texts(entities)
+        index = UniformGridIndex(polygons, max_cells_per_polygon=self.max_cells_per_polygon)
         relations: list[TextInPolygonRelation] = []
+        candidate_checks = 0
+        brute_force_pairs = len(polygons) * len(texts)
         for text_entity, point in texts:
-            for polygon_entity, polygon in polygons:
-                bbox = bbox_from_points(polygon)
-                if bbox is not None and not bbox.contains(point):
+            for indexed_polygon in index.candidates(point):
+                if not indexed_polygon.bbox.contains(point):
                     continue
-                if point_in_polygon(point, polygon):
+                candidate_checks += 1
+                if point_in_polygon(point, indexed_polygon.polygon):
                     relations.append(TextInPolygonRelation(
                         file_id=file_id,
                         text=str(text_entity.get('text') or ''),
                         text_handle=text_entity.get('handle'),
                         text_layer=text_entity.get('layer'),
                         text_insert=[point.x, point.y],
-                        polygon_handle=polygon_entity.get('handle'),
-                        polygon_layer=polygon_entity.get('layer'),
-                        polygon_point_count=len(polygon),
+                        polygon_handle=indexed_polygon.entity.get('handle'),
+                        polygon_layer=indexed_polygon.entity.get('layer'),
+                        polygon_point_count=len(indexed_polygon.polygon),
                     ))
+        stats = index.stats()
+        stats.update({
+            'text_count': len(texts),
+            'brute_force_pairs': brute_force_pairs,
+            'candidate_checks': candidate_checks,
+            'reduction_ratio': round((1 - candidate_checks / brute_force_pairs) * 100, 4) if brute_force_pairs else 0,
+        })
         return {
             'file_id': file_id,
             'relative_path': record.get('relative_path'),
             'relation_count': len(relations),
+            'stats': stats,
             'relations': [relation.to_dict() for relation in relations],
         }
 
@@ -65,19 +80,33 @@ class TextContainmentAnalyzer:
         base = Path(json_dir)
         results = [self.analyze_json_file(path) for path in sorted(base.glob('*.json'))]
         relations = []
+        stats = {
+            'file_count': len(results),
+            'polygon_count': 0,
+            'text_count': 0,
+            'brute_force_pairs': 0,
+            'candidate_checks': 0,
+        }
         for result in results:
             relations.extend(result.get('relations') or [])
+            file_stats = result.get('stats') or {}
+            for key in stats:
+                if key == 'file_count':
+                    continue
+                stats[key] += int(file_stats.get(key) or 0)
+        stats['reduction_ratio'] = round((1 - stats['candidate_checks'] / stats['brute_force_pairs']) * 100, 4) if stats['brute_force_pairs'] else 0
         return {
             'json_dir': str(base),
             'file_count': len(results),
             'relation_count': len(relations),
+            'stats': stats,
             'files': results,
             'relations': relations,
         }
 
     @staticmethod
-    def _closed_polygons(entities: list[dict[str, Any]]) -> list[tuple[dict[str, Any], list[Point2D]]]:
-        rows: list[tuple[dict[str, Any], list[Point2D]]] = []
+    def _indexed_polygons(entities: list[dict[str, Any]]) -> list[IndexedPolygon]:
+        rows: list[IndexedPolygon] = []
         for entity in entities:
             entity_type = str(entity.get('entity_type') or '').upper()
             if entity_type != 'POLYLINE':
@@ -86,8 +115,9 @@ class TextContainmentAnalyzer:
                 continue
             points = [as_point2d(point) for point in (entity.get('points') or [])]
             polygon = [point for point in points if point is not None]
-            if len(polygon) >= 3:
-                rows.append((entity, polygon))
+            bbox = bbox_from_points(polygon)
+            if len(polygon) >= 3 and bbox is not None:
+                rows.append(IndexedPolygon(index=len(rows), entity=entity, polygon=polygon, bbox=bbox))
         return rows
 
     @staticmethod
