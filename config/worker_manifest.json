@@ -101,6 +101,17 @@
       "gpu_required": false,
       "outputs": ["TEXT_REVIEW_QUEUE.json", "TEXT_REVIEW_QUEUE.md"]
     },
+    "text_corrections_export": {
+      "worker_type": "review_queue",
+      "env_manager": "current_python",
+      "python": "3.12",
+      "requirements": [],
+      "entry": "python -m src.workers.text_corrections_export_worker",
+      "timeout_sec": 300,
+      "max_memory_mb": 4096,
+      "gpu_required": false,
+      "outputs": ["TEXT_REVIEW_QUEUE.csv", "TEXT_CORRECTIONS_TEMPLATE.json", "TEXT_CORRECTIONS_TEMPLATE.csv", "TEXT_CORRECTIONS_EXPORT_REPORT.md"]
+    },
     "vision_layout": {
       "worker_type": "vision",
       "env_manager": "uv",
