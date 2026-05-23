@@ -19,7 +19,7 @@ def run_worker(worker_input: WorkerInput) -> WorkerOutput:
     fallback_provenance = build_provenance(
         workspace=workspace,
         backend=BACKEND,
-        algorithm='pymupdf_render_pdfplumber_vector_opencv_contours',
+        algorithm='pymupdf_render_pdfplumber_vector_opencv_contours_with_coordinate_contract',
         source_artifacts=worker_input.input_artifacts,
         worker_name=WORKER_NAME,
     )
@@ -44,24 +44,30 @@ def run_worker(worker_input: WorkerInput) -> WorkerOutput:
         artifacts=artifacts,
         signals=[
             {
+                'id': 'pdf_coordinate_contract',
+                'score': 1.0 if result.get('page_contract_count') else 0.0,
+                'evidence': [f"page_contract_count={result.get('page_contract_count')}"],
+            },
+            {
                 'id': 'pdf_vector_objects',
                 'score': 1.0 if result.get('vector_object_count') else 0.0,
-                'evidence': [f"vector_object_count={result.get('vector_object_count')}"]
+                'evidence': [f"vector_object_count={result.get('vector_object_count')}"],
             },
             {
                 'id': 'raster_contours',
                 'score': 1.0 if result.get('contour_count') else 0.0,
-                'evidence': [f"contour_count={result.get('contour_count')}"]
+                'evidence': [f"contour_count={result.get('contour_count')}"],
             },
             {
                 'id': 'pdf_raster_analysis_complete',
                 'score': score,
-                'evidence': [f"pdf_count={result.get('pdf_count')}", f"status={status}"]
-            }
+                'evidence': [f"pdf_count={result.get('pdf_count')}", f"status={status}"],
+            },
         ],
         warnings=list(result.get('warnings') or []),
         metrics={
             'pdf_count': result.get('pdf_count'),
+            'page_contract_count': result.get('page_contract_count'),
             'vector_object_count': result.get('vector_object_count'),
             'contour_count': result.get('contour_count'),
             'render_output_count': result.get('render_output_count'),
