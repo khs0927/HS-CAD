@@ -30,12 +30,7 @@ class AreaElement:
 
 
 class AreaElementInferer:
-    """Infer room/area-like elements from fileized vector CAD JSON.
-
-    This is a deterministic foundation. It handles explicit and reconstructed
-    boundaries first, and records evidence so optional Shapely/vision/LLM
-    backends can improve the result later.
-    """
+    """Infer room/area-like elements from fileized vector CAD JSON."""
 
     def __init__(self, *, tolerance: float = 1e-3, circle_segments: int = 64, min_area: float = 1.0):
         self.tolerance = tolerance
@@ -138,10 +133,14 @@ class AreaElementInferer:
     @staticmethod
     def _confidence(candidate: BoundaryCandidate, label_role: dict[str, Any] | None, area: float) -> float:
         score = 0.45
-        if candidate.source_type == 'closed_polyline':
+        if candidate.source_type == 'hatch_boundary':
+            score += 0.3
+        elif candidate.source_type == 'closed_polyline':
             score += 0.25
         elif candidate.source_type == 'line_loop':
             score += 0.18
+        elif candidate.source_type == 'segment_loop':
+            score += 0.16
         elif candidate.source_type == 'circle_approx':
             score += 0.12
         if label_role and label_role.get('role') == 'room_or_space_name':
