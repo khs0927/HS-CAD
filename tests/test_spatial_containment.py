@@ -5,6 +5,7 @@ from pathlib import Path
 
 from src.spatial.containment import TextContainmentAnalyzer
 from src.spatial.geometry import Point2D, bbox_from_points
+from src.spatial.grid_index import IndexedPolygon, UniformGridIndex
 from src.spatial.polygon import point_in_polygon
 
 
@@ -55,6 +56,7 @@ def test_text_containment_analyzer_record():
     assert result['relation_count'] == 1
     assert result['relations'][0]['text'] == '사무실'
     assert result['relations'][0]['polygon_handle'] == 'P1'
+    assert result['stats']['candidate_checks'] < result['stats']['brute_force_pairs']
 
 
 def test_text_containment_analyzer_json_dir(tmp_path: Path):
@@ -72,3 +74,31 @@ def test_text_containment_analyzer_json_dir(tmp_path: Path):
     result = TextContainmentAnalyzer().analyze_json_dir(json_dir)
     assert result['file_count'] == 1
     assert result['relation_count'] == 1
+    assert result['stats']['brute_force_pairs'] == 1
+    assert result['stats']['candidate_checks'] == 1
+
+
+def test_uniform_grid_index_limits_candidates_for_sparse_polygons():
+    polygons: list[IndexedPolygon] = []
+    for index in range(100):
+        x = index * 20
+        poly = [Point2D(x, 0), Point2D(x + 5, 0), Point2D(x + 5, 5), Point2D(x, 5)]
+        bbox = bbox_from_points(poly)
+        assert bbox is not None
+        polygons.append(IndexedPolygon(index=index, entity={'handle': f'P{index}'}, polygon=poly, bbox=bbox))
+    grid = UniformGridIndex(polygons)
+    candidates = grid.candidates(Point2D(2, 2))
+    assert len(candidates) < 10
+    assert any(item.entity['handle'] == 'P0' for item in candidates)
+
+
+def test_text_containment_grid_reduces_large_sparse_pair_count():
+    entities = []
+    for index in range(100):
+        x = index * 20
+        entities.append({'handle': f'P{index}', 'entity_type': 'POLYLINE', 'layer': 'ROOM', 'closed': True, 'points': [[x, 0], [x + 5, 0], [x + 5, 5], [x, 5]]})
+        entities.append({'handle': f'T{index}', 'entity_type': 'TEXT', 'layer': 'TEXT', 'text': f'room {index}', 'insert': [x + 2, 2]})
+    result = TextContainmentAnalyzer().analyze_record({'file_id': 'large', 'entities': entities})
+    assert result['stats']['brute_force_pairs'] == 10000
+    assert result['stats']['candidate_checks'] < 1000
+    assert result['relation_count'] == 100
