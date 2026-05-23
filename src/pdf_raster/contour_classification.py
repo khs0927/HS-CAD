@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import json
+from pathlib import Path
 from typing import Any
 
 
@@ -44,12 +46,61 @@ def classify_contour(*, width: float, height: float, area: float, image_area: fl
     }
 
 
+def classify_contour_rows(contours: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    rows: list[dict[str, Any]] = []
+    for contour in contours:
+        row = dict(contour)
+        classification = classify_contour(
+            width=float(row.get('width') or 0.0),
+            height=float(row.get('height') or 0.0),
+            area=float(row.get('area') or 0.0),
+            image_area=_image_area(row),
+        )
+        row.update(classification)
+        rows.append(row)
+    return rows
+
+
 def contour_class_summary(contours: list[dict[str, Any]]) -> dict[str, Any]:
     counts: dict[str, int] = {}
+    confidence_sum: dict[str, float] = {}
     for contour in contours:
         contour_class = str(contour.get('contour_class') or 'unknown')
         counts[contour_class] = counts.get(contour_class, 0) + 1
+        confidence_sum[contour_class] = confidence_sum.get(contour_class, 0.0) + float(contour.get('classification_confidence') or 0.0)
+    avg_confidence = {
+        key: round(confidence_sum.get(key, 0.0) / count, 6) if count else 0.0
+        for key, count in counts.items()
+    }
     return {
         'total': len(contours),
         'class_counts': counts,
+        'avg_confidence_by_class': avg_confidence,
     }
+
+
+def postprocess_raster_contours(workspace: str | Path) -> dict[str, Any]:
+    base = Path(workspace)
+    path = base / 'RASTER_CONTOURS.json'
+    if not path.exists():
+        return {'status': 'missing', 'reason': f'not found: {path}', 'summary': {'total': 0, 'class_counts': {}}}
+    payload = json.loads(path.read_text(encoding='utf-8'))
+    contours = classify_contour_rows(payload.get('contours') or [])
+    summary = contour_class_summary(contours)
+    payload['contours'] = contours
+    payload['class_summary'] = summary
+    path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding='utf-8')
+    out = {
+        'backend': 'pdf_raster_contour_classification',
+        'status': 'ok',
+        'summary': summary,
+        'artifact': str(path),
+    }
+    (base / 'RASTER_CONTOUR_CLASSES.json').write_text(json.dumps(out, ensure_ascii=False, indent=2), encoding='utf-8')
+    return out
+
+
+def _image_area(row: dict[str, Any]) -> float | None:
+    pixel_bbox = row.get('pixel_bbox') or []
+    # We do not always know full image size at postprocess time. Keep this optional.
+    return None if not pixel_bbox else None
