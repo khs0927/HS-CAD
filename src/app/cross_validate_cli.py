@@ -154,9 +154,19 @@ def _graph_audit_signals(path: Path) -> dict[str, dict]:
     if payload.get('status') != 'ok':
         return {}
     metrics = payload.get('metrics') or {}
-    finding_rate = float(metrics.get('finding_rate') or 0.0)
-    score = round(max(0.0, min(1.0, 1.0 - finding_rate)), 6)
-    evidence = [f"finding_count={payload.get('finding_count')}", f"finding_rate={finding_rate}"]
+    graph_quality_score = metrics.get('graph_quality_score')
+    if graph_quality_score is not None:
+        score = float(graph_quality_score or 0.0)
+    else:
+        finding_rate = float(metrics.get('finding_rate') or 0.0)
+        score = round(max(0.0, min(1.0, 1.0 - finding_rate)), 6)
+    evidence = [
+        f"finding_count={payload.get('finding_count')}",
+        f"finding_rate={metrics.get('finding_rate')}",
+        f"weighted_finding_rate={metrics.get('weighted_finding_rate')}",
+        f"graph_penalty={metrics.get('graph_penalty')}",
+        f"graph_quality_score={metrics.get('graph_quality_score')}",
+    ]
     return {
         'networkx_component_check': {'score': score, 'evidence': evidence},
         'orphan_detection': {'score': score, 'evidence': evidence},
