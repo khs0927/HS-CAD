@@ -17,6 +17,14 @@ def _polygon_area(points: list[list[float]]) -> float:
     return fabs(area) / 2.0
 
 
+def _bbox_list(points: list[list[float]]) -> list[float]:
+    """Return [min_x, min_y, max_x, max_y] from project bbox helper output."""
+    bbox = bbox_from_points(points)
+    if not bbox:
+        return []
+    return [float(bbox['min_x']), float(bbox['min_y']), float(bbox['max_x']), float(bbox['max_y'])]
+
+
 def _bbox_area(bbox: list[float]) -> float:
     if len(bbox) != 4:
         return 0.0
@@ -51,7 +59,7 @@ def closed_polyline_candidates(objects: list[dict[str, Any]]) -> list[dict[str, 
     for item in objects:
         points = item.get('points') or []
         if item.get('closed') is True and points:
-            bbox = bbox_from_points(points)
+            bbox = _bbox_list(points)
             area = _polygon_area(points)
             row = dict(item)
             row['bbox'] = bbox
