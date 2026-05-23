@@ -4,7 +4,7 @@ import importlib.util
 import json
 from pathlib import Path
 
-from src.analytics.duckdb_export import DuckDBAnalyticsExporter, collect_workspace_rows, write_duckdb_export
+from src.analytics.duckdb_export import DuckDBAnalyticsExporter, _load_workspace_tables, write_duckdb_export
 from src.workers.contracts import WorkerInput
 from src.workers.runner import WorkerRunner
 
@@ -37,11 +37,12 @@ def _sample_workspace(tmp_path: Path) -> Path:
     return tmp_path
 
 
-def test_collect_workspace_rows(tmp_path: Path):
+def test_load_workspace_tables_includes_entities_and_artifacts(tmp_path: Path):
     workspace = _sample_workspace(tmp_path)
-    rows = collect_workspace_rows(workspace)
+    rows = _load_workspace_tables(workspace)
     assert len(rows['files']) == 1
     assert len(rows['entities']) == 2
+    assert rows['entities'][0]['payload_json']
     assert len(rows['texts']) == 1
     assert len(rows['areas']) == 1
     assert len(rows['graph_nodes']) == 2
@@ -54,10 +55,11 @@ def test_duckdb_export_never_crashes_without_duckdb(tmp_path: Path):
     workspace = _sample_workspace(tmp_path)
     result = DuckDBAnalyticsExporter().export_workspace(workspace)
     assert result['status'] in {'ok', 'unavailable'}
+    assert 'provenance' in result
     assert (workspace / 'DUCKDB_EXPORT_REPORT.md').exists()
 
 
-def test_duckdb_export_creates_database_when_available(tmp_path: Path):
+def test_duckdb_export_creates_database_parquet_and_provenance_when_available(tmp_path: Path):
     if importlib.util.find_spec('duckdb') is None:
         return
     workspace = _sample_workspace(tmp_path)
@@ -66,6 +68,12 @@ def test_duckdb_export_creates_database_when_available(tmp_path: Path):
     assert (workspace / 'hscad_analysis.duckdb').exists()
     assert (workspace / 'DUCKDB_EXPORT.json').exists()
     assert result['table_counts']['files'] == 1
+    assert result['table_counts']['entities'] == 2
+    assert result['sql_reports']['entity_rows'] == 2
+    assert result['provenance']['backend'] == 'duckdb_export'
+    for table_name, parquet_path in result['parquet_paths'].items():
+        assert table_name
+        assert Path(parquet_path).exists()
 
 
 def test_duckdb_worker_registered_and_plans_command():
