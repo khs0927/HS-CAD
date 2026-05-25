@@ -1,0 +1,24 @@
+{
+  "name": "hs_cad_evidence_bridge_schema_v6",
+  "base_branch": "feature/main-code-pipeline-overlay",
+  "target_branch": "feature/evidence-bridge-schema-golden",
+  "purpose": "Schema-aware legacy artifact bridge plus golden runtime fixtures",
+  "files": [
+    "src/hscad/connectors/artifact_schema.py",
+    "src/hscad/connectors/legacy_artifact_adapter.py",
+    "scripts/inspect_legacy_artifact_schema.py",
+    "tests/fixtures/legacy_schema_artifact_factory.py",
+    "tests/test_legacy_artifact_schema_v6.py",
+    "docs/36_evidence_bridge_schema_mapping_report.md",
+    "CODEX_MAIN_CODE_V6_PROMPT.md",
+    "LOCAL_AGENT_PROMPT_V6.md",
+    ".github/workflows/evidence-bridge-schema-ci.yml"
+  ],
+  "safety": {
+    "cad_execution": false,
+    "zwcad_com": false,
+    "sendcommand": false,
+    "xicad_alias": false,
+    "original_dwg_mutation": false
+  }
+}
