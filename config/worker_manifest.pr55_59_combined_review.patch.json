@@ -1,0 +1,25 @@
+{
+  "workers_to_add": [
+    {
+      "name": "pr55_59_combined_review",
+      "module": "src.workers.pr55_59_combined_review_worker",
+      "callable": "run_worker",
+      "status": "implemented",
+      "description": "Generates combined human review package for PR #55~#59. Does not merge main.",
+      "outputs": [
+        "PR55_59_COMBINED_REVIEW_PACKAGE.json",
+        "PR55_59_COMBINED_REVIEW_PACKAGE.md",
+        "PR55_59_OPERATOR_REVIEW_PROMPT.md",
+        "PR55_59_POST_MERGE_MANUAL_COMMANDS.json"
+      ],
+      "safety": {
+        "this_package_merges_main": false,
+        "auto_merge_allowed": false,
+        "cad_execution_allowed": false,
+        "zwcad_com_sendcommand_allowed": false,
+        "final_live_runner_implemented": false
+      }
+    }
+  ],
+  "note": "Human review package only."
+}
