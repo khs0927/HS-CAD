@@ -2,20 +2,22 @@
 
 ## PR82 status
 
-PR82 is a draft review PR from branch `pr-38-all-generated-megapacks`.
+PR82 is a generated megapack review PR from branch `pr-38-all-generated-megapacks`.
 
 It must not be merged directly.
 
-Observed PR82 metadata:
+Observed PR82 metadata on 2026-05-26:
 
 - PR: #82
 - State: open
-- Draft: true
-- Mergeable: false
+- Draft: false
+- Mergeable: CONFLICTING
 - Base: main
 - Head: pr-38-all-generated-megapacks
 - Changed files reported by GitHub: 244
 - Commits reported by GitHub: 250
+
+The PR being ready for review does not make it merge-ready. Missing checks mean no CI result was reported, not that the branch passed CI.
 
 ## Merge refusal statement
 
@@ -54,6 +56,8 @@ The prompt referenced `src/adapters/zwcad_com_adapter.py` as high risk. It must 
 ### 1. Spatial Foundation
 
 Purpose: isolate geometry and spatial primitives.
+
+Status: completed separately and merged through PR #85. Do not re-extract this group from PR82.
 
 Candidate ownership:
 
@@ -231,14 +235,15 @@ Do not include `config/worker_manifest.json` in the config review PR.
 
 ## GitHub actions to take next
 
-1. Leave PR82 as draft.
-2. Add a PR82 comment pointing to this split plan.
+1. Keep PR82 open as an inspection source only.
+2. Add a PR82 comment pointing to this split plan if needed.
 3. Do not approve PR82.
 4. Do not merge PR82.
 5. Create extraction branches from latest `main`, one group at a time.
-6. Start with Spatial Foundation because it is the safest independent source group.
-7. Keep CLI and worker manifest changes as candidate docs only until their source groups are validated.
-8. Close or supersede PR82 only after all useful parts are extracted into smaller PRs.
+6. Continue with PDF Raster because Spatial Foundation has already landed.
+7. Then extract OCR Tools.
+8. Keep CLI and worker manifest changes as candidate docs only until their source groups are validated.
+9. Close or supersede PR82 only after all useful parts are extracted into smaller PRs.
 
 ## Local validation handoff
 
