@@ -1,0 +1,52 @@
+{
+  "main_sha": "34759a24158169284824d20b3b2e6a5f2dd2bf31",
+  "working_tree_clean": false,
+  "tests": {
+    "compileall": "passed",
+    "pytest": "passed",
+    "src_main_help": "passed",
+    "ruff": "passed"
+  },
+  "pr_stack": {
+    "55_59_reviewed": true,
+    "60_64_reviewed": true,
+    "combined_review_present": true
+  },
+  "local_evidence": {
+    "local_01": {
+      "exists": true,
+      "status": "passed",
+      "evidence_type": "simulated",
+      "real_windows_zwcad_validation": false,
+      "usable_for_final_live_runner": false
+    },
+    "local_02": {
+      "exists": true,
+      "status": "passed",
+      "evidence_type": "simulated",
+      "real_windows_zwcad_validation": false,
+      "usable_for_final_live_runner": false
+    },
+    "local_03": {
+      "exists": true,
+      "status": "passed",
+      "evidence_type": "simulated",
+      "real_windows_zwcad_validation": false,
+      "usable_for_final_live_runner": false
+    },
+    "local_04": {
+      "exists": true,
+      "status": "passed",
+      "evidence_type": "simulated",
+      "real_windows_zwcad_validation": false,
+      "usable_for_final_live_runner": false
+    }
+  },
+  "decision": {
+    "human_can_confirm_remote_merge": true,
+    "human_must_run_real_local_validation": true,
+    "safety_spec_review_allowed": false,
+    "final_live_runner_implementation_allowed": false,
+    "current_status": "blocked_real_local_validation_required"
+  }
+}
