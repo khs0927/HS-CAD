@@ -33,6 +33,7 @@ import src.app.analysis_phase3_cli  # noqa: F401,E402
 import src.app.analysis_phase4_cli  # noqa: F401,E402
 import src.app.analysis_phase5_cli  # noqa: F401,E402
 import src.app.analysis_phase6_cli  # noqa: F401,E402
+import src.app.analysis_phase7_9_cli  # noqa: F401,E402
 
 if __name__ == '__main__':
     app()
