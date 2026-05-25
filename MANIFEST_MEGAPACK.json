@@ -1,0 +1,15 @@
+{
+  "name": "hs_cad_megapack_finalization",
+  "branch": "feature/hs-cad-megapack-finalization",
+  "base": "feature/review-output-quality-v2",
+  "purpose": "Record final stack status and local validation checklist",
+  "files": [
+    "TODO_LOCAL_VALIDATION.md",
+    "docs/38_hs_cad_megapack_finalization_report.md",
+    "MANIFEST_MEGAPACK.json"
+  ],
+  "zip_package": "hs_cad_megapack_finalization.zip",
+  "zip_committed_to_repo": false,
+  "source_inputs_changed": false,
+  "runtime_outputs_committed": false
+}
