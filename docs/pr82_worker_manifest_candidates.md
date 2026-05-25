@@ -1,43 +1,127 @@
 # PR82 Worker Manifest Candidates
 
-## Status
+Date: 2026-05-25
 
-This document records worker manifest candidates from PR82.
-It does not modify config/worker_manifest.json.
+## Purpose
 
-## Why direct merge is blocked
+This document preserves `config/worker_manifest.json` candidates from PR82 without directly modifying the active worker manifest.
 
-- config/worker_manifest.json is a high-risk integration file.
-- Worker entries must be added only after corresponding source modules are merged.
-- Worker dry-run tests must pass without skip-based masking.
-- src/main.py registration is out of scope.
-- Live CAD execution remains blocked.
+The PR82 manifest and current main manifest use different shapes. Direct replacement would be unsafe.
 
-## Candidate worker entries
+## Current main status
 
-| Candidate worker id | Module path | Function/class | Source PR dependency | Test file | Status | Notes |
-|---|---|---|---|---|---|---|
-| pdf_raster | src.workers.pdf_raster_worker | pdf_raster | PR 91 | test_pdf_raster_worker.py | ready_candidate | Merged but needs manifest test |
-| ocr_text_region | src.workers.ocr_text_region_worker | ocr_text_region | PR 91 | test_ocr_text_region_worker.py | ready_candidate | Merged but needs manifest test |
-| networkx_graph_audit | src.workers.networkx_graph_audit_worker | networkx_graph_audit | PR 92 | test_networkx_graph_audit.py | ready_candidate | Merged but needs manifest test |
-| duckdb_export | src.workers.duckdb_export_worker | duckdb_export | PR 92 | test_duckdb_export.py | ready_candidate | Merged but needs manifest test |
-| analysis_advanced_megapack | src.workers.analysis_advanced_megapack_worker | analysis_advanced | unmerged | unknown | missing_module | Needs source module extraction |
+Latest checked main SHA:
 
-## Required validation before actual manifest edit
+```text
+ff7bffc01c691e24909f72d0ea8cd600db620acd
+```
 
-1. Module import test
-2. Worker contract test
-3. Dry-run test
-4. No CAD execution
-5. No original DWG mutation
-6. No outputs/artifacts committed
-7. No src/main.py changes
-8. No live runner changes
+Current main already has an active `config/worker_manifest.json` with implemented analysis/readiness workers. PR82 proposed a larger optional-backend manifest with a different schema.
 
-## Future implementation PR rule
+## Candidate worker keys from PR82
 
-Actual config/worker_manifest.json changes must be done in small PRs:
-- one worker family per PR
-- corresponding tests included
-- no test skip masking
-- full pytest required
+```text
+shapely_topology
+networkx_graph_audit
+duckdb_export
+pdf_raster
+ocr_text_region
+ocr_vector_text_match
+ocr_cad_text_match
+text_evidence_fusion
+text_review_queue
+text_corrections_export
+text_corrections_apply
+text_calibration_report
+text_weight_suggestions
+analysis_core_megapack
+analysis_graph_megapack
+analysis_advanced_megapack
+analysis_ops_megapack
+analysis_automation_megapack
+analysis_evidence_megapack
+vision_layout
+bim_projection
+```
+
+## Candidate registration policy
+
+Each worker should be registered only after its source module, tests, and artifact contract are validated.
+
+Do not merge PR82's manifest wholesale.
+
+## Candidate mapping guidance
+
+For current main's manifest style, prefer entries like:
+
+```json
+{
+  "worker_name": {
+    "module": "src.workers.<worker_module>",
+    "callable": "run_worker",
+    "status": "implemented",
+    "description": "...",
+    "outputs": [],
+    "safety": {
+      "source_mutation_allowed": false,
+      "cad_execution_allowed": false,
+      "sendcommand_allowed": false,
+      "saveas_allowed": false,
+      "original_dwg_mutation_allowed": false
+    }
+  }
+}
+```
+
+## Priority candidates
+
+These appear safer because they are review/report workers and should not mutate CAD files:
+
+```text
+shapely_topology
+networkx_graph_audit
+duckdb_export
+pdf_raster
+ocr_text_region
+ocr_vector_text_match
+ocr_cad_text_match
+text_evidence_fusion
+text_review_queue
+text_corrections_export
+text_calibration_report
+text_weight_suggestions
+```
+
+These need stricter review because they imply broader orchestration or future execution paths:
+
+```text
+text_corrections_apply
+analysis_automation_megapack
+analysis_evidence_megapack
+vision_layout
+bim_projection
+```
+
+## Validation commands before manifest registration
+
+```powershell
+python -X utf8 -m compileall -q src/workers tests
+python -X utf8 -m pytest -q tests/test_worker_contracts.py tests/test_worker_run_log.py tests/test_worker_runner.py
+```
+
+Then run focused tests for each worker group.
+
+## Safety
+
+This candidate document does not modify `config/worker_manifest.json`.
+
+Still blocked by default:
+
+```text
+ZWCAD COM SendCommand
+CHPROP execution
+SAVEAS execution
+DXFOUT execution
+XiCAD alias execution
+original DWG mutation
+```
