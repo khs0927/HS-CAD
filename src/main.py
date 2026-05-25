@@ -52,6 +52,7 @@ import src.app.local_evidence_finalization_cli  # noqa: F401,E402
 import src.app.pr55_59_combined_review_cli  # noqa: F401,E402
 import src.app.zwcad_com_evidence_probe_cli  # noqa: F401,E402
 import src.app.final_live_runner_preflight_cli  # noqa: F401,E402
+import src.app.final_live_runner_manual_copy_interface_cli  # noqa: F401,E402
 
 
 
