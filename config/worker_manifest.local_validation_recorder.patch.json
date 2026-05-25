@@ -1,0 +1,24 @@
+{
+  "workers_to_add": [
+    {
+      "name": "local_validation_recorder_final_runner_safety",
+      "module": "src.workers.local_validation_recorder_final_runner_safety_worker",
+      "callable": "run_worker",
+      "status": "implemented",
+      "description": "Records manual local validation results after PR59 and preserves final live runner safety gates.",
+      "outputs": [
+        "LOCAL_VALIDATION_RESULT_SUMMARY.json",
+        "LOCAL_VALIDATION_RESULT_SUMMARY.md",
+        "FINAL_LIVE_RUNNER_IMPLEMENTATION_GATE.json",
+        "PR59_CONTEXT_FOR_LOCAL_VALIDATION.json"
+      ],
+      "safety": {
+        "this_bundle_executes_cad": false,
+        "this_bundle_calls_sendcommand": false,
+        "this_bundle_executes_xicad_alias": false,
+        "this_bundle_implements_final_live_runner": false
+      }
+    }
+  ],
+  "note": "Recorder only. It does not run local validation commands."
+}
