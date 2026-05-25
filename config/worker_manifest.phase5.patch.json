@@ -1,0 +1,26 @@
+{
+  "workers_to_add": [
+    {
+      "name": "analysis_phase5_domain_rule_decision_bridge",
+      "module": "src.workers.analysis_phase5_domain_rule_decision_bridge_worker",
+      "callable": "run_worker",
+      "status": "implemented",
+      "description": "Review-only Phase 5 bridge from Phase 4 decision candidates to Domain Rule Decision input package.",
+      "outputs": [
+        "PHASE5_DOMAIN_DECISION_BRIDGE.json",
+        "PHASE5_DOMAIN_DECISION_BRIDGE.md",
+        "PHASE5_DOMAIN_RULE_INPUT_PACKAGE.json"
+      ],
+      "safety": {
+        "source_mutation_allowed": false,
+        "cad_execution_allowed": false,
+        "zwcad_com_allowed": false,
+        "sendcommand_allowed": false,
+        "xicad_alias_execution_allowed": false,
+        "execution_allowed": false,
+        "domain_rule_review_only": true
+      }
+    }
+  ],
+  "note": "Manually merge this entry into config/worker_manifest.json only after import-safety validation."
+}
