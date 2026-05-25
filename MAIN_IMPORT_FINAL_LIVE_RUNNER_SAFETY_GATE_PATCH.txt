@@ -1,0 +1,5 @@
+Add this line to src/main.py only if CLI registration is included:
+
+import src.app.final_live_runner_safety_spec_cli  # noqa: F401,E402
+
+If CLI registration is separated or not needed, do not modify src/main.py.
