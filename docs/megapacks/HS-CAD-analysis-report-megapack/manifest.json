@@ -1,0 +1,22 @@
+{
+  "package": "HS-CAD analysis report megapack",
+  "mode": "code_generation_only",
+  "validation": "todo_only",
+  "created_files": [
+    "PATCH_MAIN_IMPORT_V3.md",
+    "PATCH_WORKER_MANIFEST_ANALYSIS_REPORT.md",
+    "README_APPLY_REPORT_MEGAPACK_ZIP.md",
+    "docs/52_analysis_report_megapack_plan.md",
+    "docs/VALIDATION_TODO_REPORT_MEGAPACK.md",
+    "src/analysis/dashboard_static_assets.py",
+    "src/analysis/evidence_graph_partitioner.py",
+    "src/analysis/report_redactor.py",
+    "src/app/analysis_shortcut_cli_v3.py",
+    "src/workers/analysis_report_megapack_worker.py"
+  ],
+  "manual_patches": [
+    "PATCH_WORKER_MANIFEST_ANALYSIS_REPORT.md",
+    "PATCH_MAIN_IMPORT_V3.md"
+  ],
+  "primary_worker": "analysis_report_megapack"
+}

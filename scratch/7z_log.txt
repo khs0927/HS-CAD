@@ -1,0 +1,22 @@
+
+7-Zip 24.09 (x64) : Copyright (c) 1999-2024 Igor Pavlov : 2024-11-29
+
+Scanning the drive for archives:
+1 file, 302593665 bytes (289 MiB)
+
+Extracting archive: C:\Users\user\AppData\Local\Temp\ZWCAD_2026_Eng_Win_64bit\msi\ZWCAD\ZWCAD.7z
+--
+Path = C:\Users\user\AppData\Local\Temp\ZWCAD_2026_Eng_Win_64bit\msi\ZWCAD\ZWCAD.7z
+Type = 7z
+Physical Size = 302593665
+Headers Size = 48655
+Method = ARM64 LZMA:29 BCJ2
+Solid = +
+Blocks = 3
+
+Everything is Ok
+
+Folders: 78
+Files: 4445
+Size:       1415268519
+Compressed: 302593665

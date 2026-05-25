@@ -1,0 +1,22 @@
+{
+  "package": "HS-CAD zip integration megapack",
+  "mode": "code_generation_only",
+  "validation": "todo_only",
+  "created_files": [
+    "README_APPLY_ZIP_INTEGRATION_MEGAPACK.md",
+    "docs/53_zip_integration_megapack_plan.md",
+    "docs/VALIDATION_TODO_ZIP_INTEGRATION.md",
+    "scripts/apply_megapack_zips.py",
+    "scripts/build_final_codegen_zip.py",
+    "scripts/run_codegen_only_finalize.ps1",
+    "scripts/update_main_imports.py",
+    "scripts/update_worker_manifest_from_fragments.py"
+  ],
+  "primary_scripts": [
+    "scripts/apply_megapack_zips.py",
+    "scripts/update_worker_manifest_from_fragments.py",
+    "scripts/update_main_imports.py",
+    "scripts/build_final_codegen_zip.py",
+    "scripts/run_codegen_only_finalize.ps1"
+  ]
+}

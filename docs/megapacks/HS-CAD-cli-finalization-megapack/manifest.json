@@ -1,0 +1,14 @@
+{
+  "bundle": "HS-CAD CLI Finalization Megapack",
+  "created_at": "2026-05-23T18:39:52.881018Z",
+  "base_branch": "analysis-evidence-megapack-pr25",
+  "purpose": "Add local CLI shortcuts and preserve all validation as TODO files. No GitHub push.",
+  "files": [
+    "PATCH_MAIN_IMPORT.md",
+    "README_APPLY_THIS_ZIP.md",
+    "docs/49_analysis_cli_shortcuts_todo.md",
+    "docs/VALIDATION_TODO_ALL_MEGAPACKS.md",
+    "scripts/package_analysis_megapack.ps1",
+    "src/app/analysis_shortcut_cli.py"
+  ]
+}
