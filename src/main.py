@@ -42,6 +42,8 @@ import src.app.post_pr53_main_readiness_cli  # noqa: F401,E402
 import src.app.main_merge_readiness_cli  # noqa: F401,E402
 import src.app.pr55_main_ready_cli  # noqa: F401,E402
 import src.app.main_merge_operator_review_cli  # noqa: F401,E402
+import src.app.post_main_local_validation_cli  # noqa: F401,E402
+
 
 
 

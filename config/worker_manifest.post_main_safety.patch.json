@@ -1,0 +1,25 @@
+{
+  "workers_to_add": [
+    {
+      "name": "post_main_local_validation_live_runner_safety",
+      "module": "src.workers.post_main_local_validation_live_runner_safety_worker",
+      "callable": "run_worker",
+      "status": "implemented",
+      "description": "Generates post-main local validation and final live runner safety planning artifacts.",
+      "outputs": [
+        "POST_MAIN_LOCAL_VALIDATION_LIVE_RUNNER_SAFETY_BUNDLE.json",
+        "POST_MAIN_LOCAL_VALIDATION_COMMANDS.json",
+        "FINAL_LIVE_RUNNER_SAFETY_REQUIREMENTS.json",
+        "FINAL_LIVE_RUNNER_RISK_REGISTER.json"
+      ],
+      "safety": {
+        "main_merge_performed_by_this_bundle": false,
+        "local_validation_executed_by_this_bundle": false,
+        "final_live_runner_implemented": false,
+        "cad_execution_allowed_by_default": false,
+        "zwcad_com_sendcommand_allowed": false
+      }
+    }
+  ],
+  "note": "Planning worker only. Do not treat as execution worker."
+}
