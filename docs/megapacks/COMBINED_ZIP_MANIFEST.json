@@ -1,0 +1,30 @@
+[
+  {
+    "zip": "HS-CAD-analysis-export-megapack.zip",
+    "size": 9646
+  },
+  {
+    "zip": "HS-CAD-analysis-report-megapack.zip",
+    "size": 9190
+  },
+  {
+    "zip": "HS-CAD-analysis-storage-megapack.zip",
+    "size": 7351
+  },
+  {
+    "zip": "HS-CAD-cli-finalization-megapack.zip",
+    "size": 6480
+  },
+  {
+    "zip": "HS-CAD-final-orchestration-megapack.zip",
+    "size": 6846
+  },
+  {
+    "zip": "HS-CAD-pipeline-execution-megapack.zip",
+    "size": 6405
+  },
+  {
+    "zip": "HS-CAD-zip-integration-megapack.zip",
+    "size": 6475
+  }
+]
