@@ -10,10 +10,9 @@ from __future__ import annotations
 
 import logging
 from pathlib import Path
-from typing import Any
 
 from PIL import Image, ImageDraw, ImageFont
-from neuro_seq_cad.fusion.evidence_graph import EvidenceGraph, EvidenceEntity
+from neuro_seq_cad.fusion.evidence_graph import EvidenceGraph
 
 logger = logging.getLogger(__name__)
 

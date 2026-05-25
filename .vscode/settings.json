@@ -1,0 +1,9 @@
+{
+    "git.autofetch": false,
+    "gitlens.git.autofetch": false,
+    "git.autorefresh": false,
+    "git.detectWorktrees": false,
+    "git.enableStatusBarSync": false,
+    "scm.graph.showIncomingChanges": false,
+    "scm.graph.showOutgoingChanges": false
+}

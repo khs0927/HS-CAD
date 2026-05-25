@@ -7,7 +7,6 @@ merge_lines — 공선(collinear) 선분 병합
 
 from __future__ import annotations
 
-import math
 from typing import Sequence
 
 from neuro_seq_cad.geometry.primitives import Line2D, Point2D

@@ -1,0 +1,25 @@
+{
+  "workers_to_add": [
+    {
+      "name": "main_merge_readiness_decision",
+      "module": "src.workers.main_merge_readiness_decision_worker",
+      "callable": "run_worker",
+      "status": "implemented",
+      "description": "Generates main merge readiness decision artifacts without merging main.",
+      "outputs": [
+        "MAIN_MERGE_READINESS_DECISION.json",
+        "MAIN_MERGE_READINESS_DECISION.md",
+        "MAIN_MERGE_PR_BODY_DRAFT.md",
+        "POST_MERGE_LOCAL_VALIDATION_PROMPT.md"
+      ],
+      "safety": {
+        "main_direct_push_allowed": false,
+        "main_merge_requires_human_review": true,
+        "final_live_runner_implemented": false,
+        "cad_execution_allowed_by_default": false,
+        "sendcommand_allowed_by_default": false
+      }
+    }
+  ],
+  "note": "Merge into config/worker_manifest.json only after main merge decision PR validation."
+}

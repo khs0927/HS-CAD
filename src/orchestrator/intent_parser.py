@@ -10,7 +10,6 @@ unit tests are reliable.
 from __future__ import annotations
 
 import re
-import uuid
 from typing import Any, Dict, List
 
 from .task_schema import TaskIntent

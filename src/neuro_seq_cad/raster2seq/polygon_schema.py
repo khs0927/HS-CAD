@@ -7,7 +7,6 @@ Raster2Seq 모델이 출력하는 다각형 시퀀스(방, 벽, 문, 창문)를
 from __future__ import annotations
 
 import uuid
-from typing import Literal
 
 from pydantic import BaseModel, Field
 

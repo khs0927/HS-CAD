@@ -1,0 +1,25 @@
+{
+  "workers_to_add": [
+    {
+      "name": "analysis_phase7_9_review_pipeline_bundle",
+      "module": "src.workers.analysis_phase7_9_review_pipeline_bundle_worker",
+      "callable": "run_worker",
+      "status": "implemented",
+      "description": "Runs Phase 7~9 review-only domain decision, review gate, and readiness summary chain.",
+      "outputs": [
+        "PHASE7_DOMAIN_DECISION_PACKAGE.json",
+        "PHASE8_REVIEW_GATE_CHAIN.json",
+        "PHASE9_PIPELINE_READINESS_SUMMARY.json"
+      ],
+      "safety": {
+        "source_mutation_allowed": false,
+        "cad_execution_allowed": false,
+        "zwcad_com_allowed": false,
+        "sendcommand_allowed": false,
+        "xicad_alias_execution_allowed": false,
+        "ready_for_live_execution": false
+      }
+    }
+  ],
+  "note": "Manually merge into config/worker_manifest.json only after import-safety validation."
+}

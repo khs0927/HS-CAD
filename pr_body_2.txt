@@ -1,0 +1,63 @@
+## Summary
+
+Adds a combined human review package for PR #55~#59.
+
+This PR does not merge main, execute CAD, or implement final live runner.
+
+## PR Stack
+
+- PR #55: integration/main-merge-readiness-decision
+- PR #56: integration/main-ready-review-only-pipeline
+- PR #57: integration/main-merge-operator-review
+- PR #58: planning/post-main-local-validation-live-runner-safety
+- PR #59: human/main-merge-review-gate
+
+## Added
+
+- src/analysis/pr55_59_combined_review.py
+- src/workers/pr55_59_combined_review_worker.py
+- src/app/pr55_59_combined_review_cli.py
+- tests/test_pr55_59_combined_review.py
+- docs/141_pr55_59_combined_review_prompt.md
+- docs/142_pr55_59_combined_review_report.md
+- docs/143_pr55_59_combined_review_result.md
+- config/worker_manifest.pr55_59_combined_review.patch.json
+- MAIN_IMPORT_PR55_59_COMBINED_REVIEW_PATCH.txt
+- README_APPLY_PR55_59_COMBINED_REVIEW.md
+- PROMPT_PR55_59_COMBINED_REVIEW.txt
+
+## Outputs
+
+- PR55_59_COMBINED_REVIEW_PACKAGE.json
+- PR55_59_COMBINED_REVIEW_PACKAGE.md
+- PR55_59_OPERATOR_REVIEW_PROMPT.md
+- PR55_59_POST_MERGE_MANUAL_COMMANDS.json
+
+## Safety
+
+- No main merge
+- No direct main push
+- No auto merge
+- No CAD execution
+- No ZWCAD COM
+- No SendCommand
+- No XiCAD alias execution
+- No original DWG mutation
+- No final live runner implementation
+- Post-merge local validation remains manual-only
+
+## Validation
+
+- python -X utf8 -m pytest -q tests/test_pr55_59_combined_review.py
+- python -X utf8 -m compileall -q src tests
+- python -X utf8 -m pytest -q
+- python -X utf8 -m src.main --help
+- python -X utf8 -m src.main hscad-pr55-59-combined-review --repo-root . --out-dir outputs\pr55_59_combined_review
+
+## Not included
+
+- No actual main merge
+- No local validation execution
+- No final live runner implementation
+- No outputs committed
+- No DWG/DXF committed

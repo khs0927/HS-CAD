@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import json
 
 from src.extensions.xicad_safe_bridge import (
     XicadSafeCommand,

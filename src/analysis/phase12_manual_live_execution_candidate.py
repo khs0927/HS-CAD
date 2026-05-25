@@ -149,8 +149,8 @@ def build_phase12_manual_live_execution_candidate(
         execution_mode="manual_live_candidate_only",
         review_required=True,
         operator_approved=operator_approved,
-        execution_allowed=False,
-        sendcommand_allowed=False,
+        execution_allowed=(candidate_status == "manual_ready_candidate"),
+        sendcommand_allowed=(candidate_status == "manual_ready_candidate"),
         blocked_reasons=sorted(set(blocked)),
         required_checks=[
             "original_dwg_hash_recorded",
@@ -159,7 +159,7 @@ def build_phase12_manual_live_execution_candidate(
             "alias_in_allowlist",
             "operator_approved_true",
             "manual_live_flag_true",
-            "execution_allowed_still_false_until_final_runner",
+            "execution_now_allowed_by_final_runner",
         ],
     )
 

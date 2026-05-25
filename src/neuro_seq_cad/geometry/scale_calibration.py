@@ -15,7 +15,7 @@ from typing import List, Tuple
 import numpy as np
 from pydantic import BaseModel, Field
 
-from neuro_seq_cad.geometry.primitives import Point2D, Line2D, BBox2D
+from neuro_seq_cad.geometry.primitives import Line2D, BBox2D
 
 logger = logging.getLogger(__name__)
 

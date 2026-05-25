@@ -14,7 +14,6 @@ import logging
 from pathlib import Path
 from typing import List, Tuple
 
-import numpy as np
 from neuro_seq_cad.geometry.primitives import BBox2D
 
 logger = logging.getLogger(__name__)

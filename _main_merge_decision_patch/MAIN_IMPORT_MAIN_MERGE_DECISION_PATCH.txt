@@ -1,0 +1,5 @@
+Add this line to src/main.py only if CLI registration is included in this PR:
+
+import src.app.main_merge_readiness_cli  # noqa: F401,E402
+
+If CLI registration is separated into a later PR, do not modify src/main.py.

@@ -1,0 +1,25 @@
+{
+  "workers_to_add": [
+    {
+      "name": "main_merge_operator_review",
+      "module": "src.workers.main_merge_operator_review_worker",
+      "callable": "run_worker",
+      "status": "implemented",
+      "description": "Generates final operator review artifacts before human main merge.",
+      "outputs": [
+        "MAIN_MERGE_OPERATOR_REVIEW_PACKAGE.json",
+        "MAIN_MERGE_OPERATOR_REVIEW_PACKAGE.md",
+        "MAIN_MERGE_OPERATOR_PROMPT.md",
+        "POST_MERGE_LOCAL_VALIDATION_PROMPT.md"
+      ],
+      "safety": {
+        "auto_merge_allowed": false,
+        "operator_review_required": true,
+        "final_live_runner_implemented": false,
+        "cad_execution_allowed_by_default": false,
+        "zwcad_com_sendcommand_allowed": false
+      }
+    }
+  ],
+  "note": "Optional worker for operator review package only."
+}

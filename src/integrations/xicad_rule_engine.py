@@ -10,11 +10,9 @@ XiCAD Knowledge Extraction & Rule Parser Framework (v2)
 
 from __future__ import annotations
 
-import os
 import json
 from pathlib import Path
 from typing import Any, Dict, List, Optional
-from collections import Counter
 
 class XiCADRuleEngine:
     def __init__(self, xicad_root: str = "C:\\xicad"):

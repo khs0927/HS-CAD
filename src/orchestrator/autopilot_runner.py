@@ -3,7 +3,6 @@ from __future__ import annotations
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Any
-import json
 
 from .autopilot_policy import classify_autopilot_command
 from .autopilot_report import write_autopilot_outputs

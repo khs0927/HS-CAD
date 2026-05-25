@@ -1,7 +1,6 @@
 from __future__ import annotations
 import sys
 from pathlib import Path
-import pytest
 import ezdxf
 
 # Add src to sys.path

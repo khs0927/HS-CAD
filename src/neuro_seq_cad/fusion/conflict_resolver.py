@@ -9,9 +9,9 @@ conflict_resolver.py — 다중 소스 증거 데이터 간의 충돌 해결 및
 from __future__ import annotations
 
 import logging
-from typing import List, Dict, Any, Tuple
+from typing import List
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 from neuro_seq_cad.fusion.evidence_graph import EvidenceGraph, EvidenceEntity
 from neuro_seq_cad.fusion.confidence import calculate_entity_confidence

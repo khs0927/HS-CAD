@@ -1,0 +1,24 @@
+{
+  "workers_to_add": [
+    {
+      "name": "pr55_main_ready_review_only_validation",
+      "module": "src.workers.pr55_main_ready_review_only_validation_worker",
+      "callable": "run_worker",
+      "status": "implemented",
+      "description": "Generates PR55 main-ready review-only validation helper artifacts.",
+      "outputs": [
+        "PR55_MAIN_READY_REVIEW_ONLY_VALIDATION.json",
+        "PR55_MAIN_READY_REVIEW_ONLY_VALIDATION.md",
+        "PR55_MAIN_READY_CHECKLIST.json"
+      ],
+      "safety": {
+        "main_direct_push_allowed": false,
+        "actual_main_merge_performed": false,
+        "final_live_runner_implemented": false,
+        "cad_execution_allowed": false,
+        "zwcad_com_sendcommand_allowed": false
+      }
+    }
+  ],
+  "note": "Optional helper worker; do not merge into worker_manifest unless desired."
+}

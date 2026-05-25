@@ -1,5 +1,4 @@
 from pathlib import Path
-import pytest
 from src.workers.contracts import WorkerInput
 from src.workers.final_orchestration_megapack_worker import execute
 

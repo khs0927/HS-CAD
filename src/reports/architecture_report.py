@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import json
 import platform
 import re
 import sys
@@ -323,7 +322,7 @@ def build_environment_snapshot() -> dict[str, Any]:
         try:
             __import__(name)
             optional_modules[name] = True
-        except Exception as exc:
+        except Exception:
             optional_modules[name] = False
     return {
         "python": sys.version,

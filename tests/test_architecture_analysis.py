@@ -1,5 +1,4 @@
 from src.modifiers.architectural_modifier import (
-    check_closed_polylines,
     create_grid,
     generate_architecture_summary,
     place_beams_2d,
