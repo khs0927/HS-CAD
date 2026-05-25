@@ -1,0 +1,3 @@
+Add to src/main.py if CLI registration is included:
+
+import src.app.execution_candidate_planner_cli  # noqa: F401,E402
