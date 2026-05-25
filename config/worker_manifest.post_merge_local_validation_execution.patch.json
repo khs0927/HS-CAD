@@ -1,0 +1,24 @@
+{
+  "workers_to_add": [
+    {
+      "name": "post_merge_local_validation_execution_pack",
+      "module": "src.workers.post_merge_local_validation_execution_worker",
+      "callable": "run_worker",
+      "status": "implemented",
+      "description": "Generates guarded post-merge local validation command pack and result templates. Does not execute CAD.",
+      "outputs": [
+        "POST_MERGE_LOCAL_VALIDATION_EXECUTION_PACK.json",
+        "POST_MERGE_LOCAL_VALIDATION_EXECUTION_PACK.md",
+        "RUN_LOCAL_VALIDATION_COMMANDS.template.ps1",
+        "LOCAL_VALIDATION_RESULT_SCHEMA.json"
+      ],
+      "safety": {
+        "this_package_runs_cad": false,
+        "this_package_calls_sendcommand": false,
+        "this_package_executes_xicad_alias": false,
+        "this_package_implements_final_live_runner": false
+      }
+    }
+  ],
+  "note": "Command pack only. It does not run local validation."
+}

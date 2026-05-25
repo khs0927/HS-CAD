@@ -46,6 +46,7 @@ import src.app.post_main_local_validation_cli  # noqa: F401,E402
 import src.app.human_main_merge_review_cli  # noqa: F401,E402
 import src.app.local_validation_recorder_cli  # noqa: F401,E402
 import src.app.final_live_runner_safety_spec_cli  # noqa: F401,E402
+import src.app.post_merge_local_validation_execution_cli  # noqa: F401,E402
 
 
 
