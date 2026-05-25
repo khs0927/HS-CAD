@@ -1,0 +1,27 @@
+{
+  "workers_to_add": [
+    {
+      "name": "final_live_runner_manual_copy_only_interface",
+      "module": "src.workers.final_live_runner_manual_copy_only_interface_worker",
+      "callable": "run_worker",
+      "status": "implemented",
+      "description": "Creates a dry-run manual copy-only operator interface after preflight guard.",
+      "outputs": [
+        "FINAL_LIVE_RUNNER_MANUAL_COPY_ONLY_INTERFACE.json",
+        "FINAL_LIVE_RUNNER_MANUAL_COPY_ONLY_INTERFACE.md",
+        "FINAL_LIVE_RUNNER_OPERATOR_CONFIRMATION_PROMPT.md",
+        "FINAL_LIVE_RUNNER_MANUAL_COPY_ONLY_AUDIT_INTENT.json",
+        "FINAL_LIVE_RUNNER_MANUAL_COPY_ONLY_REFUSAL.json",
+        "NEXT_MANUAL_COPY_ONLY_EXECUTION_CANDIDATE_PR.json"
+      ],
+      "safety": {
+        "this_package_runs_cad": false,
+        "this_package_calls_sendcommand": false,
+        "this_package_calls_saveas": false,
+        "this_package_executes_xicad_alias": false,
+        "this_package_implements_production_runner": false,
+        "default_execution_allowed": false
+      }
+    }
+  ]
+}
