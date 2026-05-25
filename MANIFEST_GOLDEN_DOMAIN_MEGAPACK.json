@@ -1,0 +1,17 @@
+{
+  "name": "hs_cad_golden_domain_megapack",
+  "branch": "feature/roadmap-next-wave",
+  "base": "feature/megapack-next",
+  "purpose": "Define golden fixture and plan-only domain rule completion path",
+  "committed_files": [
+    "docs/42_golden_domain_megapack_plan.md",
+    "docs/43_golden_fixture_contract.md",
+    "docs/44_plan_only_domain_rule_backlog.md",
+    "docs/45_evidence_report_linking_plan.md",
+    "docs/46_megapack_golden_domain_status.md",
+    "MANIFEST_GOLDEN_DOMAIN_MEGAPACK.json"
+  ],
+  "local_todo_archive_branch": "archive/hs-cad-local-todos",
+  "zip_committed_to_repo": false,
+  "requires_local_samples": true
+}
