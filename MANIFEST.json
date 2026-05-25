@@ -1,0 +1,54 @@
+{
+  "name": "hs_cad_main_code_overlay_v5",
+  "created_at": "2026-05-25T11:28:16.061885Z",
+  "purpose": "PR finalization, PR readiness validation, PR body generation, forbidden artifact guard",
+  "files": [
+    {
+      "path": "APPLY_INSTRUCTIONS.md",
+      "sha256": "6237aafbc41e1912a425bee962602373a7e37397af17d93c432f09dca80eb976",
+      "bytes": 1039
+    },
+    {
+      "path": "CODEX_MAIN_CODE_V5_PROMPT.md",
+      "sha256": "e9b9bda16afc50e42c1c6add9113ddc6cabdcea45ddb6defe47ff2a22528f3d3",
+      "bytes": 883
+    },
+    {
+      "path": "LOCAL_AGENT_PROMPT.md",
+      "sha256": "3b2d28d41a0fea9ec12151abe1e88a2c3dcc449c98ff2dfd7ca4337e4760222e",
+      "bytes": 3927
+    },
+    {
+      "path": "docs/35_main_code_overlay_v5_pr_finalization_report.md",
+      "sha256": "576cbae20fe96e02542e125a7d3400e347a63eadf25e6c489306ad1094956570",
+      "bytes": 1794
+    },
+    {
+      "path": "scripts/apply_hscad_main_code_overlay_v5.py",
+      "sha256": "f3c15e9e06a78884184d4a06d59cc24d51d96b8e70eb59ef15e696a3a001b755",
+      "bytes": 2265
+    },
+    {
+      "path": "scripts/generate_hscad_pr_body.py",
+      "sha256": "09b653d593b39b250286f5ea410fcc06ed5b209dd86a2e90731a62742f0526ad",
+      "bytes": 5692
+    },
+    {
+      "path": "scripts/validate_hscad_pr_ready.py",
+      "sha256": "858de73ed975248c9f1b2fdab18e73ffb2cd8dc445b987eda325106ea53d7431",
+      "bytes": 3690
+    },
+    {
+      "path": "tests/test_pr_readiness_v5.py",
+      "sha256": "8ec1033a2106bbfc8eeb4a4c0b7f9531d66e2c81a71c800302a5d7c0e2ff819e",
+      "bytes": 1507
+    }
+  ],
+  "safety": {
+    "cad_execution": false,
+    "zwcad_com": false,
+    "sendcommand": false,
+    "xicad_alias": false,
+    "original_dwg_mutation": false
+  }
+}

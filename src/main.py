@@ -1,5 +1,11 @@
 from __future__ import annotations
 
+# HS-CAD review-only overlay commands.
+try:
+    from hscad.app.review_cli_registry import register_review_only_commands as _register_hscad_review_only_commands
+except Exception:  # pragma: no cover - keeps legacy CLI importable if overlay is absent
+    _register_hscad_review_only_commands = None
+
 from src.utils.encoding import ensure_utf8_stdio
 
 ensure_utf8_stdio()
@@ -44,6 +50,9 @@ import src.app.pr55_main_ready_cli  # noqa: F401,E402
 import src.app.main_merge_operator_review_cli  # noqa: F401,E402
 
 
+
+if _register_hscad_review_only_commands is not None:
+    _register_hscad_review_only_commands(app)
 
 if __name__ == '__main__':
     app()
