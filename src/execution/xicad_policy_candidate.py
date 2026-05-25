@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass, field
+import re
 from typing import Any
 
 from src.execution.xicad_alias_policy import (
@@ -155,8 +156,11 @@ def build_policy_candidates_from_aliases(
 
 
 def _is_dangerous(alias: str, raw_command: str) -> bool:
-    text = f"{alias} {raw_command}".upper()
-    return any(keyword in text for keyword in DANGEROUS_ALIAS_KEYWORDS)
+    alias_token = alias.upper()
+    if alias_token in DANGEROUS_ALIAS_KEYWORDS:
+        return True
+    command_tokens = set(re.findall(r"[A-Z0-9_]+", raw_command.upper()))
+    return bool(command_tokens & DANGEROUS_ALIAS_KEYWORDS)
 
 
 def _suggest_policy(alias: str, risk: str, raw_command: str) -> dict[str, Any]:

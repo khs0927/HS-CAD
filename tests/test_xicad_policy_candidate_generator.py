@@ -46,3 +46,18 @@ def test_policy_loader_forces_execution_false(tmp_path: Path):
 
     assert policies["ABC"].allowed_for_dry_run is True
     assert policies["ABC"].allowed_for_execution is False
+
+
+def test_policy_candidate_dangerous_keywords_use_token_boundaries():
+    report = build_policy_candidates_from_aliases(
+        {
+            "OPENING": "opening annotation helper",
+            "OP": "open drawing",
+            "SAVEAS": "save as command",
+        }
+    )
+    rows = {item.alias: item for item in report.candidates}
+
+    assert rows["OPENING"].status == "review_required_candidate"
+    assert rows["OP"].status == "blocked_candidate"
+    assert rows["SAVEAS"].status == "blocked_candidate"
