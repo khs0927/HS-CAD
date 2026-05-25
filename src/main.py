@@ -38,6 +38,7 @@ import src.app.analysis_phase10_11_cli  # noqa: F401,E402
 import src.app.analysis_phase12_cli  # noqa: F401,E402
 import src.app.final_todo_cli  # noqa: F401,E402
 import src.app.main_readiness_cli  # noqa: F401,E402
+import src.app.post_pr53_main_readiness_cli  # noqa: F401,E402
 
 if __name__ == '__main__':
     app()
