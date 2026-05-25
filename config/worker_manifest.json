@@ -172,6 +172,22 @@
         "xicad_alias_execution_allowed": false,
         "ready_for_live_execution": false
       }
+    },
+    "pdf_raster": {
+      "path": "src.workers.pdf_raster_worker",
+      "description": "PDF Raster extraction and analysis worker"
+    },
+    "ocr_text_region": {
+      "path": "src.workers.ocr_text_region_worker",
+      "description": "OCR Text Region detection worker"
+    },
+    "networkx_graph_audit": {
+      "path": "src.workers.networkx_graph_audit_worker",
+      "description": "NetworkX Graph Audit worker"
+    },
+    "duckdb_export": {
+      "path": "src.workers.duckdb_export_worker",
+      "description": "DuckDB Analytics Export worker"
     }
   }
 }

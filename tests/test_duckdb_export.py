@@ -8,6 +8,7 @@ from pathlib import Path
 
 from src.analytics.duckdb_export import DuckDBAnalyticsExporter, _load_workspace_tables, write_duckdb_export
 from src.workers.contracts import WorkerInput
+from src.workers.registry import WorkerRegistry
 from src.workers.runner import WorkerRunner
 
 
@@ -78,10 +79,9 @@ def test_duckdb_export_creates_database_parquet_and_provenance_when_available(tm
         assert Path(parquet_path).exists()
 
 
-@pytest.mark.skip(reason="Not registered in main yet")
 def test_duckdb_worker_registered_and_plans_command():
-    runner = WorkerRunner(record_runs=False)
+    runner = WorkerRunner(WorkerRegistry('config/worker_manifest.json'))
     worker_input = WorkerInput(worker_name='duckdb_export', task='run', workspace='outputs/sample')
     plan = runner.dry_run('duckdb_export', worker_input)
-    assert plan['worker']['name'] == 'duckdb_export'
-    assert 'src.workers.duckdb_export_worker' in plan['command']
+    assert plan['worker_name'] == 'duckdb_export'
+    assert plan['module'] == 'src.workers.duckdb_export_worker'
