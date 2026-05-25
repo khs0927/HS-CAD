@@ -7,6 +7,7 @@ from src.app.logger import console
 from src.execution.xicad_safe_runner import XiCADSafeRunner
 from src.workers.xicad_policy_candidate_worker import run_xicad_policy_candidate_worker
 from src.workers.xicad_signature_candidate_worker import run_xicad_signature_candidate_worker
+from src.workers.xicad_signature_seed_worker import run_xicad_signature_seed_worker
 
 
 @app.command("xicad-policy-candidates")
@@ -46,4 +47,13 @@ def xicad_signature_candidate(
         after_snapshot_json=after_snapshot_json,
         out_dir=out_dir,
     )
+    console.print(result)
+
+
+@app.command("xicad-signature-seeds")
+def xicad_signature_seeds(
+    xicad_root: str = typer.Option("C:/xicad", help="XiCAD root path"),
+    out_dir: str = typer.Option("outputs/xicad_signature_seeds", help="Output directory"),
+):
+    result = run_xicad_signature_seed_worker(xicad_root=xicad_root, out_dir=out_dir)
     console.print(result)

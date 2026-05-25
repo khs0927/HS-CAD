@@ -57,8 +57,18 @@
 - `outputs/xicad_reverse_inventory/XICAD_RULES_EXTRACT.json`
 - `outputs/xicad_reverse_inventory/XICAD_POLICY_CANDIDATES_FROM_LOCAL.json`
 - `outputs/xicad_reverse_inventory/XICAD_REVERSE_INVENTORY_SUMMARY.json`
+- `outputs/xicad_signature_seeds_local/XICAD_SIGNATURE_SEEDS.json`
+- `outputs/xicad_signature_seeds_local/XICAD_SIGNATURE_SEEDS.md`
 
 이 검토는 `.fas`, `.des`, `.zelx`, `.zrx`, `.arx`, `.dll` 같은 바이너리를 해체하지 않는다. 파일명, 확장자, 크기, 그리고 텍스트 설정/단축키/규격표만 안전하게 읽는다.
+
+텍스트 규칙 기반 signature seed:
+
+- `WAL`: wall style 9개에서 평행선 pair, 레이어 후보, 두께 후보 추출
+- `D1`: door config에서 opening gap + block/arc insert, 폭 후보 추출
+- `W1`: window config에서 opening gap + block/arc insert 후보 추출
+
+모든 seed는 `requires_human_review=true`이며, 아직 `config/xicad_command_signatures.json`로 승격하지 않는다.
 
 ## 3. 아키텍처
 
@@ -238,7 +248,27 @@
 - before/after snapshot JSON을 입력받아 `ENTITY_DELTA.json`, `XICAD_SIGNATURE_CANDIDATE.json`, `XICAD_SIGNATURE_CANDIDATE.md`를 생성하는 worker/CLI 구현 완료
 - demo output: `outputs/xicad_signature_candidate_demo/result/`
 
-### Step 1C. Real ZWCAD Read-Only Probe
+### Step 1C. Local XiCAD Signature Seed
+
+추가된 모듈:
+
+- `src.execution.xicad_signature_seed`
+- `src.workers.xicad_signature_seed_worker`
+- CLI: `python -X utf8 -m src.main xicad-signature-seeds`
+
+기능:
+
+- `C:\xicad`의 텍스트 설정과 규칙 파일을 읽어 signature seed를 만든다.
+- 현재 로컬 환경에서는 `WAL`, `D1`, `W1` seed가 생성된다.
+- protected binary internals는 읽지 않는다.
+- ZWCAD를 열지 않고 `SendCommand`도 호출하지 않는다.
+
+테스트:
+
+- `tests/test_xicad_signature_seed.py`
+- `tests/test_xicad_signature_seed_worker.py`
+
+### Step 1D. Real ZWCAD Read-Only Probe
 
 ZWCAD가 열려 있을 때 실행 가능한 안전 검증:
 
@@ -292,6 +322,8 @@ python -X utf8 -m pytest -q `
   tests/test_entity_delta.py `
   tests/test_xicad_signature_candidate.py `
   tests/test_xicad_signature_candidate_worker.py `
+  tests/test_xicad_signature_seed.py `
+  tests/test_xicad_signature_seed_worker.py `
   tests/test_xicad_alias_allowlist.py `
   tests/test_xicad_policy_candidate_generator.py `
   tests/test_xicad_safe_runner.py `
