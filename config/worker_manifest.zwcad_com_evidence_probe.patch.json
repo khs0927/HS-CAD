@@ -1,0 +1,10 @@
+{
+  "workers": {
+    "zwcad_com_evidence_probe": {
+      "module": "src.workers.zwcad_com_evidence_probe_worker",
+      "description": "Safe ZWCAD COM Evidence Probe",
+      "phase": "probe",
+      "parallel": false
+    }
+  }
+}
