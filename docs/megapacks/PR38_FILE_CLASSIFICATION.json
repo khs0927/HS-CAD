@@ -1,0 +1,24 @@
+{
+  "status": "pending_classification",
+  "total_files_expected": 75,
+  "categories": {
+    "safe_to_stage_source": [],
+    "safe_to_stage_tests": [],
+    "safe_to_stage_docs": [],
+    "manual_registration_needed": [
+      "src/main.py"
+    ],
+    "worker_manifest_candidate": [
+      "config/worker_manifest.json"
+    ],
+    "remove_or_do_not_commit": [],
+    "needs_import_safety_review": [
+      "src/adapters/zwcad_com_adapter.py",
+      "src/adapters/xicad_adapter.py"
+    ],
+    "needs_runtime_validation": [],
+    "duplicate_or_superseded": [],
+    "already_covered_by_existing_pr": []
+  },
+  "notes": "This classification schema acts as the blueprint for splitting PR 38's 75 combined Megapack files into progressive integrations (PR 39 to 44)."
+}
