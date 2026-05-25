@@ -1,0 +1,24 @@
+{
+  "workers_to_add": [
+    {
+      "name": "final_todo_integration_readiness",
+      "module": "src.workers.final_todo_integration_readiness_worker",
+      "callable": "run_worker",
+      "status": "implemented",
+      "description": "Generates final TODO and integration readiness reports after Phase 3~12.",
+      "outputs": [
+        "FINAL_TODO_INTEGRATION_READINESS.json",
+        "FINAL_TODO_INTEGRATION_READINESS.md",
+        "FINAL_PR_SEQUENCE_PLAN.json"
+      ],
+      "safety": {
+        "source_mutation_allowed": false,
+        "cad_execution_allowed_by_default": false,
+        "sendcommand_allowed_by_default": false,
+        "live_execution_ready": false,
+        "final_runner_implemented": false
+      }
+    }
+  ],
+  "note": "Merge into config/worker_manifest.json in final worker registration PR only."
+}
