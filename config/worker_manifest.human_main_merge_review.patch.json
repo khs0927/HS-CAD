@@ -1,0 +1,26 @@
+{
+  "workers_to_add": [
+    {
+      "name": "human_main_merge_review_gate",
+      "module": "src.workers.human_main_merge_review_gate_worker",
+      "callable": "run_worker",
+      "status": "implemented",
+      "description": "Generates the final human main merge review gate artifacts.",
+      "outputs": [
+        "HUMAN_MAIN_MERGE_REVIEW_GATE.json",
+        "HUMAN_MAIN_MERGE_REVIEW_GATE.md",
+        "HUMAN_MAIN_MERGE_OPERATOR_PROMPT.md",
+        "POST_MERGE_LOCAL_VALIDATION_PROMPT.md",
+        "FINAL_LIVE_RUNNER_DEFERRED_GUARD.json"
+      ],
+      "safety": {
+        "auto_merge_allowed": false,
+        "this_package_merges_main": false,
+        "final_live_runner_implemented": false,
+        "cad_execution_allowed_by_default": false,
+        "zwcad_com_sendcommand_allowed": false
+      }
+    }
+  ],
+  "note": "Review gate worker only. Do not treat as merge automation."
+}
