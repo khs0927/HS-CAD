@@ -1,0 +1,25 @@
+{
+  "workers_to_add": [
+    {
+      "name": "execution_candidate_planner",
+      "module": "src.workers.execution_candidate_planner_worker",
+      "callable": "run_worker",
+      "status": "implemented",
+      "description": "Generates review-only execution candidate planning artifacts.",
+      "outputs": [
+        "EXECUTION_CANDIDATE_PLANNER_DECISION.json",
+        "EXECUTION_CANDIDATE_PLANNER_DECISION.md",
+        "EXECUTION_CANDIDATE_STEPS_FOR_HUMAN_REVIEW.json",
+        "EXECUTION_CANDIDATE_ROLLBACK_REQUIREMENTS.json",
+        "EXECUTION_CANDIDATE_AUDIT_REQUIREMENTS.json",
+        "EXECUTION_CANDIDATE_REFUSAL_REASONS.json"
+      ],
+      "safety": {
+        "this_package_runs_cad": false,
+        "this_package_changes_drawings": false,
+        "this_package_performs_live_action": false,
+        "default_execution_candidate_allowed": false
+      }
+    }
+  ]
+}
