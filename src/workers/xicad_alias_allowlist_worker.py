@@ -26,6 +26,7 @@ def render_alias_allowlist_markdown(plan: dict[str, Any]) -> str:
         "",
         "## Dry-run allowed aliases",
     ]
+
     for alias in plan.get("dry_run_allowed_aliases") or []:
         lines.append(f"- {alias}")
 
@@ -53,7 +54,7 @@ def render_alias_allowlist_markdown(plan: dict[str, Any]) -> str:
         "- This plan does not execute XiCAD aliases.",
         "- Unknown aliases are blocked.",
         "- Destructive aliases are blocked.",
-        "- Execution allowed aliases should remain empty until a later approved-copy execution stage.",
+        "- execution_allowed_aliases must remain empty until a later approved-copy execution stage.",
     ]
 
     return "\n".join(lines).rstrip() + "\n"
@@ -65,7 +66,10 @@ def run_xicad_alias_allowlist_worker(
     out_dir: str | Path = "outputs/xicad_alias_allowlist",
 ) -> dict[str, Any]:
     command_plan = load_command_plan(command_plan_json)
-    plan = build_xicad_alias_allowlist_plan(command_plan, source_command_plan=str(command_plan_json))
+    plan = build_xicad_alias_allowlist_plan(
+        command_plan,
+        source_command_plan=str(command_plan_json),
+    )
 
     out = Path(out_dir)
     out.mkdir(parents=True, exist_ok=True)
