@@ -14,11 +14,11 @@ The full test suite originally reported four failures:
 2. `test_text_role_inferer_detects_room_name_inside_boundary` – returned `leader_note` instead of `room_or_space_name`.
 3. `test_text_role_inferer_detects_table_text_from_grid_lines` – returned `leader_note` instead of `table_cell_text`.
 4. `test_text_role_inferer_detects_dimension_or_spec_note` – returned `leader_note` instead of `dimension_or_spec_note`.
-The root cause was an over‑eager `leader_note` classification that pre‑empted the more specific roles.
+The root cause was an over‑eager `leader_note` classification that pre‑empted more specific roles.
 
 ### Fix Overview
 The branch already incorporates the corrected implementation of `TextRoleInferer`:
-- Table detection now requires ≥6 lines with ≥3 horizontals and ≥3 verticals, assigning `table_cell_text` (confidence ≥0.82).
+- Table detection now requires ≥6 lines with ≥3 horizontals & ≥3 verticals, assigning `table_cell_text` (confidence ≥0.82).
 - Dimension/spec detection uses robust regex patterns via `_looks_like_dimension_or_spec` and assigns `dimension_or_spec_note` (confidence ≥0.7).
 - Room/space name inference relies on containment analysis; after a successful match, the role is set to `room_or_space_name` (confidence ≥0.68).
 - The fallback `leader_note` is only applied when none of the above conditions match, respecting layer hints.
