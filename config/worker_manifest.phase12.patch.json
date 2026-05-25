@@ -1,0 +1,25 @@
+{
+  "workers_to_add": [
+    {
+      "name": "analysis_phase12_manual_live_execution_candidate",
+      "module": "src.workers.analysis_phase12_manual_live_execution_candidate_worker",
+      "callable": "run_worker",
+      "status": "implemented",
+      "description": "Creates manual-only live execution candidate guard artifacts; does not execute CAD.",
+      "outputs": [
+        "PHASE12_MANUAL_LIVE_EXECUTION_CANDIDATE.json",
+        "PHASE12_MANUAL_LIVE_EXECUTION_CANDIDATE.md",
+        "PHASE12_FINAL_RUNNER_GUARD.json"
+      ],
+      "safety": {
+        "execution_allowed": false,
+        "sendcommand_allowed_by_default": false,
+        "requires_copied_dwg": true,
+        "requires_allowlist_alias": true,
+        "requires_operator_approval": true,
+        "final_runner_implemented": false
+      }
+    }
+  ],
+  "note": "Manually merge into config/worker_manifest.json only after import-safety validation."
+}
