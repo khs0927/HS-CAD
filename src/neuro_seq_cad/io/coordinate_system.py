@@ -33,7 +33,10 @@ from __future__ import annotations
 
 import logging
 from dataclasses import dataclass
-from typing import List, Sequence, Tuple, Union
+from typing import TYPE_CHECKING, List, Sequence, Tuple, Union
+
+if TYPE_CHECKING:  # pragma: no cover - typing only
+    import numpy  # type: ignore[import-not-found]
 
 logger = logging.getLogger(__name__)
 
@@ -210,10 +213,10 @@ class ImageToCADTransformer:
 
     def transform_points_numpy(
         self,
-        points: "numpy.ndarray",
+        points: numpy.ndarray,
         *,
         to_cad: bool = True,
-    ) -> "numpy.ndarray":
+    ) -> numpy.ndarray:
         """NumPy 배열 (N, 2) 좌표를 벡터 연산으로 일괄 변환합니다.
 
         벡터화 수식 (Image → CAD):

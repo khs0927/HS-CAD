@@ -17,9 +17,12 @@ layer_schema.py — CAD 레이어 스키마 정의 및 ezdxf 문서 레이어 �
 from __future__ import annotations
 
 import logging
-from typing import Dict, Optional
+from typing import TYPE_CHECKING, Dict, Optional
 
 from pydantic import BaseModel, Field
+
+if TYPE_CHECKING:  # pragma: no cover - typing only
+    import ezdxf  # type: ignore[import-not-found]
 
 logger = logging.getLogger(__name__)
 
@@ -216,7 +219,7 @@ def get_layer_for_element(
     return CAD_LAYERS[layer_key]
 
 
-def setup_layers(doc: "ezdxf.document.Drawing") -> None:
+def setup_layers(doc: ezdxf.document.Drawing) -> None:
     """ezdxf 문서에 CAD_LAYERS 딕셔너리의 모든 레이어를 등록합니다.
 
     이미 존재하는 레이어는 건너뛰고, 필요한 선종류(CENTER, DASHED)를
@@ -282,7 +285,7 @@ def list_layers() -> list[LayerDefinition]:
 # 내부 헬퍼 (Internal helpers)
 # ---------------------------------------------------------------------------
 def _ensure_linetype(
-    doc: "ezdxf.document.Drawing",
+    doc: ezdxf.document.Drawing,
     name: str,
     description: str,
     pattern: list[float],

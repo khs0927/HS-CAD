@@ -56,11 +56,6 @@ def _load_json(path: Path) -> dict[str, Any]:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-def _safe_flag_false(payload: dict[str, Any], key: str) -> bool:
-    value = payload.get("safety", {}).get(key)
-    return value is False or value is None
-
-
 def _safety() -> dict[str, Any]:
     return {
         "main_direct_push_allowed": False,
