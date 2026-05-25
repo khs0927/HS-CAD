@@ -16,11 +16,12 @@ from src.workers.registry import WorkerRegistry
 from src.workers.runner import WorkerRunner
 
 DEFAULT_ANALYSIS_WORKERS = [
-    "analysis_export_megapack",
-    "analysis_storage_megapack",
-    "analysis_report_megapack",
-    "pipeline_execution_megapack",
-    "final_orchestration_megapack",
+    "analysis_core_megapack",
+    "analysis_graph_megapack",
+    "analysis_advanced_megapack",
+    "analysis_ops_megapack",
+    "analysis_automation_megapack",
+    "analysis_evidence_megapack",
 ]
 
 

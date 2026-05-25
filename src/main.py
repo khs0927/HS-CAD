@@ -53,7 +53,9 @@ import src.app.pr55_59_combined_review_cli  # noqa: F401,E402
 import src.app.zwcad_com_evidence_probe_cli  # noqa: F401,E402
 import src.app.final_live_runner_preflight_cli  # noqa: F401,E402
 
-
-
+# PR82 CLI Candidates
+import src.app.spatial_cli  # noqa: F401,E402
+import src.app.text_roles_cli  # noqa: F401,E402
+import src.app.worker_cli  # noqa: F401,E402
 if __name__ == '__main__':
     app()
