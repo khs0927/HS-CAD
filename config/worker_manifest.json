@@ -1,0 +1,177 @@
+{
+  "workers": {
+    "analysis_export_megapack": {
+      "path": "src.workers.analysis_export_megapack_worker",
+      "description": "Exports evidence graph to various outputs"
+    },
+    "analysis_report_megapack": {
+      "path": "src.workers.analysis_report_megapack_worker",
+      "description": "Partitions evidence graph and generates dashboard assets"
+    },
+    "analysis_storage_megapack": {
+      "path": "src.workers.analysis_storage_megapack_worker",
+      "description": "Exports evidence storage (DuckDB/Parquet) and runs threshold-aware validation"
+    },
+    "pipeline_execution_megapack": {
+      "path": "src.workers.pipeline_execution_megapack_worker",
+      "description": "Pipeline execution worker"
+    },
+    "final_orchestration_megapack": {
+      "path": "src.workers.final_orchestration_megapack_worker",
+      "description": "Final orchestration apply-plan generation"
+    },
+    "final_todo_integration_readiness": {
+      "module": "src.workers.final_todo_integration_readiness_worker",
+      "callable": "run_worker",
+      "status": "implemented",
+      "description": "Generates final TODO and integration readiness reports after Phase 3~12.",
+      "outputs": [
+        "FINAL_TODO_INTEGRATION_READINESS.json",
+        "FINAL_TODO_INTEGRATION_READINESS.md",
+        "FINAL_PR_SEQUENCE_PLAN.json"
+      ],
+      "safety": {
+        "source_mutation_allowed": false,
+        "cad_execution_allowed_by_default": false,
+        "sendcommand_allowed_by_default": false,
+        "live_execution_ready": false,
+        "final_runner_implemented": false
+      }
+    },
+    "analysis_phase10_11_domain_copy_validation": {
+      "module": "src.workers.analysis_phase10_11_domain_copy_validation_worker",
+      "callable": "run_worker",
+      "status": "implemented",
+      "description": "Runs Phase 10~11 review-only domain decision connector and copied-DWG validation planning.",
+      "outputs": [
+        "PHASE10_DOMAIN_DECISION_CONNECTOR.json",
+        "PHASE10_DOMAIN_RULE_DECISION_CLI_PLAN.json",
+        "PHASE11_COPIED_DWG_VALIDATION_BRIDGE.json",
+        "PHASE11_COPY_VALIDATION_CLI_PLAN.json"
+      ],
+      "safety": {
+        "source_mutation_allowed": false,
+        "cad_execution_allowed": false,
+        "zwcad_com_allowed": false,
+        "sendcommand_allowed": false,
+        "xicad_alias_execution_allowed": false,
+        "live_execution_allowed": false
+      }
+    },
+    "analysis_phase12_manual_live_execution_candidate": {
+      "module": "src.workers.analysis_phase12_manual_live_execution_candidate_worker",
+      "callable": "run_worker",
+      "status": "implemented",
+      "description": "Creates manual-only live execution candidate guard artifacts; does not execute CAD.",
+      "outputs": [
+        "PHASE12_MANUAL_LIVE_EXECUTION_CANDIDATE.json",
+        "PHASE12_MANUAL_LIVE_EXECUTION_CANDIDATE.md",
+        "PHASE12_FINAL_RUNNER_GUARD.json"
+      ],
+      "safety": {
+        "execution_allowed": false,
+        "sendcommand_allowed_by_default": false,
+        "requires_copied_dwg": true,
+        "requires_allowlist_alias": true,
+        "requires_operator_approval": true,
+        "final_runner_implemented": false
+      }
+    },
+    "analysis_phase3_real_data_binding": {
+      "module": "src.workers.analysis_phase3_real_data_binding_worker",
+      "callable": "run_worker",
+      "status": "implemented",
+      "description": "Read-only Phase 3 bridge that scans Phase 1/2 derived artifacts and writes real-data coverage reports.",
+      "outputs": [
+        "PHASE3_REAL_DATA_BINDING_REPORT.json",
+        "PHASE3_REAL_DATA_BINDING_REPORT.md",
+        "PHASE3_ARTIFACT_COVERAGE.json"
+      ],
+      "safety": {
+        "source_mutation_allowed": false,
+        "cad_execution_allowed": false,
+        "zwcad_com_allowed": false,
+        "xicad_alias_execution_allowed": false
+      }
+    },
+    "analysis_phase4_metrics_decision_bridge": {
+      "module": "src.workers.analysis_phase4_metrics_decision_bridge_worker",
+      "callable": "run_worker",
+      "status": "implemented",
+      "description": "Review-only Phase 4 bridge from Phase 3 artifact coverage to metrics and decision candidates.",
+      "outputs": [
+        "PHASE4_METRICS_DECISION_BRIDGE.json",
+        "PHASE4_METRICS_DECISION_BRIDGE.md",
+        "PHASE4_DECISION_BRIDGE_PACKAGE.json"
+      ],
+      "safety": {
+        "source_mutation_allowed": false,
+        "cad_execution_allowed": false,
+        "zwcad_com_allowed": false,
+        "sendcommand_allowed": false,
+        "xicad_alias_execution_allowed": false,
+        "decision_package_is_review_only": true
+      }
+    },
+    "analysis_phase5_domain_rule_decision_bridge": {
+      "module": "src.workers.analysis_phase5_domain_rule_decision_bridge_worker",
+      "callable": "run_worker",
+      "status": "implemented",
+      "description": "Review-only Phase 5 bridge from Phase 4 decision candidates to Domain Rule Decision input package.",
+      "outputs": [
+        "PHASE5_DOMAIN_DECISION_BRIDGE.json",
+        "PHASE5_DOMAIN_DECISION_BRIDGE.md",
+        "PHASE5_DOMAIN_RULE_INPUT_PACKAGE.json"
+      ],
+      "safety": {
+        "source_mutation_allowed": false,
+        "cad_execution_allowed": false,
+        "zwcad_com_allowed": false,
+        "sendcommand_allowed": false,
+        "xicad_alias_execution_allowed": false,
+        "execution_allowed": false,
+        "domain_rule_review_only": true
+      }
+    },
+    "analysis_phase6_domain_rule_workflow_adapter": {
+      "module": "src.workers.analysis_phase6_domain_rule_workflow_adapter_worker",
+      "callable": "run_worker",
+      "status": "implemented",
+      "description": "Review-only Phase 6 adapter from Phase 5 domain bridge to Domain Rule Decision Workflow input.",
+      "outputs": [
+        "PHASE6_DOMAIN_RULE_WORKFLOW_ADAPTER.json",
+        "PHASE6_DOMAIN_RULE_WORKFLOW_ADAPTER.md",
+        "DOMAIN_RULE_DECISION_INPUT_FROM_PHASE6.json"
+      ],
+      "safety": {
+        "source_mutation_allowed": false,
+        "cad_execution_allowed": false,
+        "zwcad_com_allowed": false,
+        "sendcommand_allowed": false,
+        "xicad_alias_execution_allowed": false,
+        "execution_allowed": false,
+        "domain_rule_review_only": true,
+        "command_plan_execution_allowed": false
+      }
+    },
+    "analysis_phase7_9_review_pipeline_bundle": {
+      "module": "src.workers.analysis_phase7_9_review_pipeline_bundle_worker",
+      "callable": "run_worker",
+      "status": "implemented",
+      "description": "Runs Phase 7~9 review-only domain decision, review gate, and readiness summary chain.",
+      "outputs": [
+        "PHASE7_DOMAIN_DECISION_PACKAGE.json",
+        "PHASE8_REVIEW_GATE_CHAIN.json",
+        "PHASE9_PIPELINE_READINESS_SUMMARY.json"
+      ],
+      "safety": {
+        "source_mutation_allowed": false,
+        "cad_execution_allowed": false,
+        "zwcad_com_allowed": false,
+        "sendcommand_allowed": false,
+        "xicad_alias_execution_allowed": false,
+        "ready_for_live_execution": false
+      }
+    }
+  }
+}

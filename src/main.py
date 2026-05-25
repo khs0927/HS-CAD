@@ -24,5 +24,22 @@ import src.app.converters_cli  # noqa: F401,E402
 import src.app.run_summary_cli  # noqa: F401,E402
 import src.app.reviewcontext_dxf_cli  # noqa: F401,E402
 
+# Analysis Megapack integrations
+import src.app.analysis_shortcut_cli  # noqa: F401,E402
+import src.app.analysis_shortcut_cli_v2  # noqa: F401,E402
+import src.app.analysis_shortcut_cli_v3  # noqa: F401,E402
+import src.app.analysis_pipeline_cli  # noqa: F401,E402
+import src.app.analysis_phase3_cli  # noqa: F401,E402
+import src.app.analysis_phase4_cli  # noqa: F401,E402
+import src.app.analysis_phase5_cli  # noqa: F401,E402
+import src.app.analysis_phase6_cli  # noqa: F401,E402
+import src.app.analysis_phase7_9_cli  # noqa: F401,E402
+import src.app.analysis_phase10_11_cli  # noqa: F401,E402
+import src.app.analysis_phase12_cli  # noqa: F401,E402
+import src.app.final_todo_cli  # noqa: F401,E402
+import src.app.main_readiness_cli  # noqa: F401,E402
+import src.app.post_pr53_main_readiness_cli  # noqa: F401,E402
+import src.app.main_merge_readiness_cli  # noqa: F401,E402
+
 if __name__ == '__main__':
     app()

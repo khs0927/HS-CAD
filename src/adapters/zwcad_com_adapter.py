@@ -15,38 +15,96 @@ class ZWCADCOMAdapter(CADAdapter):
     lazily, every COM attribute access is guarded, and a single bad entity never
     stops a drawing scan. This keeps `--help` and pytest usable on non-ZWCAD
     machines while still providing an executable fallback on Windows.
+
+    Parameters
+    ----------
+    visible:
+        Whether a freshly spawned ZWCAD instance should be visible.
+    version:
+        Optional ZWCAD version pin. Accepts ``"2026"``, ``"2025"``,
+        ``"2024"`` (mapped to legacy ProgIDs) or ``None`` to scan all
+        known ProgIDs. The version pin affects which ProgIDs are
+        attempted and the order in which they are tried.
+    start_if_needed:
+        If ``True`` (default) and no running ZWCAD instance is found,
+        a new instance will be spawned via ``CreateObject``. If
+        ``False``, only an already-running ZWCAD will be attached to
+        and ``connect()`` will raise ``RuntimeError`` if none is
+        available.
     """
 
-    def __init__(self, visible: bool = True):
+    # Map known versions to candidate ProgIDs in priority order.
+    _VERSION_PROGIDS: dict[str, list[str]] = {
+        "2026": ["ZWCAD.Application.2026", "ZWCAD.Application"],
+        "2025": ["ZWCAD.Application.2025", "ZWCAD.Application"],
+        "2024": ["ZWCAD.Application.2024", "ZWCAD.Application"],
+    }
+    _DEFAULT_PROGIDS: list[str] = [
+        "ZWCAD.Application.2026",
+        "ZWCAD.Application.2025",
+        "ZWCAD.Application.2024",
+        "ZWCAD.Application",
+    ]
+
+    def __init__(
+        self,
+        visible: bool = True,
+        *,
+        version: str | None = None,
+        start_if_needed: bool = True,
+    ) -> None:
         self.visible = visible
+        self.version = version
+        self.start_if_needed = start_if_needed
         self.app: Any = None
         self.doc: Any = None
+        self.active_progid: str | None = None
         self.warnings: list[dict[str, Any]] = []
+
+    def _candidate_progids(self) -> list[str]:
+        if self.version and self.version in self._VERSION_PROGIDS:
+            return list(self._VERSION_PROGIDS[self.version])
+        return list(self._DEFAULT_PROGIDS)
 
     def connect(self) -> None:
         import comtypes.client  # type: ignore
-        progids = ['ZWCAD.Application.2026', 'ZWCAD.Application.2024', 'ZWCAD.Application']
-        
-        # 1. Try to connect to an active ZWCAD instance first
+
+        progids = self._candidate_progids()
+
+        # 1. Try to attach to an already-running ZWCAD instance.
         for progid in progids:
             try:
                 self.app = comtypes.client.GetActiveObject(progid)
+                self.active_progid = progid
                 logger.success(f'Connected to active ZWCAD via COM: {progid}')
                 return
             except Exception:
                 continue
-                
-        # 2. If no active instance, spawn a new ZWCAD instance
+
+        # 2. Optionally spawn a new instance.
+        if not self.start_if_needed:
+            raise RuntimeError(
+                'No running ZWCAD instance found and start_if_needed=False '
+                f'(tried: {progids}).'
+            )
+
         for progid in progids:
             try:
                 self.app = comtypes.client.CreateObject(progid)
-                self.app.Visible = self.visible
+                try:
+                    self.app.Visible = self.visible
+                except Exception:
+                    pass
+                self.active_progid = progid
                 logger.success(f'Created new ZWCAD instance via COM: {progid}')
                 return
             except Exception:
                 continue
-                
-        raise RuntimeError('Failed to connect to ZWCAD COM. GetActiveObject and CreateObject both failed for ZWCAD 2026/2024/Application.')
+
+        raise RuntimeError(
+            'Failed to connect to ZWCAD COM. GetActiveObject and CreateObject '
+            f'both failed for ProgIDs: {progids}.'
+        )
 
     def open_document(self, path: str) -> Any:
         if self.app is None:

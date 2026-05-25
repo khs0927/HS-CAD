@@ -1,0 +1,23 @@
+{
+  "workers_to_add": [
+    {
+      "name": "main_readiness_local_validation_planner",
+      "module": "src.workers.main_readiness_local_validation_planner_worker",
+      "callable": "run_worker",
+      "status": "implemented",
+      "description": "Generates main-readiness and local-only validation planning artifacts.",
+      "outputs": [
+        "MAIN_READINESS_LOCAL_VALIDATION_PLAN.json",
+        "MAIN_READINESS_LOCAL_VALIDATION_PLAN.md",
+        "LOCAL_ONLY_VALIDATION_TODO.json"
+      ],
+      "safety": {
+        "cad_execution_allowed_by_default": false,
+        "sendcommand_allowed_by_default": false,
+        "final_live_runner_implemented": false,
+        "local_only_validation_required_before_live_runner": true
+      }
+    }
+  ],
+  "note": "Merge into config/worker_manifest.json only after final review readiness passes."
+}

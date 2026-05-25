@@ -1,0 +1,26 @@
+{
+  "workers_to_add": [
+    {
+      "name": "analysis_phase10_11_domain_copy_validation",
+      "module": "src.workers.analysis_phase10_11_domain_copy_validation_worker",
+      "callable": "run_worker",
+      "status": "implemented",
+      "description": "Runs Phase 10~11 review-only domain decision connector and copied-DWG validation planning.",
+      "outputs": [
+        "PHASE10_DOMAIN_DECISION_CONNECTOR.json",
+        "PHASE10_DOMAIN_RULE_DECISION_CLI_PLAN.json",
+        "PHASE11_COPIED_DWG_VALIDATION_BRIDGE.json",
+        "PHASE11_COPY_VALIDATION_CLI_PLAN.json"
+      ],
+      "safety": {
+        "source_mutation_allowed": false,
+        "cad_execution_allowed": false,
+        "zwcad_com_allowed": false,
+        "sendcommand_allowed": false,
+        "xicad_alias_execution_allowed": false,
+        "live_execution_allowed": false
+      }
+    }
+  ],
+  "note": "Manually merge into config/worker_manifest.json only after import-safety validation."
+}
