@@ -2,7 +2,7 @@ import json
 import logging
 from pathlib import Path
 
-import click
+import typer
 
 from src.analysis.final_live_runner import FinalLiveRunner
 from src.app.cli import app
@@ -10,10 +10,11 @@ from src.app.cli import app
 logger = logging.getLogger(__name__)
 
 @app.command("zwcad-copy-scan-validate")
-@click.option("--original-dwg", required=True, help="Original DWG path.")
-@click.option("--working-copy-dwg", required=True, help="Copied DWG path.")
-@click.option("--out-dir", required=True, help="Output directory.")
-def zwcad_copy_scan_validate_cmd(original_dwg: str, working_copy_dwg: str, out_dir: str):
+def zwcad_copy_scan_validate_cmd(
+    original_dwg: str = typer.Option(..., "--original-dwg", help="Original DWG path."),
+    working_copy_dwg: str = typer.Option(..., "--working-copy-dwg", help="Copied DWG path."),
+    out_dir: str = typer.Option(..., "--out-dir", help="Output directory.")
+):
     """Copied DWG scan validation."""
     logger.info("Running ZWCAD copy scan validation...")
     runner = FinalLiveRunner()
@@ -28,12 +29,13 @@ def zwcad_copy_scan_validate_cmd(original_dwg: str, working_copy_dwg: str, out_d
     logger.info(f"Result written to {res_path}")
 
 @app.command("zwcad-copy-saveas-validate")
-@click.option("--original-dwg", required=True, help="Original DWG path.")
-@click.option("--working-copy-dwg", required=True, help="Copied DWG path.")
-@click.option("--save-as-target", required=True, help="SaveAs target path.")
-@click.option("--out-dir", required=True, help="Output directory.")
-@click.option("--overwrite-copy", is_flag=True, help="Allow overwrite.")
-def zwcad_copy_saveas_validate_cmd(original_dwg: str, working_copy_dwg: str, save_as_target: str, out_dir: str, overwrite_copy: bool):
+def zwcad_copy_saveas_validate_cmd(
+    original_dwg: str = typer.Option(..., "--original-dwg", help="Original DWG path."),
+    working_copy_dwg: str = typer.Option(..., "--working-copy-dwg", help="Copied DWG path."),
+    save_as_target: str = typer.Option(..., "--save-as-target", help="SaveAs target path."),
+    out_dir: str = typer.Option(..., "--out-dir", help="Output directory."),
+    overwrite_copy: bool = typer.Option(False, "--overwrite-copy", is_flag=True, help="Allow overwrite.")
+):
     """Copied DWG SaveAs validation."""
     logger.info("Running ZWCAD copy SaveAs validation...")
     runner = FinalLiveRunner()
@@ -48,9 +50,10 @@ def zwcad_copy_saveas_validate_cmd(original_dwg: str, working_copy_dwg: str, sav
     logger.info(f"Result written to {res_path}")
 
 @app.command("xicad-policy-candidates")
-@click.option("--xicad-root", required=True, help="XiCAD root path.")
-@click.option("--out-dir", required=True, help="Output directory.")
-def xicad_policy_candidates_cmd(xicad_root: str, out_dir: str):
+def xicad_policy_candidates_cmd(
+    xicad_root: str = typer.Option(..., "--xicad-root", help="XiCAD root path."),
+    out_dir: str = typer.Option(..., "--out-dir", help="Output directory.")
+):
     """C:/xicad allowlist policy validation."""
     logger.info("Running XiCAD policy candidate validation...")
     runner = FinalLiveRunner()
