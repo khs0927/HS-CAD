@@ -15,6 +15,7 @@ import src.app.xicad_manual_recorder_cli  # noqa: F401,E402
 import src.app.xicad_policy_candidate_cli  # noqa: F401,E402
 import src.app.xicad_alias_allowlist_cli  # noqa: F401,E402
 import src.app.xicad_sandbox_cli  # noqa: F401,E402
+import src.app.xicad_signature_validator_cli  # noqa: F401,E402
 import src.app.autopilot_cli  # noqa: F401,E402
 import src.app.landscape_sync_cli  # noqa: F401,E402
 import src.app.corpus_cli  # noqa: F401,E402

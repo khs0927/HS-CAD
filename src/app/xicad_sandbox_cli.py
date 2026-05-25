@@ -50,7 +50,12 @@ def xicad_sandbox_extract(
     with open(sig_file, "w", encoding="utf-8") as f:
         json.dump(delta_report.to_dict(), f, indent=2, ensure_ascii=False)
 
-    console.print(f"[green]Delta successfully extracted![/green]")
+    try:
+        working_copy.unlink(missing_ok=True)
+    except Exception:
+        pass
+
+    console.print(f"[green]Delta successfully extracted and temp drawing removed![/green]")
     console.print(f"- Added: {delta_report.added_count}")
     console.print(f"- Modified: {delta_report.modified_count}")
     console.print(f"- Deleted: {delta_report.deleted_count}")

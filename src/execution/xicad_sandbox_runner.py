@@ -64,6 +64,11 @@ class XiCADSandboxRunner:
         # 6. Snapshot AFTER
         after = build_scan_snapshot(self.adapter, str(working_path.resolve()))
 
+        try:
+            doc.Close(False)
+        except Exception:
+            pass
+
         # 7. Extract Delta
         delta = extract_dxf_delta(before, after, command_hint=command_hint)
         return delta
