@@ -12,6 +12,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Iterable
 
+from hscad.connectors.artifact_schema import extract_artifact_records, summarize_artifact_schema
 from hscad.core.evidence import Evidence, make_evidence
 from hscad.core.models import DrawingEntity, FileizedDrawing
 
@@ -51,6 +52,7 @@ class LegacyArtifact:
             "kind": self.kind,
             "recognized": self.recognized,
             "payload_type": type(self.payload).__name__,
+            "schema": summarize_artifact_schema(self.payload, self.kind).to_record(),
         }
 
 
@@ -146,7 +148,7 @@ class LegacyArtifactAdapter:
                 source_id=artifact.path,
                 confidence=0.86,
                 reason="known_artifact_loaded",
-                data={"artifact": artifact.to_record(), "summary": summarize_payload(payload)},
+                data={"artifact": artifact.to_record(), "summary": summarize_payload(payload), "schema": summarize_artifact_schema(payload, artifact.kind).to_record()},
             )
         ]
         if artifact.name == "FILEIZED_DRAWING.json":
@@ -205,7 +207,11 @@ class LegacyArtifactAdapter:
 
     def _domain_rule_evidence(self, artifact: LegacyArtifact) -> list[Evidence]:
         payload = artifact.payload
-        records = payload if isinstance(payload, list) else payload.get("results", []) if isinstance(payload, dict) else []
+        records = extract_artifact_records(
+            payload,
+            artifact.kind,
+            preferred_keys=("results", "rules", "domain_rules", "items"),
+        )
         evidence: list[Evidence] = []
         for index, record in enumerate(records[: self.max_detail_records]):
             if not isinstance(record, dict):
@@ -228,8 +234,8 @@ class LegacyArtifactAdapter:
 
     def _cross_validation_evidence(self, artifact: LegacyArtifact) -> list[Evidence]:
         payload = artifact.payload if isinstance(artifact.payload, dict) else {}
-        conflicts = payload.get("conflicts") if isinstance(payload.get("conflicts"), list) else []
-        recs = payload.get("recommendations") if isinstance(payload.get("recommendations"), list) else []
+        conflicts = extract_artifact_records(payload, artifact.kind, preferred_keys=("conflicts", "issues", "gaps"))
+        recs = extract_artifact_records(payload, artifact.kind, preferred_keys=("recommendations", "actions"))
         evidence: list[Evidence] = []
         for index, conflict in enumerate(conflicts[: self.max_detail_records]):
             evidence.append(
@@ -434,19 +440,7 @@ def summarize_payload(payload: Any) -> Json:
 
 
 def _extract_list_or_mapping(payload: Any, preferred_keys: Iterable[str]) -> list[Any]:
-    if isinstance(payload, list):
-        return payload
-    if isinstance(payload, dict):
-        for key in preferred_keys:
-            value = payload.get(key)
-            if isinstance(value, list):
-                return value
-            if isinstance(value, dict):
-                return [{"name": k, **v} if isinstance(v, dict) else {"name": k, "value": v} for k, v in value.items()]
-        # Common pattern: mapping of IDs to result objects.
-        if payload and all(isinstance(v, (dict, str, int, float, bool, type(None))) for v in payload.values()):
-            return [{"name": k, **v} if isinstance(v, dict) else {"name": k, "value": v} for k, v in payload.items()]
-    return []
+    return extract_artifact_records(payload, "legacy_artifact", preferred_keys=preferred_keys)
 
 
 def _confidence_from_status(status: str, default: float) -> float:
