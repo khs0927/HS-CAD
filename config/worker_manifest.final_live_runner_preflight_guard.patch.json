@@ -1,0 +1,26 @@
+{
+  "workers_to_add": [
+    {
+      "name": "final_live_runner_preflight_guard",
+      "module": "src.workers.final_live_runner_preflight_guard_worker",
+      "callable": "run_worker",
+      "status": "implemented",
+      "description": "Validates Final Live Runner preflight gates without executing CAD.",
+      "outputs": [
+        "FINAL_LIVE_RUNNER_PREFLIGHT_DECISION.json",
+        "FINAL_LIVE_RUNNER_PREFLIGHT_DECISION.md",
+        "FINAL_LIVE_RUNNER_PREFLIGHT_AUDIT_INTENT.json",
+        "FINAL_LIVE_RUNNER_PREFLIGHT_REFUSAL_REASONS.json",
+        "NEXT_IMPLEMENTATION_PR_PLAN.json"
+      ],
+      "safety": {
+        "this_package_runs_cad": false,
+        "this_package_calls_sendcommand": false,
+        "this_package_calls_saveas": false,
+        "this_package_executes_xicad_alias": false,
+        "this_package_implements_final_live_runner": false,
+        "default_execution_allowed": false
+      }
+    }
+  ]
+}
