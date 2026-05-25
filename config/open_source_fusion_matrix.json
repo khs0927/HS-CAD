@@ -1,0 +1,53 @@
+{
+  "version": 1,
+  "principle": "Open-source tools provide optional evidence signals. HS-CAD decides through cross-validation, confidence, and audit outputs.",
+  "targets": [
+    {
+      "target_type": "area_element",
+      "signals": [
+        {"id": "closed_polyline_area", "backend": "pure_python", "weight": 0.18, "status": "implemented"},
+        {"id": "line_loop_area", "backend": "pure_python", "weight": 0.14, "status": "implemented"},
+        {"id": "arc_segment_loop_area", "backend": "pure_python", "weight": 0.12, "status": "implemented"},
+        {"id": "hatch_boundary_area", "backend": "ezdxf", "weight": 0.2, "status": "implemented"},
+        {"id": "shapely_polygonize_area", "backend": "shapely", "weight": 0.18, "status": "planned_pr6"},
+        {"id": "opencv_contour_area", "backend": "opencv", "weight": 0.1, "status": "planned_pr9"},
+        {"id": "room_label_inside", "backend": "hscad_text_roles", "weight": 0.08, "status": "implemented"}
+      ]
+    },
+    {
+      "target_type": "text_role",
+      "signals": [
+        {"id": "cad_text_position", "backend": "ezdxf", "weight": 0.2, "status": "implemented"},
+        {"id": "boundary_containment", "backend": "hscad_spatial", "weight": 0.2, "status": "implemented"},
+        {"id": "table_region_exclusion", "backend": "hscad_text_roles", "weight": 0.12, "status": "implemented"},
+        {"id": "leader_proximity", "backend": "hscad_text_roles", "weight": 0.1, "status": "implemented"},
+        {"id": "ocr_match", "backend": "paddleocr", "weight": 0.18, "status": "planned_pr10"},
+        {"id": "layout_region", "backend": "layoutparser", "weight": 0.1, "status": "planned_pr10"},
+        {"id": "layer_semantic_support", "backend": "hscad_layer_semantics", "weight": 0.1, "status": "implemented"}
+      ]
+    },
+    {
+      "target_type": "layer_semantic",
+      "signals": [
+        {"id": "layer_name_pattern", "backend": "hscad_layer_semantics", "weight": 0.25, "status": "implemented"},
+        {"id": "entity_type_distribution", "backend": "hscad_layer_semantics", "weight": 0.2, "status": "implemented"},
+        {"id": "color_distribution", "backend": "hscad_layer_semantics", "weight": 0.1, "status": "implemented"},
+        {"id": "linetype_distribution", "backend": "hscad_layer_semantics", "weight": 0.1, "status": "implemented"},
+        {"id": "block_name_samples", "backend": "hscad_layer_semantics", "weight": 0.15, "status": "implemented"},
+        {"id": "graph_connections", "backend": "hscad_spatial_graph", "weight": 0.1, "status": "implemented"},
+        {"id": "manual_correction", "backend": "future_company_profile", "weight": 0.1, "status": "deferred"}
+      ]
+    },
+    {
+      "target_type": "graph_relationship",
+      "signals": [
+        {"id": "area_has_label", "backend": "hscad_spatial_graph", "weight": 0.25, "status": "implemented"},
+        {"id": "layer_has_text", "backend": "hscad_spatial_graph", "weight": 0.15, "status": "implemented"},
+        {"id": "layer_has_area", "backend": "hscad_spatial_graph", "weight": 0.15, "status": "implemented"},
+        {"id": "networkx_component_check", "backend": "networkx", "weight": 0.2, "status": "planned_pr7"},
+        {"id": "duckdb_corpus_statistics", "backend": "duckdb", "weight": 0.1, "status": "planned_pr8"},
+        {"id": "orphan_detection", "backend": "hscad_graph_audit", "weight": 0.15, "status": "planned_pr7"}
+      ]
+    }
+  ]
+}

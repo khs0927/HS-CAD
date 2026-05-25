@@ -85,11 +85,67 @@ class DXFEzdxfFileizer(DrawingFileizer):
             except Exception:
                 item['points'] = []
             item['closed'] = bool(getattr(entity, 'is_closed', False))
+        elif etype == 'HATCH':
+            item['pattern_name'] = getattr(entity.dxf, 'pattern_name', None)
+            item['solid_fill'] = getattr(entity.dxf, 'solid_fill', None)
+            item['boundary_path_count'] = len(getattr(entity, 'paths', []) or [])
+            item['boundary_hint'] = True
+            item['paths'] = self._hatch_paths(entity)
         elif 'DIMENSION' in etype:
             item['entity_type'] = 'DIMENSION'
             item['text_override'] = getattr(entity.dxf, 'text', None)
             item['measurement'] = getattr(entity, 'get_measurement', lambda: None)()
         return item
+
+    def _hatch_paths(self, entity: Any) -> list[dict[str, Any]]:
+        rows: list[dict[str, Any]] = []
+        for path in list(getattr(entity, 'paths', []) or []):
+            points = self._hatch_path_points(path)
+            rows.append({'path_type': path.__class__.__name__, 'points': points})
+        return rows
+
+    def _hatch_path_points(self, path: Any) -> list[list[float]]:
+        points: list[list[float]] = []
+        for vertex in list(getattr(path, 'vertices', []) or []):
+            xyz = self._xyz(vertex)
+            if xyz is not None:
+                points.append(xyz)
+        if points:
+            return points
+        for edge in list(getattr(path, 'edges', []) or []):
+            edge_points = self._hatch_edge_points(edge)
+            if points and edge_points and points[-1][:2] == edge_points[0][:2]:
+                points.extend(edge_points[1:])
+            else:
+                points.extend(edge_points)
+        return points
+
+    def _hatch_edge_points(self, edge: Any) -> list[list[float]]:
+        edge_name = edge.__class__.__name__.lower()
+        if 'line' in edge_name:
+            start = self._xyz(getattr(edge, 'start', None))
+            end = self._xyz(getattr(edge, 'end', None))
+            return [p for p in [start, end] if p is not None]
+        if 'arc' in edge_name:
+            center = self._xyz(getattr(edge, 'center', None))
+            radius = getattr(edge, 'radius', None)
+            start_angle = getattr(edge, 'start_angle', None)
+            end_angle = getattr(edge, 'end_angle', None)
+            if center is None or radius is None or start_angle is None or end_angle is None:
+                return []
+            import math
+            start = math.radians(float(start_angle))
+            end = math.radians(float(end_angle))
+            if end < start:
+                end += math.tau
+            steps = 16
+            return [
+                [center[0] + math.cos(start + (end - start) * i / (steps - 1)) * float(radius),
+                 center[1] + math.sin(start + (end - start) * i / (steps - 1)) * float(radius),
+                 0.0]
+                for i in range(steps)
+            ]
+        return []
 
     def fileize(self, path: str | Path, *, file_id: str, relative_path: str | Path) -> FileizedDrawingRecord:
         src = Path(path)
