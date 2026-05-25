@@ -1,0 +1,24 @@
+{
+  "workers_to_add": [
+    {
+      "name": "local_evidence_finalization_safety_spec_approval",
+      "module": "src.workers.local_evidence_finalization_safety_spec_approval_worker",
+      "callable": "run_worker",
+      "status": "implemented",
+      "description": "Finalizes local evidence readiness for human safety spec approval. Does not execute CAD.",
+      "outputs": [
+        "LOCAL_EVIDENCE_FINALIZATION_SAFETY_SPEC_APPROVAL.json",
+        "LOCAL_EVIDENCE_FINALIZATION_SAFETY_SPEC_APPROVAL.md",
+        "HUMAN_SAFETY_SPEC_APPROVAL_PROMPT.md",
+        "IMPLEMENTATION_PR_HARD_GATES.json"
+      ],
+      "safety": {
+        "this_package_runs_cad": false,
+        "this_package_calls_sendcommand": false,
+        "this_package_implements_final_live_runner": false,
+        "implementation_pr_allowed_by_this_package": false
+      }
+    }
+  ],
+  "note": "Approval gate only. Implementation remains separate."
+}

@@ -12,7 +12,7 @@ from __future__ import annotations
 import logging
 from typing import List
 
-from neuro_seq_cad.fusion.evidence_graph import EvidenceGraph, EvidenceEntity, BBox, Polygon2D, SourceInfo
+from neuro_seq_cad.fusion.evidence_graph import EvidenceGraph, EvidenceEntity, BBox, Polygon2D
 from neuro_seq_cad.vlm.schemas import VLMFloorplanRefinementOutput, CorrectionInstruction
 
 logger = logging.getLogger(__name__)

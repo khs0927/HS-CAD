@@ -11,7 +11,6 @@ from __future__ import annotations
 import logging
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any
 
 from neuro_seq_cad.fusion.evidence_graph import EvidenceGraph
 
@@ -65,22 +64,22 @@ class QAReportGenerator:
         low_conf_items = self.graph.low_confidence(0.6)
 
         lines = [
-            f"# 📐 Floorplan-to-CAD 품질 보증 (QA) 보고서",
-            f"",
-            f"본 보고서는 AI 파이프라인(Raster2Seq + MLSD + PlanParser + PaddleOCR + VLM Refiner)을 통해 생성된 CAD 도면의 정밀도 및 일관성을 검증한 결과입니다.",
-            f"",
-            f"---",
-            f"",
-            f"## 📋 1. 도면 분석 개요",
+            "# 📐 Floorplan-to-CAD 품질 보증 (QA) 보고서",
+            "",
+            "본 보고서는 AI 파이프라인(Raster2Seq + MLSD + PlanParser + PaddleOCR + VLM Refiner)을 통해 생성된 CAD 도면의 정밀도 및 일관성을 검증한 결과입니다.",
+            "",
+            "---",
+            "",
+            "## 📋 1. 도면 분석 개요",
             f"- **분석 시각**: `{datetime.now(timezone.utc).isoformat()}` (UTC)",
             f"- **대상 이미지**: `{pipeline.image_path or 'synthetic_floorplan.png'}`",
             f"- **이미지 해상도**: `{pipeline.image_width} x {pipeline.image_height} px`",
             f"- **적용 축적 스케일 계수**: `1 px = {scale:.4f} mm` ({scale_calibration_method})",
             f"- **활성화 추론 소스**: `{', '.join(pipeline.active_sources) or 'Raster2SeqMock'}`",
-            f"",
-            f"## 📊 2. 건축 기하 통계 (Entity Summary)",
-            f"| 요소 유형 (Entity Type) | 검출 개수 (Count) | 타겟 CAD 레이어 | 설명 |",
-            f"| :--- | :---: | :---: | :--- |",
+            "",
+            "## 📊 2. 건축 기하 통계 (Entity Summary)",
+            "| 요소 유형 (Entity Type) | 검출 개수 (Count) | 타겟 CAD 레이어 | 설명 |",
+            "| :--- | :---: | :---: | :--- |",
             f"| 기둥 (Column) | `{summary.get('column', 0)}` | `COL` | 골조 사각 기둥 블록 |",
             f"| 외벽/일반벽 (Wall) | `{summary.get('wall', 0)}` | `WAL1 / WAL2` | 외곽 내력벽 및 내부 파티션 선분 |",
             f"| 문 (Door) | `{summary.get('door', 0)}` | `DOOR` | 90° Swing 여닫이 블록 |",
@@ -91,8 +90,8 @@ class QAReportGenerator:
             f"| 가구 (Furniture) | `{summary.get('furniture', 0)}` | `FUR` | 침대, 변기, 싱크 등 내장재 |",
             f"| 계단 (Stair) | `{summary.get('stair', 0)}` | `STAIR` | 피난 계단선 |",
             f"| **총합 (Total Entities)** | **`{total_entities}`** | - | **전체 기하 객체 수** |",
-            f"",
-            f"## 🛡️ 3. 다중 센서 융합 및 충돌 해결 (Fusion & Conflicts)",
+            "",
+            "## 🛡️ 3. 다중 센서 융합 및 충돌 해결 (Fusion & Conflicts)",
         ]
 
         # 충돌 로그 파싱
@@ -111,8 +110,8 @@ class QAReportGenerator:
             lines.append("- 감지된 심볼/공간 영역 간의 심각한 중복 겹침 및 중복 할당 충돌이 발견되지 않았습니다. (클린 그래프 상태)")
 
         lines.extend([
-            f"",
-            f"## 👁️ 4. VLM (Vision-Language) 최종 감리 및 미세 보정",
+            "",
+            "## 👁️ 4. VLM (Vision-Language) 최종 감리 및 미세 보정",
         ])
 
         # VLM 피드백 파싱
@@ -136,8 +135,8 @@ class QAReportGenerator:
             lines.append("- VLM 에이전트의 비교 도면 감수 결과, 모델 기하와 래스터 픽셀 스케일이 매우 잘 일치하여 특별한 수동 시프트 보정이 제외되었습니다.")
 
         lines.extend([
-            f"",
-            f"## 📈 5. 최종 데이터 신뢰도 품질 검사",
+            "",
+            "## 📈 5. 최종 데이터 신뢰도 품질 검사",
             f"- **도면 종합 평균 신뢰도**: `{avg_conf * 100:.2f}%`",
             f"- **검수 요구 항목 (Needs Review)**: `{len(low_conf_items)}`건",
         ])

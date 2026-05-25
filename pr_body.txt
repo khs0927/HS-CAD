@@ -1,0 +1,54 @@
+## Summary
+
+Adds a local evidence finalization and safety spec approval gate.
+
+This PR does not run local validation and does not implement final live runner.
+
+## Added
+
+- src/analysis/local_evidence_finalization_safety_spec_approval.py
+- src/workers/local_evidence_finalization_safety_spec_approval_worker.py
+- src/app/local_evidence_finalization_cli.py
+- tests/test_local_evidence_finalization_safety_spec_approval.py
+- docs/138_local_evidence_finalization_safety_spec_approval_prompt.md
+- docs/139_local_evidence_finalization_safety_spec_approval_report.md
+- docs/140_local_evidence_finalization_safety_spec_approval_result.md
+- config/worker_manifest.local_evidence_finalization.patch.json
+- MAIN_IMPORT_LOCAL_EVIDENCE_FINALIZATION_PATCH.txt
+- README_APPLY_LOCAL_EVIDENCE_FINALIZATION.md
+- PROMPT_LOCAL_EVIDENCE_FINALIZATION_SAFETY_SPEC_APPROVAL.txt
+
+## Outputs
+
+- LOCAL_EVIDENCE_FINALIZATION_SAFETY_SPEC_APPROVAL.json
+- LOCAL_EVIDENCE_FINALIZATION_SAFETY_SPEC_APPROVAL.md
+- HUMAN_SAFETY_SPEC_APPROVAL_PROMPT.md
+- IMPLEMENTATION_PR_HARD_GATES.json
+
+## Safety
+
+- No CAD execution during PR validation
+- No PowerShell execution
+- No ZWCAD COM
+- No SendCommand
+- No XiCAD alias execution
+- No original DWG mutation
+- No final live runner implementation
+- Safety spec approval only
+- Implementation requires separate PR
+
+## Validation
+
+- python -X utf8 -m pytest -q tests/test_local_evidence_finalization_safety_spec_approval.py
+- python -X utf8 -m compileall -q src tests
+- python -X utf8 -m pytest -q
+- python -X utf8 -m src.main --help
+- python -X utf8 -m src.main hscad-local-evidence-finalization --repo-root . --out-dir outputs\local_evidence_finalization_safety_spec_approval
+
+## Not included
+
+- No actual local validation execution
+- No PowerShell execution
+- No final live runner implementation
+- No outputs committed
+- No DWG/DXF committed

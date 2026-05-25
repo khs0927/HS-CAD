@@ -8,7 +8,6 @@ networkx 그래프를 사용하여 연결 관계를 파악하고 사이클/체�
 from __future__ import annotations
 
 import logging
-import math
 from typing import Sequence
 
 from neuro_seq_cad.geometry.primitives import Line2D, Point2D

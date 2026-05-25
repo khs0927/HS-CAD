@@ -20,12 +20,12 @@ from pathlib import Path
 from typing import Any
 
 from neuro_seq_cad.config.settings import get_settings
-from neuro_seq_cad.config.layer_schema import setup_layers, get_layer_for_element
+from neuro_seq_cad.config.layer_schema import setup_layers
 from neuro_seq_cad.cad.block_factory import create_all_blocks
 from neuro_seq_cad.cad.text_builder import add_text_entities
 from neuro_seq_cad.cad.dimension_builder import add_dimensions
-from neuro_seq_cad.io.coordinate_system import ImageToCADTransformer, Point2D
-from neuro_seq_cad.fusion.evidence_graph import EvidenceGraph, EvidenceEntity
+from neuro_seq_cad.io.coordinate_system import ImageToCADTransformer
+from neuro_seq_cad.fusion.evidence_graph import EvidenceGraph
 
 try:
     import ezdxf

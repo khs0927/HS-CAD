@@ -1,0 +1,257 @@
+{
+  "package": "hs_cad_next_stage_overlay",
+  "file_count": 49,
+  "files": [
+    {
+      "path": ".github/workflows/next-stage-overlay-ci.yml",
+      "size": 868,
+      "sha256": "995aaf388664bff8c67265d933db2f286224117903949538bb8d397843e9ef81"
+    },
+    {
+      "path": ".pytest_cache/.gitignore",
+      "size": 37,
+      "sha256": "3ed731b65d06150c138e2dadb0be0697550888a6b47eb8c45ecc9adba8b8e9bd"
+    },
+    {
+      "path": ".pytest_cache/CACHEDIR.TAG",
+      "size": 191,
+      "sha256": "37dc88ef9a0abeddbe81053a6dd8fdfb13afb613045ea1eb4a5c815a74a3bde4"
+    },
+    {
+      "path": ".pytest_cache/README.md",
+      "size": 302,
+      "sha256": "73fd6fccdd802c419a6b2d983d6c3173b7da97558ac4b589edec2dfe443db9ad"
+    },
+    {
+      "path": ".pytest_cache/v/cache/nodeids",
+      "size": 506,
+      "sha256": "20d05ee906c73854da0c1378e44a272ddff88e02b050158aef4e1bae6eb8e698"
+    },
+    {
+      "path": "APPLY_INSTRUCTIONS.md",
+      "size": 1792,
+      "sha256": "34385ef65cd4322ceef3953fc45c9c0e0019c6ba0e76aff45acc53af45e8d201"
+    },
+    {
+      "path": "CODEX_NEXT_STAGE_PROMPT.md",
+      "size": 1180,
+      "sha256": "a4a2ff402983a5162d3961abbdc625df3d8625ced4f6a50d63f669270983030f"
+    },
+    {
+      "path": "README_NEXT_STAGE_OVERLAY.md",
+      "size": 1894,
+      "sha256": "79c3dc07a07887519212286461f9250a94f80851386f12828ce0cee70a536006"
+    },
+    {
+      "path": "docs/29_next_stage_overlay_plan.md",
+      "size": 1417,
+      "sha256": "dbce4c2105f92f8568a5c7a059dc48ae69bd8fe9d9554da96e21bc8f8bee54f0"
+    },
+    {
+      "path": "docs/30_pyproject_optional_dependencies_snippet.md",
+      "size": 409,
+      "sha256": "f8003e9b18c6a9c716d5e0d9db25132c9fb3a08e1e767f064eeb0c11b9250ab5"
+    },
+    {
+      "path": "scripts/apply_hscad_overlay.py",
+      "size": 1690,
+      "sha256": "0370dbc525d7fbb7f29c68224a104fbb25d2f01afef7dd0f81339c055d53b4a8"
+    },
+    {
+      "path": "scripts/run_hscad_next_stage_smoke.py",
+      "size": 607,
+      "sha256": "951e276bb5611ef721bf6fa2ed1e971d905fe0d4c6f20e2537b5ab7845747ba3"
+    },
+    {
+      "path": "src/hscad/__init__.py",
+      "size": 41,
+      "sha256": "60c4ee3e909da0e6df792c2a7ea8d2eeb16c59a0f51dfc695c1a5e6e3c37c1d6"
+    },
+    {
+      "path": "src/hscad/adapters/__init__.py",
+      "size": 41,
+      "sha256": "60c4ee3e909da0e6df792c2a7ea8d2eeb16c59a0f51dfc695c1a5e6e3c37c1d6"
+    },
+    {
+      "path": "src/hscad/adapters/ezdxf_adapter.py",
+      "size": 6462,
+      "sha256": "0c8f56233e522795c34a819727a74927dc2dedb9e5fe4b4821a9c528b8468556"
+    },
+    {
+      "path": "src/hscad/adapters/odafc_adapter.py",
+      "size": 2062,
+      "sha256": "0586d9df3d4e3e81a448c11872c460f4c3a2a1f84ff7806d92c80d928a4effc9"
+    },
+    {
+      "path": "src/hscad/analyzers/__init__.py",
+      "size": 41,
+      "sha256": "60c4ee3e909da0e6df792c2a7ea8d2eeb16c59a0f51dfc695c1a5e6e3c37c1d6"
+    },
+    {
+      "path": "src/hscad/analyzers/basic_entity_analyzer.py",
+      "size": 2502,
+      "sha256": "0f3b785a6811745d5d147c31f5da4ca344e08eab8e09498f00b29aaab632ae64"
+    },
+    {
+      "path": "src/hscad/cad/__init__.py",
+      "size": 41,
+      "sha256": "60c4ee3e909da0e6df792c2a7ea8d2eeb16c59a0f51dfc695c1a5e6e3c37c1d6"
+    },
+    {
+      "path": "src/hscad/cad/dxf_builders.py",
+      "size": 3878,
+      "sha256": "24c085dc37983d3a7abd325203096dc2415a96e4822af1d3c8fe660de803f7b6"
+    },
+    {
+      "path": "src/hscad/cad/layer_schema.py",
+      "size": 2303,
+      "sha256": "20e5dbc914ed41f0e587fd39eb28ba9f585e754cd50adb3324c214311e280f30"
+    },
+    {
+      "path": "src/hscad/core/__init__.py",
+      "size": 41,
+      "sha256": "60c4ee3e909da0e6df792c2a7ea8d2eeb16c59a0f51dfc695c1a5e6e3c37c1d6"
+    },
+    {
+      "path": "src/hscad/core/evidence.py",
+      "size": 5264,
+      "sha256": "5ded2080020cda96ece583c5f16b3e0ac34a32f612961873675fab99b027b597"
+    },
+    {
+      "path": "src/hscad/core/jsonio.py",
+      "size": 1253,
+      "sha256": "7684d181dee5814ba8db80637b4f0f417c1e2fcc685809065bac6717ef33927a"
+    },
+    {
+      "path": "src/hscad/core/models.py",
+      "size": 1637,
+      "sha256": "00547069b57a688aa639bd886e187aeada3e79d200d70aced69b28b027b9ba3b"
+    },
+    {
+      "path": "src/hscad/domain_rules/__init__.py",
+      "size": 41,
+      "sha256": "60c4ee3e909da0e6df792c2a7ea8d2eeb16c59a0f51dfc695c1a5e6e3c37c1d6"
+    },
+    {
+      "path": "src/hscad/domain_rules/architectural_rules.py",
+      "size": 1392,
+      "sha256": "a3e564de933909991a748e54f1b3e53e3882f57018ac96a85856990761ba3194"
+    },
+    {
+      "path": "src/hscad/domain_rules/base.py",
+      "size": 2402,
+      "sha256": "f0cc3ff05b5f68dd2705b7e0ce5dcd78ad611494adc783d2564bcbea2317f618"
+    },
+    {
+      "path": "src/hscad/domain_rules/energy_rules.py",
+      "size": 1126,
+      "sha256": "b5e4eab914ce83bd6c339d9394d4fbe20d8aec9f6e12b162f10323b5d0dd8778"
+    },
+    {
+      "path": "src/hscad/domain_rules/fire_rules.py",
+      "size": 1572,
+      "sha256": "196631053346da365dea42735e9e4f8c8d73cea9a8aa97f99b72b0ba3314f7c7"
+    },
+    {
+      "path": "src/hscad/domain_rules/runner.py",
+      "size": 995,
+      "sha256": "65ea74f23cea19d34fdf56fac9e2d8b089d6aa35029bbc146cdb95349e1746be"
+    },
+    {
+      "path": "src/hscad/domain_rules/structural_rules.py",
+      "size": 1024,
+      "sha256": "23c86b9eff1d4fff82a697b2fe7a8f4d9be338185c17dbbdcd35b5fc914a37a6"
+    },
+    {
+      "path": "src/hscad/domain_rules/xicad_rule_engine.py",
+      "size": 1024,
+      "sha256": "c0d3b38b63e690337519470b37e3e02f59111a0aaabf9ad2c2098740350347a7"
+    },
+    {
+      "path": "src/hscad/fileizers/__init__.py",
+      "size": 41,
+      "sha256": "60c4ee3e909da0e6df792c2a7ea8d2eeb16c59a0f51dfc695c1a5e6e3c37c1d6"
+    },
+    {
+      "path": "src/hscad/fileizers/base.py",
+      "size": 647,
+      "sha256": "0f361767ddc7eea1715d1cbf017eebcc374e6129f7eebceb99cc696ae3335179"
+    },
+    {
+      "path": "src/hscad/fileizers/batch_fileizer.py",
+      "size": 1262,
+      "sha256": "a0ae88e099d7e7fa0e92cf670eda45063d29c490b688a6d71ad8aa8472803db5"
+    },
+    {
+      "path": "src/hscad/fileizers/dwg_fileizer.py",
+      "size": 1821,
+      "sha256": "8893ca4ab7cc67d7222a52b7c6c34d5da6166ce8ec46378fa771a35eb0510eac"
+    },
+    {
+      "path": "src/hscad/fileizers/dxf_fileizer.py",
+      "size": 1205,
+      "sha256": "db883dd88fcc38ff1498ecc6c5ed589ce4499c007b4b571a76e3f69ed37c3fb6"
+    },
+    {
+      "path": "src/hscad/fileizers/image_fileizer.py",
+      "size": 1623,
+      "sha256": "cdcceccac2991fc7bee4aaf7205742f9d243510266eab3a799b0d209dffde521"
+    },
+    {
+      "path": "src/hscad/fileizers/pdf_fileizer.py",
+      "size": 1491,
+      "sha256": "e047f91b7cf8138214e22dac13b66b7d52207239f9123ac98fe0db1d18854c6e"
+    },
+    {
+      "path": "src/hscad/fusion/__init__.py",
+      "size": 41,
+      "sha256": "60c4ee3e909da0e6df792c2a7ea8d2eeb16c59a0f51dfc695c1a5e6e3c37c1d6"
+    },
+    {
+      "path": "src/hscad/fusion/evidence_fusion.py",
+      "size": 4047,
+      "sha256": "e6cd60681933d99733aa772782a2c718d57e3565e3677702b89e85e785aeec7d"
+    },
+    {
+      "path": "src/hscad/normalizers/__init__.py",
+      "size": 41,
+      "sha256": "60c4ee3e909da0e6df792c2a7ea8d2eeb16c59a0f51dfc695c1a5e6e3c37c1d6"
+    },
+    {
+      "path": "src/hscad/normalizers/coordinate_normalizer.py",
+      "size": 754,
+      "sha256": "efd1fbe47ad6863257892f8f55b0271b41bba5fbdfd07f4ff78897fc9b55927b"
+    },
+    {
+      "path": "src/hscad/pipelines/__init__.py",
+      "size": 41,
+      "sha256": "60c4ee3e909da0e6df792c2a7ea8d2eeb16c59a0f51dfc695c1a5e6e3c37c1d6"
+    },
+    {
+      "path": "src/hscad/pipelines/next_stage_pipeline.py",
+      "size": 3093,
+      "sha256": "e68271e9c193f5f8cf752522da7e4ccb3752d22dc3d7d6f83660e18c4eba27e2"
+    },
+    {
+      "path": "tests/fixtures/minimal_floorplan.dxf",
+      "size": 243,
+      "sha256": "bfc584edb06f37316975900b37ca15c8e4d32f9423f046cd2cd3699ea7611686"
+    },
+    {
+      "path": "tests/test_next_stage_overlay_contracts.py",
+      "size": 1786,
+      "sha256": "662784270a93aaa6738758b2d14c0d6b8d81a261e1c6af553c4dd2cc52999673"
+    },
+    {
+      "path": "tests/test_next_stage_pipeline_smoke.py",
+      "size": 928,
+      "sha256": "aa5a6aa295b94579df129274b6225cd15ff82b577e030365600c8ef448646ab7"
+    }
+  ],
+  "validated": {
+    "pytest_contracts": "6 passed",
+    "pipeline_smoke": "passed",
+    "compileall": "passed",
+    "ruff": "not run: ruff not installed in sandbox"
+  }
+}

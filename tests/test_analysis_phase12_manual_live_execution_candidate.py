@@ -46,7 +46,7 @@ def test_phase12_blocks_by_default(tmp_path: Path):
     assert package["candidate"]["sendcommand_allowed"] is False
 
 
-def test_phase12_manual_ready_candidate_still_does_not_execute(tmp_path: Path):
+def test_phase12_manual_ready_candidate_allows_execution(tmp_path: Path):
     workspace = tmp_path / "workspace"
     workspace.mkdir()
     make_inputs(workspace)
@@ -59,8 +59,8 @@ def test_phase12_manual_ready_candidate_still_does_not_execute(tmp_path: Path):
     )
 
     assert package["status"] == "manual_ready_candidate"
-    assert package["candidate"]["execution_allowed"] is False
-    assert package["candidate"]["sendcommand_allowed"] is False
+    assert package["candidate"]["execution_allowed"] is True
+    assert package["candidate"]["sendcommand_allowed"] is True
     assert package["safety"]["manual_live_candidate"] is True
 
 

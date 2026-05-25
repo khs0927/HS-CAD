@@ -8,8 +8,6 @@ Only the step definitions required by the tests are provided.
 
 from __future__ import annotations
 
-import uuid
-from datetime import datetime
 from typing import List
 
 from .task_schema import TaskIntent, TaskPlan, TaskStep, SafetyOptions

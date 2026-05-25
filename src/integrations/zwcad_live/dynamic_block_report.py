@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any, Dict
 
 from src.integrations.zwcad_live.active_document_probe import connect_active_zwcad
 

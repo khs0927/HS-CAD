@@ -1,9 +1,7 @@
 from pathlib import Path
 
-from typer.testing import CliRunner
 
 from src.app.cli import app
-from src.app.webhard_cli import hscad_webhard_sample
 from src.utils.encoding import ensure_utf8_stdio
 
 

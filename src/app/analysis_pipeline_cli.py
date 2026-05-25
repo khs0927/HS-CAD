@@ -23,7 +23,7 @@ def hscad_analysis_run_all_exec(
         stop_on_error=stop_on_error,
         timeout_sec=timeout_sec,
     )
-    print(f"status: ok")
+    print("status: ok")
     print(f"planned: {result['summary']['planned_count']}")
     print(f"errors: {result['summary']['error_count']}")
     print(f"report: {workspace}/pipeline_execution/PIPELINE_EXECUTION_REPORT.md")
@@ -44,7 +44,7 @@ def hscad_analysis_report_exec(
         stop_on_error=stop_on_error,
         timeout_sec=timeout_sec,
     )
-    print(f"status: ok")
+    print("status: ok")
     print(f"planned: {result['summary']['planned_count']}")
     print(f"errors: {result['summary']['error_count']}")
     print(f"report: {workspace}/pipeline_execution/PIPELINE_EXECUTION_REPORT.md")

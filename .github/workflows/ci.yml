@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - integration/**
+
+jobs:
+  python-ci:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest ruff
+
+      - name: Ruff critical checks
+        run: ruff check . --select F821,E9,F63,F7,F82
+
+      - name: CLI smoke
+        run: python -X utf8 -m src.main --help
+
+      - name: Repo inventory
+        run: python -X utf8 scripts/repo_inventory.py --repo-root . --out outputs/repo_inventory/REPO_INVENTORY.json
+
+      - name: Pytest
+        run: python -X utf8 -m pytest -q
+
+      - name: Upload inventory
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: repo-inventory
+          path: outputs/repo_inventory/REPO_INVENTORY.json
+          if-no-files-found: ignore
+

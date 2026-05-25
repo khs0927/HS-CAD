@@ -1,0 +1,24 @@
+{
+  "workers_to_add": [
+    {
+      "name": "post_pr53_main_merge_local_validation",
+      "module": "src.workers.post_pr53_main_merge_local_validation_worker",
+      "callable": "run_worker",
+      "status": "implemented",
+      "description": "Preserves PR #53 context and generates main merge/local-only validation planning artifacts.",
+      "outputs": [
+        "POST_PR53_MAIN_MERGE_LOCAL_VALIDATION_PLAN.json",
+        "POST_PR53_MAIN_MERGE_LOCAL_VALIDATION_PLAN.md",
+        "POST_PR53_LOCAL_ONLY_VALIDATION_STEPS.json",
+        "POST_PR53_MAIN_MERGE_HUMAN_CHECKLIST.json"
+      ],
+      "safety": {
+        "cad_execution_allowed_by_default": false,
+        "sendcommand_allowed_by_default": false,
+        "final_live_runner_implemented": false,
+        "main_merge_requires_human_review": true
+      }
+    }
+  ],
+  "note": "Merge into config/worker_manifest.json only after post-PR53 planner validation."
+}

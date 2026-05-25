@@ -43,9 +43,9 @@ from neuro_seq_cad.detection.planparser_adapter import PlanParserAdapter
 from neuro_seq_cad.line_extraction.mlsd_adapter import MLSDAdapter
 from neuro_seq_cad.ocr.paddleocr_adapter import PaddleOCRAdapter
 from neuro_seq_cad.geometry.scale_calibration import calibrate_scale
-from neuro_seq_cad.geometry.primitives import Line2D, Point2D, BBox2D
+from neuro_seq_cad.geometry.primitives import Line2D, Point2D
 from neuro_seq_cad.fusion.evidence_graph import (
-    EvidenceGraph, EvidenceEntity, PipelineMeta, SourceInfo, BBox, Polygon2D
+    EvidenceGraph, EvidenceEntity, PipelineMeta, BBox, Polygon2D
 )
 from neuro_seq_cad.fusion.conflict_resolver import resolve_conflicts
 from neuro_seq_cad.vlm.vlm_client import VLMRefinementClient
@@ -374,7 +374,7 @@ def overlay(
     """
     EvidenceGraph의 감출 요소를 원본 도면 이미지 배경에 오버레이 드로잉하여 시각 QC 이미지를 생성합니다.
     """
-    console.print(f"[bold]Overlay Renderer:[/bold] 로드 중...")
+    console.print("[bold]Overlay Renderer:[/bold] 로드 중...")
     import json
     try:
         with open(json_graph_path, "r", encoding="utf-8") as f:
@@ -417,7 +417,7 @@ def check_img2cadseq() -> None:
         rel_resp = requests.get(f"{url}/releases", headers=headers, timeout=5.0)
         releases = rel_resp.json() if rel_resp.status_code == 200 else []
         
-        console.print(f"  - [bold]저장소 이름[/bold]: Rilpraa0110/Img2CADSeq")
+        console.print("  - [bold]저장소 이름[/bold]: Rilpraa0110/Img2CADSeq")
         console.print(f"  - [bold]저장소 크기[/bold]: {size} KB")
         console.print(f"  - [bold]최종 업데이트 시각[/bold]: {updated_at}")
         

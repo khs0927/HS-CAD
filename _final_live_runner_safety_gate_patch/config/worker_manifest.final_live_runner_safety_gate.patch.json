@@ -1,0 +1,25 @@
+{
+  "workers_to_add": [
+    {
+      "name": "final_live_runner_safety_spec_gate",
+      "module": "src.workers.final_live_runner_safety_spec_gate_worker",
+      "callable": "run_worker",
+      "status": "implemented",
+      "description": "Checks whether final live runner safety spec can be reviewed. Does not implement runner.",
+      "outputs": [
+        "FINAL_LIVE_RUNNER_SAFETY_SPEC_GATE.json",
+        "FINAL_LIVE_RUNNER_SAFETY_SPEC_GATE.md",
+        "MINIMUM_IMPLEMENTATION_CONSTRAINTS.json",
+        "FINAL_LIVE_RUNNER_TEST_MATRIX.json"
+      ],
+      "safety": {
+        "this_package_implements_runner": false,
+        "cad_execution_allowed": false,
+        "zwcad_com_sendcommand_allowed": false,
+        "xicad_alias_execution_allowed": false,
+        "final_live_runner_implementation_allowed": false
+      }
+    }
+  ],
+  "note": "Safety gate only. Implementation remains separate."
+}

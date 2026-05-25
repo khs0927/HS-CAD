@@ -10,7 +10,7 @@ import json
 from pathlib import Path
 
 from .active_document_probe import write_active_probe_json, write_active_probe_md
-from .dynamic_block_report import collect_dynamic_blocks, write_dynamic_block_report_json, write_dynamic_block_report_md
+from .dynamic_block_report import write_dynamic_block_report_json, write_dynamic_block_report_md
 
 
 def generate_active_drawing_report(out_dir: str) -> dict[str, str]:

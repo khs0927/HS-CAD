@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from typing import Optional
 
 import typer
 from rich.console import Console
@@ -138,9 +137,9 @@ def landscape_sync_dry_run(
     md_lines = [
         "# Dry-Run Simulation Summary",
         "",
-        f"- **Status**: `SIMULATED_SUCCESS`",
+        "- **Status**: `SIMULATED_SUCCESS`",
         f"- **Proposed Replacements**: {len(replacements)} items",
-        f"- **Safety check**: Passed"
+        "- **Safety check**: Passed"
     ]
     (Path(out_dir) / "dry_run_summary.md").write_text("\n".join(md_lines), encoding="utf-8")
     
@@ -271,7 +270,7 @@ def _generate_compare_report(out_dir: Path, plan_path: Path, after_texts_path: P
         "# After Sync Integrity Verification Report",
         "",
         f"- **Modified DWG Path**: `{save_as}`",
-        f"- **Verification Time**: 2026-05-22",
+        "- **Verification Time**: 2026-05-22",
         "",
         "## Handle-by-Handle Verification List",
         "| Handle | Layer | Before Value | Expected Value | Actual Value | Verification |",

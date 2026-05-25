@@ -1,0 +1,26 @@
+name: next-stage-overlay-ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  next-stage-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+      - name: Install package
+        run: |
+          python -m pip install -U pip
+          pip install -e ".[dev]" || pip install -e .
+      - name: Critical ruff rules
+        run: python -m ruff check . --select F821,E9,F63,F7,F82
+      - name: Next-stage contract tests
+        run: python -X utf8 -m pytest -q tests/test_next_stage_overlay_contracts.py tests/test_next_stage_pipeline_smoke.py
+      - name: Next-stage pipeline smoke
+        run: python -X utf8 -m hscad.pipelines.next_stage_pipeline --input tests/fixtures/minimal_floorplan.dxf --out outputs/next_stage_smoke

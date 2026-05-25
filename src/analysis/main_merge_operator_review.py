@@ -361,7 +361,7 @@ def build_post_merge_local_validation_prompt(package: dict[str, Any]) -> str:
     for index, step in enumerate(package["post_merge_local_validation_commands"], start=1):
         lines.append(f"{index}. {step['title']}")
         lines.append(f"   환경: {step['environment']}")
-        lines.append(f"   명령:")
+        lines.append("   명령:")
         lines.append(f"   {step['command']}")
         lines.append("   확인:")
         for item in step["confirm"]:

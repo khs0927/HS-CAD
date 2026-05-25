@@ -17,7 +17,7 @@ layer_schema.py — CAD 레이어 스키마 정의 및 ezdxf 문서 레이어 �
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, Dict, Optional
+from typing import TYPE_CHECKING, Dict
 
 from pydantic import BaseModel, Field
 

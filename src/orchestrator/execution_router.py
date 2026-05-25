@@ -10,7 +10,7 @@ independent while still verifying that the routing logic works correctly.
 from __future__ import annotations
 
 import importlib
-from typing import Any, Dict, List
+from typing import Any, Dict
 
 from .task_schema import ExecutionResult, StepResult, TaskPlan
 

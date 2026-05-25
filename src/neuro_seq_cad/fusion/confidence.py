@@ -12,7 +12,7 @@ from __future__ import annotations
 import logging
 from typing import Dict
 
-from neuro_seq_cad.fusion.evidence_graph import EvidenceEntity, SourceInfo
+from neuro_seq_cad.fusion.evidence_graph import EvidenceEntity
 
 logger = logging.getLogger(__name__)
 
