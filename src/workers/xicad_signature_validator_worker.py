@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 
 from src.analysis.dxf_delta_extractor import DXFDeltaReport, DXFEntityModification
-from src.execution.xicad_signature_validator import validate_signature
+from src.execution.xicad_signature_validator import VERIFIED, validate_signature
 
 
 def run_signature_validator_worker(
@@ -55,19 +55,37 @@ def run_signature_validator_worker(
 
     validation_result = validate_signature(target_seed, delta)
 
-    # Load existing verified signatures if any
+    # Keep every validation result for audit, but only truly verified
+    # signatures are written to the promotion-ready file.
+    validation_file = out / "XICAD_SIGNATURE_VALIDATION_RESULTS.json"
+    validation_data = {"validation_results": []}
+    if validation_file.exists():
+        with open(validation_file, "r", encoding="utf-8") as f:
+            validation_data = json.load(f)
+
+    filtered_results = [s for s in validation_data["validation_results"] if s.get("alias") != alias]
+    filtered_results.append(validation_result)
+    validation_data["validation_results"] = filtered_results
+
+    with open(validation_file, "w", encoding="utf-8") as f:
+        json.dump(validation_data, f, indent=2, ensure_ascii=False)
+
     verified_file = out / "VERIFIED_XICAD_SIGNATURES.json"
     existing_data = {"verified_signatures": []}
     if verified_file.exists():
         with open(verified_file, "r", encoding="utf-8") as f:
             existing_data = json.load(f)
 
-    # Upsert the result
     filtered_sigs = [s for s in existing_data["verified_signatures"] if s.get("alias") != alias]
-    filtered_sigs.append(validation_result)
+    if validation_result.get("status") == VERIFIED:
+        filtered_sigs.append(validation_result)
     existing_data["verified_signatures"] = filtered_sigs
 
     with open(verified_file, "w", encoding="utf-8") as f:
         json.dump(existing_data, f, indent=2, ensure_ascii=False)
 
-    return validation_result
+    return {
+        **validation_result,
+        "validation_results": str(validation_file),
+        "verified_signatures": str(verified_file),
+    }

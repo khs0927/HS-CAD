@@ -279,6 +279,25 @@ ZWCAD가 열려 있을 때 실행 가능한 안전 검증:
 
 이 probe는 real CAD 환경 확인용이며, signature 생성의 필수 조건은 아니다.
 
+### Step 1E. Signature Validation
+
+추가된 모듈:
+
+- `src.execution.xicad_signature_validator`
+- `src.workers.xicad_signature_validator_worker`
+- CLI: `python -X utf8 -m src.main xicad-signature-validate`
+
+기능:
+
+- `XICAD_SIGNATURE_SEEDS.json`의 예측과 sandbox delta JSON을 대조한다.
+- 빈 delta는 `empty_delta`로 기록하고 승격하지 않는다.
+- 검증 이력은 `XICAD_SIGNATURE_VALIDATION_RESULTS.json`에 남긴다.
+- `VERIFIED_XICAD_SIGNATURES.json`에는 `status="verified"` 결과만 저장한다.
+
+테스트:
+
+- `tests/test_xicad_signature_validator.py`
+
 ## 5. Step 2 이후 로드맵
 
 ### Step 2. Approved Copy Delta
@@ -298,6 +317,14 @@ ZWCAD가 열려 있을 때 실행 가능한 안전 검증:
 
 - 실제 도면 scan 결과에 signature matcher를 적용한다.
 - confidence 낮은 결과는 자동 확정하지 않고 review queue로 보낸다.
+
+초기 구현:
+
+- `src.execution.xicad_signature_matcher`
+- `src.workers.xicad_signature_matcher_worker`
+- CLI: `python -X utf8 -m src.main xicad-signature-match`
+- 현재 범위는 `WAL`의 verified signature를 이용한 평행 LINE/LWPOLYLINE pair 후보 매칭이다.
+- 출력은 `review_required` 상태이며 CAD 파일을 열거나 수정하지 않는다.
 
 ### Step 5. Command Trace Report
 
@@ -324,6 +351,9 @@ python -X utf8 -m pytest -q `
   tests/test_xicad_signature_candidate_worker.py `
   tests/test_xicad_signature_seed.py `
   tests/test_xicad_signature_seed_worker.py `
+  tests/test_xicad_signature_validator.py `
+  tests/test_xicad_signature_matcher.py `
+  tests/test_xicad_signature_matcher_worker.py `
   tests/test_xicad_alias_allowlist.py `
   tests/test_xicad_policy_candidate_generator.py `
   tests/test_xicad_safe_runner.py `

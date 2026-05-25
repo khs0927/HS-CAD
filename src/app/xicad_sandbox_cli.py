@@ -20,6 +20,7 @@ def xicad_sandbox_extract(
     input_sequence: str = typer.Option(..., help="Command inputs to send. Use \\n for enter."),
     out_dir: str = typer.Option("outputs/xicad_signatures", help="Output directory for signatures"),
     delay: float = typer.Option(1.0, help="Delay seconds after SendCommand before snapshot"),
+    cleanup_working_copy: bool = typer.Option(True, help="Remove sandbox DWG/BAK after successful extraction"),
 ):
     """
     Extracts the geometric delta (signature) of a XiCAD command by executing it in a sandbox ZWCAD.
@@ -50,12 +51,14 @@ def xicad_sandbox_extract(
     with open(sig_file, "w", encoding="utf-8") as f:
         json.dump(delta_report.to_dict(), f, indent=2, ensure_ascii=False)
 
-    try:
-        working_copy.unlink(missing_ok=True)
-    except Exception:
-        pass
+    if cleanup_working_copy:
+        for path in (working_copy, working_copy.with_suffix(".bak")):
+            try:
+                path.unlink(missing_ok=True)
+            except Exception:
+                pass
 
-    console.print(f"[green]Delta successfully extracted and temp drawing removed![/green]")
+    console.print("[green]Delta successfully extracted![/green]")
     console.print(f"- Added: {delta_report.added_count}")
     console.print(f"- Modified: {delta_report.modified_count}")
     console.print(f"- Deleted: {delta_report.deleted_count}")

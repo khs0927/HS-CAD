@@ -5,6 +5,12 @@ from typing import Any
 from src.analysis.dxf_delta_extractor import DXFDeltaReport
 
 
+VERIFIED = "verified"
+EMPTY_DELTA = "empty_delta"
+MISMATCH = "mismatch"
+NEEDS_REVIEW = "needs_review"
+
+
 def validate_signature(seed: dict[str, Any], delta: DXFDeltaReport) -> dict[str, Any]:
     """
     Compares a theoretical Signature Seed (from config rules) against
@@ -15,8 +21,9 @@ def validate_signature(seed: dict[str, Any], delta: DXFDeltaReport) -> dict[str,
     if delta.added_count == 0 and delta.modified_count == 0 and delta.deleted_count == 0:
         return {
             "alias": alias,
-            "status": "failed",
-            "reason": "Sandbox delta is completely empty. Command did not execute or failed.",
+            "status": EMPTY_DELTA,
+            "promotable": False,
+            "reason": "Sandbox delta is completely empty. Command did not execute, produced no geometry, or snapshot capture failed.",
         }
         
     hint = seed.get("signature_hint", {})
@@ -38,17 +45,23 @@ def validate_signature(seed: dict[str, Any], delta: DXFDeltaReport) -> dict[str,
     if layer_match and type_match:
         return {
             "alias": alias,
-            "status": "verified",
+            "status": VERIFIED,
+            "promotable": True,
             "evidence": {
-                "matched_layers": list(added_layers),
-                "matched_types": list(added_types),
+                "matched_layers": sorted(added_layers),
+                "matched_types": sorted(added_types),
                 "added_count": delta.added_count,
                 "modified_count": delta.modified_count,
             }
         }
-    else:
-        return {
-            "alias": alias,
-            "status": "failed",
-            "reason": f"Heuristic mismatch. Expected layers: {expected_layers}, Got: {added_layers}. Expected types: {expected_types}, Got: {added_types}",
-        }
+
+    return {
+        "alias": alias,
+        "status": MISMATCH,
+        "promotable": False,
+        "reason": (
+            "Heuristic mismatch. "
+            f"Expected layers: {expected_layers}, Got: {sorted(added_layers)}. "
+            f"Expected types: {expected_types}, Got: {sorted(added_types)}"
+        ),
+    }

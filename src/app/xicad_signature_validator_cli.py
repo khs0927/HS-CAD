@@ -42,5 +42,5 @@ def xicad_signature_validate(
         console.print(f"[green]Validation Passed for alias '{result['alias']}'![/green]")
         console.print(result["evidence"])
     else:
-        console.print(f"[yellow]Validation Failed for alias '{result['alias']}':[/yellow]")
+        console.print(f"[yellow]Validation needs attention for alias '{result['alias']}' ({result.get('status')}):[/yellow]")
         console.print(result["reason"])
