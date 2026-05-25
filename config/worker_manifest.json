@@ -1,0 +1,16 @@
+{
+  "workers": {
+    "analysis_export_megapack": {
+      "path": "src.workers.analysis_export_megapack_worker",
+      "description": "Exports evidence graph to various outputs (thresholds, ZIPs)"
+    },
+    "analysis_report_megapack": {
+      "path": "src.workers.analysis_report_megapack_worker",
+      "description": "Partitions evidence graph and generates dashboard assets"
+    },
+    "analysis_storage_megapack": {
+      "path": "src.workers.analysis_storage_megapack_worker",
+      "description": "Exports evidence storage (DuckDB/Parquet) and runs threshold-aware validation"
+    }
+  }
+}

@@ -24,5 +24,11 @@ import src.app.converters_cli  # noqa: F401,E402
 import src.app.run_summary_cli  # noqa: F401,E402
 import src.app.reviewcontext_dxf_cli  # noqa: F401,E402
 
+# Analysis Megapack integrations
+import src.app.analysis_shortcut_cli  # noqa: F401,E402
+import src.app.analysis_shortcut_cli_v2  # noqa: F401,E402
+import src.app.analysis_shortcut_cli_v3  # noqa: F401,E402
+import src.app.analysis_pipeline_cli  # noqa: F401,E402
+
 if __name__ == '__main__':
     app()
