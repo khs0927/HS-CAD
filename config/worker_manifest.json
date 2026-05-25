@@ -2,7 +2,7 @@
   "workers": {
     "analysis_export_megapack": {
       "path": "src.workers.analysis_export_megapack_worker",
-      "description": "Exports evidence graph to various outputs (thresholds, ZIPs)"
+      "description": "Exports evidence graph to various outputs"
     },
     "analysis_report_megapack": {
       "path": "src.workers.analysis_report_megapack_worker",
@@ -11,6 +11,14 @@
     "analysis_storage_megapack": {
       "path": "src.workers.analysis_storage_megapack_worker",
       "description": "Exports evidence storage (DuckDB/Parquet) and runs threshold-aware validation"
+    },
+    "pipeline_execution_megapack": {
+      "path": "src.workers.pipeline_execution_megapack_worker",
+      "description": "Pipeline execution worker"
+    },
+    "final_orchestration_megapack": {
+      "path": "src.workers.final_orchestration_megapack_worker",
+      "description": "Final orchestration apply-plan generation"
     }
   }
 }
