@@ -1,0 +1,16 @@
+{
+  "name": "hs_cad_megapack_next",
+  "branch": "feature/megapack-next",
+  "base": "feature/hs-cad-megapack-finalization",
+  "purpose": "Consolidate remaining work, archive TODO reference, and define next PR roadmap",
+  "committed_files": [
+    "archive/LOCAL_VALIDATION_TODO_ARCHIVE.md",
+    "docs/39_megapack_next_status.md",
+    "docs/40_remaining_work_matrix.md",
+    "docs/41_future_pr_roadmap.md",
+    "MANIFEST_MEGAPACK_NEXT.json"
+  ],
+  "zip_package": "hs_cad_megapack_next.zip",
+  "zip_committed_to_repo": false,
+  "local_todo_archive_branch": "archive/hs-cad-local-todos"
+}
