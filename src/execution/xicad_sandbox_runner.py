@@ -43,31 +43,32 @@ class XiCADSandboxRunner:
         except Exception as e:
             raise RuntimeError(f"Failed to open working document: {e}")
 
-        # Ensure document is activated (focus) for SendCommand
         try:
-            self.adapter.app.ActiveDocument = doc
-        except Exception as e:
-            warn(f"Could not explicitly set active document: {e}")
+            # Ensure document is activated (focus) for SendCommand
+            try:
+                self.adapter.app.ActiveDocument = doc
+            except Exception as e:
+                warn(f"Could not explicitly set active document: {e}")
 
-        # 3. Snapshot BEFORE
-        before = build_scan_snapshot(self.adapter, str(working_path.resolve()))
+            # 3. Snapshot BEFORE
+            before = build_scan_snapshot(self.adapter, str(working_path.resolve()))
 
-        # 4. Execute Command via SendCommand
-        # Replace string literal '\n' with actual newline carriage return
-        formatted_sequence = input_sequence.replace("\\n", "\n")
-        doc.SendCommand(formatted_sequence)
+            # 4. Execute Command via SendCommand
+            # Replace string literal '\n' with actual newline carriage return
+            formatted_sequence = input_sequence.replace("\\n", "\n")
+            doc.SendCommand(formatted_sequence)
 
-        # 5. Wait for LISP/FAS execution to finish
-        time.sleep(delay_seconds)
-        doc.Save()
+            # 5. Wait for LISP/FAS execution to finish
+            time.sleep(delay_seconds)
+            doc.Save()
 
-        # 6. Snapshot AFTER
-        after = build_scan_snapshot(self.adapter, str(working_path.resolve()))
-
-        try:
-            doc.Close(False)
-        except Exception:
-            pass
+            # 6. Snapshot AFTER
+            after = build_scan_snapshot(self.adapter, str(working_path.resolve()))
+        finally:
+            try:
+                doc.Close(False)
+            except Exception:
+                pass
 
         # 7. Extract Delta
         delta = extract_dxf_delta(before, after, command_hint=command_hint)
