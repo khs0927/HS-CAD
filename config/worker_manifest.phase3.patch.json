@@ -1,0 +1,23 @@
+{
+  "workers_to_add": [
+    {
+      "name": "analysis_phase3_real_data_binding",
+      "module": "src.workers.analysis_phase3_real_data_binding_worker",
+      "callable": "run_worker",
+      "status": "implemented",
+      "description": "Read-only Phase 3 bridge that scans Phase 1/2 derived artifacts and writes real-data coverage reports.",
+      "outputs": [
+        "PHASE3_REAL_DATA_BINDING_REPORT.json",
+        "PHASE3_REAL_DATA_BINDING_REPORT.md",
+        "PHASE3_ARTIFACT_COVERAGE.json"
+      ],
+      "safety": {
+        "source_mutation_allowed": false,
+        "cad_execution_allowed": false,
+        "zwcad_com_allowed": false,
+        "xicad_alias_execution_allowed": false
+      }
+    }
+  ],
+  "note": "Manually merge this entry into config/worker_manifest.json only after import-safety validation."
+}
