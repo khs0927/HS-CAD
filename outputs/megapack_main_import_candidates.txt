@@ -1,0 +1,7 @@
+# Main import candidates from combined megapacks
+
+import src.app.analysis_shortcut_cli_v2  # noqa: F401,E402
+import src.app.analysis_shortcut_cli_v3  # noqa: F401,E402
+import src.app.worker_cli  # noqa: F401,E402
+import src.app.analysis_shortcut_cli  # noqa: F401,E402
+import src.app.analysis_pipeline_cli  # noqa: F401,E402

@@ -1,0 +1,23 @@
+{
+  "package": "HS-CAD analysis export megapack",
+  "mode": "code_generation_only",
+  "validation": "todo_only",
+  "created_files": [
+    "PATCH_MAIN_IMPORT_V2.md",
+    "PATCH_WORKER_MANIFEST_ANALYSIS_EXPORT.md",
+    "README_APPLY_EXPORT_MEGAPACK_ZIP.md",
+    "docs/50_analysis_export_megapack_plan.md",
+    "docs/VALIDATION_TODO_EXPORT_MEGAPACK.md",
+    "scripts/package_final_megapack.ps1",
+    "src/analysis/evidence_graph_exporter.py",
+    "src/analysis/report_zip_packager.py",
+    "src/analysis/validation_threshold_config.py",
+    "src/app/analysis_shortcut_cli_v2.py",
+    "src/workers/analysis_export_megapack_worker.py"
+  ],
+  "manual_patches": [
+    "PATCH_WORKER_MANIFEST_ANALYSIS_EXPORT.md",
+    "PATCH_MAIN_IMPORT_V2.md"
+  ],
+  "primary_worker": "analysis_export_megapack"
+}

@@ -1,0 +1,25 @@
+{
+  "candidates": [
+    {
+      "name": "analysis_export_megapack",
+      "module": "src.workers.analysis_export_megapack_worker",
+      "entry": "python -m src.workers.analysis_export_megapack_worker",
+      "enabled": false,
+      "reason": "generated megapack worker; requires manual config/worker_manifest.json review"
+    },
+    {
+      "name": "analysis_report_megapack",
+      "module": "src.workers.analysis_report_megapack_worker",
+      "entry": "python -m src.workers.analysis_report_megapack_worker",
+      "enabled": false,
+      "reason": "generated megapack worker; requires manual config/worker_manifest.json review"
+    },
+    {
+      "name": "analysis_storage_megapack",
+      "module": "src.workers.analysis_storage_megapack_worker",
+      "entry": "python -m src.workers.analysis_storage_megapack_worker",
+      "enabled": false,
+      "reason": "generated megapack worker; requires manual config/worker_manifest.json review; optional duckdb/pyarrow dependencies noted in patch"
+    }
+  ]
+}

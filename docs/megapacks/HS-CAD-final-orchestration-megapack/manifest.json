@@ -1,0 +1,22 @@
+{
+  "package": "HS-CAD final orchestration megapack",
+  "mode": "code_generation_only",
+  "validation": "todo_only",
+  "created_files": [
+    "README_APPLY_FINAL_ORCHESTRATION_MEGAPACK_ZIP.md",
+    "docs/55_final_orchestration_megapack_plan.md",
+    "docs/VALIDATION_TODO_FINAL_ORCHESTRATION.md",
+    "scripts/collect_final_todos.py",
+    "scripts/generate_final_apply_plan.py",
+    "scripts/run_final_orchestration_codegen.ps1",
+    "scripts/write_codex_final_apply_prompt.py",
+    "src/analysis/codex_prompt_generator.py",
+    "src/analysis/final_apply_plan_generator.py",
+    "src/analysis/final_todo_collector.py"
+  ],
+  "primary_outputs": [
+    "outputs/FINAL_TODO_INDEX.md",
+    "outputs/FINAL_APPLY_PLAN.md",
+    "outputs/CODEX_FINAL_APPLY_PROMPT.md"
+  ]
+}

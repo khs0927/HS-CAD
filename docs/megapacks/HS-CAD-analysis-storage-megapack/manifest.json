@@ -1,0 +1,18 @@
+{
+  "package": "HS-CAD analysis storage megapack",
+  "mode": "code_generation_only",
+  "validation": "todo_only",
+  "created_files": [
+    "PATCH_WORKER_MANIFEST_ANALYSIS_STORAGE.md",
+    "README_APPLY_STORAGE_MEGAPACK_ZIP.md",
+    "docs/51_analysis_storage_megapack_plan.md",
+    "docs/VALIDATION_TODO_STORAGE_MEGAPACK.md",
+    "src/analysis/evidence_graph_storage_exporter.py",
+    "src/analysis/validation_rule_engine_v2.py",
+    "src/workers/analysis_storage_megapack_worker.py"
+  ],
+  "manual_patches": [
+    "PATCH_WORKER_MANIFEST_ANALYSIS_STORAGE.md"
+  ],
+  "primary_worker": "analysis_storage_megapack"
+}

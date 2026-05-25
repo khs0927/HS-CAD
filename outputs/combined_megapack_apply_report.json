@@ -1,0 +1,465 @@
+{
+  "zip_path": "C:\\CODE\\HS-CAD-pr38-megapack-validation\\HS-CAD-all-generated-megapacks-combined.zip",
+  "repo_root": "C:\\CODE\\HS-CAD-pr38-megapack-validation",
+  "mode": "staged",
+  "applied_count": 75,
+  "skipped_count": 0,
+  "applied": [
+    {
+      "source": "source_zips/HS-CAD-analysis-export-megapack.zip",
+      "target": "artifacts/megapacks/HS-CAD-analysis-export-megapack.zip",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "extracted_by_zip/HS-CAD-analysis-export-megapack/PATCH_MAIN_IMPORT_V2.md",
+      "target": "docs/megapacks/HS-CAD-analysis-export-megapack/PATCH_MAIN_IMPORT_V2.md",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "extracted_by_zip/HS-CAD-analysis-export-megapack/PATCH_WORKER_MANIFEST_ANALYSIS_EXPORT.md",
+      "target": "docs/megapacks/HS-CAD-analysis-export-megapack/PATCH_WORKER_MANIFEST_ANALYSIS_EXPORT.md",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "extracted_by_zip/HS-CAD-analysis-export-megapack/README_APPLY_EXPORT_MEGAPACK_ZIP.md",
+      "target": "docs/megapacks/HS-CAD-analysis-export-megapack/README_APPLY_EXPORT_MEGAPACK_ZIP.md",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "extracted_by_zip/HS-CAD-analysis-export-megapack/docs/50_analysis_export_megapack_plan.md",
+      "target": "docs/50_analysis_export_megapack_plan.md",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "extracted_by_zip/HS-CAD-analysis-export-megapack/docs/VALIDATION_TODO_EXPORT_MEGAPACK.md",
+      "target": "docs/VALIDATION_TODO_EXPORT_MEGAPACK.md",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "extracted_by_zip/HS-CAD-analysis-export-megapack/manifest.json",
+      "target": "docs/megapacks/HS-CAD-analysis-export-megapack/manifest.json",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "extracted_by_zip/HS-CAD-analysis-export-megapack/scripts/package_final_megapack.ps1",
+      "target": "scripts/package_final_megapack.ps1",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "extracted_by_zip/HS-CAD-analysis-export-megapack/src/analysis/evidence_graph_exporter.py",
+      "target": "src/analysis/evidence_graph_exporter.py",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "extracted_by_zip/HS-CAD-analysis-export-megapack/src/analysis/report_zip_packager.py",
+      "target": "src/analysis/report_zip_packager.py",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "extracted_by_zip/HS-CAD-analysis-export-megapack/src/analysis/validation_threshold_config.py",
+      "target": "src/analysis/validation_threshold_config.py",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "extracted_by_zip/HS-CAD-analysis-export-megapack/src/app/analysis_shortcut_cli_v2.py",
+      "target": "src/app/analysis_shortcut_cli_v2.py",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "extracted_by_zip/HS-CAD-analysis-export-megapack/src/workers/analysis_export_megapack_worker.py",
+      "target": "src/workers/analysis_export_megapack_worker.py",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "source_zips/HS-CAD-analysis-report-megapack.zip",
+      "target": "artifacts/megapacks/HS-CAD-analysis-report-megapack.zip",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "extracted_by_zip/HS-CAD-analysis-report-megapack/PATCH_MAIN_IMPORT_V3.md",
+      "target": "docs/megapacks/HS-CAD-analysis-report-megapack/PATCH_MAIN_IMPORT_V3.md",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "extracted_by_zip/HS-CAD-analysis-report-megapack/PATCH_WORKER_MANIFEST_ANALYSIS_REPORT.md",
+      "target": "docs/megapacks/HS-CAD-analysis-report-megapack/PATCH_WORKER_MANIFEST_ANALYSIS_REPORT.md",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "extracted_by_zip/HS-CAD-analysis-report-megapack/README_APPLY_REPORT_MEGAPACK_ZIP.md",
+      "target": "docs/megapacks/HS-CAD-analysis-report-megapack/README_APPLY_REPORT_MEGAPACK_ZIP.md",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "extracted_by_zip/HS-CAD-analysis-report-megapack/docs/52_analysis_report_megapack_plan.md",
+      "target": "docs/52_analysis_report_megapack_plan.md",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "extracted_by_zip/HS-CAD-analysis-report-megapack/docs/VALIDATION_TODO_REPORT_MEGAPACK.md",
+      "target": "docs/VALIDATION_TODO_REPORT_MEGAPACK.md",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "extracted_by_zip/HS-CAD-analysis-report-megapack/manifest.json",
+      "target": "docs/megapacks/HS-CAD-analysis-report-megapack/manifest.json",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "extracted_by_zip/HS-CAD-analysis-report-megapack/src/analysis/dashboard_static_assets.py",
+      "target": "src/analysis/dashboard_static_assets.py",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "extracted_by_zip/HS-CAD-analysis-report-megapack/src/analysis/evidence_graph_partitioner.py",
+      "target": "src/analysis/evidence_graph_partitioner.py",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "extracted_by_zip/HS-CAD-analysis-report-megapack/src/analysis/report_redactor.py",
+      "target": "src/analysis/report_redactor.py",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "extracted_by_zip/HS-CAD-analysis-report-megapack/src/app/analysis_shortcut_cli_v3.py",
+      "target": "src/app/analysis_shortcut_cli_v3.py",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "extracted_by_zip/HS-CAD-analysis-report-megapack/src/workers/analysis_report_megapack_worker.py",
+      "target": "src/workers/analysis_report_megapack_worker.py",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "source_zips/HS-CAD-analysis-storage-megapack.zip",
+      "target": "artifacts/megapacks/HS-CAD-analysis-storage-megapack.zip",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "extracted_by_zip/HS-CAD-analysis-storage-megapack/PATCH_WORKER_MANIFEST_ANALYSIS_STORAGE.md",
+      "target": "docs/megapacks/HS-CAD-analysis-storage-megapack/PATCH_WORKER_MANIFEST_ANALYSIS_STORAGE.md",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "extracted_by_zip/HS-CAD-analysis-storage-megapack/README_APPLY_STORAGE_MEGAPACK_ZIP.md",
+      "target": "docs/megapacks/HS-CAD-analysis-storage-megapack/README_APPLY_STORAGE_MEGAPACK_ZIP.md",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "extracted_by_zip/HS-CAD-analysis-storage-megapack/docs/51_analysis_storage_megapack_plan.md",
+      "target": "docs/51_analysis_storage_megapack_plan.md",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "extracted_by_zip/HS-CAD-analysis-storage-megapack/docs/VALIDATION_TODO_STORAGE_MEGAPACK.md",
+      "target": "docs/VALIDATION_TODO_STORAGE_MEGAPACK.md",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "extracted_by_zip/HS-CAD-analysis-storage-megapack/manifest.json",
+      "target": "docs/megapacks/HS-CAD-analysis-storage-megapack/manifest.json",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "extracted_by_zip/HS-CAD-analysis-storage-megapack/src/analysis/evidence_graph_storage_exporter.py",
+      "target": "src/analysis/evidence_graph_storage_exporter.py",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "extracted_by_zip/HS-CAD-analysis-storage-megapack/src/analysis/validation_rule_engine_v2.py",
+      "target": "src/analysis/validation_rule_engine_v2.py",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "extracted_by_zip/HS-CAD-analysis-storage-megapack/src/workers/analysis_storage_megapack_worker.py",
+      "target": "src/workers/analysis_storage_megapack_worker.py",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "source_zips/HS-CAD-cli-finalization-megapack.zip",
+      "target": "artifacts/megapacks/HS-CAD-cli-finalization-megapack.zip",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "extracted_by_zip/HS-CAD-cli-finalization-megapack/PATCH_MAIN_IMPORT.md",
+      "target": "docs/megapacks/HS-CAD-cli-finalization-megapack/PATCH_MAIN_IMPORT.md",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "extracted_by_zip/HS-CAD-cli-finalization-megapack/README_APPLY_THIS_ZIP.md",
+      "target": "docs/megapacks/HS-CAD-cli-finalization-megapack/README_APPLY_THIS_ZIP.md",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "extracted_by_zip/HS-CAD-cli-finalization-megapack/docs/49_analysis_cli_shortcuts_todo.md",
+      "target": "docs/49_analysis_cli_shortcuts_todo.md",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "extracted_by_zip/HS-CAD-cli-finalization-megapack/docs/VALIDATION_TODO_ALL_MEGAPACKS.md",
+      "target": "docs/VALIDATION_TODO_ALL_MEGAPACKS.md",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "extracted_by_zip/HS-CAD-cli-finalization-megapack/manifest.json",
+      "target": "docs/megapacks/HS-CAD-cli-finalization-megapack/manifest.json",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "extracted_by_zip/HS-CAD-cli-finalization-megapack/scripts/package_analysis_megapack.ps1",
+      "target": "scripts/package_analysis_megapack.ps1",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "extracted_by_zip/HS-CAD-cli-finalization-megapack/src/app/analysis_shortcut_cli.py",
+      "target": "src/app/analysis_shortcut_cli.py",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "source_zips/HS-CAD-final-orchestration-megapack.zip",
+      "target": "artifacts/megapacks/HS-CAD-final-orchestration-megapack.zip",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "extracted_by_zip/HS-CAD-final-orchestration-megapack/README_APPLY_FINAL_ORCHESTRATION_MEGAPACK_ZIP.md",
+      "target": "docs/megapacks/HS-CAD-final-orchestration-megapack/README_APPLY_FINAL_ORCHESTRATION_MEGAPACK_ZIP.md",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "extracted_by_zip/HS-CAD-final-orchestration-megapack/docs/55_final_orchestration_megapack_plan.md",
+      "target": "docs/55_final_orchestration_megapack_plan.md",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "extracted_by_zip/HS-CAD-final-orchestration-megapack/docs/VALIDATION_TODO_FINAL_ORCHESTRATION.md",
+      "target": "docs/VALIDATION_TODO_FINAL_ORCHESTRATION.md",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "extracted_by_zip/HS-CAD-final-orchestration-megapack/manifest.json",
+      "target": "docs/megapacks/HS-CAD-final-orchestration-megapack/manifest.json",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "extracted_by_zip/HS-CAD-final-orchestration-megapack/scripts/collect_final_todos.py",
+      "target": "scripts/collect_final_todos.py",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "extracted_by_zip/HS-CAD-final-orchestration-megapack/scripts/generate_final_apply_plan.py",
+      "target": "scripts/generate_final_apply_plan.py",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "extracted_by_zip/HS-CAD-final-orchestration-megapack/scripts/run_final_orchestration_codegen.ps1",
+      "target": "scripts/run_final_orchestration_codegen.ps1",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "extracted_by_zip/HS-CAD-final-orchestration-megapack/scripts/write_codex_final_apply_prompt.py",
+      "target": "scripts/write_codex_final_apply_prompt.py",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "extracted_by_zip/HS-CAD-final-orchestration-megapack/src/analysis/codex_prompt_generator.py",
+      "target": "src/analysis/codex_prompt_generator.py",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "extracted_by_zip/HS-CAD-final-orchestration-megapack/src/analysis/final_apply_plan_generator.py",
+      "target": "src/analysis/final_apply_plan_generator.py",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "extracted_by_zip/HS-CAD-final-orchestration-megapack/src/analysis/final_todo_collector.py",
+      "target": "src/analysis/final_todo_collector.py",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "source_zips/HS-CAD-pipeline-execution-megapack.zip",
+      "target": "artifacts/megapacks/HS-CAD-pipeline-execution-megapack.zip",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "extracted_by_zip/HS-CAD-pipeline-execution-megapack/PATCH_MAIN_IMPORT_PIPELINE_CLI.md",
+      "target": "docs/megapacks/HS-CAD-pipeline-execution-megapack/PATCH_MAIN_IMPORT_PIPELINE_CLI.md",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "extracted_by_zip/HS-CAD-pipeline-execution-megapack/README_APPLY_PIPELINE_EXECUTION_MEGAPACK_ZIP.md",
+      "target": "docs/megapacks/HS-CAD-pipeline-execution-megapack/README_APPLY_PIPELINE_EXECUTION_MEGAPACK_ZIP.md",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "extracted_by_zip/HS-CAD-pipeline-execution-megapack/docs/54_pipeline_execution_megapack_plan.md",
+      "target": "docs/54_pipeline_execution_megapack_plan.md",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "extracted_by_zip/HS-CAD-pipeline-execution-megapack/docs/VALIDATION_TODO_PIPELINE_EXECUTION.md",
+      "target": "docs/VALIDATION_TODO_PIPELINE_EXECUTION.md",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "extracted_by_zip/HS-CAD-pipeline-execution-megapack/manifest.json",
+      "target": "docs/megapacks/HS-CAD-pipeline-execution-megapack/manifest.json",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "extracted_by_zip/HS-CAD-pipeline-execution-megapack/scripts/build_final_codegen_inventory.py",
+      "target": "scripts/build_final_codegen_inventory.py",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "extracted_by_zip/HS-CAD-pipeline-execution-megapack/src/analysis/final_codegen_inventory.py",
+      "target": "src/analysis/final_codegen_inventory.py",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "extracted_by_zip/HS-CAD-pipeline-execution-megapack/src/analysis/pipeline_execution_reporter.py",
+      "target": "src/analysis/pipeline_execution_reporter.py",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "extracted_by_zip/HS-CAD-pipeline-execution-megapack/src/app/analysis_pipeline_cli.py",
+      "target": "src/app/analysis_pipeline_cli.py",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "source_zips/HS-CAD-zip-integration-megapack.zip",
+      "target": "artifacts/megapacks/HS-CAD-zip-integration-megapack.zip",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "extracted_by_zip/HS-CAD-zip-integration-megapack/README_APPLY_ZIP_INTEGRATION_MEGAPACK.md",
+      "target": "docs/megapacks/HS-CAD-zip-integration-megapack/README_APPLY_ZIP_INTEGRATION_MEGAPACK.md",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "extracted_by_zip/HS-CAD-zip-integration-megapack/docs/53_zip_integration_megapack_plan.md",
+      "target": "docs/53_zip_integration_megapack_plan.md",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "extracted_by_zip/HS-CAD-zip-integration-megapack/docs/VALIDATION_TODO_ZIP_INTEGRATION.md",
+      "target": "docs/VALIDATION_TODO_ZIP_INTEGRATION.md",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "extracted_by_zip/HS-CAD-zip-integration-megapack/manifest.json",
+      "target": "docs/megapacks/HS-CAD-zip-integration-megapack/manifest.json",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "extracted_by_zip/HS-CAD-zip-integration-megapack/scripts/apply_megapack_zips.py",
+      "target": "scripts/apply_megapack_zips.py",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "extracted_by_zip/HS-CAD-zip-integration-megapack/scripts/build_final_codegen_zip.py",
+      "target": "scripts/build_final_codegen_zip.py",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "extracted_by_zip/HS-CAD-zip-integration-megapack/scripts/run_codegen_only_finalize.ps1",
+      "target": "scripts/run_codegen_only_finalize.ps1",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "extracted_by_zip/HS-CAD-zip-integration-megapack/scripts/update_main_imports.py",
+      "target": "scripts/update_main_imports.py",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "extracted_by_zip/HS-CAD-zip-integration-megapack/scripts/update_worker_manifest_from_fragments.py",
+      "target": "scripts/update_worker_manifest_from_fragments.py",
+      "action": "written",
+      "reason": ""
+    },
+    {
+      "source": "COMBINED_ZIP_MANIFEST.json",
+      "target": "docs/megapacks/COMBINED_ZIP_MANIFEST.json",
+      "action": "written",
+      "reason": ""
+    }
+  ],
+  "skipped": [],
+  "manual_follow_up": [
+    "Review docs/megapacks/*/PATCH_MAIN_IMPORT*.md before editing src/main.py.",
+    "Review docs/megapacks/*/PATCH_WORKER_MANIFEST*.md before editing config/worker_manifest.json.",
+    "Run pytest and CLI help smoke tests before committing generated code."
+  ]
+}

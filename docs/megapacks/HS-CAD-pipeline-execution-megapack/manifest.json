@@ -1,0 +1,22 @@
+{
+  "package": "HS-CAD pipeline execution megapack",
+  "mode": "code_generation_only",
+  "validation": "todo_only",
+  "created_files": [
+    "PATCH_MAIN_IMPORT_PIPELINE_CLI.md",
+    "README_APPLY_PIPELINE_EXECUTION_MEGAPACK_ZIP.md",
+    "docs/54_pipeline_execution_megapack_plan.md",
+    "docs/VALIDATION_TODO_PIPELINE_EXECUTION.md",
+    "scripts/build_final_codegen_inventory.py",
+    "src/analysis/final_codegen_inventory.py",
+    "src/analysis/pipeline_execution_reporter.py",
+    "src/app/analysis_pipeline_cli.py"
+  ],
+  "manual_patches": [
+    "PATCH_MAIN_IMPORT_PIPELINE_CLI.md"
+  ],
+  "primary_cli": [
+    "hscad-analysis-run-all-exec",
+    "hscad-analysis-report-exec"
+  ]
+}
