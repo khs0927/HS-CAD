@@ -77,6 +77,7 @@ def build_xicad_alias_allowlist_plan(
         steps.append(step)
 
         alias = classification.alias or "<missing>"
+
         if classification.blocked_reason:
             blocked.append(alias)
         elif classification.policy.requires_human_review:
@@ -89,7 +90,7 @@ def build_xicad_alias_allowlist_plan(
             execution_allowed.append(alias)
 
     if execution_allowed:
-        warnings.append("Execution allowed aliases should normally be empty at this stage.")
+        warnings.append("execution_allowed_aliases should remain empty at this stage.")
 
     if blocked:
         status = "blocked"

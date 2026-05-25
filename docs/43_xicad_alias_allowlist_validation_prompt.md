@@ -18,7 +18,7 @@ Rules:
 - Do not modify DWG files.
 - Unknown aliases must be blocked.
 - Destructive aliases must be blocked.
-- Execution allowed aliases should remain empty.
+- execution_allowed_aliases must remain empty.
 
 Commands:
 

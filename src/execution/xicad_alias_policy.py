@@ -3,7 +3,6 @@ from __future__ import annotations
 from dataclasses import asdict, dataclass, field
 from typing import Any, Literal
 
-
 AliasRisk = Literal["safe_plan_only", "review_required", "blocked", "unknown"]
 
 
@@ -59,7 +58,7 @@ def build_default_xicad_alias_policies() -> dict[str, XiCADAliasPolicy]:
             alias="PK",
             risk="review_required",
             title="Parking or package workflow",
-            description="Alias requires manual classification before any dry-run mapping.",
+            description="Alias requires manual classification before dry-run mapping.",
             allowed_for_dry_run=True,
             allowed_for_execution=False,
             requires_human_review=True,
@@ -89,7 +88,7 @@ def build_default_xicad_alias_policies() -> dict[str, XiCADAliasPolicy]:
             alias="PURGE",
             risk="blocked",
             title="Purge command",
-            description="Potentially destructive drawing cleanup command. Blocked by default.",
+            description="Potentially destructive cleanup command. Blocked by default.",
             allowed_for_dry_run=False,
             allowed_for_execution=False,
             destructive=True,

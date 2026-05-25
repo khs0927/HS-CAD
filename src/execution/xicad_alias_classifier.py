@@ -39,7 +39,6 @@ def extract_alias(raw: str) -> str:
     if not tokens:
         return ""
 
-    # If the command starts with xicad-safe-plan and no --alias exists, treat as unknown.
     if tokens[0].lower() == "xicad-safe-plan":
         return ""
 
@@ -53,6 +52,7 @@ def classify_xicad_alias(
 ) -> XiCADAliasClassification:
     policies = policies or build_default_xicad_alias_policies()
     alias = extract_alias(raw)
+
     if not alias:
         policy = unknown_alias_policy("")
         return XiCADAliasClassification(
@@ -75,6 +75,6 @@ def classify_xicad_alias(
         alias=alias,
         policy=policy,
         allowed_for_dry_run=policy.allowed_for_dry_run and policy.risk not in {"blocked", "unknown"},
-        allowed_for_execution=policy.allowed_for_execution and policy.risk == "safe_plan_only",
+        allowed_for_execution=False,
         blocked_reason=blocked_reason,
     )
