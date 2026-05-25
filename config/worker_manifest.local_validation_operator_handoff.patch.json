@@ -1,0 +1,24 @@
+{
+  "workers_to_add": [
+    {
+      "name": "local_validation_operator_handoff",
+      "module": "src.workers.local_validation_operator_handoff_worker",
+      "callable": "run_worker",
+      "status": "implemented",
+      "description": "Generates manual operator handoff artifacts after PR62. Does not execute CAD.",
+      "outputs": [
+        "LOCAL_VALIDATION_OPERATOR_HANDOFF.json",
+        "LOCAL_VALIDATION_OPERATOR_HANDOFF.md",
+        "LOCAL_VALIDATION_OPERATOR_PROMPT.md",
+        "RESULT_FINALIZATION_COMMANDS.json"
+      ],
+      "safety": {
+        "this_package_runs_cad": false,
+        "this_package_runs_powershell": false,
+        "this_package_calls_sendcommand": false,
+        "this_package_implements_final_live_runner": false
+      }
+    }
+  ],
+  "note": "Handoff only. Manual operator execution remains external."
+}
