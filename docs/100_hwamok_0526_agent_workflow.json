@@ -1,0 +1,153 @@
+{
+  "id": "hwamok_0526_analysis_correction_framework",
+  "date": "2026-05-26",
+  "target_dwg_name_required": "화목동698-14 근린생활시설 신축공사_건축_0526.dwg",
+  "default_route": [
+    "zwcad_attach_only_probe",
+    "oda_dwg_to_dxf",
+    "ezdxf_fileized_json",
+    "json_validation",
+    "candidate_error_audit",
+    "dry_run_plan",
+    "copied_dwg_execution_only_after_approval"
+  ],
+  "prohibited_by_default": [
+    "SendCommand",
+    "SaveAs on active/original DWG",
+    "XiCAD alias execution",
+    "direct COM ModelSpace bulk scan as primary route",
+    "guessing unknown text replacements"
+  ],
+  "preflight_commands": [
+    "python -X utf8 -m src.main hscad-converters --probe",
+    "python -X utf8 -m src.main hscad-zwcad-com-evidence-probe --out-dir outputs\\hwamok_0526_active_probe --attach-only"
+  ],
+  "preflight_pass_conditions": {
+    "oda_available": true,
+    "probe_status": "confirmed",
+    "active_caption_contains": [
+      "화목동698-14",
+      "_건축_0526.dwg"
+    ],
+    "sendcommand_used": false,
+    "saveas_used": false,
+    "original_dwg_mutated": false
+  },
+  "current_counts": {
+    "entities": 30880,
+    "layers": 168,
+    "block_symbols": 61,
+    "texts": 2188,
+    "dimensions": 577
+  },
+  "current_findings": [
+    {
+      "handle": "AE10",
+      "layer": "실명",
+      "current_text": "10?",
+      "classification": "high_confidence_candidate",
+      "likely_text": "10%",
+      "requires_visual_confirmation": true,
+      "auto_execute_allowed": false
+    },
+    {
+      "handle": "AE11",
+      "layer": "실명",
+      "current_text": "100?",
+      "classification": "high_confidence_candidate",
+      "likely_text": "100%",
+      "requires_visual_confirmation": true,
+      "auto_execute_allowed": false
+    },
+    {
+      "handle": "AE16",
+      "layer": "실명",
+      "current_text": "5?",
+      "classification": "high_confidence_candidate",
+      "likely_text": "5%",
+      "requires_visual_confirmation": true,
+      "auto_execute_allowed": false
+    },
+    {
+      "handle": "AE17",
+      "layer": "실명",
+      "current_text": "50?",
+      "classification": "high_confidence_candidate",
+      "likely_text": "50%",
+      "requires_visual_confirmation": true,
+      "auto_execute_allowed": false
+    },
+    {
+      "handle": "AE1C",
+      "layer": "실명",
+      "current_text": "5?",
+      "classification": "high_confidence_candidate",
+      "likely_text": "5%",
+      "requires_visual_confirmation": true,
+      "auto_execute_allowed": false
+    },
+    {
+      "handle": "B181",
+      "layer": "실명",
+      "current_text": "??",
+      "classification": "low_confidence_candidate",
+      "likely_text": null,
+      "requires_visual_confirmation": true,
+      "auto_execute_allowed": false
+    },
+    {
+      "handle": "B182",
+      "layer": "실명",
+      "current_text": "??",
+      "classification": "low_confidence_candidate",
+      "likely_text": null,
+      "requires_visual_confirmation": true,
+      "auto_execute_allowed": false
+    },
+    {
+      "handle": "B183",
+      "layer": "실명",
+      "current_text": "??",
+      "classification": "low_confidence_candidate",
+      "likely_text": null,
+      "requires_visual_confirmation": true,
+      "auto_execute_allowed": false
+    }
+  ],
+  "quality_risks": [
+    {
+      "id": "layer_0_overload",
+      "detail": "Layer 0 contains 8903 entities.",
+      "default_action": "report_only_then_semantic_split_plan"
+    },
+    {
+      "id": "anonymous_blocks",
+      "detail": "19 anonymous/auto-generated block symbols detected.",
+      "default_action": "group_by_location_layer_nearby_text_before_any_normalization"
+    },
+    {
+      "id": "large_text_heights",
+      "detail": "12 text entities have extracted height greater than 1000.",
+      "default_action": "visual_review_before_classifying_as_error"
+    }
+  ],
+  "dry_run_plan_required_fields": [
+    "original_dwg_path",
+    "working_copy_path",
+    "saveas_target_path",
+    "target_handle",
+    "current_value",
+    "proposed_value",
+    "evidence",
+    "confirmation_status",
+    "rollback_plan"
+  ],
+  "execution_gate": {
+    "requires_explicit_human_approval": true,
+    "requires_working_copy": true,
+    "requires_distinct_saveas_target": true,
+    "requires_before_fileized_json": true,
+    "requires_after_fileized_json": true,
+    "requires_delta_report": true
+  }
+}
