@@ -1,0 +1,19 @@
+{
+  "job_id": "add-foundation-note-demo",
+  "source": {
+    "type": "local",
+    "file_path": "samples/missing-demo.dxf",
+    "allow_blank": true
+  },
+  "actions": [
+    {
+      "type": "add_leader_note",
+      "layer": "DIMLE",
+      "text": "기초: 매트기초",
+      "position": [1200, 700],
+      "leader_to": [900, 500],
+      "color": 3
+    }
+  ],
+  "outputs": ["dxf", "svg", "png", "change_report"]
+}

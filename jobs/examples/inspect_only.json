@@ -1,0 +1,14 @@
+{
+  "job_id": "inspect-only-demo",
+  "source": {
+    "type": "local",
+    "file_path": "samples/missing-demo.dxf",
+    "allow_blank": true
+  },
+  "actions": [
+    {
+      "type": "inspect_only"
+    }
+  ],
+  "outputs": ["dxf", "svg", "png", "change_report"]
+}

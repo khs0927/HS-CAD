@@ -1,0 +1,27 @@
+{
+  "job_id": "add-panel-notes-demo",
+  "source": {
+    "type": "local",
+    "file_path": "samples/missing-demo.dxf",
+    "allow_blank": true
+  },
+  "actions": [
+    {
+      "type": "add_leader_note",
+      "layer": "DIMLE",
+      "text": "외벽: T100 그라스울 판넬",
+      "position": [1200, 2800],
+      "leader_to": [800, 2400],
+      "color": 2
+    },
+    {
+      "type": "add_leader_note",
+      "layer": "DIMLE",
+      "text": "지붕: T180 그라스울 판넬",
+      "position": [1200, 3400],
+      "leader_to": [850, 3100],
+      "color": 2
+    }
+  ],
+  "outputs": ["dxf", "svg", "png", "change_report"]
+}

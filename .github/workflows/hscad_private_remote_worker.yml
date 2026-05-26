@@ -1,0 +1,95 @@
+name: HS-CAD Private Remote DXF Worker
+
+on:
+  pull_request:
+    paths:
+      - "src/remote_worker/**"
+      - "src/cad/dxf_inspector.py"
+      - "src/cad/ezdxf_modifier.py"
+      - "src/cad/svg_preview.py"
+      - "src/cad/png_exporter.py"
+      - "tests/test_remote_worker_*.py"
+      - ".github/workflows/hscad_private_remote_worker.yml"
+      - "jobs/examples/**"
+  push:
+    branches:
+      - feature/remote-dxf-worker
+  workflow_dispatch:
+    inputs:
+      job_json_path:
+        description: "Path to job JSON"
+        required: true
+        default: "jobs/examples/add_panel_notes.json"
+      drive_file_id:
+        description: "Optional Google Drive source file id"
+        required: false
+        default: ""
+      drive_file_name:
+        description: "Optional Google Drive source file name"
+        required: false
+        default: "source.dxf"
+
+jobs:
+  remote-dxf-worker:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install "pydantic>=2" ezdxf pillow google-api-python-client google-auth google-auth-httplib2 google-auth-oauthlib pytest
+
+      - name: Compile remote worker
+        run: python -m compileall -q src tests
+
+      - name: Run remote worker tests
+        run: python -m pytest -q tests/test_remote_worker_job_schema.py tests/test_remote_worker_safety_guard.py tests/test_remote_worker_runner.py
+
+      - name: Patch Drive input into job when provided
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.drive_file_id != '' }}
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          path = Path("${{ inputs.job_json_path }}")
+          data = json.loads(path.read_text(encoding="utf-8"))
+          data["source"] = {
+              "type": "google_drive",
+              "file_id": "${{ inputs.drive_file_id }}",
+              "file_name": "${{ inputs.drive_file_name }}",
+              "allow_blank": False,
+          }
+          patched = Path("outputs/runtime_job.json")
+          patched.parent.mkdir(parents=True, exist_ok=True)
+          patched.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+          PY
+
+      - name: Run worker with Drive input
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.drive_file_id != '' }}
+        env:
+          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+          GDRIVE_OUTPUT_FOLDER_ID: ${{ secrets.GDRIVE_OUTPUT_FOLDER_ID }}
+        run: python -m src.remote_worker.worker_runner --job outputs/runtime_job.json
+
+      - name: Run worker with sample job
+        if: ${{ github.event_name != 'workflow_dispatch' || inputs.drive_file_id == '' }}
+        env:
+          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+          GDRIVE_OUTPUT_FOLDER_ID: ${{ secrets.GDRIVE_OUTPUT_FOLDER_ID }}
+        run: python -m src.remote_worker.worker_runner --job jobs/examples/add_panel_notes.json
+
+      - name: Upload short-lived artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: hscad-remote-worker-output
+          path: outputs/jobs/**
+          retention-days: 1
