@@ -1,6 +1,19 @@
 name: HS-CAD Private Remote DXF Worker
 
 on:
+  pull_request:
+    paths:
+      - "src/remote_worker/**"
+      - "src/cad/dxf_inspector.py"
+      - "src/cad/ezdxf_modifier.py"
+      - "src/cad/svg_preview.py"
+      - "src/cad/png_exporter.py"
+      - "tests/test_remote_worker_*.py"
+      - ".github/workflows/hscad_private_remote_worker.yml"
+      - "jobs/examples/**"
+  push:
+    branches:
+      - feature/remote-dxf-worker
   workflow_dispatch:
     inputs:
       job_json_path:
@@ -42,7 +55,7 @@ jobs:
         run: python -m pytest -q tests/test_remote_worker_job_schema.py tests/test_remote_worker_safety_guard.py tests/test_remote_worker_runner.py
 
       - name: Patch Drive input into job when provided
-        if: ${{ inputs.drive_file_id != '' }}
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.drive_file_id != '' }}
         run: |
           python - <<'PY'
           import json
@@ -61,18 +74,18 @@ jobs:
           PY
 
       - name: Run worker with Drive input
-        if: ${{ inputs.drive_file_id != '' }}
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.drive_file_id != '' }}
         env:
           GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
           GDRIVE_OUTPUT_FOLDER_ID: ${{ secrets.GDRIVE_OUTPUT_FOLDER_ID }}
         run: python -m src.remote_worker.worker_runner --job outputs/runtime_job.json
 
-      - name: Run worker with repository job
-        if: ${{ inputs.drive_file_id == '' }}
+      - name: Run worker with sample job
+        if: ${{ github.event_name != 'workflow_dispatch' || inputs.drive_file_id == '' }}
         env:
           GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
           GDRIVE_OUTPUT_FOLDER_ID: ${{ secrets.GDRIVE_OUTPUT_FOLDER_ID }}
-        run: python -m src.remote_worker.worker_runner --job "${{ inputs.job_json_path }}"
+        run: python -m src.remote_worker.worker_runner --job jobs/examples/add_panel_notes.json
 
       - name: Upload short-lived artifact
         uses: actions/upload-artifact@v4
