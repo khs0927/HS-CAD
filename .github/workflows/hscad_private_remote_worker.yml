@@ -13,7 +13,16 @@ on:
       - "jobs/examples/**"
   push:
     branches:
-      - feature/remote-dxf-worker
+      - main
+    paths:
+      - "src/remote_worker/**"
+      - "src/cad/dxf_inspector.py"
+      - "src/cad/ezdxf_modifier.py"
+      - "src/cad/svg_preview.py"
+      - "src/cad/png_exporter.py"
+      - "tests/test_remote_worker_*.py"
+      - ".github/workflows/hscad_private_remote_worker.yml"
+      - "jobs/examples/**"
   workflow_dispatch:
     inputs:
       job_json_path:
