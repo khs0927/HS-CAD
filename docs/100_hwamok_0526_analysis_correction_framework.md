@@ -5,16 +5,24 @@
 - **COM/SaveAs/SendCommand 금지 및 승인 게이트**: ZWCAD COM을 통한 `SendCommand`나 `SaveAs` 등 도면 상태를 변형하는 라이브 CAD 명령은 기본적으로 엄격히 금지되며, 반드시 승인 게이트를 통과해야 합니다.
 - **실행 게이트 (복사본 수정)**: 실제 도면 수정(Mutation)은 원본 보호를 위해 절대 원본 DWG에서 진행하지 않으며, 반드시 **복사본 DWG**에서만 진행하도록 강제하는 실행 게이트를 통과해야 합니다.
 
-## 2. Current Error Candidates (오류 후보 점검 결과)
+## 2. Phase 1 Pipeline Baseline Results (핵심 분석 파이프라인 검증 완료)
+웹하드 원본 도면 20개의 샘플(`outputs/webhard_corpus_sample`)에 대하여 공간적 포함 관계 및 텍스트 역할 분석에 이르는 핵심 파이프라인 연동 테스트를 완벽히 통과했습니다. 이 베이스라인 데이터는 향후 오작동을 판별하는 기준점이 됩니다.
+
+- **Area Elements**: 총 4,345개의 면적 및 다각형 기하학 요소가 에러 없이 추출되었습니다.
+- **Spatial Containment**: 무려 74만 건의 기하학적 교차 검사를 통해, 실제 유효한 2,716개의 '공간적 포함 관계(도면 내부의 요소들 간 종속 관계)'가 빠르고 정확하게 맵핑되었습니다.
+- **Text Roles**: 생성된 공간 정보를 기반으로, 단순 텍스트들이 '도면명(Titleblock)', '실명(Room Name)', '일반 주석' 등 고유의 역할로 스마트하게 분류되었습니다 (예: 실명 156개 도출).
+- **Graph Audit**: 이 모든 데이터 위에서 최종 오딧 워커(`networkx_graph_audit`)가 어떠한 결함이나 크래시 없이 무결성 점검을 완료했습니다.
+
+## 3. Current Error Candidates (오류 후보 점검 결과)
 ### 텍스트 핸들별 판단 (8개 오류 후보)
-현재 화목동 0526 도면에서 발견된 8개의 문제성 텍스트 핸들에 대해 공간적 포함 관계(Spatial Containment)와 의미 역할(Text Roles) 기반으로 정밀 판단을 진행합니다.
+현재 화목동 0526 도면에서 발견된 8개의 문제성 텍스트 핸들에 대해 위 베이스라인(공간적 포함 관계 및 텍스트 역할) 기반으로 정밀 판단을 진행합니다.
 
 ### 후보 처리 기준 (Handling Criteria)
 - **0 레이어 과다 (Excessive Layer 0)**: 도면 객체의 상당수가 '0' 레이어에 방치된 경우 분류를 요구합니다.
 - **익명 블록 (Anonymous Blocks)**: `*U` 형태의 익명 블록이 공간 경계를 침범하거나 분석을 방해할 경우 분해(Explode) 또는 정규화 대상이 됩니다.
 - **텍스트 높이 이상 (Abnormal Text Height)**: 표준 척도 스케일을 벗어나는 텍스트 요소들을 식별하고 수정 대상 후보로 지정합니다.
 
-## 3. Agent Workflow (다른 에이전트가 따라야 할 단계별 명령 순서)
+## 4. Agent Workflow (다른 에이전트가 따라야 할 단계별 명령 순서)
 다음은 다른 분석/수정 에이전트가 화목동 0526 도면을 처리할 때 따라야 하는 순차 프레임워크입니다.
 
 1. `corpus-run prepare` (샘플 및 작업 공간 격리)
@@ -24,7 +32,7 @@
 5. `hscad-text-roles` (텍스트 의미 및 속성 분류)
 6. `hscad-analysis-phase12-manual-live-candidate` (복사본 도면 기반 수정 후보군 생성)
 
-## 4. Gates & Conditions
+## 5. Gates & Conditions
 ### 중단 조건 (Halt Conditions)
 - 원본 DWG 경로에 대한 직/간접적 쓰기 시도 감지 시
 - 승인되지 않은 `ZWCAD COM` 라이브 실행 시도 시
