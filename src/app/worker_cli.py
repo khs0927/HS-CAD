@@ -49,7 +49,7 @@ def hscad_worker_run(
         console.print(runner.dry_run(worker_name, worker_input))
         return
     output = runner.run(worker_name, worker_input)
-    console.print(output.model_dump())
+    console.print(output.to_dict())
     if output.status in {'ok', 'warning'}:
         success('Worker completed')
     elif output.status == 'unavailable':

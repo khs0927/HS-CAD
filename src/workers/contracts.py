@@ -42,7 +42,7 @@ class WorkerOutput:
     warnings: list[str] = field(default_factory=list)
     metrics: dict[str, Any] = field(default_factory=dict)
     provenance: dict[str, Any] = field(default_factory=dict)
-    error: str | None = None
+    error_message: str | None = None
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
@@ -65,7 +65,7 @@ class WorkerOutput:
             status="error",
             warnings=[message],
             provenance=provenance or {},
-            error=message,
+            error_message=message,
         )
 
     @classmethod
