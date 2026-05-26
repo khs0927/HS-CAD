@@ -58,6 +58,11 @@ class ODAFileConverter:
         for candidate in candidates:
             if candidate.exists():
                 return candidate
+        for root in (Path('C:/Program Files/ODA'), Path('C:/Program Files (x86)/ODA')):
+            if root.exists():
+                matches = sorted(root.glob('ODAFileConverter*/ODAFileConverter.exe'), reverse=True)
+                if matches:
+                    return matches[0]
         return None
 
     def is_available(self) -> tuple[bool, str]:

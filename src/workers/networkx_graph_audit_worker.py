@@ -46,7 +46,8 @@ def run_worker(worker_input: WorkerInput) -> WorkerOutput:
         )
     score = _score_from_result(result)
     metrics = result.get('metrics') or {}
-    return WorkerOutput.ok(
+    return WorkerOutput(
+        status='ok',
         worker_name=WORKER_NAME,
         backend=BACKEND,
         artifacts=[str(json_path), str(md_path)],

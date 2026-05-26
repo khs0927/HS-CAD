@@ -25,12 +25,7 @@ WORKER_CANDIDATES = {
 
 CLI_CANDIDATES = [
     'src.app.analysis_shortcut_cli',
-    'src.app.cad_platforms_cli',
-    'src.app.cross_validate_cli',
-    'src.app.fusion_matrix_cli',
     'src.app.layer_analysis_cli',
-    'src.app.layer_audit_cli',
-    'src.app.open_backends_cli',
     'src.app.shapely_area_match_cli',
     'src.app.shapely_topology_audit_cli',
     'src.app.shapely_topology_cli',
