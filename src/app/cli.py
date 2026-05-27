@@ -39,9 +39,11 @@ app = typer.Typer(help='ZWCAD AI Architectural Modifier CLI')
 
 
 def get_adapter(dwg: Optional[str] = None) -> ZWCADCOMAdapter:
-    adapter = ZWCADCOMAdapter(visible=True)
+    import os
+    version = os.getenv("ZWCAD_VERSION")
+    adapter = ZWCADCOMAdapter(visible=True, version=version)
     adapter.connect()
-    if dwg:
+    if dwg and dwg.lower() != 'active':
         adapter.open_document(dwg)
     return adapter
 

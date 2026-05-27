@@ -49,6 +49,9 @@ class ArchiOfficeRuleEngine:
         self.is_loaded = True
         return True
 
+    def load_all(self) -> None:
+        self.load_all_rules()
+
     def _read_file_safe(self, file_path: Path) -> Optional[List[str]]:
         """한글이 들어간 아키오피스 설정 파일을 다양한 인코딩으로 안전하게 로드합니다."""
         if not file_path.exists():

@@ -67,21 +67,52 @@ class ZWCADCOMAdapter(CADAdapter):
         return list(self._DEFAULT_PROGIDS)
 
     def connect(self) -> None:
-        import comtypes.client  # type: ignore
-
         progids = self._candidate_progids()
 
-        # 1. Try to attach to an already-running ZWCAD instance.
+        # 1. Try win32com.client first for instantaneous dynamic dispatch (no freeze)
+        try:
+            import win32com.client
+            # Try to attach first
+            for progid in progids:
+                try:
+                    self.app = win32com.client.GetActiveObject(progid)
+                    self.active_progid = progid
+                    logger.success(f'Connected to active ZWCAD via win32com COM: {progid}')
+                    return
+                except Exception:
+                    continue
+            
+            # Spawn if needed
+            if self.start_if_needed:
+                for progid in progids:
+                    try:
+                        self.app = win32com.client.Dispatch(progid)
+                        try:
+                            self.app.Visible = self.visible
+                        except Exception:
+                            pass
+                        self.active_progid = progid
+                        logger.success(f'Created new ZWCAD instance via win32com COM: {progid}')
+                        return
+                    except Exception:
+                        continue
+        except ImportError:
+            pass
+
+        # 2. Fall back to comtypes.client if win32com is not available
+        import comtypes.client  # type: ignore
+
+        # Try to attach to an already-running ZWCAD instance.
         for progid in progids:
             try:
                 self.app = comtypes.client.GetActiveObject(progid)
                 self.active_progid = progid
-                logger.success(f'Connected to active ZWCAD via COM: {progid}')
+                logger.success(f'Connected to active ZWCAD via comtypes COM: {progid}')
                 return
             except Exception:
                 continue
 
-        # 2. Optionally spawn a new instance.
+        # Optionally spawn a new instance.
         if not self.start_if_needed:
             raise RuntimeError(
                 'No running ZWCAD instance found and start_if_needed=False '
@@ -96,7 +127,7 @@ class ZWCADCOMAdapter(CADAdapter):
                 except Exception:
                     pass
                 self.active_progid = progid
-                logger.success(f'Created new ZWCAD instance via COM: {progid}')
+                logger.success(f'Created new ZWCAD instance via comtypes COM: {progid}')
                 return
             except Exception:
                 continue
@@ -107,9 +138,11 @@ class ZWCADCOMAdapter(CADAdapter):
         )
 
     def open_document(self, path: str) -> Any:
+        import os
         if self.app is None:
             self.connect()
-        self.doc = self.app.Documents.Open(str(Path(path)))
+        abs_path = os.path.abspath(path).replace('/', '\\')
+        self.doc = self.app.Documents.Open(abs_path)
         return self.doc
 
     def get_active_document(self) -> Any:
@@ -382,7 +415,11 @@ class ZWCADCOMAdapter(CADAdapter):
     def create_line(self, start: Iterable[float], end: Iterable[float], layer: str = '0') -> Any:
         doc = self.doc or self.get_active_document()
         self._ensure_layer(layer)
-        ent = doc.ModelSpace.AddLine(list(start), list(end))
+        import win32com.client
+        import pythoncom
+        start_pt = win32com.client.VARIANT(pythoncom.VT_ARRAY | pythoncom.VT_R8, [float(v) for v in start])
+        end_pt = win32com.client.VARIANT(pythoncom.VT_ARRAY | pythoncom.VT_R8, [float(v) for v in end])
+        ent = doc.ModelSpace.AddLine(start_pt, end_pt)
         try:
             ent.Layer = layer
         except Exception:
@@ -395,7 +432,10 @@ class ZWCADCOMAdapter(CADAdapter):
         coords: list[float] = []
         for pt in points:
             coords.extend([float(pt[0]), float(pt[1])])
-        ent = doc.ModelSpace.AddLightWeightPolyline(coords)
+        import win32com.client
+        import pythoncom
+        coords_val = win32com.client.VARIANT(pythoncom.VT_ARRAY | pythoncom.VT_R8, coords)
+        ent = doc.ModelSpace.AddLightWeightPolyline(coords_val)
         try:
             ent.Layer = layer
         except Exception:
@@ -410,7 +450,10 @@ class ZWCADCOMAdapter(CADAdapter):
         doc = self.doc or self.get_active_document()
         self._ensure_layer(layer)
         sx, sy, sz = list(scale or [1, 1, 1])[:3]
-        ent = doc.ModelSpace.InsertBlock(list(insert), block_name, sx, sy, sz, rotation)
+        import win32com.client
+        import pythoncom
+        insert_pt = win32com.client.VARIANT(pythoncom.VT_ARRAY | pythoncom.VT_R8, [float(v) for v in insert])
+        ent = doc.ModelSpace.InsertBlock(insert_pt, block_name, sx, sy, sz, rotation)
         try:
             ent.Layer = layer
         except Exception:
@@ -420,7 +463,10 @@ class ZWCADCOMAdapter(CADAdapter):
     def create_text(self, text: str, insert: Iterable[float], height: float = 150.0, layer: str = '0', color: int = 256) -> Any:
         doc = self.doc or self.get_active_document()
         self._ensure_layer(layer)
-        ent = doc.ModelSpace.AddText(text, list(insert), height)
+        import win32com.client
+        import pythoncom
+        insert_pt = win32com.client.VARIANT(pythoncom.VT_ARRAY | pythoncom.VT_R8, [float(v) for v in insert])
+        ent = doc.ModelSpace.AddText(text, insert_pt, height)
         try:
             ent.Layer = layer
         except Exception:

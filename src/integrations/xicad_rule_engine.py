@@ -54,6 +54,9 @@ class XiCADRuleEngine:
         self.is_loaded = True
         return True
 
+    def load_all(self) -> None:
+        self.load_all_rules()
+
     def _read_file_safe(self, file_path: Path) -> Optional[List[str]]:
         """한글 및 특수기호가 포함된 설정 파일을 안전하게 디코딩하여 라인 단위로 읽어옵니다."""
         if not file_path.exists():
