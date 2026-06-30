@@ -182,8 +182,27 @@
       "description": "OCR Text Region detection worker"
     },
     "networkx_graph_audit": {
+      "module": "src.workers.networkx_graph_audit_worker",
       "path": "src.workers.networkx_graph_audit_worker",
-      "description": "NetworkX Graph Audit worker"
+      "callable": "run_worker",
+      "status": "implemented",
+      "description": "Review-only NetworkX graph audit worker. Reads SPATIAL_GRAPH.json and writes graph audit JSON/Markdown reports.",
+      "outputs": [
+        "GRAPH_AUDIT.json",
+        "GRAPH_AUDIT.md"
+      ],
+      "safety": {
+        "source_mutation_allowed": false,
+        "cad_execution_allowed": false,
+        "zwcad_com_allowed": false,
+        "sendcommand_allowed": false,
+        "saveas_allowed": false,
+        "dxfout_allowed": false,
+        "xicad_alias_execution_allowed": false,
+        "original_dwg_mutation_allowed": false,
+        "review_only": true,
+        "optional_dependency": "networkx"
+      }
     },
     "duckdb_export": {
       "path": "src.workers.duckdb_export_worker",
