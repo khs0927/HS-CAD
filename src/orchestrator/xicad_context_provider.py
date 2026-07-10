@@ -26,12 +26,20 @@ def _command_to_dict(command: Any) -> dict[str, Any]:
 def find_xicad_candidates(query: str, category: str | None = None, limit: int = 12) -> list[dict[str, Any]]:
     """Return limited XiCAD candidates annotated with the stage-2 safety policy."""
     limit = max(1, min(int(limit or 12), 50))
+    candidates: list[dict[str, Any]] = []
     try:
         from src.orchestrator.xicad_taxonomy import search_xicad_commands
 
         rows = search_xicad_commands(query, category=category, limit=limit)
         candidates = [_command_to_dict(row) for row in rows]
     except Exception:
+        candidates = []
+
+    # An installed or frozen build may not include a generated taxonomy index.
+    # Empty search results are therefore treated the same as an unavailable
+    # index, preserving a safe built-in command set instead of returning no
+    # guidance at all.
+    if not candidates:
         candidates = _fallback_candidates(query, category=category)
 
     normalized: list[dict[str, Any]] = []
