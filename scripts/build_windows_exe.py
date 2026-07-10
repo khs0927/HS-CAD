@@ -5,7 +5,6 @@ import hashlib
 import os
 import shutil
 import subprocess
-import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -41,6 +40,8 @@ def _pyinstaller_arguments() -> list[str]:
         str(SPEC),
         "--paths",
         str(ROOT),
+        "--paths",
+        str(ROOT / "src"),
         "--hidden-import=pythoncom",
         "--hidden-import=pywintypes",
         "--hidden-import=win32com",
@@ -53,6 +54,7 @@ def _pyinstaller_arguments() -> list[str]:
         "--collect-submodules=src.graph",
         "--collect-submodules=src.analytics",
         "--collect-submodules=src.neuro_seq_cad",
+        "--collect-submodules=neuro_seq_cad",
         "--exclude-module=paddle",
         "--exclude-module=paddleocr",
         "--exclude-module=easyocr",
@@ -101,6 +103,7 @@ def build(*, clean: bool, smoke: bool) -> Path:
     if smoke:
         subprocess.run([str(executable), "--help"], cwd=ROOT, check=True, timeout=120)
         subprocess.run([str(executable), "doctor"], cwd=ROOT, check=True, timeout=120)
+        subprocess.run([str(executable), "floorplan-analyze", "--help"], cwd=ROOT, check=True, timeout=120)
 
     print(f"Built: {executable}")
     print(f"SHA256: {checksum}")
