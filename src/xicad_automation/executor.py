@@ -18,7 +18,12 @@ class AutomationAdapter(Protocol):
     def connect(self) -> None: ...
     def open_document(self, path: str): ...
     def run_command(self, command_text: str) -> None: ...
-    def wait_until_idle(self, timeout_seconds: float = 120.0, poll_seconds: float = 0.2) -> bool: ...
+    def wait_until_idle(
+        self,
+        timeout_seconds: float = 120.0,
+        poll_seconds: float = 0.2,
+        cancel_check: Callable[[], bool] | None = None,
+    ) -> bool: ...
     def cancel_current_command(self) -> None: ...
     def save(self) -> None: ...
     def scan_modelspace(self) -> list[dict]: ...
@@ -27,6 +32,12 @@ class AutomationAdapter(Protocol):
 
 class WorkflowBlocked(RuntimeError):
     pass
+
+
+class WorkflowCancelled(RuntimeError):
+    def __init__(self, message: str, result: WorkflowResult) -> None:
+        super().__init__(message)
+        self.result = result
 
 
 class WorkflowExecutor:
@@ -46,11 +57,37 @@ class WorkflowExecutor:
             problems.append("Approval token is missing or does not match this exact workflow")
         return problems
 
-    def execute(self, workflow: WorkflowSpec) -> WorkflowResult:
+    @staticmethod
+    def _cancelled_result(
+        workflow: WorkflowSpec,
+        started: str,
+        steps: list[StepResult],
+        recovery_path: Path | None = None,
+    ) -> WorkflowResult:
+        return WorkflowResult(
+            workflow_id=workflow.id,
+            status=JobStatus.cancelled,
+            started_at=started,
+            finished_at=utc_now(),
+            working_dwg=str(workflow.working_dwg),
+            recovery_path=str(recovery_path) if recovery_path else None,
+            steps=steps,
+            warnings=["Cancellation was requested; the current XiCAD command received a cancel signal."],
+        )
+
+    def execute(
+        self,
+        workflow: WorkflowSpec,
+        cancel_check: Callable[[], bool] | None = None,
+    ) -> WorkflowResult:
         started = utc_now()
         problems = self.validate(workflow)
         if problems:
             raise WorkflowBlocked("; ".join(problems))
+
+        if cancel_check and cancel_check():
+            result = self._cancelled_result(workflow, started, [])
+            raise WorkflowCancelled("Cancelled before execution", result)
 
         if workflow.dry_run:
             return WorkflowResult(
@@ -77,16 +114,48 @@ class WorkflowExecutor:
             adapter.connect()
             adapter.open_document(str(workflow.working_dwg))
             XiCADAdapter(adapter, str(workflow.xicad_root)).load()
-            if not adapter.wait_until_idle(timeout_seconds=120):
+            try:
+                idle = adapter.wait_until_idle(timeout_seconds=120, cancel_check=cancel_check)
+            except InterruptedError as exc:
+                raise WorkflowCancelled(
+                    str(exc), self._cancelled_result(workflow, started, step_results, recovery_path)
+                ) from exc
+            if not idle:
                 raise TimeoutError("XiCAD bootstrap did not return ZWCAD to idle state")
 
             for index, step in enumerate(workflow.steps):
+                if cancel_check and cancel_check():
+                    raise WorkflowCancelled(
+                        "Cancelled between steps",
+                        self._cancelled_result(workflow, started, step_results, recovery_path),
+                    )
                 step_started = utc_now()
                 before_count = len(adapter.scan_modelspace())
                 checkpoint_path: Path | None = None
                 try:
                     adapter.run_command(step.command_text())
-                    if not adapter.wait_until_idle(timeout_seconds=step.timeout_seconds):
+                    try:
+                        idle = adapter.wait_until_idle(
+                            timeout_seconds=step.timeout_seconds,
+                            cancel_check=cancel_check,
+                        )
+                    except InterruptedError as exc:
+                        step_results.append(
+                            StepResult(
+                                index=index,
+                                alias=step.alias,
+                                status="cancelled",
+                                started_at=step_started,
+                                finished_at=utc_now(),
+                                before_count=before_count,
+                                error=str(exc),
+                            )
+                        )
+                        raise WorkflowCancelled(
+                            str(exc),
+                            self._cancelled_result(workflow, started, step_results, recovery_path),
+                        ) from exc
+                    if not idle:
                         adapter.cancel_current_command()
                         raise TimeoutError(f"{step.alias} exceeded {step.timeout_seconds:.0f}s")
                     after_count = len(adapter.scan_modelspace())
@@ -114,6 +183,8 @@ class WorkflowExecutor:
                             checkpoint_path=str(checkpoint_path) if checkpoint_path else None,
                         )
                     )
+                except WorkflowCancelled:
+                    raise
                 except Exception as exc:
                     step_results.append(
                         StepResult(
@@ -138,6 +209,12 @@ class WorkflowExecutor:
                 recovery_path=str(recovery_path) if recovery_path else None,
                 steps=step_results,
             )
+        except WorkflowCancelled:
+            try:
+                adapter.cancel_current_command()
+            except Exception:
+                pass
+            raise
         except Exception:
             try:
                 adapter.cancel_current_command()
@@ -168,8 +245,13 @@ class BackgroundWorker:
             if problems:
                 self.store.block(job.id, "; ".join(problems))
                 return True
-            result = self.executor.execute(job.workflow)
+            result = self.executor.execute(
+                job.workflow,
+                cancel_check=lambda: self.store.is_cancellation_requested(job.id),
+            )
             self.store.complete(job.id, result)
+        except WorkflowCancelled as exc:
+            self.store.complete(job.id, exc.result)
         except WorkflowBlocked as exc:
             self.store.block(job.id, str(exc))
         except Exception as exc:
