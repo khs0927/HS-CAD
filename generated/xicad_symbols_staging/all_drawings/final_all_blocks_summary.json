@@ -1,0 +1,28 @@
+{
+  "xicad_analysis": "generated/xicad_symbols_staging/xicad_symbol_system_analysis.json",
+  "xicad_analysis_after_all": "generated/xicad_symbols_staging/xicad_symbol_system_analysis_after_all.json",
+  "all_catalog": "generated/xicad_symbols_staging/all_drawings/all_drawing_block_catalog.json",
+  "all_report": "generated/xicad_symbols_staging/all_drawings/all_drawings_to_xicad_report.json",
+  "hs_cad_all_root": "C:\\xicad\\xiLib\\심볼\\HS-CAD-ALL",
+  "hs_cad_all_count": 41,
+  "hs_cad_all_by_category": {
+    "annotation_symbol": 7,
+    "door": 2,
+    "door_or_fixture": 9,
+    "general_symbol": 14,
+    "material": 1,
+    "sanitary": 1,
+    "structure": 3,
+    "title_sheet": 2,
+    "window_or_linear_symbol": 2
+  },
+  "live_reports": {
+    "english_representatives": "generated/zwcad_symbol_live_test/hscad_all_symbol_insert_test.dwg",
+    "hangul_representatives": "generated/zwcad_symbol_live_test/hscad_all_hangul_symbol_insert_test.dwg",
+    "hangul_report": "generated/zwcad_symbol_live_test/hscad_all_hangul_insert_report.json"
+  },
+  "policy": {
+    "review_only_installed": false,
+    "review_only_reason": "anonymous A$C/temporary blocks are exported for review but not installed into XiCAD automatically"
+  }
+}

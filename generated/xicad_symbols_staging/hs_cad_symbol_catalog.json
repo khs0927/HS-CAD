@@ -1,0 +1,2093 @@
+{
+  "mode": "staging_only_no_xicad_install",
+  "observed_report": "generated/fast_scan_report.json",
+  "xicad_root": "C:\\xicad",
+  "staging_dir": "generated\\xicad_symbols_staging\\HS-CAD",
+  "intended_install_dir": "C:\\xicad\\xiLib\\심볼\\HS-CAD",
+  "counts": {
+    "total": 108,
+    "by_category": {
+      "annotation_symbol": 18,
+      "brand": 1,
+      "door": 3,
+      "door_or_fixture": 1,
+      "furniture": 1,
+      "general_symbol": 52,
+      "landscape": 1,
+      "material": 2,
+      "review_only": 18,
+      "sanitary": 7,
+      "security": 1,
+      "structure": 1,
+      "title_sheet": 2
+    },
+    "by_source_status": {
+      "matched_existing_xicad_dwg": 6,
+      "needs_wblock_export": 102
+    }
+  },
+  "candidates": [
+    {
+      "name": "12321a",
+      "sanitized_name": "12321a",
+      "category": "general_symbol",
+      "confidence": 0.42,
+      "reason": [
+        "fallback"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/general_symbol",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "1F",
+      "sanitized_name": "1F",
+      "category": "general_symbol",
+      "confidence": 0.42,
+      "reason": [
+        "fallback"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/general_symbol",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "2013_0604_샤워부스 도어 손잡이",
+      "sanitized_name": "2013_0604_샤워부스 도어 손잡이",
+      "category": "door",
+      "confidence": 0.82,
+      "reason": [
+        "door/name"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/door",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "2013_0604_샤워부스 손잡이",
+      "sanitized_name": "2013_0604_샤워부스 손잡이",
+      "category": "general_symbol",
+      "confidence": 0.42,
+      "reason": [
+        "fallback"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/general_symbol",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "21231a",
+      "sanitized_name": "21231a",
+      "category": "general_symbol",
+      "confidence": 0.42,
+      "reason": [
+        "fallback"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/general_symbol",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "2P-S109",
+      "sanitized_name": "2P-S109",
+      "category": "general_symbol",
+      "confidence": 0.42,
+      "reason": [
+        "fallback"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/general_symbol",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "2P-T204",
+      "sanitized_name": "2P-T204",
+      "category": "door_or_fixture",
+      "confidence": 0.58,
+      "reason": [
+        "arc_and_line_geometry"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/door_or_fixture",
+      "shape": {
+        "source": "outputs\\oda_hwamok_0526\\dxf\\hwamok_0526.dxf",
+        "entity_count": 15,
+        "entity_counts": {
+          "ARC": 2,
+          "LINE": 10,
+          "POLYLINE": 1,
+          "LWPOLYLINE": 2
+        },
+        "width": 520.0,
+        "height": 775.6,
+        "aspect_ratio": 0.67,
+        "has_text": false,
+        "has_circle": false,
+        "has_arc": true,
+        "has_insert": false
+      },
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "33",
+      "sanitized_name": "33",
+      "category": "general_symbol",
+      "confidence": 0.42,
+      "reason": [
+        "fallback"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/general_symbol",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "4668",
+      "sanitized_name": "4668",
+      "category": "general_symbol",
+      "confidence": 0.42,
+      "reason": [
+        "fallback"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/general_symbol",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "55757",
+      "sanitized_name": "55757",
+      "category": "general_symbol",
+      "confidence": 0.42,
+      "reason": [
+        "fallback"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/general_symbol",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "A$C07FE4FCB",
+      "sanitized_name": "A$C07FE4FCB",
+      "category": "review_only",
+      "confidence": 0.3,
+      "reason": [
+        "anonymous_or_xref_name"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/review_only",
+      "shape": {
+        "source": "outputs\\oda_hwamok_0526\\dxf\\hwamok_0526.dxf",
+        "entity_count": 22,
+        "entity_counts": {
+          "LWPOLYLINE": 22
+        },
+        "width": 422.74,
+        "height": 321.867,
+        "aspect_ratio": 1.313,
+        "has_text": false,
+        "has_circle": false,
+        "has_arc": false,
+        "has_insert": false
+      },
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "A$C118B31B9",
+      "sanitized_name": "A$C118B31B9",
+      "category": "review_only",
+      "confidence": 0.3,
+      "reason": [
+        "anonymous_or_xref_name"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/review_only",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "A$C16310355",
+      "sanitized_name": "A$C16310355",
+      "category": "review_only",
+      "confidence": 0.3,
+      "reason": [
+        "anonymous_or_xref_name"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/review_only",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "A$C1905086C",
+      "sanitized_name": "A$C1905086C",
+      "category": "review_only",
+      "confidence": 0.3,
+      "reason": [
+        "anonymous_or_xref_name"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/review_only",
+      "shape": {
+        "source": "outputs\\oda_hwamok_0526\\dxf\\hwamok_0526.dxf",
+        "entity_count": 28,
+        "entity_counts": {
+          "LWPOLYLINE": 24,
+          "ARC": 3,
+          "LINE": 1
+        },
+        "width": 6872.901,
+        "height": 6970.344,
+        "aspect_ratio": 0.986,
+        "has_text": false,
+        "has_circle": false,
+        "has_arc": true,
+        "has_insert": false
+      },
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "A$C27357E8E",
+      "sanitized_name": "A$C27357E8E",
+      "category": "review_only",
+      "confidence": 0.3,
+      "reason": [
+        "anonymous_or_xref_name"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/review_only",
+      "shape": {
+        "source": "outputs\\oda_hwamok_0526\\dxf\\hwamok_0526.dxf",
+        "entity_count": 6,
+        "entity_counts": {
+          "LWPOLYLINE": 2,
+          "LINE": 3,
+          "INSERT": 1
+        },
+        "width": 420.738,
+        "height": 401.676,
+        "aspect_ratio": 1.047,
+        "has_text": false,
+        "has_circle": false,
+        "has_arc": false,
+        "has_insert": true
+      },
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "A$C2D5752AA",
+      "sanitized_name": "A$C2D5752AA",
+      "category": "review_only",
+      "confidence": 0.3,
+      "reason": [
+        "anonymous_or_xref_name"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/review_only",
+      "shape": {
+        "source": "outputs\\oda_hwamok_0526\\dxf\\hwamok_0526.dxf",
+        "entity_count": 29,
+        "entity_counts": {
+          "LWPOLYLINE": 24,
+          "LINE": 2,
+          "ARC": 3
+        },
+        "width": 4948.489,
+        "height": 5018.648,
+        "aspect_ratio": 0.986,
+        "has_text": false,
+        "has_circle": false,
+        "has_arc": true,
+        "has_insert": false
+      },
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "A$C37B0209A",
+      "sanitized_name": "A$C37B0209A",
+      "category": "review_only",
+      "confidence": 0.3,
+      "reason": [
+        "anonymous_or_xref_name"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/review_only",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "A$C39115F82",
+      "sanitized_name": "A$C39115F82",
+      "category": "review_only",
+      "confidence": 0.3,
+      "reason": [
+        "anonymous_or_xref_name"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/review_only",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "A$C3DE26DB7",
+      "sanitized_name": "A$C3DE26DB7",
+      "category": "review_only",
+      "confidence": 0.3,
+      "reason": [
+        "anonymous_or_xref_name"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/review_only",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "A$C51837608",
+      "sanitized_name": "A$C51837608",
+      "category": "review_only",
+      "confidence": 0.3,
+      "reason": [
+        "anonymous_or_xref_name"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/review_only",
+      "shape": {
+        "source": "outputs\\oda_hwamok_0526\\dxf\\hwamok_0526.dxf",
+        "entity_count": 50,
+        "entity_counts": {
+          "LWPOLYLINE": 50
+        },
+        "width": 3134.841,
+        "height": 1380.301,
+        "aspect_ratio": 2.271,
+        "has_text": false,
+        "has_circle": false,
+        "has_arc": false,
+        "has_insert": false
+      },
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "A$C60481E0E",
+      "sanitized_name": "A$C60481E0E",
+      "category": "review_only",
+      "confidence": 0.3,
+      "reason": [
+        "anonymous_or_xref_name"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/review_only",
+      "shape": {
+        "source": "outputs\\oda_hwamok_0526\\dxf\\hwamok_0526.dxf",
+        "entity_count": 1,
+        "entity_counts": {
+          "INSERT": 1
+        },
+        "width": 0.0,
+        "height": 0.0,
+        "aspect_ratio": 0.0,
+        "has_text": false,
+        "has_circle": false,
+        "has_arc": false,
+        "has_insert": true
+      },
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "A$C61E56072",
+      "sanitized_name": "A$C61E56072",
+      "category": "review_only",
+      "confidence": 0.3,
+      "reason": [
+        "anonymous_or_xref_name"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/review_only",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "A$C64605616",
+      "sanitized_name": "A$C64605616",
+      "category": "review_only",
+      "confidence": 0.3,
+      "reason": [
+        "anonymous_or_xref_name"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/review_only",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "A$C669179C9",
+      "sanitized_name": "A$C669179C9",
+      "category": "review_only",
+      "confidence": 0.3,
+      "reason": [
+        "anonymous_or_xref_name"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/review_only",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "A$C71E55132",
+      "sanitized_name": "A$C71E55132",
+      "category": "review_only",
+      "confidence": 0.3,
+      "reason": [
+        "anonymous_or_xref_name"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/review_only",
+      "shape": {
+        "source": "outputs\\oda_hwamok_0526\\dxf\\hwamok_0526.dxf",
+        "entity_count": 48,
+        "entity_counts": {
+          "LWPOLYLINE": 38,
+          "LINE": 10
+        },
+        "width": 2405.196,
+        "height": 3126.562,
+        "aspect_ratio": 0.769,
+        "has_text": false,
+        "has_circle": false,
+        "has_arc": false,
+        "has_insert": false
+      },
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "A$C77CE0888",
+      "sanitized_name": "A$C77CE0888",
+      "category": "review_only",
+      "confidence": 0.3,
+      "reason": [
+        "anonymous_or_xref_name"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/review_only",
+      "shape": {
+        "source": "outputs\\oda_hwamok_0526\\dxf\\hwamok_0526.dxf",
+        "entity_count": 50,
+        "entity_counts": {
+          "ARC": 1,
+          "LINE": 49
+        },
+        "width": 72720.212,
+        "height": 72806.967,
+        "aspect_ratio": 0.999,
+        "has_text": false,
+        "has_circle": false,
+        "has_arc": true,
+        "has_insert": false
+      },
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "A$C7C67674A",
+      "sanitized_name": "A$C7C67674A",
+      "category": "review_only",
+      "confidence": 0.3,
+      "reason": [
+        "anonymous_or_xref_name"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/review_only",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "AC",
+      "sanitized_name": "AC",
+      "category": "general_symbol",
+      "confidence": 0.42,
+      "reason": [
+        "fallback"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/general_symbol",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "AN",
+      "sanitized_name": "AN",
+      "category": "general_symbol",
+      "confidence": 0.42,
+      "reason": [
+        "fallback"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/general_symbol",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "ARROW",
+      "sanitized_name": "ARROW",
+      "category": "annotation_symbol",
+      "confidence": 0.78,
+      "reason": [
+        "symbol/name"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/annotation_symbol",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "ARROWX",
+      "sanitized_name": "ARROWX",
+      "category": "annotation_symbol",
+      "confidence": 0.78,
+      "reason": [
+        "symbol/name"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/annotation_symbol",
+      "shape": {
+        "source": "outputs\\oda_hwamok_0526\\dxf\\hwamok_0526.dxf",
+        "entity_count": 3,
+        "entity_counts": {
+          "LWPOLYLINE": 1,
+          "SOLID": 2
+        },
+        "width": 0.293,
+        "height": 1.0,
+        "aspect_ratio": 0.293,
+        "has_text": false,
+        "has_circle": false,
+        "has_arc": false,
+        "has_insert": false
+      },
+      "source_status": "matched_existing_xicad_dwg",
+      "source_path": "C:\\xicad\\Lib\\ARROWX.dwg",
+      "staged_path": "generated\\xicad_symbols_staging\\HS-CAD\\annotation_symbol\\ARROWX.dwg",
+      "preview_path": null
+    },
+    {
+      "name": "ARW1",
+      "sanitized_name": "ARW1",
+      "category": "general_symbol",
+      "confidence": 0.42,
+      "reason": [
+        "fallback"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/general_symbol",
+      "shape": {
+        "source": "outputs\\oda_hwamok_0526\\dxf\\hwamok_0526.dxf",
+        "entity_count": 1,
+        "entity_counts": {
+          "SOLID": 1
+        },
+        "width": 0.0,
+        "height": 0.0,
+        "aspect_ratio": 0.0,
+        "has_text": false,
+        "has_circle": false,
+        "has_arc": false,
+        "has_insert": false
+      },
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "BB",
+      "sanitized_name": "BB",
+      "category": "annotation_symbol",
+      "confidence": 0.54,
+      "reason": [
+        "circle_dominant_geometry"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/annotation_symbol",
+      "shape": {
+        "source": "outputs\\oda_hwamok_0526\\dxf\\hwamok_0526.dxf",
+        "entity_count": 2,
+        "entity_counts": {
+          "CIRCLE": 1,
+          "LWPOLYLINE": 1
+        },
+        "width": 540.0,
+        "height": 765.0,
+        "aspect_ratio": 0.706,
+        "has_text": false,
+        "has_circle": true,
+        "has_arc": false,
+        "has_insert": false
+      },
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "BB2",
+      "sanitized_name": "BB2",
+      "category": "general_symbol",
+      "confidence": 0.42,
+      "reason": [
+        "fallback"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/general_symbol",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "BUBBLE",
+      "sanitized_name": "BUBBLE",
+      "category": "annotation_symbol",
+      "confidence": 0.78,
+      "reason": [
+        "symbol/name"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/annotation_symbol",
+      "shape": {
+        "source": "outputs\\oda_hwamok_0526\\dxf\\hwamok_0526.dxf",
+        "entity_count": 2,
+        "entity_counts": {
+          "LINE": 1,
+          "CIRCLE": 1
+        },
+        "width": 12.0,
+        "height": 17.0,
+        "aspect_ratio": 0.706,
+        "has_text": false,
+        "has_circle": true,
+        "has_arc": false,
+        "has_insert": false
+      },
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "CCTV",
+      "sanitized_name": "CCTV",
+      "category": "security",
+      "confidence": 0.82,
+      "reason": [
+        "security/name"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/security",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "DDOT1",
+      "sanitized_name": "DDOT1",
+      "category": "annotation_symbol",
+      "confidence": 0.78,
+      "reason": [
+        "symbol/name"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/annotation_symbol",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "DEC-EL5",
+      "sanitized_name": "DEC-EL5",
+      "category": "general_symbol",
+      "confidence": 0.42,
+      "reason": [
+        "fallback"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/general_symbol",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "DIMDOT",
+      "sanitized_name": "DIMDOT",
+      "category": "annotation_symbol",
+      "confidence": 0.78,
+      "reason": [
+        "symbol/name"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/annotation_symbol",
+      "shape": {
+        "source": "outputs\\oda_hwamok_0526\\dxf\\hwamok_0526.dxf",
+        "entity_count": 3,
+        "entity_counts": {
+          "CIRCLE": 2,
+          "LINE": 1
+        },
+        "width": 2.0,
+        "height": 1.0,
+        "aspect_ratio": 2.0,
+        "has_text": false,
+        "has_circle": true,
+        "has_arc": false,
+        "has_insert": false
+      },
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "DOT",
+      "sanitized_name": "DOT",
+      "category": "annotation_symbol",
+      "confidence": 0.78,
+      "reason": [
+        "symbol/name"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/annotation_symbol",
+      "shape": {
+        "source": "outputs\\oda_hwamok_0526\\dxf\\hwamok_0526.dxf",
+        "entity_count": 2,
+        "entity_counts": {
+          "LINE": 1,
+          "LWPOLYLINE": 1
+        },
+        "width": 4.18,
+        "height": 0.0,
+        "aspect_ratio": 999.0,
+        "has_text": false,
+        "has_circle": false,
+        "has_arc": false,
+        "has_insert": false
+      },
+      "source_status": "matched_existing_xicad_dwg",
+      "source_path": "C:\\xicad\\Lib\\DOT.dwg",
+      "staged_path": "generated\\xicad_symbols_staging\\HS-CAD\\annotation_symbol\\DOT.dwg",
+      "preview_path": null
+    },
+    {
+      "name": "DOT0",
+      "sanitized_name": "DOT0",
+      "category": "annotation_symbol",
+      "confidence": 0.78,
+      "reason": [
+        "symbol/name"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/annotation_symbol",
+      "shape": null,
+      "source_status": "matched_existing_xicad_dwg",
+      "source_path": "C:\\xicad\\Lib\\DOT0.dwg",
+      "staged_path": "generated\\xicad_symbols_staging\\HS-CAD\\annotation_symbol\\DOT0.dwg",
+      "preview_path": null
+    },
+    {
+      "name": "DOT1",
+      "sanitized_name": "DOT1",
+      "category": "annotation_symbol",
+      "confidence": 0.78,
+      "reason": [
+        "symbol/name"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/annotation_symbol",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "DOTK",
+      "sanitized_name": "DOTK",
+      "category": "annotation_symbol",
+      "confidence": 0.78,
+      "reason": [
+        "symbol/name"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/annotation_symbol",
+      "shape": null,
+      "source_status": "matched_existing_xicad_dwg",
+      "source_path": "C:\\xicad\\Lib\\DOTK.dwg",
+      "staged_path": "generated\\xicad_symbols_staging\\HS-CAD\\annotation_symbol\\DOTK.dwg",
+      "preview_path": null
+    },
+    {
+      "name": "ELEV13",
+      "sanitized_name": "ELEV13",
+      "category": "general_symbol",
+      "confidence": 0.42,
+      "reason": [
+        "fallback"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/general_symbol",
+      "shape": null,
+      "source_status": "matched_existing_xicad_dwg",
+      "source_path": "C:\\xicad\\Lib\\ELEV13.dwg",
+      "staged_path": "generated\\xicad_symbols_staging\\HS-CAD\\general_symbol\\ELEV13.dwg",
+      "preview_path": null
+    },
+    {
+      "name": "F-125",
+      "sanitized_name": "F-125",
+      "category": "general_symbol",
+      "confidence": 0.42,
+      "reason": [
+        "fallback"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/general_symbol",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "F-222",
+      "sanitized_name": "F-222",
+      "category": "general_symbol",
+      "confidence": 0.42,
+      "reason": [
+        "fallback"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/general_symbol",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "F-702",
+      "sanitized_name": "F-702",
+      "category": "general_symbol",
+      "confidence": 0.42,
+      "reason": [
+        "fallback"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/general_symbol",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "HANDISYM",
+      "sanitized_name": "HANDISYM",
+      "category": "annotation_symbol",
+      "confidence": 0.78,
+      "reason": [
+        "symbol/name"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/annotation_symbol",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "INSU",
+      "sanitized_name": "INSU",
+      "category": "material",
+      "confidence": 0.72,
+      "reason": [
+        "material/name"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/material",
+      "shape": {
+        "source": "outputs\\oda_hwamok_0526\\dxf\\hwamok_0526.dxf",
+        "entity_count": 1,
+        "entity_counts": {
+          "LWPOLYLINE": 1
+        },
+        "width": 0.325,
+        "height": 0.0,
+        "aspect_ratio": 999.0,
+        "has_text": false,
+        "has_circle": false,
+        "has_arc": false,
+        "has_insert": false
+      },
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "KITPD08",
+      "sanitized_name": "KITPD08",
+      "category": "sanitary",
+      "confidence": 0.86,
+      "reason": [
+        "sanitary/name"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/sanitary",
+      "shape": {
+        "source": "outputs\\oda_hwamok_0526\\dxf\\hwamok_0526.dxf",
+        "entity_count": 49,
+        "entity_counts": {
+          "ARC": 8,
+          "LINE": 40,
+          "CIRCLE": 1
+        },
+        "width": 1200.0,
+        "height": 560.0,
+        "aspect_ratio": 2.143,
+        "has_text": false,
+        "has_circle": true,
+        "has_arc": true,
+        "has_insert": false
+      },
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "LCPLTR31",
+      "sanitized_name": "LCPLTR31",
+      "category": "general_symbol",
+      "confidence": 0.42,
+      "reason": [
+        "fallback"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/general_symbol",
+      "shape": {
+        "source": "outputs\\oda_hwamok_0526\\dxf\\hwamok_0526.dxf",
+        "entity_count": 290,
+        "entity_counts": {
+          "ATTDEF": 2,
+          "LINE": 288
+        },
+        "width": 12.061,
+        "height": 11.889,
+        "aspect_ratio": 1.014,
+        "has_text": true,
+        "has_circle": false,
+        "has_arc": false,
+        "has_insert": false
+      },
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "SEGIO2",
+      "sanitized_name": "SEGIO2",
+      "category": "general_symbol",
+      "confidence": 0.42,
+      "reason": [
+        "fallback"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/general_symbol",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "SHEET_WINDOW",
+      "sanitized_name": "SHEET_WINDOW",
+      "category": "title_sheet",
+      "confidence": 0.94,
+      "reason": [
+        "title/name"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/title_sheet",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "SYMTBS_SYS14",
+      "sanitized_name": "SYMTBS_SYS14",
+      "category": "annotation_symbol",
+      "confidence": 0.78,
+      "reason": [
+        "symbol/name"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/annotation_symbol",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "SYMTBU_SYS114",
+      "sanitized_name": "SYMTBU_SYS114",
+      "category": "annotation_symbol",
+      "confidence": 0.78,
+      "reason": [
+        "symbol/name"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/annotation_symbol",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "TL000073_0",
+      "sanitized_name": "TL000073_0",
+      "category": "general_symbol",
+      "confidence": 0.42,
+      "reason": [
+        "fallback"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/general_symbol",
+      "shape": {
+        "source": "outputs\\oda_hwamok_0526\\dxf\\hwamok_0526.dxf",
+        "entity_count": 15,
+        "entity_counts": {
+          "LWPOLYLINE": 13,
+          "HATCH": 1,
+          "CIRCLE": 1
+        },
+        "width": 1.073,
+        "height": 0.998,
+        "aspect_ratio": 1.074,
+        "has_text": false,
+        "has_circle": true,
+        "has_arc": false,
+        "has_insert": false
+      },
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "TL000076_0",
+      "sanitized_name": "TL000076_0",
+      "category": "general_symbol",
+      "confidence": 0.42,
+      "reason": [
+        "fallback"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/general_symbol",
+      "shape": {
+        "source": "outputs\\oda_hwamok_0526\\dxf\\hwamok_0526.dxf",
+        "entity_count": 2,
+        "entity_counts": {
+          "LWPOLYLINE": 2
+        },
+        "width": 0.964,
+        "height": 0.964,
+        "aspect_ratio": 1.0,
+        "has_text": false,
+        "has_circle": false,
+        "has_arc": false,
+        "has_insert": false
+      },
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "TO-08",
+      "sanitized_name": "TO-08",
+      "category": "general_symbol",
+      "confidence": 0.42,
+      "reason": [
+        "fallback"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/general_symbol",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "TOIPD02",
+      "sanitized_name": "TOIPD02",
+      "category": "sanitary",
+      "confidence": 0.86,
+      "reason": [
+        "sanitary/name"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/sanitary",
+      "shape": {
+        "source": "outputs\\oda_hwamok_0526\\dxf\\hwamok_0526.dxf",
+        "entity_count": 12,
+        "entity_counts": {
+          "CIRCLE": 3,
+          "LINE": 4,
+          "LWPOLYLINE": 3,
+          "ARC": 2
+        },
+        "width": 475.0,
+        "height": 375.0,
+        "aspect_ratio": 1.267,
+        "has_text": false,
+        "has_circle": true,
+        "has_arc": true,
+        "has_insert": false
+      },
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "UNITCIRCLE",
+      "sanitized_name": "UNITCIRCLE",
+      "category": "general_symbol",
+      "confidence": 0.42,
+      "reason": [
+        "fallback"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/general_symbol",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "XREF-평면도$0$bd300-p",
+      "sanitized_name": "XREF-평면도$0$bd300-p",
+      "category": "review_only",
+      "confidence": 0.3,
+      "reason": [
+        "anonymous_or_xref_name"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/review_only",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "ZIUM LOGO",
+      "sanitized_name": "ZIUM LOGO",
+      "category": "brand",
+      "confidence": 0.9,
+      "reason": [
+        "brand/name"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/brand",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "ZIUM_sheet_architect",
+      "sanitized_name": "ZIUM_sheet_architect",
+      "category": "title_sheet",
+      "confidence": 0.94,
+      "reason": [
+        "title/name"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/title_sheet",
+      "shape": {
+        "source": "outputs\\oda_hwamok_0526\\dxf\\hwamok_0526.dxf",
+        "entity_count": 134,
+        "entity_counts": {
+          "TEXT": 22,
+          "LINE": 39,
+          "LWPOLYLINE": 28,
+          "SPLINE": 22,
+          "HATCH": 23
+        },
+        "width": 84000.0,
+        "height": 59400.0,
+        "aspect_ratio": 1.414,
+        "has_text": true,
+        "has_circle": false,
+        "has_arc": false,
+        "has_insert": false
+      },
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "Z_DOT",
+      "sanitized_name": "Z_DOT",
+      "category": "annotation_symbol",
+      "confidence": 0.78,
+      "reason": [
+        "symbol/name"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/annotation_symbol",
+      "shape": {
+        "source": "outputs\\oda_hwamok_0526\\dxf\\hwamok_0526.dxf",
+        "entity_count": 4,
+        "entity_counts": {
+          "LINE": 2,
+          "CIRCLE": 2
+        },
+        "width": 6.0,
+        "height": 6.0,
+        "aspect_ratio": 1.0,
+        "has_text": false,
+        "has_circle": true,
+        "has_arc": false,
+        "has_insert": false
+      },
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "_ArchTick",
+      "sanitized_name": "_ArchTick",
+      "category": "general_symbol",
+      "confidence": 0.42,
+      "reason": [
+        "fallback"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/general_symbol",
+      "shape": {
+        "source": "outputs\\oda_hwamok_0526\\dxf\\hwamok_0526.dxf",
+        "entity_count": 1,
+        "entity_counts": {
+          "LWPOLYLINE": 1
+        },
+        "width": 1.0,
+        "height": 1.0,
+        "aspect_ratio": 1.0,
+        "has_text": false,
+        "has_circle": false,
+        "has_arc": false,
+        "has_insert": false
+      },
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "_Dot",
+      "sanitized_name": "_Dot",
+      "category": "annotation_symbol",
+      "confidence": 0.78,
+      "reason": [
+        "symbol/name"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/annotation_symbol",
+      "shape": {
+        "source": "outputs\\oda_hwamok_0526\\dxf\\hwamok_0526.dxf",
+        "entity_count": 2,
+        "entity_counts": {
+          "LWPOLYLINE": 1,
+          "LINE": 1
+        },
+        "width": 1.25,
+        "height": 0.0,
+        "aspect_ratio": 999.0,
+        "has_text": false,
+        "has_circle": false,
+        "has_arc": false,
+        "has_insert": false
+      },
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "_DotSmall",
+      "sanitized_name": "_DotSmall",
+      "category": "annotation_symbol",
+      "confidence": 0.78,
+      "reason": [
+        "symbol/name"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/annotation_symbol",
+      "shape": {
+        "source": "outputs\\oda_hwamok_0526\\dxf\\hwamok_0526.dxf",
+        "entity_count": 1,
+        "entity_counts": {
+          "LWPOLYLINE": 1
+        },
+        "width": 0.125,
+        "height": 0.0,
+        "aspect_ratio": 999.0,
+        "has_text": false,
+        "has_circle": false,
+        "has_arc": false,
+        "has_insert": false
+      },
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "_Open30",
+      "sanitized_name": "_Open30",
+      "category": "general_symbol",
+      "confidence": 0.42,
+      "reason": [
+        "fallback"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/general_symbol",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "_Open90",
+      "sanitized_name": "_Open90",
+      "category": "general_symbol",
+      "confidence": 0.42,
+      "reason": [
+        "fallback"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/general_symbol",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "_RXDOT",
+      "sanitized_name": "_RXDOT",
+      "category": "annotation_symbol",
+      "confidence": 0.78,
+      "reason": [
+        "symbol/name"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/annotation_symbol",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "arrow1",
+      "sanitized_name": "arrow1",
+      "category": "annotation_symbol",
+      "confidence": 0.78,
+      "reason": [
+        "symbol/name"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/annotation_symbol",
+      "shape": null,
+      "source_status": "matched_existing_xicad_dwg",
+      "source_path": "C:\\xicad\\Lib\\ARROW1.dwg",
+      "staged_path": "generated\\xicad_symbols_staging\\HS-CAD\\annotation_symbol\\arrow1.dwg",
+      "preview_path": null
+    },
+    {
+      "name": "eyetryetryty",
+      "sanitized_name": "eyetryetryty",
+      "category": "general_symbol",
+      "confidence": 0.42,
+      "reason": [
+        "fallback"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/general_symbol",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "handle1",
+      "sanitized_name": "handle1",
+      "category": "general_symbol",
+      "confidence": 0.42,
+      "reason": [
+        "fallback"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/general_symbol",
+      "shape": {
+        "source": "outputs\\oda_hwamok_0526\\dxf\\hwamok_0526.dxf",
+        "entity_count": 3,
+        "entity_counts": {
+          "CIRCLE": 1,
+          "LINE": 2
+        },
+        "width": 90.0,
+        "height": 90.0,
+        "aspect_ratio": 1.0,
+        "has_text": false,
+        "has_circle": true,
+        "has_arc": false,
+        "has_insert": false
+      },
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "innus_U332",
+      "sanitized_name": "innus_U332",
+      "category": "general_symbol",
+      "confidence": 0.42,
+      "reason": [
+        "fallback"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/general_symbol",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "insul1",
+      "sanitized_name": "insul1",
+      "category": "material",
+      "confidence": 0.72,
+      "reason": [
+        "material/name"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/material",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "inus_IC859E",
+      "sanitized_name": "inus_IC859E",
+      "category": "sanitary",
+      "confidence": 0.86,
+      "reason": [
+        "sanitary/name"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/sanitary",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "la-ca-025-D-E",
+      "sanitized_name": "la-ca-025-D-E",
+      "category": "door",
+      "confidence": 0.82,
+      "reason": [
+        "door/name"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/door",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "la-ca-112-D-E",
+      "sanitized_name": "la-ca-112-D-E",
+      "category": "door",
+      "confidence": 0.82,
+      "reason": [
+        "door/name"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/door",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "line",
+      "sanitized_name": "line",
+      "category": "general_symbol",
+      "confidence": 0.42,
+      "reason": [
+        "fallback"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/general_symbol",
+      "shape": {
+        "source": "outputs\\oda_hwamok_0526\\dxf\\hwamok_0526.dxf",
+        "entity_count": 26,
+        "entity_counts": {
+          "LINE": 26
+        },
+        "width": 7437.26,
+        "height": 17750.0,
+        "aspect_ratio": 0.419,
+        "has_text": false,
+        "has_circle": false,
+        "has_arc": false,
+        "has_insert": false
+      },
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "m12 ex anchor",
+      "sanitized_name": "m12 ex anchor",
+      "category": "structure",
+      "confidence": 0.78,
+      "reason": [
+        "structure/name"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/structure",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "가구",
+      "sanitized_name": "가구",
+      "category": "furniture",
+      "confidence": 0.78,
+      "reason": [
+        "furniture/name"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/furniture",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "가스2구",
+      "sanitized_name": "가스2구",
+      "category": "general_symbol",
+      "confidence": 0.42,
+      "reason": [
+        "fallback"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/general_symbol",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "단차",
+      "sanitized_name": "단차",
+      "category": "general_symbol",
+      "confidence": 0.42,
+      "reason": [
+        "fallback"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/general_symbol",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "루버1",
+      "sanitized_name": "루버1",
+      "category": "general_symbol",
+      "confidence": 0.42,
+      "reason": [
+        "fallback"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/general_symbol",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "루버2",
+      "sanitized_name": "루버2",
+      "category": "general_symbol",
+      "confidence": 0.42,
+      "reason": [
+        "fallback"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/general_symbol",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "루버3",
+      "sanitized_name": "루버3",
+      "category": "general_symbol",
+      "confidence": 0.42,
+      "reason": [
+        "fallback"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/general_symbol",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "루버4",
+      "sanitized_name": "루버4",
+      "category": "general_symbol",
+      "confidence": 0.42,
+      "reason": [
+        "fallback"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/general_symbol",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "매립형세면대",
+      "sanitized_name": "매립형세면대",
+      "category": "sanitary",
+      "confidence": 0.86,
+      "reason": [
+        "sanitary/name"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/sanitary",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "미니세면대",
+      "sanitized_name": "미니세면대",
+      "category": "sanitary",
+      "confidence": 0.86,
+      "reason": [
+        "sanitary/name"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/sanitary",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "방위",
+      "sanitized_name": "방위",
+      "category": "general_symbol",
+      "confidence": 0.42,
+      "reason": [
+        "fallback"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/general_symbol",
+      "shape": {
+        "source": "outputs\\oda_hwamok_0526\\dxf\\hwamok_0526.dxf",
+        "entity_count": 26,
+        "entity_counts": {
+          "LINE": 21,
+          "SOLID": 3,
+          "HATCH": 1,
+          "CIRCLE": 1
+        },
+        "width": 1732.267,
+        "height": 2000.729,
+        "aspect_ratio": 0.866,
+        "has_text": false,
+        "has_circle": true,
+        "has_arc": false,
+        "has_insert": false
+      },
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "벤치마크",
+      "sanitized_name": "벤치마크",
+      "category": "general_symbol",
+      "confidence": 0.42,
+      "reason": [
+        "fallback"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/general_symbol",
+      "shape": {
+        "source": "outputs\\oda_hwamok_0526\\dxf\\hwamok_0526.dxf",
+        "entity_count": 4,
+        "entity_counts": {
+          "LINE": 2,
+          "CIRCLE": 1,
+          "HATCH": 1
+        },
+        "width": 288.229,
+        "height": 300.0,
+        "aspect_ratio": 0.961,
+        "has_text": false,
+        "has_circle": true,
+        "has_arc": false,
+        "has_insert": false
+      },
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "변기(690x405)",
+      "sanitized_name": "변기(690x405)",
+      "category": "sanitary",
+      "confidence": 0.86,
+      "reason": [
+        "sanitary/name"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/sanitary",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "삼성 인덕션",
+      "sanitized_name": "삼성 인덕션",
+      "category": "general_symbol",
+      "confidence": 0.42,
+      "reason": [
+        "fallback"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/general_symbol",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "서대신동3가 61-46 토지",
+      "sanitized_name": "서대신동3가 61-46 토지",
+      "category": "general_symbol",
+      "confidence": 0.42,
+      "reason": [
+        "fallback"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/general_symbol",
+      "shape": {
+        "source": "outputs\\oda_hwamok_0526\\dxf\\hwamok_0526.dxf",
+        "entity_count": 40,
+        "entity_counts": {
+          "LWPOLYLINE": 29,
+          "LINE": 1,
+          "HATCH": 1,
+          "TEXT": 9
+        },
+        "width": 68714.946,
+        "height": 64902.957,
+        "aspect_ratio": 1.059,
+        "has_text": true,
+        "has_circle": false,
+        "has_arc": false,
+        "has_insert": false
+      },
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "세면도(500x425)",
+      "sanitized_name": "세면도(500x425)",
+      "category": "sanitary",
+      "confidence": 0.86,
+      "reason": [
+        "sanitary/name"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/sanitary",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "세탁기",
+      "sanitized_name": "세탁기",
+      "category": "general_symbol",
+      "confidence": 0.42,
+      "reason": [
+        "fallback"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/general_symbol",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "수도꼭지",
+      "sanitized_name": "수도꼭지",
+      "category": "general_symbol",
+      "confidence": 0.42,
+      "reason": [
+        "fallback"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/general_symbol",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "수전2",
+      "sanitized_name": "수전2",
+      "category": "general_symbol",
+      "confidence": 0.42,
+      "reason": [
+        "fallback"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/general_symbol",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "실외기",
+      "sanitized_name": "실외기",
+      "category": "general_symbol",
+      "confidence": 0.42,
+      "reason": [
+        "fallback"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/general_symbol",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "실외기(평면)",
+      "sanitized_name": "실외기(평면)",
+      "category": "general_symbol",
+      "confidence": 0.42,
+      "reason": [
+        "fallback"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/general_symbol",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "싱크볼 500",
+      "sanitized_name": "싱크볼 500",
+      "category": "general_symbol",
+      "confidence": 0.42,
+      "reason": [
+        "fallback"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/general_symbol",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "싱크수전",
+      "sanitized_name": "싱크수전",
+      "category": "general_symbol",
+      "confidence": 0.42,
+      "reason": [
+        "fallback"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/general_symbol",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "왕벚",
+      "sanitized_name": "왕벚",
+      "category": "general_symbol",
+      "confidence": 0.42,
+      "reason": [
+        "fallback"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/general_symbol",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "지시선2",
+      "sanitized_name": "지시선2",
+      "category": "general_symbol",
+      "confidence": 0.42,
+      "reason": [
+        "fallback"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/general_symbol",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "차면시설",
+      "sanitized_name": "차면시설",
+      "category": "general_symbol",
+      "confidence": 0.42,
+      "reason": [
+        "fallback"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/general_symbol",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "코너선반-하남",
+      "sanitized_name": "코너선반-하남",
+      "category": "general_symbol",
+      "confidence": 0.42,
+      "reason": [
+        "fallback"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/general_symbol",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "투수블럭",
+      "sanitized_name": "투수블럭",
+      "category": "landscape",
+      "confidence": 0.78,
+      "reason": [
+        "landscape/name"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/landscape",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    },
+    {
+      "name": "해바라기수전",
+      "sanitized_name": "해바라기수전",
+      "category": "general_symbol",
+      "confidence": 0.42,
+      "reason": [
+        "fallback"
+      ],
+      "target_folder": "xiLib/심볼/HS-CAD/general_symbol",
+      "shape": null,
+      "source_status": "needs_wblock_export",
+      "source_path": null,
+      "staged_path": null,
+      "preview_path": null
+    }
+  ]
+}

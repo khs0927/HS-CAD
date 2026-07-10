@@ -1,0 +1,129 @@
+{
+  "symbol_root": "C:\\xicad\\xiLib\\심볼\\HS-CAD",
+  "save_path": "C:\\CODE\\CAD\\HS-CAD\\generated\\zwcad_symbol_live_test\\xicad_symbol_insert_test_fixed.dwg",
+  "modelspace_count": 4,
+  "insert_count": 4,
+  "rows": [
+    {
+      "path": "C:\\xicad\\xiLib\\심볼\\HS-CAD\\title_sheet\\ZIUM_sheet_architect.dwg",
+      "exists": true,
+      "status": "inserted",
+      "name": "ZIUM_sheet_architect",
+      "effective_name": "ZIUM_sheet_architect",
+      "handle": "F6",
+      "layer": "HS-CAD-TEST"
+    },
+    {
+      "path": "C:\\xicad\\xiLib\\심볼\\HS-CAD\\sanitary\\TOIPD02.dwg",
+      "exists": true,
+      "status": "inserted",
+      "name": "TOIPD02",
+      "effective_name": "TOIPD02",
+      "handle": "106",
+      "layer": "HS-CAD-TEST"
+    },
+    {
+      "path": "C:\\xicad\\xiLib\\심볼\\HS-CAD\\annotation_symbol\\DOT.dwg",
+      "exists": true,
+      "status": "inserted",
+      "name": "DOT",
+      "effective_name": "DOT",
+      "handle": "10C",
+      "layer": "HS-CAD-TEST"
+    },
+    {
+      "path": "C:\\xicad\\xiLib\\심볼\\HS-CAD\\door_or_fixture\\2P-T204.dwg",
+      "exists": true,
+      "status": "inserted",
+      "name": "2P-T204",
+      "effective_name": "2P-T204",
+      "handle": "1DD",
+      "layer": "HS-CAD-TEST"
+    },
+    {
+      "path": "C:\\xicad\\xiLib\\심볼\\HS-CAD\\general_symbol\\??.dwg",
+      "exists": false,
+      "status": "failed",
+      "error": "(-2147467259, '지정되지 않은 오류입니다.', (None, None, None, 0, None))"
+    }
+  ],
+  "inserted_blocks": [
+    {
+      "handle": "F6",
+      "object_name": "AcDbBlockReference",
+      "entity_type": "INSERT",
+      "layer": "HS-CAD-TEST",
+      "name": "ZIUM_sheet_architect",
+      "effective_name": "ZIUM_sheet_architect",
+      "insert": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "bbox": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "handle": "106",
+      "object_name": "AcDbBlockReference",
+      "entity_type": "INSERT",
+      "layer": "HS-CAD-TEST",
+      "name": "TOIPD02",
+      "effective_name": "TOIPD02",
+      "insert": [
+        5000.0,
+        0.0,
+        0.0
+      ],
+      "bbox": [
+        5000.0,
+        0.0,
+        5000.0,
+        0.0
+      ]
+    },
+    {
+      "handle": "10C",
+      "object_name": "AcDbBlockReference",
+      "entity_type": "INSERT",
+      "layer": "HS-CAD-TEST",
+      "name": "DOT",
+      "effective_name": "DOT",
+      "insert": [
+        10000.0,
+        0.0,
+        0.0
+      ],
+      "bbox": [
+        10000.0,
+        0.0,
+        10000.0,
+        0.0
+      ]
+    },
+    {
+      "handle": "1DD",
+      "object_name": "AcDbBlockReference",
+      "entity_type": "INSERT",
+      "layer": "HS-CAD-TEST",
+      "name": "2P-T204",
+      "effective_name": "2P-T204",
+      "insert": [
+        15000.0,
+        0.0,
+        0.0
+      ],
+      "bbox": [
+        15000.0,
+        0.0,
+        15000.0,
+        0.0
+      ]
+    }
+  ],
+  "warnings": []
+}

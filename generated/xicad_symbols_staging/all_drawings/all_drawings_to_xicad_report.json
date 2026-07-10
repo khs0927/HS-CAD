@@ -1,0 +1,196 @@
+{
+  "mode": "all_drawings_to_xicad_blocks",
+  "sources": [
+    "outputs\\active_hwamok_v2018\\modify_ready_check.dxf",
+    "outputs\\oda_hwamok_0526\\dxf\\hwamok_0526.dxf",
+    "outputs\\oda_hwamok_0526\\modified\\hwamok_0526_hscad_detail_notes.dxf",
+    "outputs\\oda_hwamok_0526\\modified_dwg\\hwamok_0526_hscad_detail_notes.dwg",
+    "scratch\\active_hwamok_v2018.dxf",
+    "scratch\\oda_source\\hwamok_0526.dwg"
+  ],
+  "conversions": [
+    {
+      "source": "outputs\\active_hwamok_v2018\\modify_ready_check.dxf",
+      "status": "already_dxf",
+      "dxf": "outputs\\active_hwamok_v2018\\modify_ready_check.dxf"
+    },
+    {
+      "source": "outputs\\oda_hwamok_0526\\dxf\\hwamok_0526.dxf",
+      "status": "already_dxf",
+      "dxf": "outputs\\oda_hwamok_0526\\dxf\\hwamok_0526.dxf"
+    },
+    {
+      "source": "outputs\\oda_hwamok_0526\\modified\\hwamok_0526_hscad_detail_notes.dxf",
+      "status": "already_dxf",
+      "dxf": "outputs\\oda_hwamok_0526\\modified\\hwamok_0526_hscad_detail_notes.dxf"
+    },
+    {
+      "source": "outputs\\oda_hwamok_0526\\modified_dwg\\hwamok_0526_hscad_detail_notes.dwg",
+      "status": "converted",
+      "dxf": "generated\\xicad_symbols_staging\\all_drawings\\converted_dxf\\hwamok_0526_hscad_detail_notes\\hwamok_0526_hscad_detail_notes.dxf"
+    },
+    {
+      "source": "scratch\\active_hwamok_v2018.dxf",
+      "status": "already_dxf",
+      "dxf": "scratch\\active_hwamok_v2018.dxf"
+    },
+    {
+      "source": "scratch\\oda_source\\hwamok_0526.dwg",
+      "status": "converted",
+      "dxf": "generated\\xicad_symbols_staging\\all_drawings\\converted_dxf\\hwamok_0526\\hwamok_0526.dxf"
+    }
+  ],
+  "catalog": {
+    "path": "generated\\xicad_symbols_staging\\all_drawings\\all_drawing_block_catalog.json",
+    "counts": {
+      "total": 81,
+      "by_category": {
+        "annotation_symbol": 17,
+        "door": 2,
+        "door_or_fixture": 10,
+        "general_symbol": 25,
+        "material": 2,
+        "review_only": 14,
+        "sanitary": 3,
+        "structure": 3,
+        "title_sheet": 3,
+        "window_or_linear_symbol": 2
+      },
+      "by_source_status": {
+        "from_drawing_definition": 55,
+        "matched_existing_xicad_dwg": 26
+      }
+    }
+  },
+  "export": {
+    "path": "generated\\xicad_symbols_staging\\all_drawings\\hs_cad_symbol_export_report.json",
+    "exported_count": 55,
+    "converted": [
+      {
+        "category": "annotation_symbol",
+        "status": "converted",
+        "dwg_dir": "generated\\xicad_symbols_staging\\all_drawings\\exported_dwg\\annotation_symbol",
+        "count": 7
+      },
+      {
+        "category": "door",
+        "status": "converted",
+        "dwg_dir": "generated\\xicad_symbols_staging\\all_drawings\\exported_dwg\\door",
+        "count": 2
+      },
+      {
+        "category": "door_or_fixture",
+        "status": "converted",
+        "dwg_dir": "generated\\xicad_symbols_staging\\all_drawings\\exported_dwg\\door_or_fixture",
+        "count": 9
+      },
+      {
+        "category": "general_symbol",
+        "status": "converted",
+        "dwg_dir": "generated\\xicad_symbols_staging\\all_drawings\\exported_dwg\\general_symbol",
+        "count": 14
+      },
+      {
+        "category": "material",
+        "status": "converted",
+        "dwg_dir": "generated\\xicad_symbols_staging\\all_drawings\\exported_dwg\\material",
+        "count": 1
+      },
+      {
+        "category": "review_only",
+        "status": "converted",
+        "dwg_dir": "generated\\xicad_symbols_staging\\all_drawings\\exported_dwg\\review_only",
+        "count": 14
+      },
+      {
+        "category": "sanitary",
+        "status": "converted",
+        "dwg_dir": "generated\\xicad_symbols_staging\\all_drawings\\exported_dwg\\sanitary",
+        "count": 1
+      },
+      {
+        "category": "structure",
+        "status": "converted",
+        "dwg_dir": "generated\\xicad_symbols_staging\\all_drawings\\exported_dwg\\structure",
+        "count": 3
+      },
+      {
+        "category": "title_sheet",
+        "status": "converted",
+        "dwg_dir": "generated\\xicad_symbols_staging\\all_drawings\\exported_dwg\\title_sheet",
+        "count": 2
+      },
+      {
+        "category": "window_or_linear_symbol",
+        "status": "converted",
+        "dwg_dir": "generated\\xicad_symbols_staging\\all_drawings\\exported_dwg\\window_or_linear_symbol",
+        "count": 2
+      }
+    ]
+  },
+  "install": {
+    "enabled": true,
+    "target": "C:\\xicad\\xiLib\\심볼\\HS-CAD-ALL",
+    "include_review_only": false,
+    "installed": [
+      {
+        "category": "annotation_symbol",
+        "status": "installed",
+        "target": "C:\\xicad\\xiLib\\심볼\\HS-CAD-ALL\\annotation_symbol",
+        "count": 7
+      },
+      {
+        "category": "door",
+        "status": "installed",
+        "target": "C:\\xicad\\xiLib\\심볼\\HS-CAD-ALL\\door",
+        "count": 2
+      },
+      {
+        "category": "door_or_fixture",
+        "status": "installed",
+        "target": "C:\\xicad\\xiLib\\심볼\\HS-CAD-ALL\\door_or_fixture",
+        "count": 9
+      },
+      {
+        "category": "general_symbol",
+        "status": "installed",
+        "target": "C:\\xicad\\xiLib\\심볼\\HS-CAD-ALL\\general_symbol",
+        "count": 14
+      },
+      {
+        "category": "material",
+        "status": "installed",
+        "target": "C:\\xicad\\xiLib\\심볼\\HS-CAD-ALL\\material",
+        "count": 1
+      },
+      {
+        "category": "review_only",
+        "status": "skipped_review_only"
+      },
+      {
+        "category": "sanitary",
+        "status": "installed",
+        "target": "C:\\xicad\\xiLib\\심볼\\HS-CAD-ALL\\sanitary",
+        "count": 1
+      },
+      {
+        "category": "structure",
+        "status": "installed",
+        "target": "C:\\xicad\\xiLib\\심볼\\HS-CAD-ALL\\structure",
+        "count": 3
+      },
+      {
+        "category": "title_sheet",
+        "status": "installed",
+        "target": "C:\\xicad\\xiLib\\심볼\\HS-CAD-ALL\\title_sheet",
+        "count": 2
+      },
+      {
+        "category": "window_or_linear_symbol",
+        "status": "installed",
+        "target": "C:\\xicad\\xiLib\\심볼\\HS-CAD-ALL\\window_or_linear_symbol",
+        "count": 2
+      }
+    ]
+  }
+}

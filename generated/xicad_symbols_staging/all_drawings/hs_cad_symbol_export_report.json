@@ -1,0 +1,454 @@
+{
+  "catalog_path": "generated\\xicad_symbols_staging\\all_drawings\\all_drawing_block_catalog.json",
+  "out_dir": "generated\\xicad_symbols_staging\\all_drawings\\exported_dxf",
+  "exported_count": 55,
+  "exported": [
+    {
+      "name": "대지",
+      "category": "annotation_symbol",
+      "source": "outputs\\active_hwamok_v2018\\modify_ready_check.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\all_drawings\\exported_dxf\\annotation_symbol\\대지.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "100X50",
+      "category": "general_symbol",
+      "source": "outputs\\active_hwamok_v2018\\modify_ready_check.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\all_drawings\\exported_dxf\\general_symbol\\100X50.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "A$CBC7E8936",
+      "category": "review_only",
+      "source": "outputs\\active_hwamok_v2018\\modify_ready_check.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\all_drawings\\exported_dxf\\review_only\\A$CBC7E8936.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "DAELIM_FÜLEN 3000",
+      "category": "door_or_fixture",
+      "source": "outputs\\active_hwamok_v2018\\modify_ready_check.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\all_drawings\\exported_dxf\\door_or_fixture\\DAELIM_FÜLEN 3000.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "06-A31- 001~ 신관동 평면도$0$큐비클문",
+      "category": "door",
+      "source": "outputs\\active_hwamok_v2018\\modify_ready_check.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\all_drawings\\exported_dxf\\door\\06-A31- 001~ 신관동 평면도$0$큐비클문.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "A$C043B7E4E",
+      "category": "review_only",
+      "source": "outputs\\active_hwamok_v2018\\modify_ready_check.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\all_drawings\\exported_dxf\\review_only\\A$C043B7E4E.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "A$C72A26C90",
+      "category": "review_only",
+      "source": "outputs\\active_hwamok_v2018\\modify_ready_check.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\all_drawings\\exported_dxf\\review_only\\A$C72A26C90.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "A$C032327CB",
+      "category": "review_only",
+      "source": "outputs\\active_hwamok_v2018\\modify_ready_check.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\all_drawings\\exported_dxf\\review_only\\A$C032327CB.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "06-A31- 001~ 신관동 평면도$0$대변기",
+      "category": "sanitary",
+      "source": "outputs\\active_hwamok_v2018\\modify_ready_check.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\all_drawings\\exported_dxf\\sanitary\\06-A31- 001~ 신관동 평면도$0$대변기.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "DSI-C007",
+      "category": "door_or_fixture",
+      "source": "outputs\\active_hwamok_v2018\\modify_ready_check.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\all_drawings\\exported_dxf\\door_or_fixture\\DSI-C007.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "LA-MA-009-D-P",
+      "category": "door",
+      "source": "outputs\\active_hwamok_v2018\\modify_ready_check.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\all_drawings\\exported_dxf\\door\\LA-MA-009-D-P.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "DL-S3220_DAELIM-T",
+      "category": "door_or_fixture",
+      "source": "outputs\\active_hwamok_v2018\\modify_ready_check.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\all_drawings\\exported_dxf\\door_or_fixture\\DL-S3220_DAELIM-T.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "F-610",
+      "category": "door_or_fixture",
+      "source": "outputs\\active_hwamok_v2018\\modify_ready_check.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\all_drawings\\exported_dxf\\door_or_fixture\\F-610.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "080",
+      "category": "door_or_fixture",
+      "source": "outputs\\active_hwamok_v2018\\modify_ready_check.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\all_drawings\\exported_dxf\\door_or_fixture\\080.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "35SFGH",
+      "category": "door_or_fixture",
+      "source": "outputs\\active_hwamok_v2018\\modify_ready_check.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\all_drawings\\exported_dxf\\door_or_fixture\\35SFGH.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "A$C2BE44C31",
+      "category": "review_only",
+      "source": "outputs\\active_hwamok_v2018\\modify_ready_check.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\all_drawings\\exported_dxf\\review_only\\A$C2BE44C31.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "부위별단열설치계획표",
+      "category": "material",
+      "source": "outputs\\active_hwamok_v2018\\modify_ready_check.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\all_drawings\\exported_dxf\\material\\부위별단열설치계획표.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "01420DDOT01",
+      "category": "annotation_symbol",
+      "source": "outputs\\active_hwamok_v2018\\modify_ready_check.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\all_drawings\\exported_dxf\\annotation_symbol\\01420DDOT01.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "AID-INTERIORFINISHDETAIL$0$SC25",
+      "category": "door_or_fixture",
+      "source": "outputs\\active_hwamok_v2018\\modify_ready_check.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\all_drawings\\exported_dxf\\door_or_fixture\\AID-INTERIORFINISHDETAIL$0$SC25.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "A$C51837608",
+      "category": "review_only",
+      "source": "outputs\\active_hwamok_v2018\\modify_ready_check.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\all_drawings\\exported_dxf\\review_only\\A$C51837608.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "A$C60481E0E",
+      "category": "review_only",
+      "source": "outputs\\active_hwamok_v2018\\modify_ready_check.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\all_drawings\\exported_dxf\\review_only\\A$C60481E0E.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "A$C77CE0888",
+      "category": "review_only",
+      "source": "outputs\\active_hwamok_v2018\\modify_ready_check.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\all_drawings\\exported_dxf\\review_only\\A$C77CE0888.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "A$C1905086C",
+      "category": "review_only",
+      "source": "outputs\\active_hwamok_v2018\\modify_ready_check.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\all_drawings\\exported_dxf\\review_only\\A$C1905086C.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "A$C27357E8E",
+      "category": "review_only",
+      "source": "outputs\\active_hwamok_v2018\\modify_ready_check.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\all_drawings\\exported_dxf\\review_only\\A$C27357E8E.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "A$C2D5752AA",
+      "category": "review_only",
+      "source": "outputs\\active_hwamok_v2018\\modify_ready_check.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\all_drawings\\exported_dxf\\review_only\\A$C2D5752AA.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "A$C71E55132",
+      "category": "review_only",
+      "source": "outputs\\active_hwamok_v2018\\modify_ready_check.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\all_drawings\\exported_dxf\\review_only\\A$C71E55132.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "A$C07FE4FCB",
+      "category": "review_only",
+      "source": "outputs\\active_hwamok_v2018\\modify_ready_check.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\all_drawings\\exported_dxf\\review_only\\A$C07FE4FCB.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "도곽SVS",
+      "category": "title_sheet",
+      "source": "outputs\\active_hwamok_v2018\\modify_ready_check.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\all_drawings\\exported_dxf\\title_sheet\\도곽SVS.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "인허가용도곽",
+      "category": "title_sheet",
+      "source": "outputs\\active_hwamok_v2018\\modify_ready_check.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\all_drawings\\exported_dxf\\title_sheet\\인허가용도곽.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "롤방충망설치",
+      "category": "general_symbol",
+      "source": "outputs\\active_hwamok_v2018\\modify_ready_check.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\all_drawings\\exported_dxf\\general_symbol\\롤방충망설치.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "센터힌지",
+      "category": "door_or_fixture",
+      "source": "outputs\\active_hwamok_v2018\\modify_ready_check.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\all_drawings\\exported_dxf\\door_or_fixture\\센터힌지.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "사이드힌지",
+      "category": "door_or_fixture",
+      "source": "outputs\\active_hwamok_v2018\\modify_ready_check.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\all_drawings\\exported_dxf\\door_or_fixture\\사이드힌지.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "MC2",
+      "category": "general_symbol",
+      "source": "outputs\\oda_hwamok_0526\\dxf\\hwamok_0526.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\all_drawings\\exported_dxf\\general_symbol\\MC2.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "명지동 3259-6",
+      "category": "annotation_symbol",
+      "source": "outputs\\oda_hwamok_0526\\dxf\\hwamok_0526.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\all_drawings\\exported_dxf\\annotation_symbol\\명지동 3259-6.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "X-PLAN$0$X-PLAN$0$Z_101",
+      "category": "general_symbol",
+      "source": "outputs\\oda_hwamok_0526\\dxf\\hwamok_0526.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\all_drawings\\exported_dxf\\general_symbol\\X-PLAN$0$X-PLAN$0$Z_101.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "BRF_25",
+      "category": "window_or_linear_symbol",
+      "source": "outputs\\oda_hwamok_0526\\dxf\\hwamok_0526.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\all_drawings\\exported_dxf\\window_or_linear_symbol\\BRF_25.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "방위표",
+      "category": "general_symbol",
+      "source": "outputs\\oda_hwamok_0526\\dxf\\hwamok_0526.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\all_drawings\\exported_dxf\\general_symbol\\방위표.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "레벨표",
+      "category": "general_symbol",
+      "source": "outputs\\oda_hwamok_0526\\dxf\\hwamok_0526.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\all_drawings\\exported_dxf\\general_symbol\\레벨표.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "약도",
+      "category": "general_symbol",
+      "source": "outputs\\oda_hwamok_0526\\dxf\\hwamok_0526.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\all_drawings\\exported_dxf\\general_symbol\\약도.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "화살표_동적",
+      "category": "general_symbol",
+      "source": "outputs\\oda_hwamok_0526\\dxf\\hwamok_0526.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\all_drawings\\exported_dxf\\general_symbol\\화살표_동적.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "ZW$DA75",
+      "category": "general_symbol",
+      "source": "outputs\\oda_hwamok_0526\\dxf\\hwamok_0526.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\all_drawings\\exported_dxf\\general_symbol\\ZW$DA75.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "ZW$E9A1",
+      "category": "general_symbol",
+      "source": "outputs\\oda_hwamok_0526\\dxf\\hwamok_0526.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\all_drawings\\exported_dxf\\general_symbol\\ZW$E9A1.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "ZW$PASTETMP0",
+      "category": "annotation_symbol",
+      "source": "outputs\\oda_hwamok_0526\\dxf\\hwamok_0526.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\all_drawings\\exported_dxf\\annotation_symbol\\ZW$PASTETMP0.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "HEADED_HT_BOLT-TAIL-M20",
+      "category": "structure",
+      "source": "outputs\\oda_hwamok_0526\\dxf\\hwamok_0526.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\all_drawings\\exported_dxf\\structure\\HEADED_HT_BOLT-TAIL-M20.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "HEADED_HT_BOLT-HEAD-M20",
+      "category": "structure",
+      "source": "outputs\\oda_hwamok_0526\\dxf\\hwamok_0526.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\all_drawings\\exported_dxf\\structure\\HEADED_HT_BOLT-HEAD-M20.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "ZW$F610",
+      "category": "general_symbol",
+      "source": "outputs\\oda_hwamok_0526\\dxf\\hwamok_0526.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\all_drawings\\exported_dxf\\general_symbol\\ZW$F610.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "HEADED_HT_BOLT-PLAN-M20F10T",
+      "category": "structure",
+      "source": "outputs\\oda_hwamok_0526\\dxf\\hwamok_0526.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\all_drawings\\exported_dxf\\structure\\HEADED_HT_BOLT-PLAN-M20F10T.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "DO1",
+      "category": "annotation_symbol",
+      "source": "outputs\\oda_hwamok_0526\\dxf\\hwamok_0526.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\all_drawings\\exported_dxf\\annotation_symbol\\DO1.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "ZW$D243",
+      "category": "general_symbol",
+      "source": "outputs\\oda_hwamok_0526\\dxf\\hwamok_0526.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\all_drawings\\exported_dxf\\general_symbol\\ZW$D243.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "ZW$840A",
+      "category": "window_or_linear_symbol",
+      "source": "outputs\\oda_hwamok_0526\\dxf\\hwamok_0526.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\all_drawings\\exported_dxf\\window_or_linear_symbol\\ZW$840A.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "ZW$6281",
+      "category": "general_symbol",
+      "source": "outputs\\oda_hwamok_0526\\dxf\\hwamok_0526.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\all_drawings\\exported_dxf\\general_symbol\\ZW$6281.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "ZW$4CE7",
+      "category": "annotation_symbol",
+      "source": "outputs\\oda_hwamok_0526\\dxf\\hwamok_0526.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\all_drawings\\exported_dxf\\annotation_symbol\\ZW$4CE7.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "A$C0B0CC074",
+      "category": "review_only",
+      "source": "outputs\\oda_hwamok_0526\\dxf\\hwamok_0526.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\all_drawings\\exported_dxf\\review_only\\A$C0B0CC074.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "ZW$3385",
+      "category": "annotation_symbol",
+      "source": "outputs\\oda_hwamok_0526\\dxf\\hwamok_0526.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\all_drawings\\exported_dxf\\annotation_symbol\\ZW$3385.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "ZW$7E6A",
+      "category": "general_symbol",
+      "source": "outputs\\oda_hwamok_0526\\dxf\\hwamok_0526.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\all_drawings\\exported_dxf\\general_symbol\\ZW$7E6A.dxf",
+      "status": "exported_dxf"
+    }
+  ],
+  "converted": [
+    {
+      "category": "annotation_symbol",
+      "status": "converted",
+      "dwg_dir": "generated\\xicad_symbols_staging\\all_drawings\\exported_dwg\\annotation_symbol",
+      "count": 7
+    },
+    {
+      "category": "door",
+      "status": "converted",
+      "dwg_dir": "generated\\xicad_symbols_staging\\all_drawings\\exported_dwg\\door",
+      "count": 2
+    },
+    {
+      "category": "door_or_fixture",
+      "status": "converted",
+      "dwg_dir": "generated\\xicad_symbols_staging\\all_drawings\\exported_dwg\\door_or_fixture",
+      "count": 9
+    },
+    {
+      "category": "general_symbol",
+      "status": "converted",
+      "dwg_dir": "generated\\xicad_symbols_staging\\all_drawings\\exported_dwg\\general_symbol",
+      "count": 14
+    },
+    {
+      "category": "material",
+      "status": "converted",
+      "dwg_dir": "generated\\xicad_symbols_staging\\all_drawings\\exported_dwg\\material",
+      "count": 1
+    },
+    {
+      "category": "review_only",
+      "status": "converted",
+      "dwg_dir": "generated\\xicad_symbols_staging\\all_drawings\\exported_dwg\\review_only",
+      "count": 14
+    },
+    {
+      "category": "sanitary",
+      "status": "converted",
+      "dwg_dir": "generated\\xicad_symbols_staging\\all_drawings\\exported_dwg\\sanitary",
+      "count": 1
+    },
+    {
+      "category": "structure",
+      "status": "converted",
+      "dwg_dir": "generated\\xicad_symbols_staging\\all_drawings\\exported_dwg\\structure",
+      "count": 3
+    },
+    {
+      "category": "title_sheet",
+      "status": "converted",
+      "dwg_dir": "generated\\xicad_symbols_staging\\all_drawings\\exported_dwg\\title_sheet",
+      "count": 2
+    },
+    {
+      "category": "window_or_linear_symbol",
+      "status": "converted",
+      "dwg_dir": "generated\\xicad_symbols_staging\\all_drawings\\exported_dwg\\window_or_linear_symbol",
+      "count": 2
+    }
+  ]
+}

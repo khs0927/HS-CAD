@@ -19,6 +19,15 @@ from src.extensions.xicad_safe_bridge.registry import XicadAliasRegistry, defaul
 from src.integrations.xicad_command_catalog import filter_architecture_commands, parse_xicad_shortkey
 from src.integrations.xicad_manifest import write_manifest
 from src.integrations.xicad_paths import detect_xicad_profile
+from src.integrations.xicad_symbol_staging import (
+    analyze_xicad_symbol_system,
+    build_master_symbol_review_table,
+    build_xicad_symbol_staging,
+    configure_xicad_block_library_default,
+    export_all_drawing_blocks_to_xicad,
+    export_dxf_block_symbols,
+    mirror_hscad_library_to_xicad_native_folders,
+)
 from src.integrations.xicad_workflows import get_workflow, list_workflows
 from src.modifiers.architectural_modifier import (
     create_boundary,
@@ -296,6 +305,137 @@ def build_xicad_catalog(xicad_root: str = typer.Option(..., help='XiCAD root pat
     rows = [cmd.__dict__ for cmd in filter_architecture_commands(parse_xicad_shortkey(key))]
     export_json(rows, out)
     success(f'XiCAD catalog written: {out}')
+
+
+@app.command('build-xicad-symbol-staging')
+def build_xicad_symbol_staging_cli(
+    observed_report: str = typer.Option('generated/fast_scan_report.json', help='fast-scan report containing user_blocks_observed'),
+    xicad_root: str = typer.Option('C:/xicad', help='XiCAD root path'),
+    out_dir: str = typer.Option('generated/xicad_symbols_staging', help='Staging output directory'),
+    target_subdir: str = typer.Option('HS-CAD', help='Subfolder name below XiCAD xiLib/심볼'),
+    dxf_source: list[str] = typer.Option([], help='Optional DXF files used for block shape inference'),
+    copy_matches: bool = typer.Option(True, help='Copy matched existing XiCAD DWG/SLD files into staging'),
+):
+    payload = build_xicad_symbol_staging(
+        observed_report=observed_report,
+        dxf_sources=dxf_source,
+        xicad_root=xicad_root,
+        out_dir=out_dir,
+        target_subdir=target_subdir,
+        copy_matches=copy_matches,
+    )
+    counts = payload["counts"]
+    success(
+        f'XiCAD symbol staging written: {out_dir} '
+        f'({counts["total"]} candidates, {counts["by_source_status"]})'
+    )
+
+
+@app.command('export-xicad-symbol-dxf')
+def export_xicad_symbol_dxf_cli(
+    dxf_source: list[str] = typer.Option(..., help='DXF files used as block-definition sources'),
+    catalog: str = typer.Option('generated/xicad_symbols_staging/hs_cad_symbol_catalog.json', help='Symbol catalog path'),
+    out_dir: str = typer.Option('generated/xicad_symbols_staging/exported_dxf', help='Output directory for per-symbol DXF files'),
+    category: list[str] = typer.Option([], help='Optional categories to export'),
+    convert_to_dwg: bool = typer.Option(False, help='Convert exported DXFs to DWG with ODA File Converter'),
+    oda_converter: str | None = typer.Option(None, help='Optional ODAFileConverter.exe path'),
+):
+    payload = export_dxf_block_symbols(
+        dxf_sources=dxf_source,
+        catalog_path=catalog,
+        out_dir=out_dir,
+        categories=category,
+        convert_to_dwg=convert_to_dwg,
+        oda_converter=oda_converter,
+    )
+    success(f'Exported {payload["exported_count"]} DXF symbol files -> {out_dir}')
+
+
+@app.command('analyze-xicad-symbol-system')
+def analyze_xicad_symbol_system_cli(
+    xicad_root: str = typer.Option('C:/xicad', help='XiCAD root path'),
+    out: str = typer.Option('generated/xicad_symbols_staging/xicad_symbol_system_analysis.json', help='Analysis JSON path'),
+):
+    payload = analyze_xicad_symbol_system(xicad_root=xicad_root, out_path=out)
+    totals = payload["totals"]
+    success(
+        f'XiCAD symbol system analyzed: {out} '
+        f'(xiLib DWG {totals["xiLib_dwg"]}, Lib DWG {totals["Lib_dwg"]})'
+    )
+
+
+@app.command('export-all-drawing-blocks-to-xicad')
+def export_all_drawing_blocks_to_xicad_cli(
+    root: list[str] = typer.Option(['.'], help='Root files/folders to scan for DWG/DXF sources'),
+    xicad_root: str = typer.Option('C:/xicad', help='XiCAD root path'),
+    out_dir: str = typer.Option('generated/xicad_symbols_staging/all_drawings', help='Working output directory'),
+    target_subdir: str = typer.Option('HS-CAD-ALL', help='Subfolder below XiCAD xiLib/심볼'),
+    install: bool = typer.Option(False, help='Copy converted DWG symbols into XiCAD after export'),
+    include_review_only: bool = typer.Option(False, help='Also install anonymous/review-only blocks'),
+    oda_converter: str | None = typer.Option(None, help='Optional ODAFileConverter.exe path'),
+):
+    payload = export_all_drawing_blocks_to_xicad(
+        roots=root,
+        xicad_root=xicad_root,
+        out_dir=out_dir,
+        target_subdir=target_subdir,
+        install=install,
+        include_review_only=include_review_only,
+        oda_converter=oda_converter,
+    )
+    success(
+        f'All drawing blocks processed: {payload["catalog"]["counts"]["total"]} candidates, '
+        f'{payload["export"]["exported_count"]} exported'
+    )
+
+
+@app.command('configure-xicad-block-library')
+def configure_xicad_block_library_cli(
+    xicad_root: str = typer.Option('C:/xicad', help='XiCAD root path'),
+    default_folder: str = typer.Option(r'<MAINPATH>\심볼\HS-CAD-XICAD', help='Default xiBlkLibrary folder value'),
+):
+    payload = configure_xicad_block_library_default(xicad_root=xicad_root, default_folder=default_folder)
+    success(f'XiCAD block library default updated: {payload["new_value"]} (backup: {payload["backup"]})')
+
+
+@app.command('mirror-xicad-native-folders')
+def mirror_xicad_native_folders_cli(
+    source_subdir: str = typer.Option('HS-CAD-ALL', help='Source subfolder below XiCAD xiLib/심볼'),
+    target_subdir: str = typer.Option('HS-CAD-XICAD', help='Target subfolder below XiCAD xiLib/심볼'),
+    xicad_root: str = typer.Option('C:/xicad', help='XiCAD root path'),
+    catalog: str = typer.Option('generated/xicad_symbols_staging/all_drawings/all_drawing_block_catalog.json', help='All drawing block catalog path'),
+    analysis: str = typer.Option('generated/xicad_symbols_staging/xicad_symbol_system_analysis.json', help='XiCAD symbol system analysis path'),
+    out: str = typer.Option('generated/xicad_symbols_staging/all_drawings/xicad_native_folder_mirror_report.json', help='Report JSON path'),
+):
+    payload = mirror_hscad_library_to_xicad_native_folders(
+        source_subdir=source_subdir,
+        target_subdir=target_subdir,
+        xicad_root=xicad_root,
+        catalog_path=catalog,
+        analysis_path=analysis,
+        out_path=out,
+    )
+    success(f'XiCAD-native mirror written: {payload["target_root"]} ({payload["copied_count"]} copied)')
+
+
+@app.command('build-symbol-review-table')
+def build_symbol_review_table_cli(
+    xicad_root: str = typer.Option('C:/xicad', help='XiCAD root path'),
+    out_dir: str = typer.Option('generated/xicad_symbols_staging', help='Output directory'),
+    catalog: str = typer.Option('generated/xicad_symbols_staging/all_drawings/all_drawing_block_catalog.json', help='All drawing block catalog path'),
+):
+    reports = {
+        'HS-CAD-ALL': 'generated/zwcad_symbol_live_test/hscad_all_full_library_insert_report.json',
+        'HS-CAD-XICAD': 'generated/zwcad_symbol_live_test/hscad_xicad_native_full_insert_report.json',
+        'HS-CAD-REVIEW': 'generated/zwcad_symbol_live_test/hscad_review_only_insert_report.json',
+    }
+    payload = build_master_symbol_review_table(
+        xicad_root=xicad_root,
+        catalog_path=catalog,
+        validation_reports=reports,
+        out_dir=out_dir,
+    )
+    success(f'Symbol review table written: {payload["csv"]} ({payload["rows"]} rows)')
 
 
 @app.command('xicad-workflows')

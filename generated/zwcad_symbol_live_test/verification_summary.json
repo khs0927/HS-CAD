@@ -1,0 +1,27 @@
+{
+  "symbol_root": "C:\\xicad\\xiLib\\심볼\\HS-CAD",
+  "installed_dwg_count": 27,
+  "installed_by_category": {
+    "annotation_symbol": 11,
+    "door_or_fixture": 1,
+    "general_symbol": 11,
+    "material": 1,
+    "sanitary": 2,
+    "title_sheet": 1
+  },
+  "live_test_reports": {
+    "com_insert_variants": "generated/zwcad_symbol_live_test/insert_param_report_fixed.json",
+    "hs_cad_symbol_insert": "generated/zwcad_symbol_live_test/live_insert_report_fixed.json",
+    "hangul_symbol_insert": "generated/zwcad_symbol_live_test/hangul_insert_report.json"
+  },
+  "test_drawings": [
+    "generated/zwcad_symbol_live_test/insert_param_test_fixed.dwg",
+    "generated/zwcad_symbol_live_test/xicad_symbol_insert_test_fixed.dwg",
+    "generated/zwcad_symbol_live_test/hangul_symbol_insert_test.dwg"
+  ],
+  "notes": [
+    "ZWCAD COM requires array(\"d\") coordinate values; Python list/tuple coordinates failed with invalid parameter.",
+    "XiCAD Q1 is interactive and left the CLI waiting for UI completion; automated verification used direct COM insert and scan instead.",
+    "Review-only anonymous A$C blocks were not installed into XiCAD."
+  ]
+}

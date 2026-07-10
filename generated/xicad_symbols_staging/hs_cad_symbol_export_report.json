@@ -1,0 +1,254 @@
+{
+  "catalog_path": "generated/xicad_symbols_staging/hs_cad_symbol_catalog.json",
+  "out_dir": "generated\\xicad_symbols_staging\\exported_dxf",
+  "exported_count": 29,
+  "exported": [
+    {
+      "name": "_Dot",
+      "category": "annotation_symbol",
+      "source": "scratch\\active_hwamok_v2018.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\exported_dxf\\annotation_symbol\\_Dot.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "_ArchTick",
+      "category": "general_symbol",
+      "source": "scratch\\active_hwamok_v2018.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\exported_dxf\\general_symbol\\_ArchTick.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "DIMDOT",
+      "category": "annotation_symbol",
+      "source": "scratch\\active_hwamok_v2018.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\exported_dxf\\annotation_symbol\\DIMDOT.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "ZIUM_sheet_architect",
+      "category": "title_sheet",
+      "source": "scratch\\active_hwamok_v2018.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\exported_dxf\\title_sheet\\ZIUM_sheet_architect.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "BUBBLE",
+      "category": "annotation_symbol",
+      "source": "scratch\\active_hwamok_v2018.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\exported_dxf\\annotation_symbol\\BUBBLE.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "ARW1",
+      "category": "general_symbol",
+      "source": "scratch\\active_hwamok_v2018.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\exported_dxf\\general_symbol\\ARW1.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "2P-T204",
+      "category": "door_or_fixture",
+      "source": "scratch\\active_hwamok_v2018.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\exported_dxf\\door_or_fixture\\2P-T204.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "TOIPD02",
+      "category": "sanitary",
+      "source": "scratch\\active_hwamok_v2018.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\exported_dxf\\sanitary\\TOIPD02.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "KITPD08",
+      "category": "sanitary",
+      "source": "scratch\\active_hwamok_v2018.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\exported_dxf\\sanitary\\KITPD08.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "line",
+      "category": "general_symbol",
+      "source": "scratch\\active_hwamok_v2018.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\exported_dxf\\general_symbol\\line.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "_DotSmall",
+      "category": "annotation_symbol",
+      "source": "scratch\\active_hwamok_v2018.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\exported_dxf\\annotation_symbol\\_DotSmall.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "TL000076_0",
+      "category": "general_symbol",
+      "source": "scratch\\active_hwamok_v2018.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\exported_dxf\\general_symbol\\TL000076_0.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "TL000073_0",
+      "category": "general_symbol",
+      "source": "scratch\\active_hwamok_v2018.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\exported_dxf\\general_symbol\\TL000073_0.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "A$C51837608",
+      "category": "review_only",
+      "source": "scratch\\active_hwamok_v2018.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\exported_dxf\\review_only\\A$C51837608.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "A$C60481E0E",
+      "category": "review_only",
+      "source": "scratch\\active_hwamok_v2018.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\exported_dxf\\review_only\\A$C60481E0E.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "LCPLTR31",
+      "category": "general_symbol",
+      "source": "scratch\\active_hwamok_v2018.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\exported_dxf\\general_symbol\\LCPLTR31.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "INSU",
+      "category": "material",
+      "source": "scratch\\active_hwamok_v2018.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\exported_dxf\\material\\INSU.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "A$C77CE0888",
+      "category": "review_only",
+      "source": "scratch\\active_hwamok_v2018.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\exported_dxf\\review_only\\A$C77CE0888.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "A$C1905086C",
+      "category": "review_only",
+      "source": "scratch\\active_hwamok_v2018.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\exported_dxf\\review_only\\A$C1905086C.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "A$C27357E8E",
+      "category": "review_only",
+      "source": "scratch\\active_hwamok_v2018.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\exported_dxf\\review_only\\A$C27357E8E.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "A$C2D5752AA",
+      "category": "review_only",
+      "source": "scratch\\active_hwamok_v2018.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\exported_dxf\\review_only\\A$C2D5752AA.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "A$C71E55132",
+      "category": "review_only",
+      "source": "scratch\\active_hwamok_v2018.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\exported_dxf\\review_only\\A$C71E55132.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "A$C07FE4FCB",
+      "category": "review_only",
+      "source": "scratch\\active_hwamok_v2018.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\exported_dxf\\review_only\\A$C07FE4FCB.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "Z_DOT",
+      "category": "annotation_symbol",
+      "source": "scratch\\active_hwamok_v2018.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\exported_dxf\\annotation_symbol\\Z_DOT.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "handle1",
+      "category": "general_symbol",
+      "source": "scratch\\active_hwamok_v2018.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\exported_dxf\\general_symbol\\handle1.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "벤치마크",
+      "category": "general_symbol",
+      "source": "outputs\\oda_hwamok_0526\\dxf\\hwamok_0526.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\exported_dxf\\general_symbol\\벤치마크.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "방위",
+      "category": "general_symbol",
+      "source": "outputs\\oda_hwamok_0526\\dxf\\hwamok_0526.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\exported_dxf\\general_symbol\\방위.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "BB",
+      "category": "annotation_symbol",
+      "source": "outputs\\oda_hwamok_0526\\dxf\\hwamok_0526.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\exported_dxf\\annotation_symbol\\BB.dxf",
+      "status": "exported_dxf"
+    },
+    {
+      "name": "서대신동3가 61-46 토지",
+      "category": "general_symbol",
+      "source": "outputs\\oda_hwamok_0526\\dxf\\hwamok_0526.dxf",
+      "dxf_path": "generated\\xicad_symbols_staging\\exported_dxf\\general_symbol\\서대신동3가 61-46 토지.dxf",
+      "status": "exported_dxf"
+    }
+  ],
+  "converted": [
+    {
+      "category": "annotation_symbol",
+      "status": "converted",
+      "dwg_dir": "generated\\xicad_symbols_staging\\exported_dwg\\annotation_symbol",
+      "count": 6
+    },
+    {
+      "category": "door_or_fixture",
+      "status": "converted",
+      "dwg_dir": "generated\\xicad_symbols_staging\\exported_dwg\\door_or_fixture",
+      "count": 1
+    },
+    {
+      "category": "general_symbol",
+      "status": "converted",
+      "dwg_dir": "generated\\xicad_symbols_staging\\exported_dwg\\general_symbol",
+      "count": 10
+    },
+    {
+      "category": "material",
+      "status": "converted",
+      "dwg_dir": "generated\\xicad_symbols_staging\\exported_dwg\\material",
+      "count": 1
+    },
+    {
+      "category": "review_only",
+      "status": "converted",
+      "dwg_dir": "generated\\xicad_symbols_staging\\exported_dwg\\review_only",
+      "count": 8
+    },
+    {
+      "category": "sanitary",
+      "status": "converted",
+      "dwg_dir": "generated\\xicad_symbols_staging\\exported_dwg\\sanitary",
+      "count": 2
+    },
+    {
+      "category": "title_sheet",
+      "status": "converted",
+      "dwg_dir": "generated\\xicad_symbols_staging\\exported_dwg\\title_sheet",
+      "count": 1
+    }
+  ]
+}

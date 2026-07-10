@@ -1,0 +1,514 @@
+{
+  "source_root": "C:\\xicad\\xiLib\\심볼\\HS-CAD-ALL",
+  "target_root": "C:\\xicad\\xiLib\\심볼\\HS-CAD-XICAD",
+  "copied_count": 41,
+  "skipped_count": 26,
+  "by_folder": {
+    "DOOR_DOOR": 11,
+    "ETC_SYM": 26,
+    "FIX_FIX": 1,
+    "MATRIAL_MATRIAL": 1,
+    "WINDOW_WIN": 2
+  },
+  "rows": [
+    {
+      "name": "01420DDOT01",
+      "category": "annotation_symbol",
+      "xicad_key": "ETC",
+      "layer": "SYM",
+      "source": "C:\\xicad\\xiLib\\심볼\\HS-CAD-ALL\\annotation_symbol\\01420DDOT01.dwg",
+      "target": "C:\\xicad\\xiLib\\심볼\\HS-CAD-XICAD\\ETC_SYM\\01420DDOT01.dwg",
+      "status": "copied"
+    },
+    {
+      "name": "06-A31- 001~ 신관동 평면도$0$대변기",
+      "category": "sanitary",
+      "xicad_key": "FIX",
+      "layer": "FIX",
+      "source": "C:\\xicad\\xiLib\\심볼\\HS-CAD-ALL\\sanitary\\06-A31- 001~ 신관동 평면도$0$대변기.dwg",
+      "target": "C:\\xicad\\xiLib\\심볼\\HS-CAD-XICAD\\FIX_FIX\\06-A31- 001~ 신관동 평면도$0$대변기.dwg",
+      "status": "copied"
+    },
+    {
+      "name": "06-A31- 001~ 신관동 평면도$0$큐비클문",
+      "category": "door",
+      "xicad_key": "DOOR",
+      "layer": "DOOR",
+      "source": "C:\\xicad\\xiLib\\심볼\\HS-CAD-ALL\\door\\06-A31- 001~ 신관동 평면도$0$큐비클문.dwg",
+      "target": "C:\\xicad\\xiLib\\심볼\\HS-CAD-XICAD\\DOOR_DOOR\\06-A31- 001~ 신관동 평면도$0$큐비클문.dwg",
+      "status": "copied"
+    },
+    {
+      "name": "080",
+      "category": "door_or_fixture",
+      "xicad_key": "DOOR",
+      "layer": "DOOR",
+      "source": "C:\\xicad\\xiLib\\심볼\\HS-CAD-ALL\\door_or_fixture\\080.dwg",
+      "target": "C:\\xicad\\xiLib\\심볼\\HS-CAD-XICAD\\DOOR_DOOR\\080.dwg",
+      "status": "copied"
+    },
+    {
+      "name": "100X50",
+      "category": "general_symbol",
+      "xicad_key": "ETC",
+      "layer": "SYM",
+      "source": "C:\\xicad\\xiLib\\심볼\\HS-CAD-ALL\\general_symbol\\100X50.dwg",
+      "target": "C:\\xicad\\xiLib\\심볼\\HS-CAD-XICAD\\ETC_SYM\\100X50.dwg",
+      "status": "copied"
+    },
+    {
+      "name": "2P-T204",
+      "category": "door_or_fixture",
+      "status": "not_installed_in_source"
+    },
+    {
+      "name": "35SFGH",
+      "category": "door_or_fixture",
+      "xicad_key": "DOOR",
+      "layer": "DOOR",
+      "source": "C:\\xicad\\xiLib\\심볼\\HS-CAD-ALL\\door_or_fixture\\35SFGH.dwg",
+      "target": "C:\\xicad\\xiLib\\심볼\\HS-CAD-XICAD\\DOOR_DOOR\\35SFGH.dwg",
+      "status": "copied"
+    },
+    {
+      "name": "AID-INTERIORFINISHDETAIL$0$SC25",
+      "category": "door_or_fixture",
+      "xicad_key": "DOOR",
+      "layer": "DOOR",
+      "source": "C:\\xicad\\xiLib\\심볼\\HS-CAD-ALL\\door_or_fixture\\AID-INTERIORFINISHDETAIL$0$SC25.dwg",
+      "target": "C:\\xicad\\xiLib\\심볼\\HS-CAD-XICAD\\DOOR_DOOR\\AID-INTERIORFINISHDETAIL$0$SC25.dwg",
+      "status": "copied"
+    },
+    {
+      "name": "ARROWX",
+      "category": "annotation_symbol",
+      "status": "not_installed_in_source"
+    },
+    {
+      "name": "ARW1",
+      "category": "general_symbol",
+      "status": "not_installed_in_source"
+    },
+    {
+      "name": "BB",
+      "category": "annotation_symbol",
+      "status": "not_installed_in_source"
+    },
+    {
+      "name": "BRF_25",
+      "category": "window_or_linear_symbol",
+      "xicad_key": "WINDOW",
+      "layer": "WIN",
+      "source": "C:\\xicad\\xiLib\\심볼\\HS-CAD-ALL\\window_or_linear_symbol\\BRF_25.dwg",
+      "target": "C:\\xicad\\xiLib\\심볼\\HS-CAD-XICAD\\WINDOW_WIN\\BRF_25.dwg",
+      "status": "copied"
+    },
+    {
+      "name": "BUBBLE",
+      "category": "annotation_symbol",
+      "status": "not_installed_in_source"
+    },
+    {
+      "name": "DAELIM_FÜLEN 3000",
+      "category": "door_or_fixture",
+      "xicad_key": "DOOR",
+      "layer": "DOOR",
+      "source": "C:\\xicad\\xiLib\\심볼\\HS-CAD-ALL\\door_or_fixture\\DAELIM_FÜLEN 3000.dwg",
+      "target": "C:\\xicad\\xiLib\\심볼\\HS-CAD-XICAD\\DOOR_DOOR\\DAELIM_FÜLEN 3000.dwg",
+      "status": "copied"
+    },
+    {
+      "name": "DIMDOT",
+      "category": "annotation_symbol",
+      "status": "not_installed_in_source"
+    },
+    {
+      "name": "DL-S3220_DAELIM-T",
+      "category": "door_or_fixture",
+      "xicad_key": "DOOR",
+      "layer": "DOOR",
+      "source": "C:\\xicad\\xiLib\\심볼\\HS-CAD-ALL\\door_or_fixture\\DL-S3220_DAELIM-T.dwg",
+      "target": "C:\\xicad\\xiLib\\심볼\\HS-CAD-XICAD\\DOOR_DOOR\\DL-S3220_DAELIM-T.dwg",
+      "status": "copied"
+    },
+    {
+      "name": "DO1",
+      "category": "annotation_symbol",
+      "xicad_key": "ETC",
+      "layer": "SYM",
+      "source": "C:\\xicad\\xiLib\\심볼\\HS-CAD-ALL\\annotation_symbol\\DO1.dwg",
+      "target": "C:\\xicad\\xiLib\\심볼\\HS-CAD-XICAD\\ETC_SYM\\DO1.dwg",
+      "status": "copied"
+    },
+    {
+      "name": "DOT",
+      "category": "annotation_symbol",
+      "status": "not_installed_in_source"
+    },
+    {
+      "name": "DSI-C007",
+      "category": "door_or_fixture",
+      "xicad_key": "DOOR",
+      "layer": "DOOR",
+      "source": "C:\\xicad\\xiLib\\심볼\\HS-CAD-ALL\\door_or_fixture\\DSI-C007.dwg",
+      "target": "C:\\xicad\\xiLib\\심볼\\HS-CAD-XICAD\\DOOR_DOOR\\DSI-C007.dwg",
+      "status": "copied"
+    },
+    {
+      "name": "EXIT",
+      "category": "general_symbol",
+      "status": "not_installed_in_source"
+    },
+    {
+      "name": "F-610",
+      "category": "door_or_fixture",
+      "xicad_key": "DOOR",
+      "layer": "DOOR",
+      "source": "C:\\xicad\\xiLib\\심볼\\HS-CAD-ALL\\door_or_fixture\\F-610.dwg",
+      "target": "C:\\xicad\\xiLib\\심볼\\HS-CAD-XICAD\\DOOR_DOOR\\F-610.dwg",
+      "status": "copied"
+    },
+    {
+      "name": "HANDLE1",
+      "category": "general_symbol",
+      "status": "not_installed_in_source"
+    },
+    {
+      "name": "HEADED_HT_BOLT-HEAD-M20",
+      "category": "structure",
+      "xicad_key": "ETC",
+      "layer": "SYM",
+      "source": "C:\\xicad\\xiLib\\심볼\\HS-CAD-ALL\\structure\\HEADED_HT_BOLT-HEAD-M20.dwg",
+      "target": "C:\\xicad\\xiLib\\심볼\\HS-CAD-XICAD\\ETC_SYM\\HEADED_HT_BOLT-HEAD-M20.dwg",
+      "status": "copied"
+    },
+    {
+      "name": "HEADED_HT_BOLT-PLAN-M20F10T",
+      "category": "structure",
+      "xicad_key": "ETC",
+      "layer": "SYM",
+      "source": "C:\\xicad\\xiLib\\심볼\\HS-CAD-ALL\\structure\\HEADED_HT_BOLT-PLAN-M20F10T.dwg",
+      "target": "C:\\xicad\\xiLib\\심볼\\HS-CAD-XICAD\\ETC_SYM\\HEADED_HT_BOLT-PLAN-M20F10T.dwg",
+      "status": "copied"
+    },
+    {
+      "name": "HEADED_HT_BOLT-TAIL-M20",
+      "category": "structure",
+      "xicad_key": "ETC",
+      "layer": "SYM",
+      "source": "C:\\xicad\\xiLib\\심볼\\HS-CAD-ALL\\structure\\HEADED_HT_BOLT-TAIL-M20.dwg",
+      "target": "C:\\xicad\\xiLib\\심볼\\HS-CAD-XICAD\\ETC_SYM\\HEADED_HT_BOLT-TAIL-M20.dwg",
+      "status": "copied"
+    },
+    {
+      "name": "INSU",
+      "category": "material",
+      "status": "not_installed_in_source"
+    },
+    {
+      "name": "KITPD08",
+      "category": "sanitary",
+      "status": "not_installed_in_source"
+    },
+    {
+      "name": "LA-MA-009-D-P",
+      "category": "door",
+      "xicad_key": "DOOR",
+      "layer": "DOOR",
+      "source": "C:\\xicad\\xiLib\\심볼\\HS-CAD-ALL\\door\\LA-MA-009-D-P.dwg",
+      "target": "C:\\xicad\\xiLib\\심볼\\HS-CAD-XICAD\\DOOR_DOOR\\LA-MA-009-D-P.dwg",
+      "status": "copied"
+    },
+    {
+      "name": "LCPLTR31",
+      "category": "general_symbol",
+      "status": "not_installed_in_source"
+    },
+    {
+      "name": "LINE",
+      "category": "general_symbol",
+      "status": "not_installed_in_source"
+    },
+    {
+      "name": "MC2",
+      "category": "general_symbol",
+      "xicad_key": "ETC",
+      "layer": "SYM",
+      "source": "C:\\xicad\\xiLib\\심볼\\HS-CAD-ALL\\general_symbol\\MC2.dwg",
+      "target": "C:\\xicad\\xiLib\\심볼\\HS-CAD-XICAD\\ETC_SYM\\MC2.dwg",
+      "status": "copied"
+    },
+    {
+      "name": "TL000073_0",
+      "category": "general_symbol",
+      "status": "not_installed_in_source"
+    },
+    {
+      "name": "TL000076_0",
+      "category": "general_symbol",
+      "status": "not_installed_in_source"
+    },
+    {
+      "name": "TOIPD02",
+      "category": "sanitary",
+      "status": "not_installed_in_source"
+    },
+    {
+      "name": "X-PLAN$0$X-PLAN$0$Z_101",
+      "category": "general_symbol",
+      "xicad_key": "ETC",
+      "layer": "SYM",
+      "source": "C:\\xicad\\xiLib\\심볼\\HS-CAD-ALL\\general_symbol\\X-PLAN$0$X-PLAN$0$Z_101.dwg",
+      "target": "C:\\xicad\\xiLib\\심볼\\HS-CAD-XICAD\\ETC_SYM\\X-PLAN$0$X-PLAN$0$Z_101.dwg",
+      "status": "copied"
+    },
+    {
+      "name": "XIWINSYMBOL",
+      "category": "annotation_symbol",
+      "status": "not_installed_in_source"
+    },
+    {
+      "name": "XIWINSYMBOL_OC",
+      "category": "annotation_symbol",
+      "status": "not_installed_in_source"
+    },
+    {
+      "name": "ZIUM_SHEET_ARCHITECT",
+      "category": "title_sheet",
+      "status": "not_installed_in_source"
+    },
+    {
+      "name": "ZW$3385",
+      "category": "annotation_symbol",
+      "xicad_key": "ETC",
+      "layer": "SYM",
+      "source": "C:\\xicad\\xiLib\\심볼\\HS-CAD-ALL\\annotation_symbol\\ZW$3385.dwg",
+      "target": "C:\\xicad\\xiLib\\심볼\\HS-CAD-XICAD\\ETC_SYM\\ZW$3385.dwg",
+      "status": "copied"
+    },
+    {
+      "name": "ZW$4CE7",
+      "category": "annotation_symbol",
+      "xicad_key": "ETC",
+      "layer": "SYM",
+      "source": "C:\\xicad\\xiLib\\심볼\\HS-CAD-ALL\\annotation_symbol\\ZW$4CE7.dwg",
+      "target": "C:\\xicad\\xiLib\\심볼\\HS-CAD-XICAD\\ETC_SYM\\ZW$4CE7.dwg",
+      "status": "copied"
+    },
+    {
+      "name": "ZW$6281",
+      "category": "general_symbol",
+      "xicad_key": "ETC",
+      "layer": "SYM",
+      "source": "C:\\xicad\\xiLib\\심볼\\HS-CAD-ALL\\general_symbol\\ZW$6281.dwg",
+      "target": "C:\\xicad\\xiLib\\심볼\\HS-CAD-XICAD\\ETC_SYM\\ZW$6281.dwg",
+      "status": "copied"
+    },
+    {
+      "name": "ZW$7E6A",
+      "category": "general_symbol",
+      "xicad_key": "ETC",
+      "layer": "SYM",
+      "source": "C:\\xicad\\xiLib\\심볼\\HS-CAD-ALL\\general_symbol\\ZW$7E6A.dwg",
+      "target": "C:\\xicad\\xiLib\\심볼\\HS-CAD-XICAD\\ETC_SYM\\ZW$7E6A.dwg",
+      "status": "copied"
+    },
+    {
+      "name": "ZW$840A",
+      "category": "window_or_linear_symbol",
+      "xicad_key": "WINDOW",
+      "layer": "WIN",
+      "source": "C:\\xicad\\xiLib\\심볼\\HS-CAD-ALL\\window_or_linear_symbol\\ZW$840A.dwg",
+      "target": "C:\\xicad\\xiLib\\심볼\\HS-CAD-XICAD\\WINDOW_WIN\\ZW$840A.dwg",
+      "status": "copied"
+    },
+    {
+      "name": "ZW$D243",
+      "category": "general_symbol",
+      "xicad_key": "ETC",
+      "layer": "SYM",
+      "source": "C:\\xicad\\xiLib\\심볼\\HS-CAD-ALL\\general_symbol\\ZW$D243.dwg",
+      "target": "C:\\xicad\\xiLib\\심볼\\HS-CAD-XICAD\\ETC_SYM\\ZW$D243.dwg",
+      "status": "copied"
+    },
+    {
+      "name": "ZW$DA75",
+      "category": "general_symbol",
+      "xicad_key": "ETC",
+      "layer": "SYM",
+      "source": "C:\\xicad\\xiLib\\심볼\\HS-CAD-ALL\\general_symbol\\ZW$DA75.dwg",
+      "target": "C:\\xicad\\xiLib\\심볼\\HS-CAD-XICAD\\ETC_SYM\\ZW$DA75.dwg",
+      "status": "copied"
+    },
+    {
+      "name": "ZW$E9A1",
+      "category": "general_symbol",
+      "xicad_key": "ETC",
+      "layer": "SYM",
+      "source": "C:\\xicad\\xiLib\\심볼\\HS-CAD-ALL\\general_symbol\\ZW$E9A1.dwg",
+      "target": "C:\\xicad\\xiLib\\심볼\\HS-CAD-XICAD\\ETC_SYM\\ZW$E9A1.dwg",
+      "status": "copied"
+    },
+    {
+      "name": "ZW$F610",
+      "category": "general_symbol",
+      "xicad_key": "ETC",
+      "layer": "SYM",
+      "source": "C:\\xicad\\xiLib\\심볼\\HS-CAD-ALL\\general_symbol\\ZW$F610.dwg",
+      "target": "C:\\xicad\\xiLib\\심볼\\HS-CAD-XICAD\\ETC_SYM\\ZW$F610.dwg",
+      "status": "copied"
+    },
+    {
+      "name": "ZW$PASTETMP0",
+      "category": "annotation_symbol",
+      "xicad_key": "ETC",
+      "layer": "SYM",
+      "source": "C:\\xicad\\xiLib\\심볼\\HS-CAD-ALL\\annotation_symbol\\ZW$PASTETMP0.dwg",
+      "target": "C:\\xicad\\xiLib\\심볼\\HS-CAD-XICAD\\ETC_SYM\\ZW$PASTETMP0.dwg",
+      "status": "copied"
+    },
+    {
+      "name": "Z_DOT",
+      "category": "annotation_symbol",
+      "status": "not_installed_in_source"
+    },
+    {
+      "name": "_ARCHTICK",
+      "category": "general_symbol",
+      "status": "not_installed_in_source"
+    },
+    {
+      "name": "_DOT",
+      "category": "annotation_symbol",
+      "status": "not_installed_in_source"
+    },
+    {
+      "name": "_DOTSMALL",
+      "category": "annotation_symbol",
+      "status": "not_installed_in_source"
+    },
+    {
+      "name": "대지",
+      "category": "annotation_symbol",
+      "xicad_key": "ETC",
+      "layer": "SYM",
+      "source": "C:\\xicad\\xiLib\\심볼\\HS-CAD-ALL\\annotation_symbol\\대지.dwg",
+      "target": "C:\\xicad\\xiLib\\심볼\\HS-CAD-XICAD\\ETC_SYM\\대지.dwg",
+      "status": "copied"
+    },
+    {
+      "name": "도곽SVS",
+      "category": "title_sheet",
+      "xicad_key": "ETC",
+      "layer": "SYM",
+      "source": "C:\\xicad\\xiLib\\심볼\\HS-CAD-ALL\\title_sheet\\도곽SVS.dwg",
+      "target": "C:\\xicad\\xiLib\\심볼\\HS-CAD-XICAD\\ETC_SYM\\도곽SVS.dwg",
+      "status": "copied"
+    },
+    {
+      "name": "레벨표",
+      "category": "general_symbol",
+      "xicad_key": "ETC",
+      "layer": "SYM",
+      "source": "C:\\xicad\\xiLib\\심볼\\HS-CAD-ALL\\general_symbol\\레벨표.dwg",
+      "target": "C:\\xicad\\xiLib\\심볼\\HS-CAD-XICAD\\ETC_SYM\\레벨표.dwg",
+      "status": "copied"
+    },
+    {
+      "name": "롤방충망설치",
+      "category": "general_symbol",
+      "xicad_key": "ETC",
+      "layer": "SYM",
+      "source": "C:\\xicad\\xiLib\\심볼\\HS-CAD-ALL\\general_symbol\\롤방충망설치.dwg",
+      "target": "C:\\xicad\\xiLib\\심볼\\HS-CAD-XICAD\\ETC_SYM\\롤방충망설치.dwg",
+      "status": "copied"
+    },
+    {
+      "name": "명지동 3259-6",
+      "category": "annotation_symbol",
+      "xicad_key": "ETC",
+      "layer": "SYM",
+      "source": "C:\\xicad\\xiLib\\심볼\\HS-CAD-ALL\\annotation_symbol\\명지동 3259-6.dwg",
+      "target": "C:\\xicad\\xiLib\\심볼\\HS-CAD-XICAD\\ETC_SYM\\명지동 3259-6.dwg",
+      "status": "copied"
+    },
+    {
+      "name": "방위",
+      "category": "general_symbol",
+      "status": "not_installed_in_source"
+    },
+    {
+      "name": "방위표",
+      "category": "general_symbol",
+      "xicad_key": "ETC",
+      "layer": "SYM",
+      "source": "C:\\xicad\\xiLib\\심볼\\HS-CAD-ALL\\general_symbol\\방위표.dwg",
+      "target": "C:\\xicad\\xiLib\\심볼\\HS-CAD-XICAD\\ETC_SYM\\방위표.dwg",
+      "status": "copied"
+    },
+    {
+      "name": "벤치마크",
+      "category": "general_symbol",
+      "status": "not_installed_in_source"
+    },
+    {
+      "name": "부위별단열설치계획표",
+      "category": "material",
+      "xicad_key": "MATRIAL",
+      "layer": "MATRIAL",
+      "source": "C:\\xicad\\xiLib\\심볼\\HS-CAD-ALL\\material\\부위별단열설치계획표.dwg",
+      "target": "C:\\xicad\\xiLib\\심볼\\HS-CAD-XICAD\\MATRIAL_MATRIAL\\부위별단열설치계획표.dwg",
+      "status": "copied"
+    },
+    {
+      "name": "사이드힌지",
+      "category": "door_or_fixture",
+      "xicad_key": "DOOR",
+      "layer": "DOOR",
+      "source": "C:\\xicad\\xiLib\\심볼\\HS-CAD-ALL\\door_or_fixture\\사이드힌지.dwg",
+      "target": "C:\\xicad\\xiLib\\심볼\\HS-CAD-XICAD\\DOOR_DOOR\\사이드힌지.dwg",
+      "status": "copied"
+    },
+    {
+      "name": "서대신동3가 61-46 토지",
+      "category": "general_symbol",
+      "status": "not_installed_in_source"
+    },
+    {
+      "name": "센터힌지",
+      "category": "door_or_fixture",
+      "xicad_key": "DOOR",
+      "layer": "DOOR",
+      "source": "C:\\xicad\\xiLib\\심볼\\HS-CAD-ALL\\door_or_fixture\\센터힌지.dwg",
+      "target": "C:\\xicad\\xiLib\\심볼\\HS-CAD-XICAD\\DOOR_DOOR\\센터힌지.dwg",
+      "status": "copied"
+    },
+    {
+      "name": "약도",
+      "category": "general_symbol",
+      "xicad_key": "ETC",
+      "layer": "SYM",
+      "source": "C:\\xicad\\xiLib\\심볼\\HS-CAD-ALL\\general_symbol\\약도.dwg",
+      "target": "C:\\xicad\\xiLib\\심볼\\HS-CAD-XICAD\\ETC_SYM\\약도.dwg",
+      "status": "copied"
+    },
+    {
+      "name": "인허가용도곽",
+      "category": "title_sheet",
+      "xicad_key": "ETC",
+      "layer": "SYM",
+      "source": "C:\\xicad\\xiLib\\심볼\\HS-CAD-ALL\\title_sheet\\인허가용도곽.dwg",
+      "target": "C:\\xicad\\xiLib\\심볼\\HS-CAD-XICAD\\ETC_SYM\\인허가용도곽.dwg",
+      "status": "copied"
+    },
+    {
+      "name": "화살표_동적",
+      "category": "general_symbol",
+      "xicad_key": "ETC",
+      "layer": "SYM",
+      "source": "C:\\xicad\\xiLib\\심볼\\HS-CAD-ALL\\general_symbol\\화살표_동적.dwg",
+      "target": "C:\\xicad\\xiLib\\심볼\\HS-CAD-XICAD\\ETC_SYM\\화살표_동적.dwg",
+      "status": "copied"
+    }
+  ]
+}

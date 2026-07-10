@@ -1,0 +1,33 @@
+{
+  "save_path": "C:\\CODE\\CAD\\HS-CAD\\generated\\zwcad_symbol_live_test\\insert_param_test.dwg",
+  "rows": [
+    {
+      "action": "create_line",
+      "status": "failed",
+      "error": "(-2147024809, '매개 변수가 틀립니다.', (None, None, None, 0, None))"
+    },
+    {
+      "action": "insert_block",
+      "block": "C:/xicad/Lib/DOT.dwg",
+      "exists": true,
+      "status": "failed",
+      "error": "(-2147024809, '매개 변수가 틀립니다.', (None, None, None, 0, None))"
+    },
+    {
+      "action": "insert_block",
+      "block": "C:\\CODE\\CAD\\HS-CAD\\generated\\zwcad_symbol_live_test\\ascii_symbols\\DOT.dwg",
+      "exists": true,
+      "status": "failed",
+      "error": "(-2147024809, '매개 변수가 틀립니다.', (None, None, None, 0, None))"
+    },
+    {
+      "action": "insert_block",
+      "block": "DOT",
+      "exists": null,
+      "status": "failed",
+      "error": "(-2147024809, '매개 변수가 틀립니다.', (None, None, None, 0, None))"
+    }
+  ],
+  "scan": [],
+  "warnings": []
+}

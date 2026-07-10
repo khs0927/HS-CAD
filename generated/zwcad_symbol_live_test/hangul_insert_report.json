@@ -1,0 +1,34 @@
+{
+  "save_path": "C:\\CODE\\CAD\\HS-CAD\\generated\\zwcad_symbol_live_test\\hangul_symbol_insert_test.dwg",
+  "row": {
+    "path": "C:\\xicad\\xiLib\\심볼\\HS-CAD\\general_symbol\\방위.dwg",
+    "exists": true,
+    "status": "inserted",
+    "name": "방위",
+    "effective_name": "방위",
+    "handle": "86",
+    "layer": "HS-CAD-HANGUL"
+  },
+  "scan": [
+    {
+      "handle": "86",
+      "object_name": "AcDbBlockReference",
+      "entity_type": "INSERT",
+      "layer": "HS-CAD-HANGUL",
+      "name": "방위",
+      "effective_name": "방위",
+      "insert": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "bbox": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    }
+  ],
+  "warnings": []
+}

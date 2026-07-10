@@ -1,0 +1,34 @@
+{
+  "symbol_root": "C:\\xicad\\xiLib\\심볼\\HS-CAD",
+  "save_path": "C:\\CODE\\CAD\\HS-CAD\\generated\\zwcad_symbol_live_test\\xicad_symbol_insert_test.dwg",
+  "modelspace_count": 0,
+  "insert_count": 0,
+  "rows": [
+    {
+      "path": "C:\\xicad\\xiLib\\심볼\\HS-CAD\\title_sheet\\ZIUM_sheet_architect.dwg",
+      "exists": true,
+      "status": "failed",
+      "error": "(-2147024809, '매개 변수가 틀립니다.', (None, None, None, 0, None))"
+    },
+    {
+      "path": "C:\\xicad\\xiLib\\심볼\\HS-CAD\\sanitary\\TOIPD02.dwg",
+      "exists": true,
+      "status": "failed",
+      "error": "(-2147024809, '매개 변수가 틀립니다.', (None, None, None, 0, None))"
+    },
+    {
+      "path": "C:\\xicad\\xiLib\\심볼\\HS-CAD\\annotation_symbol\\DOT.dwg",
+      "exists": true,
+      "status": "failed",
+      "error": "(-2147024809, '매개 변수가 틀립니다.', (None, None, None, 0, None))"
+    },
+    {
+      "path": "C:\\xicad\\xiLib\\심볼\\HS-CAD\\door_or_fixture\\2P-T204.dwg",
+      "exists": true,
+      "status": "failed",
+      "error": "(-2147024809, '매개 변수가 틀립니다.', (None, None, None, 0, None))"
+    }
+  ],
+  "inserted_blocks": [],
+  "warnings": []
+}

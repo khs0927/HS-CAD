@@ -1,0 +1,109 @@
+{
+  "save_path": "C:\\CODE\\CAD\\HS-CAD\\generated\\zwcad_symbol_live_test\\insert_param_test_fixed.dwg",
+  "rows": [
+    {
+      "action": "create_line",
+      "status": "ok",
+      "handle": "60"
+    },
+    {
+      "action": "insert_block",
+      "block": "C:/xicad/Lib/DOT.dwg",
+      "exists": true,
+      "status": "ok",
+      "name": "DOT",
+      "effective_name": "DOT",
+      "handle": "67"
+    },
+    {
+      "action": "insert_block",
+      "block": "C:\\CODE\\CAD\\HS-CAD\\generated\\zwcad_symbol_live_test\\ascii_symbols\\DOT.dwg",
+      "exists": true,
+      "status": "ok",
+      "name": "DOT",
+      "effective_name": "DOT",
+      "handle": "6A"
+    },
+    {
+      "action": "insert_block",
+      "block": "DOT",
+      "exists": null,
+      "status": "ok",
+      "name": "DOT",
+      "effective_name": "DOT",
+      "handle": "6B"
+    }
+  ],
+  "scan": [
+    {
+      "handle": "60",
+      "object_name": "AcDbLine",
+      "entity_type": "LINE",
+      "layer": "HS-CAD-TEST",
+      "bbox": [
+        0.0,
+        0.0,
+        1000.0,
+        0.0
+      ]
+    },
+    {
+      "handle": "67",
+      "object_name": "AcDbBlockReference",
+      "entity_type": "INSERT",
+      "layer": "HS-CAD-TEST",
+      "name": "DOT",
+      "effective_name": "DOT",
+      "insert": [
+        0.0,
+        1000.0,
+        0.0
+      ],
+      "bbox": [
+        0.0,
+        1000.0,
+        0.0,
+        1000.0
+      ]
+    },
+    {
+      "handle": "6A",
+      "object_name": "AcDbBlockReference",
+      "entity_type": "INSERT",
+      "layer": "HS-CAD-TEST",
+      "name": "DOT",
+      "effective_name": "DOT",
+      "insert": [
+        2000.0,
+        1000.0,
+        0.0
+      ],
+      "bbox": [
+        2000.0,
+        1000.0,
+        2000.0,
+        1000.0
+      ]
+    },
+    {
+      "handle": "6B",
+      "object_name": "AcDbBlockReference",
+      "entity_type": "INSERT",
+      "layer": "HS-CAD-TEST",
+      "name": "DOT",
+      "effective_name": "DOT",
+      "insert": [
+        4000.0,
+        1000.0,
+        0.0
+      ],
+      "bbox": [
+        4000.0,
+        1000.0,
+        4000.0,
+        1000.0
+      ]
+    }
+  ],
+  "warnings": []
+}

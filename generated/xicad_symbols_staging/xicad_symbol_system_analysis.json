@@ -1,0 +1,552 @@
+{
+  "xicad_root": "C:\\xicad",
+  "xi_block_library_config": {
+    "raw": "C:\\xicad\\xiLib|<MAINPATH>\\_동적블럭_기타|1|0|0|TXT.SHX|WHGTXT.SHX|0|0",
+    "root": "C:\\xicad\\xiLib",
+    "default_folder": "<MAINPATH>\\_동적블럭_기타",
+    "options": [
+      "1",
+      "0",
+      "0",
+      "TXT.SHX",
+      "WHGTXT.SHX",
+      "0",
+      "0"
+    ]
+  },
+  "symbol_layer_rules_cfg": [
+    {
+      "key": "FURN",
+      "layer": "FURN",
+      "linetype": "HIDDEN",
+      "color": 9,
+      "description": "가구"
+    },
+    {
+      "key": "KITCHEN",
+      "layer": "KITCHEN",
+      "linetype": "Continuous",
+      "color": 6,
+      "description": "주방기구"
+    },
+    {
+      "key": "FIX",
+      "layer": "FIX",
+      "linetype": "Continuous",
+      "color": 6,
+      "description": "화장실 기구"
+    },
+    {
+      "key": "CAR",
+      "layer": "CAR",
+      "linetype": "Continuous",
+      "color": 6,
+      "description": "자동차"
+    },
+    {
+      "key": "DOOR",
+      "layer": "DOOR",
+      "linetype": "Continuous",
+      "color": 4,
+      "description": "문"
+    },
+    {
+      "key": "WINDOW",
+      "layer": "WIN",
+      "linetype": "Continuous",
+      "color": 6,
+      "description": "창"
+    },
+    {
+      "key": "SYMWIN",
+      "layer": "WIN-SYM",
+      "linetype": "Continuous",
+      "color": 4,
+      "description": "창호기호"
+    },
+    {
+      "key": "MATRIAL",
+      "layer": "MATRIAL",
+      "linetype": "Continuous",
+      "color": 6,
+      "description": "재료"
+    },
+    {
+      "key": "ELEVATOR",
+      "layer": "ELEVATOR",
+      "linetype": "Continuous",
+      "color": 6,
+      "description": "엘리베이터"
+    },
+    {
+      "key": "TREE",
+      "layer": "TREE",
+      "linetype": "Continuous",
+      "color": 6,
+      "description": "나무"
+    },
+    {
+      "key": "LAND",
+      "layer": "LAND",
+      "linetype": "Continuous",
+      "color": 6,
+      "description": "조경시설물"
+    },
+    {
+      "key": "ETC",
+      "layer": "SYM",
+      "linetype": "Continuous",
+      "color": 4,
+      "description": "기타"
+    }
+  ],
+  "symbol_layer_rules_txt": [
+    {
+      "key": "symbol-sym",
+      "layer": "SYM",
+      "linetype": "Continuous",
+      "color": 4,
+      "description": "심볼메뉴 일반적 기호 등 블럭"
+    },
+    {
+      "key": "symbol-car",
+      "layer": "CAR",
+      "linetype": "Continuous",
+      "color": 6,
+      "description": "심볼메뉴 자동차 블럭"
+    },
+    {
+      "key": "symbol-elevator",
+      "layer": "ELEVATOR",
+      "linetype": "Continuous",
+      "color": 6,
+      "description": "심볼메뉴 엘리베이터 블럭"
+    },
+    {
+      "key": "symbol-toilet",
+      "layer": "FIX",
+      "linetype": "Continuous",
+      "color": 6,
+      "description": "심볼메뉴 화장실 기구 블럭"
+    },
+    {
+      "key": "symbol-toilet-c",
+      "layer": "FIX-CUBICLE",
+      "linetype": "Continuous",
+      "color": 4,
+      "description": "심볼메뉴 화장실그리기 칸막이"
+    },
+    {
+      "key": "symbol-furniture",
+      "layer": "FURN",
+      "linetype": "HIDDEN",
+      "color": 9,
+      "description": "심볼메뉴 가구 블럭"
+    },
+    {
+      "key": "symbol-furniin",
+      "layer": "FURNIN",
+      "linetype": "Continuous",
+      "color": 6,
+      "description": "심볼메뉴 가구 (제공가구)"
+    },
+    {
+      "key": "symbol-kitchen",
+      "layer": "KITCHEN",
+      "linetype": "Continuous",
+      "color": 6,
+      "description": "심볼메뉴 주방기구 블럭"
+    },
+    {
+      "key": "symbol-land",
+      "layer": "LAND",
+      "linetype": "Continuous",
+      "color": 6,
+      "description": "심볼메뉴 조경시설물 블럭"
+    },
+    {
+      "key": "symbol-matrial",
+      "layer": "MATRIAL",
+      "linetype": "Continuous",
+      "color": 6,
+      "description": "심볼메뉴 재료 블럭"
+    },
+    {
+      "key": "symbol-tree",
+      "layer": "TREE",
+      "linetype": "Continuous",
+      "color": 6,
+      "description": "심볼메뉴 나무 블럭"
+    },
+    {
+      "key": "symbol-door",
+      "layer": "DOOR",
+      "linetype": "Continuous",
+      "color": 4,
+      "description": "심볼메뉴 문 블럭"
+    },
+    {
+      "key": "symbol-window",
+      "layer": "WINDOW",
+      "linetype": "Continuous",
+      "color": 6,
+      "description": "심볼메뉴 창 블럭"
+    },
+    {
+      "key": "symbol-winsym",
+      "layer": "WIN-SYM",
+      "linetype": "Continuous",
+      "color": 4,
+      "description": "심볼메뉴 창호기호 블럭"
+    }
+  ],
+  "folder_stats": {
+    "xiLib": [
+      {
+        "folder": "C:\\xicad\\xiLib",
+        "relative": ".",
+        "dwg_count": 7,
+        "sld_count": 0,
+        "preview_coverage": 0.0,
+        "sample_dwg": [
+          "xiReferenceFile.dwg",
+          "xiReferenceFile_Dimension.dwg",
+          "xiReferenceFile_IsoMetric.dwg",
+          "xiReferenceFile_Leader.dwg",
+          "xiReferenceFile_MLeader.dwg",
+          "xiReferenceFile_Style.dwg",
+          "xiReferenceFile_Table.dwg"
+        ]
+      },
+      {
+        "folder": "C:\\xicad\\xiLib\\_동적블럭_구조잡철",
+        "relative": "_동적블럭_구조잡철",
+        "dwg_count": 10,
+        "sld_count": 10,
+        "preview_coverage": 1.0,
+        "sample_dwg": [
+          "동적블럭_H빔_단면_01.dwg",
+          "동적블럭_배수판_단면_01.dwg",
+          "동적블럭_사다리_입면_01.dwg",
+          "동적블럭_사다리_측면_01.dwg",
+          "동적블럭_사다리_평면_01.dwg",
+          "동적블럭_선홈통_상부정면_01.dwg",
+          "동적블럭_선홈통_하부정면_01.dwg",
+          "동적블럭_선홈통_하부측면_01.dwg"
+        ]
+      },
+      {
+        "folder": "C:\\xicad\\xiLib\\_동적블럭_기타",
+        "relative": "_동적블럭_기타",
+        "dwg_count": 3,
+        "sld_count": 3,
+        "preview_coverage": 1.0,
+        "sample_dwg": [
+          "자율창호입면.dwg",
+          "폴딩도어 홀수짝입면.dwg",
+          "행가도어그리기 평입단면 자동.dwg"
+        ]
+      },
+      {
+        "folder": "C:\\xicad\\xiLib\\_동적블럭_문창",
+        "relative": "_동적블럭_문창",
+        "dwg_count": 17,
+        "sld_count": 17,
+        "preview_coverage": 1.0,
+        "sample_dwg": [
+          "동적블럭_그릴_단면_01.dwg",
+          "동적블럭_문_입면_01.dwg",
+          "동적블럭_문_입면_02.dwg",
+          "동적블럭_문_평면_01.dwg",
+          "동적블럭_문_평면_02.dwg",
+          "동적블럭_문_평면_03.dwg",
+          "동적블럭_문_평면_04.dwg",
+          "동적블럭_문_평면_05.dwg"
+        ]
+      },
+      {
+        "folder": "C:\\xicad\\xiLib\\_동적블럭_벽천장",
+        "relative": "_동적블럭_벽천장",
+        "dwg_count": 6,
+        "sld_count": 6,
+        "preview_coverage": 1.0,
+        "sample_dwg": [
+          "동적블럭_SGP_평면_01.dwg",
+          "동적블럭_건식벽_평면_01.dwg",
+          "동적블럭_건식벽_평면_02.dwg",
+          "동적블럭_벽돌_단면_01.dwg",
+          "동적블럭_블록_단면_01.dwg",
+          "동적블럭_천장_단면_01.dwg"
+        ]
+      },
+      {
+        "folder": "C:\\xicad\\xiLib\\_동적블럭_위생",
+        "relative": "_동적블럭_위생",
+        "dwg_count": 8,
+        "sld_count": 8,
+        "preview_coverage": 1.0,
+        "sample_dwg": [
+          "동적블럭_대변기_입면_01.dwg",
+          "동적블럭_대변기_평면_01.dwg",
+          "동적블럭_세면대_입면_01.dwg",
+          "동적블럭_세면대_입면_02.dwg",
+          "동적블럭_세면대_평면_01.dwg",
+          "동적블럭_세면대_평면_02.dwg",
+          "동적블럭_소변기_입면_01.dwg",
+          "동적블럭_소변기_평면_01.dwg"
+        ]
+      },
+      {
+        "folder": "C:\\xicad\\xiLib\\_자동축척블럭",
+        "relative": "_자동축척블럭",
+        "dwg_count": 1,
+        "sld_count": 1,
+        "preview_coverage": 1.0,
+        "sample_dwg": [
+          "Enterence_s.dwg"
+        ]
+      },
+      {
+        "folder": "C:\\xicad\\xiLib\\나무_입면",
+        "relative": "나무_입면",
+        "dwg_count": 8,
+        "sld_count": 8,
+        "preview_coverage": 1.0,
+        "sample_dwg": [
+          "xiTree_e_01.dwg",
+          "xiTree_e_02.dwg",
+          "xiTree_e_03.dwg",
+          "xiTree_e_04.dwg",
+          "xiTree_e_05.dwg",
+          "xiTree_e_06.dwg",
+          "xiTree_e_07.dwg",
+          "xiTree_e_08.dwg"
+        ]
+      },
+      {
+        "folder": "C:\\xicad\\xiLib\\사람_단순",
+        "relative": "사람_단순",
+        "dwg_count": 87,
+        "sld_count": 87,
+        "preview_coverage": 1.0,
+        "sample_dwg": [
+          "People_simple_Ele_01.dwg",
+          "People_simple_Ele_02.dwg",
+          "People_simple_Ele_03.dwg",
+          "People_simple_Ele_04.dwg",
+          "People_simple_Ele_05.dwg",
+          "People_simple_Ele_06.dwg",
+          "People_simple_Ele_07.dwg",
+          "People_simple_Ele_08.dwg"
+        ]
+      },
+      {
+        "folder": "C:\\xicad\\xiLib\\사람_일반",
+        "relative": "사람_일반",
+        "dwg_count": 67,
+        "sld_count": 67,
+        "preview_coverage": 1.0,
+        "sample_dwg": [
+          "People_detail_Ele_01.dwg",
+          "People_detail_Ele_02.dwg",
+          "People_detail_Ele_03.dwg",
+          "People_detail_Ele_04.dwg",
+          "People_detail_Ele_05.dwg",
+          "People_detail_Ele_06.dwg",
+          "People_detail_Ele_07.dwg",
+          "People_detail_Ele_08.dwg"
+        ]
+      },
+      {
+        "folder": "C:\\xicad\\xiLib\\심볼",
+        "relative": "심볼",
+        "dwg_count": 1,
+        "sld_count": 1,
+        "preview_coverage": 1.0,
+        "sample_dwg": [
+          "창호부호.dwg"
+        ]
+      },
+      {
+        "folder": "C:\\xicad\\xiLib\\정북표시",
+        "relative": "정북표시",
+        "dwg_count": 29,
+        "sld_count": 29,
+        "preview_coverage": 1.0,
+        "sample_dwg": [
+          "xiNorthMark_01.dwg",
+          "xiNorthMark_02.dwg",
+          "xiNorthMark_03.dwg",
+          "xiNorthMark_04.dwg",
+          "xiNorthMark_05.dwg",
+          "xiNorthMark_06.dwg",
+          "xiNorthMark_07.dwg",
+          "xiNorthMark_08.dwg"
+        ]
+      },
+      {
+        "folder": "C:\\xicad\\xiLib\\심볼\\HS-CAD\\annotation_symbol",
+        "relative": "심볼\\HS-CAD\\annotation_symbol",
+        "dwg_count": 11,
+        "sld_count": 0,
+        "preview_coverage": 0.0,
+        "sample_dwg": [
+          "_Dot.dwg",
+          "_DotSmall.dwg",
+          "arrow1.dwg",
+          "ARROWX.dwg",
+          "BB.dwg",
+          "BUBBLE.dwg",
+          "DIMDOT.dwg",
+          "DOT.dwg"
+        ]
+      },
+      {
+        "folder": "C:\\xicad\\xiLib\\심볼\\HS-CAD\\door_or_fixture",
+        "relative": "심볼\\HS-CAD\\door_or_fixture",
+        "dwg_count": 1,
+        "sld_count": 0,
+        "preview_coverage": 0.0,
+        "sample_dwg": [
+          "2P-T204.dwg"
+        ]
+      },
+      {
+        "folder": "C:\\xicad\\xiLib\\심볼\\HS-CAD\\general_symbol",
+        "relative": "심볼\\HS-CAD\\general_symbol",
+        "dwg_count": 11,
+        "sld_count": 0,
+        "preview_coverage": 0.0,
+        "sample_dwg": [
+          "_ArchTick.dwg",
+          "ARW1.dwg",
+          "ELEV13.dwg",
+          "handle1.dwg",
+          "LCPLTR31.dwg",
+          "line.dwg",
+          "TL000073_0.dwg",
+          "TL000076_0.dwg"
+        ]
+      },
+      {
+        "folder": "C:\\xicad\\xiLib\\심볼\\HS-CAD\\material",
+        "relative": "심볼\\HS-CAD\\material",
+        "dwg_count": 1,
+        "sld_count": 0,
+        "preview_coverage": 0.0,
+        "sample_dwg": [
+          "INSU.dwg"
+        ]
+      },
+      {
+        "folder": "C:\\xicad\\xiLib\\심볼\\HS-CAD\\sanitary",
+        "relative": "심볼\\HS-CAD\\sanitary",
+        "dwg_count": 2,
+        "sld_count": 0,
+        "preview_coverage": 0.0,
+        "sample_dwg": [
+          "KITPD08.dwg",
+          "TOIPD02.dwg"
+        ]
+      },
+      {
+        "folder": "C:\\xicad\\xiLib\\심볼\\HS-CAD\\title_sheet",
+        "relative": "심볼\\HS-CAD\\title_sheet",
+        "dwg_count": 1,
+        "sld_count": 0,
+        "preview_coverage": 0.0,
+        "sample_dwg": [
+          "ZIUM_sheet_architect.dwg"
+        ]
+      }
+    ],
+    "Lib": [
+      {
+        "folder": "C:\\xicad\\Lib",
+        "relative": ".",
+        "dwg_count": 1466,
+        "sld_count": 0,
+        "preview_coverage": 0.0,
+        "sample_dwg": [
+          "18AK12.dwg",
+          "18AK12S.dwg",
+          "18AK13.dwg",
+          "18AK13S.dwg",
+          "18AK14.dwg",
+          "18AK14S.dwg",
+          "18AK15.dwg",
+          "18AK15S.dwg"
+        ]
+      }
+    ]
+  },
+  "totals": {
+    "xiLib_dwg": 271,
+    "xiLib_sld": 237,
+    "Lib_dwg": 1466,
+    "Lib_sld": 0
+  },
+  "recommended_hscad_install_root": "C:\\xicad\\xiLib\\심볼\\HS-CAD",
+  "category_mapping": {
+    "annotation_symbol": {
+      "xicad_key": "ETC",
+      "layer": "SYM"
+    },
+    "door": {
+      "xicad_key": "DOOR",
+      "layer": "DOOR"
+    },
+    "door_or_fixture": {
+      "xicad_key": "DOOR",
+      "layer": "DOOR"
+    },
+    "window": {
+      "xicad_key": "WINDOW",
+      "layer": "WIN"
+    },
+    "window_or_linear_symbol": {
+      "xicad_key": "WINDOW",
+      "layer": "WIN"
+    },
+    "sanitary": {
+      "xicad_key": "FIX",
+      "layer": "FIX"
+    },
+    "furniture": {
+      "xicad_key": "FURN",
+      "layer": "FURN"
+    },
+    "vehicle": {
+      "xicad_key": "CAR",
+      "layer": "CAR"
+    },
+    "landscape": {
+      "xicad_key": "LAND",
+      "layer": "LAND"
+    },
+    "material": {
+      "xicad_key": "MATRIAL",
+      "layer": "MATRIAL"
+    },
+    "structure": {
+      "xicad_key": "ETC",
+      "layer": "SYM"
+    },
+    "title_sheet": {
+      "xicad_key": "ETC",
+      "layer": "SYM"
+    },
+    "brand": {
+      "xicad_key": "ETC",
+      "layer": "SYM"
+    },
+    "security": {
+      "xicad_key": "ETC",
+      "layer": "SYM"
+    },
+    "general_symbol": {
+      "xicad_key": "ETC",
+      "layer": "SYM"
+    }
+  }
+}

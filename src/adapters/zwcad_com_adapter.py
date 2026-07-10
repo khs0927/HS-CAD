@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from array import array
 from pathlib import Path
 from typing import Any, Iterable
 
@@ -53,7 +54,7 @@ class ZWCADCOMAdapter(CADAdapter):
     def open_document(self, path: str) -> Any:
         if self.app is None:
             self.connect()
-        self.doc = self.app.Documents.Open(str(Path(path)))
+        self.doc = self.app.Documents.Open(str(Path(path).resolve()))
         return self.doc
 
     def get_active_document(self) -> Any:
@@ -96,6 +97,17 @@ class ZWCADCOMAdapter(CADAdapter):
             return list(value)
         except Exception:
             return []
+
+    @staticmethod
+    def _point_variant(point: Iterable[float]) -> Any:
+        values = [float(value) for value in point]
+        while len(values) < 3:
+            values.append(0.0)
+        return array('d', values[:3])
+
+    @staticmethod
+    def _coords_variant(values: Iterable[float]) -> Any:
+        return array('d', [float(value) for value in values])
 
     @staticmethod
     def _entity_type(object_name: str) -> str:
@@ -316,7 +328,7 @@ class ZWCADCOMAdapter(CADAdapter):
     def move_entity(self, handle: str, dx: float, dy: float, dz: float = 0) -> int:
         try:
             obj = self.get_entity_by_handle(handle)
-            obj.Move([0, 0, 0], [dx, dy, dz])
+            obj.Move(self._point_variant([0, 0, 0]), self._point_variant([dx, dy, dz]))
             self._regen()
             return 1
         except Exception as exc:
@@ -324,7 +336,7 @@ class ZWCADCOMAdapter(CADAdapter):
         moved = 0
         for obj in self._iter_modelspace():
             if str(self._safe_get(obj, 'Handle')) == str(handle):
-                obj.Move([0, 0, 0], [dx, dy, dz])
+                obj.Move(self._point_variant([0, 0, 0]), self._point_variant([dx, dy, dz]))
                 moved += 1
         if moved:
             self._regen()
@@ -347,7 +359,7 @@ class ZWCADCOMAdapter(CADAdapter):
         for obj in self._iter_modelspace():
             try:
                 if str(self._safe_get(obj, 'Layer')) == layer:
-                    obj.Move([0, 0, 0], [dx, dy, dz])
+                    obj.Move(self._point_variant([0, 0, 0]), self._point_variant([dx, dy, dz]))
                     moved += 1
             except Exception:
                 continue
@@ -418,7 +430,7 @@ class ZWCADCOMAdapter(CADAdapter):
                 ys = self._safe_get(obj, 'YScaleFactor', 1) or 1
                 zs = self._safe_get(obj, 'ZScaleFactor', 1) or 1
                 old_layer = self._safe_get(obj, 'Layer')
-                new_ref = doc.ModelSpace.InsertBlock(insert, new_block, xs, ys, zs, rotation)
+                new_ref = doc.ModelSpace.InsertBlock(self._point_variant(insert), new_block, xs, ys, zs, rotation)
                 try:
                     new_ref.Layer = old_layer
                 except Exception:
@@ -446,7 +458,7 @@ class ZWCADCOMAdapter(CADAdapter):
     def create_line(self, start: Iterable[float], end: Iterable[float], layer: str = '0') -> Any:
         doc = self.doc or self.get_active_document()
         self._ensure_layer(layer)
-        ent = doc.ModelSpace.AddLine(list(start), list(end))
+        ent = doc.ModelSpace.AddLine(self._point_variant(start), self._point_variant(end))
         try:
             ent.Layer = layer
         except Exception:
@@ -459,7 +471,7 @@ class ZWCADCOMAdapter(CADAdapter):
         coords: list[float] = []
         for pt in points:
             coords.extend([float(pt[0]), float(pt[1])])
-        ent = doc.ModelSpace.AddLightWeightPolyline(coords)
+        ent = doc.ModelSpace.AddLightWeightPolyline(self._coords_variant(coords))
         try:
             ent.Layer = layer
         except Exception:
@@ -474,7 +486,7 @@ class ZWCADCOMAdapter(CADAdapter):
         doc = self.doc or self.get_active_document()
         self._ensure_layer(layer)
         sx, sy, sz = list(scale or [1, 1, 1])[:3]
-        ent = doc.ModelSpace.InsertBlock(list(insert), block_name, sx, sy, sz, rotation)
+        ent = doc.ModelSpace.InsertBlock(self._point_variant(insert), block_name, sx, sy, sz, rotation)
         try:
             ent.Layer = layer
         except Exception:
@@ -484,7 +496,7 @@ class ZWCADCOMAdapter(CADAdapter):
     def create_text(self, text: str, insert: Iterable[float], height: float = 150.0, layer: str = '0', color: int = 256) -> Any:
         doc = self.doc or self.get_active_document()
         self._ensure_layer(layer)
-        ent = doc.ModelSpace.AddText(text, list(insert), height)
+        ent = doc.ModelSpace.AddText(text, self._point_variant(insert), height)
         try:
             ent.Layer = layer
         except Exception:

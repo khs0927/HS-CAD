@@ -1,0 +1,151 @@
+{
+  "review_target": "C:\\xicad\\xiLib\\심볼\\HS-CAD-REVIEW",
+  "symbol_count": 14,
+  "inserted_rows": 14,
+  "failed_rows": 0,
+  "scan_insert_count": 106,
+  "save_path": "C:\\CODE\\CAD\\HS-CAD\\generated\\zwcad_symbol_live_test\\hscad_review_only_insert_test.dwg",
+  "rows": [
+    {
+      "index": 1,
+      "file": "A$C032327CB.dwg",
+      "path": "C:\\xicad\\xiLib\\심볼\\HS-CAD-REVIEW\\review_only\\A$C032327CB.dwg",
+      "exists": true,
+      "status": "inserted",
+      "name": "A$C032327CB",
+      "effective_name": "A$C032327CB",
+      "handle": "1F4E"
+    },
+    {
+      "index": 2,
+      "file": "A$C043B7E4E.dwg",
+      "path": "C:\\xicad\\xiLib\\심볼\\HS-CAD-REVIEW\\review_only\\A$C043B7E4E.dwg",
+      "exists": true,
+      "status": "inserted",
+      "name": "A$C043B7E4E",
+      "effective_name": "A$C043B7E4E",
+      "handle": "1F92"
+    },
+    {
+      "index": 3,
+      "file": "A$C07FE4FCB.dwg",
+      "path": "C:\\xicad\\xiLib\\심볼\\HS-CAD-REVIEW\\review_only\\A$C07FE4FCB.dwg",
+      "exists": true,
+      "status": "inserted",
+      "name": "A$C07FE4FCB",
+      "effective_name": "A$C07FE4FCB",
+      "handle": "1FAD"
+    },
+    {
+      "index": 4,
+      "file": "A$C0B0CC074.dwg",
+      "path": "C:\\xicad\\xiLib\\심볼\\HS-CAD-REVIEW\\review_only\\A$C0B0CC074.dwg",
+      "exists": true,
+      "status": "inserted",
+      "name": "A$C0B0CC074",
+      "effective_name": "A$C0B0CC074",
+      "handle": "1FB4"
+    },
+    {
+      "index": 5,
+      "file": "A$C1905086C.dwg",
+      "path": "C:\\xicad\\xiLib\\심볼\\HS-CAD-REVIEW\\review_only\\A$C1905086C.dwg",
+      "exists": true,
+      "status": "inserted",
+      "name": "A$C1905086C",
+      "effective_name": "A$C1905086C",
+      "handle": "1FD5"
+    },
+    {
+      "index": 6,
+      "file": "A$C27357E8E.dwg",
+      "path": "C:\\xicad\\xiLib\\심볼\\HS-CAD-REVIEW\\review_only\\A$C27357E8E.dwg",
+      "exists": true,
+      "status": "inserted",
+      "name": "A$C27357E8E",
+      "effective_name": "A$C27357E8E",
+      "handle": "1FE0"
+    },
+    {
+      "index": 7,
+      "file": "A$C2BE44C31.dwg",
+      "path": "C:\\xicad\\xiLib\\심볼\\HS-CAD-REVIEW\\review_only\\A$C2BE44C31.dwg",
+      "exists": true,
+      "status": "inserted",
+      "name": "A$C2BE44C31",
+      "effective_name": "A$C2BE44C31",
+      "handle": "1FE8"
+    },
+    {
+      "index": 8,
+      "file": "A$C2D5752AA.dwg",
+      "path": "C:\\xicad\\xiLib\\심볼\\HS-CAD-REVIEW\\review_only\\A$C2D5752AA.dwg",
+      "exists": true,
+      "status": "inserted",
+      "name": "A$C2D5752AA",
+      "effective_name": "A$C2D5752AA",
+      "handle": "2009"
+    },
+    {
+      "index": 9,
+      "file": "A$C51837608.dwg",
+      "path": "C:\\xicad\\xiLib\\심볼\\HS-CAD-REVIEW\\review_only\\A$C51837608.dwg",
+      "exists": true,
+      "status": "inserted",
+      "name": "A$C51837608",
+      "effective_name": "A$C51837608",
+      "handle": "203F"
+    },
+    {
+      "index": 10,
+      "file": "A$C60481E0E.dwg",
+      "path": "C:\\xicad\\xiLib\\심볼\\HS-CAD-REVIEW\\review_only\\A$C60481E0E.dwg",
+      "exists": true,
+      "status": "inserted",
+      "name": "A$C60481E0E",
+      "effective_name": "A$C60481E0E",
+      "handle": "2045"
+    },
+    {
+      "index": 11,
+      "file": "A$C71E55132.dwg",
+      "path": "C:\\xicad\\xiLib\\심볼\\HS-CAD-REVIEW\\review_only\\A$C71E55132.dwg",
+      "exists": true,
+      "status": "inserted",
+      "name": "A$C71E55132",
+      "effective_name": "A$C71E55132",
+      "handle": "2079"
+    },
+    {
+      "index": 12,
+      "file": "A$C72A26C90.dwg",
+      "path": "C:\\xicad\\xiLib\\심볼\\HS-CAD-REVIEW\\review_only\\A$C72A26C90.dwg",
+      "exists": true,
+      "status": "inserted",
+      "name": "A$C72A26C90",
+      "effective_name": "A$C72A26C90",
+      "handle": "20AC"
+    },
+    {
+      "index": 13,
+      "file": "A$C77CE0888.dwg",
+      "path": "C:\\xicad\\xiLib\\심볼\\HS-CAD-REVIEW\\review_only\\A$C77CE0888.dwg",
+      "exists": true,
+      "status": "inserted",
+      "name": "A$C77CE0888",
+      "effective_name": "A$C77CE0888",
+      "handle": "20E4"
+    },
+    {
+      "index": 14,
+      "file": "A$CBC7E8936.dwg",
+      "path": "C:\\xicad\\xiLib\\심볼\\HS-CAD-REVIEW\\review_only\\A$CBC7E8936.dwg",
+      "exists": true,
+      "status": "inserted",
+      "name": "A$Cbc7e8936",
+      "effective_name": "A$Cbc7e8936",
+      "handle": "20E9"
+    }
+  ],
+  "warnings": []
+}

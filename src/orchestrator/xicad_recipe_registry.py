@@ -30,6 +30,59 @@ class XiCADRecipe:
         payload["safety_reasons"] = list(decision.reasons)
         return payload
 
+    def validate_preconditions(self, params: dict[str, Any], scan_state: dict[str, Any] | None = None) -> list[str]:
+        """Validate recipe-specific preconditions and parameter contracts (Stage-2 Upgrade)."""
+        errors: list[str] = []
+        alias_u = self.alias.upper()
+        
+        # 1. Common validation (requires params dict)
+        if not isinstance(params, dict):
+            errors.append("Parameters must be a key-value dictionary.")
+            return errors
+
+        # 2. Specific Command Preset Validation Rules
+        if alias_u == "WAL":
+            # WAL Rule: Wall thickness, height or base line references
+            if "thickness" not in params and "width" not in params:
+                errors.append("WAL requires either 'thickness' or 'width' parameter.")
+            if scan_state:
+                # Check for baseline layer presence or A-WALL layer health
+                layers = scan_state.get("layers", {})
+                if not any(k for k in layers if "WALL" in str(k).upper() or "벽체" in str(k)):
+                    errors.append("Recommendation: No existing wall layer (e.g. A-WALL, wall1) detected in current drawing scan.")
+
+        elif alias_u == "COL":
+            # COL Rule: Coordinates check for column placements
+            if "points" not in params and "coordinates" not in params and "insertion_point" not in params:
+                errors.append("COL requires placement coordinates (e.g., 'points', 'coordinates', or 'insertion_point').")
+            points = params.get("points") or params.get("coordinates") or params.get("insertion_point")
+            if points and not isinstance(points, list):
+                errors.append("Placement points must be specified as a list of coordinates.")
+
+        elif alias_u == "D1" or alias_u == "W1":
+            # Door & Window Rules: Requires sizing specs and reference wall handle
+            if "width" not in params and "size" not in params:
+                errors.append(f"{alias_u} command requires a size or width parameter.")
+            if "wall_handle" not in params and "target_wall" not in params:
+                errors.append(f"{alias_u} requires reference target wall ('wall_handle' or 'target_wall') for integration.")
+
+        elif alias_u == "INS":
+            # INS Rule: Insulation thickness and target object
+            if "thickness" not in params and "depth" not in params:
+                errors.append("INS requires insulation 'thickness' or 'depth'.")
+
+        elif alias_u == "BE":
+            # BE Rule: Steel structure standard shapes
+            if "section" not in params and "profile" not in params:
+                errors.append("BE requires structural steel profile specifications (e.g., 'section' or 'profile').")
+
+        elif alias_u == "LC":
+            # LC Rule: Layer change parameters
+            if "target_layer" not in params and "to_layer" not in params:
+                errors.append("LC requires 'target_layer' or 'to_layer' parameter.")
+
+        return errors
+
 
 # Important:
 # Earlier drafts considered INS/AE/LC as scriptable. That is too risky until
@@ -76,3 +129,4 @@ def recipe_summary() -> dict[str, Any]:
         "policy": "default_deny_until_verified",
         "recipes": rows,
     }
+
