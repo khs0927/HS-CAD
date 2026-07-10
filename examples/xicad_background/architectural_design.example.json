@@ -1,0 +1,45 @@
+{
+  "name": "1F architectural plan",
+  "source_dwg": "C:/HS-CAD/input/base-plan.dwg",
+  "working_dwg": "C:/HS-CAD/output/base-plan-xicad.dwg",
+  "xicad_root": "C:/XiCAD",
+  "dry_run": true,
+  "save_after_each_step": true,
+  "keep_recovery_copy": true,
+  "elements": [
+    {
+      "kind": "wall",
+      "alias": "WAL",
+      "parameters": {
+        "start": "0,0",
+        "end": "10000,0",
+        "thickness": 200
+      },
+      "description": "South exterior wall"
+    },
+    {
+      "kind": "door",
+      "alias": "D1",
+      "parameters": {
+        "point": "3000,0",
+        "width": 900,
+        "swing": "L"
+      },
+      "description": "Main entrance"
+    },
+    {
+      "kind": "window",
+      "alias": "W1",
+      "parameters": {
+        "point": "6500,0",
+        "width": 1800,
+        "height": 1500
+      },
+      "description": "South window"
+    }
+  ],
+  "metadata": {
+    "units": "mm",
+    "floor": "1F"
+  }
+}
