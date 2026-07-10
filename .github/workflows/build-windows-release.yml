@@ -57,20 +57,57 @@ jobs:
           }
           "version=$version" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
 
+      - name: Install build dependencies
+        shell: pwsh
+        run: |
+          python -m pip install --upgrade pip wheel setuptools
+          python -m pip install -e ".[dev,build]"
+
       - name: Install Inno Setup
         shell: pwsh
         run: choco install innosetup --no-progress -y
 
-      - name: Build, test, and package
+      - name: Run release test suite
         shell: pwsh
-        run: ./scripts/build_windows_release.ps1 -Version "${{ steps.version.outputs.version }}"
+        run: |
+          New-Item -ItemType Directory -Force build/test-results | Out-Null
+          python -m pytest -q --disable-warnings --maxfail=1 --junitxml=build/test-results/windows-release.xml
+
+      - name: Build portable executable
+        shell: pwsh
+        run: python scripts/build_windows_exe.py
+
+      - name: Compile installer
+        shell: pwsh
+        run: |
+          $candidates = @(
+            "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe",
+            "$env:ProgramFiles\Inno Setup 6\ISCC.exe"
+          )
+          $iscc = $candidates | Where-Object { $_ -and (Test-Path $_) } | Select-Object -First 1
+          if (-not $iscc) { throw "Inno Setup 6 compiler not found." }
+          & $iscc "/DMyAppVersion=${{ steps.version.outputs.version }}" "installer\HS-CAD.iss"
+          if ($LASTEXITCODE -ne 0) { throw "Inno Setup failed with exit code $LASTEXITCODE." }
 
       - name: Generate installer checksum
         shell: pwsh
         run: |
           $installer = Get-ChildItem dist/HS-CAD-Setup-*.exe | Select-Object -First 1
+          if (-not $installer) { throw "Installer output was not found." }
           $hash = (Get-FileHash $installer.FullName -Algorithm SHA256).Hash.ToLowerInvariant()
           "$hash  $($installer.Name)" | Out-File "$($installer.FullName).sha256" -Encoding ascii
+
+      - name: Upload diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: HS-CAD-build-diagnostics-${{ steps.version.outputs.version }}
+          path: |
+            build/test-results/**
+            build/pyinstaller/**
+            build/spec/**
+          if-no-files-found: warn
+          retention-days: 7
 
       - name: Upload Windows package
         uses: actions/upload-artifact@v4
