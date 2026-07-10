@@ -10,9 +10,11 @@ from rich.table import Table
 from src.app.cli import app
 from src.app.logger import console, success, warn
 from src.xicad_automation.catalog import AutomationCatalog
+from src.xicad_automation.contracts import ContractLibrary, PromptContract
 from src.xicad_automation.executor import BackgroundWorker, WorkflowExecutor
-from src.xicad_automation.models import CommandStep, JobStatus, WorkflowSpec
+from src.xicad_automation.models import CommandStep, WorkflowSpec
 from src.xicad_automation.store import JobStore
+from src.xicad_automation.workflows import ArchitecturalDrawingSpec, ArchitecturalWorkflowCompiler
 from src.xicad_automation.zwcad_gateway import MonitoredZWCADGateway
 
 DEFAULT_DB = Path("outputs/xicad_background/jobs.sqlite3")
@@ -29,7 +31,7 @@ def xicad_bg_template(
     xicad_root: Path = typer.Option(..., "--xicad-root"),
     out: Path = typer.Option(Path("outputs/xicad_background/workflow.json"), "--out"),
 ):
-    """Create a dry-run architectural workflow template."""
+    """Create a dry-run XiCAD workflow template."""
     workflow = WorkflowSpec(
         name="Architectural floor-plan automation",
         source_dwg=source_dwg,
@@ -44,12 +46,44 @@ def xicad_bg_template(
             CommandStep(alias="AE", allow_interactive=True, arguments=[], description="Area annotation contract"),
         ],
         metadata={
-            "instructions": "Fill each step.arguments with the exact prompt answers observed through xicad-contract-wizard. Keep dry_run=true until validation passes."
+            "instructions": "Fill step.arguments with exact prompt answers observed in ZWCAD. Keep dry_run=true until validation passes."
         },
     )
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(workflow.model_dump_json(indent=2), encoding="utf-8")
     success(f"Workflow template written: {out}")
+
+
+@app.command("xicad-contract-template")
+def xicad_contract_template(
+    alias: str = typer.Option(..., "--alias"),
+    out: Path = typer.Option(..., "--out"),
+):
+    """Create an unverified reusable prompt-contract template."""
+    contract = PromptContract(
+        alias=alias,
+        argument_templates=["{first_prompt_value}", "{second_prompt_value}"],
+        verified=False,
+        notes="Replace templates with the observed XiCAD prompt sequence, then verify on a disposable DWG.",
+    )
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(contract.model_dump_json(indent=2), encoding="utf-8")
+    success(f"Prompt contract template written: {out}")
+
+
+@app.command("xicad-arch-compile")
+def xicad_arch_compile(
+    design: Path = typer.Option(..., "--design", help="ArchitecturalDrawingSpec JSON"),
+    contracts: Path = typer.Option(..., "--contracts", help="Directory containing verified prompt contracts"),
+    out: Path = typer.Option(Path("outputs/xicad_background/compiled_workflow.json"), "--out"),
+):
+    """Compile semantic walls/doors/windows/etc. into deterministic XiCAD steps."""
+    drawing = ArchitecturalDrawingSpec.model_validate_json(design.read_text(encoding="utf-8"))
+    compiler = ArchitecturalWorkflowCompiler(ContractLibrary.from_directory(contracts))
+    workflow = compiler.compile(drawing)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(workflow.model_dump_json(indent=2), encoding="utf-8")
+    success(f"Architectural workflow compiled: {out}")
 
 
 @app.command("xicad-bg-catalog")
@@ -75,6 +109,19 @@ def xicad_bg_catalog(
             str(row["unattended_ready"]),
         )
     console.print(table)
+
+
+@app.command("xicad-bg-validate")
+def xicad_bg_validate(
+    workflow: Path = typer.Option(..., "--workflow"),
+):
+    """Validate paths, catalog membership, contracts, risk flags, and approval."""
+    spec = _load_workflow(workflow)
+    executor = WorkflowExecutor(lambda: MonitoredZWCADGateway())
+    problems = executor.validate(spec)
+    console.print({"valid": not problems, "problems": problems, "approval_token": spec.expected_approval_token()})
+    if problems:
+        raise typer.Exit(code=2)
 
 
 @app.command("xicad-bg-token")
@@ -131,9 +178,7 @@ def xicad_bg_worker(
     if os.name != "nt" and not once:
         raise typer.BadParameter("Continuous live XiCAD execution requires Windows")
     store = JobStore(db)
-    executor = WorkflowExecutor(
-        lambda: MonitoredZWCADGateway(visible=visible, version=zwcad_version)
-    )
+    executor = WorkflowExecutor(lambda: MonitoredZWCADGateway(visible=visible, version=zwcad_version))
     worker = BackgroundWorker(store, executor)
     if once:
         processed = worker.run_once()
