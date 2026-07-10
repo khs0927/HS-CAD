@@ -6,8 +6,8 @@ from pathlib import Path
 from typing import Callable, Protocol
 from uuid import uuid4
 
-from src.integrations.xicad_paths import detect_xicad_profile
 from src.adapters.xicad_adapter import XiCADAdapter
+from src.integrations.xicad_paths import detect_xicad_profile
 
 from .catalog import AutomationCatalog
 from .models import JobStatus, StepResult, WorkflowResult, WorkflowSpec, utc_now
@@ -38,8 +38,8 @@ class WorkflowExecutor:
         if not workflow.source_dwg.is_file():
             problems.append(f"Source DWG does not exist: {workflow.source_dwg}")
         profile = detect_xicad_profile(workflow.xicad_root)
-        if not profile.exists:
-            problems.append(f"XiCAD root was not detected: {workflow.xicad_root}")
+        if not Path(profile.root).is_dir() or not profile.loader_candidates:
+            problems.append(f"XiCAD root or loader was not detected: {workflow.xicad_root}")
         catalog = AutomationCatalog.from_xicad_root(workflow.xicad_root)
         problems.extend(catalog.validate_steps(workflow.steps))
         if not workflow.dry_run and not workflow.is_approved():
