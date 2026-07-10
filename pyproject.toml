@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "hs-cad"
-version = "0.2.0"
+version = "0.3.0"
 description = "Safe ZWCAD 2024-2026 architectural drawing analysis and automation toolkit"
 readme = "README.md"
 requires-python = ">=3.10,<3.13"
