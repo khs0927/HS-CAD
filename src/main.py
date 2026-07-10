@@ -23,6 +23,7 @@ import src.app.webhard_batch_cli  # noqa: F401,E402
 import src.app.converters_cli  # noqa: F401,E402
 import src.app.run_summary_cli  # noqa: F401,E402
 import src.app.reviewcontext_dxf_cli  # noqa: F401,E402
+import src.app.doctor_cli  # noqa: F401,E402
 
 # Analysis Megapack integrations
 import src.app.analysis_shortcut_cli  # noqa: F401,E402
@@ -53,9 +54,16 @@ import src.app.pr55_59_combined_review_cli  # noqa: F401,E402
 import src.app.zwcad_com_evidence_probe_cli  # noqa: F401,E402
 import src.app.final_live_runner_preflight_cli  # noqa: F401,E402
 
-# PR82 CLI Candidates
+# PR82 CLI candidates
 import src.app.spatial_cli  # noqa: F401,E402
 import src.app.text_roles_cli  # noqa: F401,E402
 import src.app.worker_cli  # noqa: F401,E402
-if __name__ == '__main__':
+
+
+def main() -> None:
+    """Console-script and PyInstaller entry point."""
     app()
+
+
+if __name__ == "__main__":
+    main()

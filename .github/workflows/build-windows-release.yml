@@ -1,0 +1,136 @@
+name: Build Windows Release
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "src/**"
+      - "config/**"
+      - "installer/**"
+      - "scripts/build_windows*"
+      - "pyproject.toml"
+      - ".github/workflows/build-windows-release.yml"
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Release version without v prefix"
+        required: false
+        default: "0.2.0"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: windows-release-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: windows-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Resolve version
+        id: version
+        shell: pwsh
+        run: |
+          $version = "${{ inputs.version }}"
+          if ([string]::IsNullOrWhiteSpace($version)) {
+            if ("${{ github.ref_type }}" -eq "tag") {
+              $version = "${{ github.ref_name }}".TrimStart("v")
+            } elseif ("${{ github.event_name }}" -eq "pull_request") {
+              $version = "0.2.0-pr.${{ github.event.pull_request.number }}"
+            } else {
+              $version = "0.2.0-ci.${{ github.run_number }}"
+            }
+          }
+          "version=$version" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+
+      - name: Install build dependencies
+        shell: pwsh
+        run: |
+          python -m pip install --upgrade pip wheel setuptools
+          python -m pip install -e ".[dev,build]"
+
+      - name: Install Inno Setup
+        shell: pwsh
+        run: choco install innosetup --no-progress -y
+
+      - name: Run release test suite
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force build/test-results | Out-Null
+          python -m pytest -q --disable-warnings --maxfail=1 --junitxml=build/test-results/windows-release.xml
+
+      - name: Build portable executable
+        shell: pwsh
+        run: python scripts/build_windows_exe.py
+
+      - name: Compile installer
+        shell: pwsh
+        run: |
+          $candidates = @(
+            "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe",
+            "$env:ProgramFiles\Inno Setup 6\ISCC.exe"
+          )
+          $iscc = $candidates | Where-Object { $_ -and (Test-Path $_) } | Select-Object -First 1
+          if (-not $iscc) { throw "Inno Setup 6 compiler not found." }
+          & $iscc "/DMyAppVersion=${{ steps.version.outputs.version }}" "installer\HS-CAD.iss"
+          if ($LASTEXITCODE -ne 0) { throw "Inno Setup failed with exit code $LASTEXITCODE." }
+
+      - name: Generate installer checksum
+        shell: pwsh
+        run: |
+          $installer = Get-ChildItem dist/HS-CAD-Setup-*.exe | Select-Object -First 1
+          if (-not $installer) { throw "Installer output was not found." }
+          $hash = (Get-FileHash $installer.FullName -Algorithm SHA256).Hash.ToLowerInvariant()
+          "$hash  $($installer.Name)" | Out-File "$($installer.FullName).sha256" -Encoding ascii
+
+      - name: Upload diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: HS-CAD-build-diagnostics-${{ steps.version.outputs.version }}
+          path: |
+            build/test-results/**
+            build/pyinstaller/**
+            build/spec/**
+          if-no-files-found: warn
+          retention-days: 7
+
+      - name: Upload Windows package
+        uses: actions/upload-artifact@v4
+        with:
+          name: HS-CAD-Windows-${{ steps.version.outputs.version }}
+          path: |
+            dist/HS-CAD.exe
+            dist/HS-CAD.exe.sha256
+            dist/HS-CAD-Setup-*.exe
+            dist/HS-CAD-Setup-*.exe.sha256
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Publish GitHub release
+        if: github.ref_type == 'tag'
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${{ github.ref_name }}" `
+            dist/HS-CAD.exe `
+            dist/HS-CAD.exe.sha256 `
+            dist/HS-CAD-Setup-*.exe `
+            dist/HS-CAD-Setup-*.exe.sha256 `
+            --title "HS-CAD ${{ steps.version.outputs.version }}" `
+            --generate-notes
