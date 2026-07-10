@@ -8,16 +8,22 @@ on:
       - "config/**"
       - "installer/**"
       - "scripts/build_windows*"
+      - "release/**"
+      - "tests/test_release_version.py"
       - "pyproject.toml"
       - ".github/workflows/build-windows-release.yml"
   push:
+    branches: [main]
     tags: ["v*"]
+    paths:
+      - "release/VERSION"
+      - ".github/workflows/build-windows-release.yml"
   workflow_dispatch:
     inputs:
       version:
         description: "Release version without v prefix"
         required: false
-        default: "0.2.0"
+        default: ""
 
 permissions:
   contents: write
@@ -45,15 +51,19 @@ jobs:
         id: version
         shell: pwsh
         run: |
-          $version = "${{ inputs.version }}"
+          $version = "${{ inputs.version }}".Trim()
           if ([string]::IsNullOrWhiteSpace($version)) {
+            $baseVersion = (Get-Content "release/VERSION" -Raw).Trim()
             if ("${{ github.ref_type }}" -eq "tag") {
               $version = "${{ github.ref_name }}".TrimStart("v")
             } elseif ("${{ github.event_name }}" -eq "pull_request") {
-              $version = "0.2.0-pr.${{ github.event.pull_request.number }}"
+              $version = "$baseVersion-pr.${{ github.event.pull_request.number }}"
             } else {
-              $version = "0.2.0-ci.${{ github.run_number }}"
+              $version = $baseVersion
             }
+          }
+          if ($version -notmatch '^\d+\.\d+\.\d+([-.][0-9A-Za-z.-]+)?$') {
+            throw "Invalid release version: $version"
           }
           "version=$version" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
 
@@ -122,15 +132,28 @@ jobs:
           retention-days: 30
 
       - name: Publish GitHub release
-        if: github.ref_type == 'tag'
+        if: github.ref_type == 'tag' || (github.event_name == 'push' && github.ref == 'refs/heads/main')
         shell: pwsh
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create "${{ github.ref_name }}" `
-            dist/HS-CAD.exe `
-            dist/HS-CAD.exe.sha256 `
-            dist/HS-CAD-Setup-*.exe `
-            dist/HS-CAD-Setup-*.exe.sha256 `
-            --title "HS-CAD ${{ steps.version.outputs.version }}" `
-            --generate-notes
+          $version = "${{ steps.version.outputs.version }}"
+          $tag = if ("${{ github.ref_type }}" -eq "tag") { "${{ github.ref_name }}" } else { "v$version" }
+          $installer = Get-ChildItem dist/HS-CAD-Setup-*.exe | Select-Object -First 1
+          if (-not $installer) { throw "Installer output was not found for release publishing." }
+          $assets = @(
+            (Resolve-Path "dist/HS-CAD.exe").Path,
+            (Resolve-Path "dist/HS-CAD.exe.sha256").Path,
+            $installer.FullName,
+            (Resolve-Path "$($installer.FullName).sha256").Path
+          )
+          gh release view $tag *> $null
+          if ($LASTEXITCODE -eq 0) {
+            gh release upload $tag @assets --clobber
+          } else {
+            gh release create $tag @assets `
+              --target "${{ github.sha }}" `
+              --title "HS-CAD $version" `
+              --generate-notes
+          }
+          if ($LASTEXITCODE -ne 0) { throw "GitHub release publication failed with exit code $LASTEXITCODE." }
