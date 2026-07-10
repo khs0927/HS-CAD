@@ -14,6 +14,7 @@ from pydantic import BaseModel, Field, field_validator, model_validator
 class JobStatus(str, Enum):
     pending = "pending"
     running = "running"
+    cancelling = "cancelling"
     succeeded = "succeeded"
     failed = "failed"
     cancelled = "cancelled"
