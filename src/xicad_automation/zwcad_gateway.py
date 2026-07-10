@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import time
-from typing import Any
+from typing import Any, Callable
 
 from src.adapters.zwcad_com_adapter import ZWCADCOMAdapter
 
@@ -33,12 +33,20 @@ class MonitoredZWCADGateway:
         except Exception:
             return default
 
-    def wait_until_idle(self, timeout_seconds: float = 120.0, poll_seconds: float = 0.2) -> bool:
+    def wait_until_idle(
+        self,
+        timeout_seconds: float = 120.0,
+        poll_seconds: float = 0.2,
+        cancel_check: Callable[[], bool] | None = None,
+    ) -> bool:
         started = time.monotonic()
         deadline = started + timeout_seconds
         saw_activity = False
         stable_idle_samples = 0
         while time.monotonic() < deadline:
+            if cancel_check and cancel_check():
+                self.cancel_current_command()
+                raise InterruptedError("XiCAD job cancellation requested")
             cmdactive = int(self.get_variable("CMDACTIVE", 0) or 0)
             cmdnames = str(self.get_variable("CMDNAMES", "") or "").strip()
             active = cmdactive != 0 or bool(cmdnames)
@@ -48,9 +56,6 @@ class MonitoredZWCADGateway:
             else:
                 stable_idle_samples += 1
                 elapsed = time.monotonic() - started
-                # SendCommand may complete between polling samples. A short grace
-                # period plus three stable samples handles both observed activity
-                # and very fast commands without waiting for the full timeout.
                 if stable_idle_samples >= 3 and (saw_activity or elapsed >= 0.6):
                     return True
             time.sleep(max(0.05, poll_seconds))
