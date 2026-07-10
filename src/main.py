@@ -13,6 +13,7 @@ import src.app.xicad_contract_cli  # noqa: F401,E402
 import src.app.xicad_contract_workbench_cli  # noqa: F401,E402
 import src.app.xicad_manual_recorder_cli  # noqa: F401,E402
 import src.app.xicad_background_cli  # noqa: F401,E402
+import src.app.xicad_background_approval_cli  # noqa: F401,E402
 import src.app.autopilot_cli  # noqa: F401,E402
 import src.app.landscape_sync_cli  # noqa: F401,E402
 import src.app.corpus_cli  # noqa: F401,E402
