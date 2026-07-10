@@ -9,7 +9,7 @@ HS-CAD can discover all aliases in an installed XiCAD shortcut file, compile arc
 - Verified prompt contracts convert element parameters into exact XiCAD command-line answers.
 - Jobs survive program restarts in a SQLite WAL queue.
 - One COM STA worker executes jobs sequentially and waits for `CMDACTIVE=0` and an empty `CMDNAMES` value.
-- Every job uses a separate working DWG, recovery copy, optional per-step checkpoints, timeout, cancel attempt, entity-count verification, and save-after-step policy.
+- Every job uses a separate working DWG, recovery copy, optional per-step checkpoints, timeout, cooperative cancellation, entity-count verification, and save-after-step policy.
 - A SHA-256 approval token binds permission to the exact source, output, XiCAD root, aliases, arguments, and safety options.
 
 ## Important meaning of “all commands”
@@ -36,6 +36,16 @@ HS-CAD.exe xicad-bg-catalog `
 
 The output includes alias, description, category, risk, whether interaction is expected, and whether a verified unattended recipe is available.
 
+Create one protected template for every discovered command:
+
+```powershell
+HS-CAD.exe xicad-contract-bootstrap-all `
+  --xicad-root "C:\XiCAD" `
+  --out-dir config\xicad_contracts
+```
+
+Existing contract files are preserved unless `--overwrite` is explicitly supplied.
+
 ## 2. Record each interactive command contract
 
 Use the existing observation wizard on a disposable DWG:
@@ -44,7 +54,7 @@ Use the existing observation wizard on a disposable DWG:
 HS-CAD.exe xicad-contract-wizard --alias WAL --out-dir outputs\xicad_contracts
 ```
 
-Then create a reusable contract template:
+Then edit the corresponding reusable contract file. A single template can also be created with:
 
 ```powershell
 HS-CAD.exe xicad-contract-template `
@@ -97,14 +107,22 @@ The validator checks source DWG, separate output path, XiCAD loader, alias membe
 
 ## 6. Approve the exact live workflow
 
-Set `dry_run` to `false`, then calculate the token:
+The safest path writes live mode and the approval token in one explicit operation:
+
+```powershell
+HS-CAD.exe xicad-bg-approve `
+  --workflow outputs\xicad_background\compiled_workflow.json `
+  --confirm LIVE-XICAD
+```
+
+The lower-level token command remains available for review-only workflows:
 
 ```powershell
 HS-CAD.exe xicad-bg-token `
   --workflow outputs\xicad_background\compiled_workflow.json
 ```
 
-Insert the printed token into `approval_token`. Any later change to coordinates, aliases, arguments, paths, or options invalidates the token.
+Any later change to coordinates, aliases, arguments, paths, or options invalidates the token.
 
 ## 7. Submit and inspect the queue
 
@@ -117,7 +135,15 @@ HS-CAD.exe xicad-bg-status `
   --db "$env:LOCALAPPDATA\HS-CAD\xicad-jobs.sqlite3"
 ```
 
-Pending or blocked jobs can be cancelled with `xicad-bg-cancel --job-id <id>`.
+Cancel a pending, blocked, or running job:
+
+```powershell
+HS-CAD.exe xicad-bg-cancel `
+  --job-id <job-id> `
+  --db "$env:LOCALAPPDATA\HS-CAD\xicad-jobs.sqlite3"
+```
+
+A running job moves to `cancelling`; the COM idle monitor sends a cancel signal and stores a final `cancelled` result.
 
 ## 8. Install the background worker
 
@@ -159,8 +185,9 @@ Architectural JSON
 - The original DWG is never opened for mutation.
 - A recovery copy is created before XiCAD execution.
 - Each requested checkpoint copies the saved working DWG after the step.
-- A timed-out command receives two cancel control characters.
+- A timed-out or cancelled command receives two cancel control characters.
 - An abandoned `running` job is returned to `pending` when the single worker starts again.
+- An abandoned `cancelling` job is finalized as `cancelled` on restart.
 - Failed jobs preserve the working/recovery/checkpoint files for review.
 
 ## Recommended rollout
