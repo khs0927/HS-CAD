@@ -53,6 +53,7 @@ def _pyinstaller_arguments() -> list[str]:
         "--collect-submodules=src.spatial",
         "--collect-submodules=src.graph",
         "--collect-submodules=src.analytics",
+        "--collect-submodules=src.xicad_automation",
         "--collect-submodules=src.neuro_seq_cad",
         "--collect-submodules=neuro_seq_cad",
         "--exclude-module=paddle",
@@ -104,6 +105,7 @@ def build(*, clean: bool, smoke: bool) -> Path:
         subprocess.run([str(executable), "--help"], cwd=ROOT, check=True, timeout=120)
         subprocess.run([str(executable), "doctor"], cwd=ROOT, check=True, timeout=120)
         subprocess.run([str(executable), "floorplan-analyze", "--help"], cwd=ROOT, check=True, timeout=120)
+        subprocess.run([str(executable), "xicad-bg-status", "--help"], cwd=ROOT, check=True, timeout=120)
 
     print(f"Built: {executable}")
     print(f"SHA256: {checksum}")
