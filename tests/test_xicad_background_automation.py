@@ -19,7 +19,7 @@ from src.xicad_automation.workflows import (
 def make_xicad_root(tmp_path: Path, alias: str = "ZZZ") -> Path:
     root = tmp_path / "XiCAD"
     lisp = root / "Lisp"
-    lisp.mkdir(parents=True)
+    lisp.mkdir(parents=True, exist_ok=True)
     (lisp / "xi.zelx").write_text("fixture", encoding="utf-8")
     (lisp / "xiShortkey_origin.key").write_text(f"{alias}, custom command\n", encoding="utf-8")
     return root
@@ -66,6 +66,16 @@ def test_store_claim_complete_and_reopen(tmp_path: Path):
     completed = store.complete(claimed.id, result)
     assert completed.status == JobStatus.succeeded
     assert JobStore(store.path).get(claimed.id).result is not None
+
+
+def test_running_job_can_request_cooperative_cancel(tmp_path: Path):
+    store = JobStore(tmp_path / "jobs.sqlite3")
+    queued = store.enqueue(make_workflow(tmp_path))
+    claimed = store.claim_next("worker-1")
+    assert claimed is not None
+    cancelling = store.cancel(queued.id)
+    assert cancelling.status == JobStatus.cancelling
+    assert store.is_cancellation_requested(queued.id)
 
 
 def test_catalog_discovers_all_shortcut_aliases(tmp_path: Path):
