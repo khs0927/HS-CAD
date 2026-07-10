@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import json
 import sqlite3
 from pathlib import Path
 from typing import Iterable
@@ -104,20 +103,35 @@ class JobStore:
         return self._finish(job_id, JobStatus.blocked, error=error)
 
     def cancel(self, job_id: str) -> JobRecord:
+        now = utc_now()
         with self._connect() as db:
             db.execute(
                 "UPDATE jobs SET status=?, updated_at=? WHERE id=? AND status IN (?,?)",
-                (JobStatus.cancelled.value, utc_now(), job_id, JobStatus.pending.value, JobStatus.blocked.value),
+                (JobStatus.cancelled.value, now, job_id, JobStatus.pending.value, JobStatus.blocked.value),
+            )
+            db.execute(
+                "UPDATE jobs SET status=?, updated_at=? WHERE id=? AND status=?",
+                (JobStatus.cancelling.value, now, job_id, JobStatus.running.value),
             )
         return self.get(job_id)
 
-    def recover_abandoned(self) -> int:
+    def is_cancellation_requested(self, job_id: str) -> bool:
         with self._connect() as db:
-            result = db.execute(
+            row = db.execute("SELECT status FROM jobs WHERE id=?", (job_id,)).fetchone()
+        return bool(row and row["status"] == JobStatus.cancelling.value)
+
+    def recover_abandoned(self) -> int:
+        now = utc_now()
+        with self._connect() as db:
+            running = db.execute(
                 "UPDATE jobs SET status=?, worker_id=NULL, updated_at=? WHERE status=?",
-                (JobStatus.pending.value, utc_now(), JobStatus.running.value),
-            )
-        return int(result.rowcount)
+                (JobStatus.pending.value, now, JobStatus.running.value),
+            ).rowcount
+            cancelling = db.execute(
+                "UPDATE jobs SET status=?, worker_id=NULL, updated_at=? WHERE status=?",
+                (JobStatus.cancelled.value, now, JobStatus.cancelling.value),
+            ).rowcount
+        return int(running + cancelling)
 
     def _finish(
         self,
