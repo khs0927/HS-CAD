@@ -34,7 +34,8 @@ class MonitoredZWCADGateway:
             return default
 
     def wait_until_idle(self, timeout_seconds: float = 120.0, poll_seconds: float = 0.2) -> bool:
-        deadline = time.monotonic() + timeout_seconds
+        started = time.monotonic()
+        deadline = started + timeout_seconds
         saw_activity = False
         stable_idle_samples = 0
         while time.monotonic() < deadline:
@@ -46,21 +47,23 @@ class MonitoredZWCADGateway:
                 stable_idle_samples = 0
             else:
                 stable_idle_samples += 1
-                # Two idle samples avoid treating the SendCommand handoff gap as completion.
-                if stable_idle_samples >= 2 and (saw_activity or timeout_seconds <= 1.0):
+                elapsed = time.monotonic() - started
+                # SendCommand may complete between polling samples. A short grace
+                # period plus three stable samples handles both observed activity
+                # and very fast commands without waiting for the full timeout.
+                if stable_idle_samples >= 3 and (saw_activity or elapsed >= 0.6):
                     return True
             time.sleep(max(0.05, poll_seconds))
         return False
 
     def cancel_current_command(self) -> None:
         doc = self.adapter.doc or self.adapter.get_active_document()
-        try:
-            doc.SendCommand("\x1b\x1b")
-        except Exception:
+        for cancel_text in ("\x03\x03", "\x1b\x1b"):
             try:
-                doc.SendCommand("^C^C")
+                doc.SendCommand(cancel_text)
+                return
             except Exception:
-                pass
+                continue
 
     def save(self) -> None:
         doc = self.adapter.doc or self.adapter.get_active_document()
