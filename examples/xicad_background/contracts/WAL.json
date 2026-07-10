@@ -1,0 +1,12 @@
+{
+  "alias": "WAL",
+  "argument_templates": [
+    "{start}",
+    "{end}",
+    "{thickness}"
+  ],
+  "verified": false,
+  "zwcad_version": "2026",
+  "xicad_version": "",
+  "notes": "Template only. Replace with the actual WAL prompt order observed on a disposable drawing, then set verified=true."
+}
