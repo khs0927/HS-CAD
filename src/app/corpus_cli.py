@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 from pathlib import Path
 
 import typer
@@ -40,6 +41,13 @@ def corpus_fileize(
     success("Corpus fileize stage complete")
 
 
+def _enabled(name: str, default: bool = False) -> bool:
+    value = os.getenv(name)
+    if value is None:
+        return default
+    return value.strip().lower() in {"1", "true", "yes", "on"}
+
+
 def _summary_sink(workspace: Path, backend: str, cloud_summary: bool):
     selected = "supabase" if cloud_summary else backend.strip().lower()
     if selected == "local":
@@ -47,6 +55,12 @@ def _summary_sink(workspace: Path, backend: str, cloud_summary: bool):
     if selected == "none":
         return None
     if selected == "supabase":
+        if not _enabled("HSCAD_ALLOW_EXTERNAL_SUMMARY"):
+            raise typer.BadParameter(
+                "External summaries are disabled by the free-local profile. Set "
+                "HSCAD_ALLOW_EXTERNAL_SUMMARY=1 only when explicitly using a "
+                "Supabase free-tier project."
+            )
         sink = SupabaseRunSummarySink.from_env()
         if sink is None:
             raise typer.BadParameter(
@@ -64,7 +78,7 @@ def corpus_complete(
     sample: int = typer.Option(0, "--sample"),
     limit: int = typer.Option(0, "--limit"),
     summary_backend: str = typer.Option(
-        "local",
+        os.getenv("HSCAD_SUMMARY_BACKEND", "local"),
         "--summary-backend",
         help=(
             "Run-summary destination: local (default, free/offline), none, or "
