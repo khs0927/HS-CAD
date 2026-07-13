@@ -56,7 +56,7 @@ $resultPath = Join-Path $appRoot "CODEX_DEPLOYMENT_RESULT.md"
 
 if (-not $SkipInstall) {
     Write-Host "[HS-CAD mobile] Installing exact declared dependencies"
-    & npm install --ignore-scripts --no-audit --no-fund
+    & npm install --ignore-scripts --no-audit --no-fund --package-lock=false
     Assert-LastExitCode "npm install failed."
 }
 
@@ -66,7 +66,7 @@ Assert-LastExitCode "npm run validate:ci failed."
 
 Write-Host "[HS-CAD mobile] Verifying Cloudflare authentication"
 & npx wrangler whoami
-Assert-LastExitCode "Cloudflare authentication is missing or invalid. Run `npx wrangler login` with the user's approval."
+Assert-LastExitCode "Cloudflare authentication is missing or invalid. Run npx wrangler login with the user's approval."
 
 $workerUrl = $ExpectedWorkerUrl.Trim().TrimEnd("/")
 if (-not $SkipDeploy) {
@@ -111,18 +111,18 @@ $healthJson = $healthPayload | ConvertTo-Json -Depth 10 -Compress
 $lines = @(
     "# Codex Cloudflare Deployment Result",
     "",
-    "- Date: `$(Get-Date -Format o)`",
-    "- Node.js: `$nodeVersion`",
-    "- Worker URL: `$workerUrl`",
-    "- Health URL: `$healthUrl`",
-    "- MCP URL: `$mcpUrl`",
-    "- Health response: ``$healthJson``",
-    "- Validation log: `deployment-logs/$(Split-Path -Leaf $validateLog)`",
-    "- Deploy log: `deployment-logs/$(Split-Path -Leaf $deployLog)`",
+    "- Date: $(Get-Date -Format o)",
+    "- Node.js: $nodeVersion",
+    "- Worker URL: $workerUrl",
+    "- Health URL: $healthUrl",
+    "- MCP URL: $mcpUrl",
+    "- Health response: $healthJson",
+    "- Validation log: deployment-logs/$(Split-Path -Leaf $validateLog)",
+    "- Deploy log: deployment-logs/$(Split-Path -Leaf $deployLog)",
     "",
     "## Next connected-account step",
     "",
-    "Register the MCP URL in ChatGPT Developer Mode, refresh the app after registration, and execute the acceptance prompts in `MOBILE_TEST_PROMPTS.md`.",
+    "Register the MCP URL in ChatGPT Developer Mode, refresh the app after registration, and execute the acceptance prompts in MOBILE_TEST_PROMPTS.md.",
     "",
     "## Security note",
     "",
