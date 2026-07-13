@@ -2,33 +2,36 @@
 
 ## 완료
 
-- 모바일 터치 UI
-- Cloudflare Workers MCP `/mcp` 엔드포인트
-- ChatGPT 도구 3개
-- 건축 파라메트릭 입력 모델
+- 모바일 터치 UI와 고급 JSON 입력
+- Cloudflare Workers stateless MCP `/mcp` 엔드포인트
+- ChatGPT 도구 4개
+- versioned MCP App 위젯 리소스
+- 건축 파라메트릭 입력 모델과 Zod 4 검증
 - 평면도 1면
 - 박공지붕 입면도 4면
 - 횡단면·종단면 2면
 - SVG 미리보기 및 다운로드
-- ASCII DXF R12 다운로드
+- 레이어 구조를 가진 ASCII DXF R12 다운로드
 - PWA manifest
-- 입력 검증과 도면 경고
-- 핵심 TypeScript 엔진 독립 typecheck
-- 7개 도면 생성 및 DXF 헤더/종료 코드 런타임 확인
+- 면적·둘레·지붕경사·다락 유효폭 계산
+- 창호 일람표
+- 외곽선 자기교차, 높이 관계, 창호 범위 검증
+- Context7의 MCP SDK·Cloudflare Agents 문서 대조
+- OpenAI Apps SDK 공식 문서 대조
 
-## 검증 제한
+## 실제 검증 결과
 
-현재 실행 환경에서 `npm install`이 제한 시간 안에 완료되지 않아 React·Vite·Cloudflare 전체 번들 빌드는 수행하지 못했습니다. 핵심 도면 엔진 파일은 TypeScript strict typecheck를 통과했고, 실제로 7개 view 생성 및 DXF R12 문자열 생성을 확인했습니다.
+- `npm install`: 완료, 취약점 0
+- `npm run typecheck`: 통과
+- `npm test`: 7/7 통과
+- `npm run build`: 통과
+- `wrangler deploy --dry-run`: 통과
+- 로컬 `/health`: HTTP 200
+- MCP initialize: protocol 2025-06-18
+- tools/list: 4개 도구 확인
+- validate 도구 호출: 통과
+- resources/list/read: 위젯 MIME 및 HTML 확인
 
-## 배포 전 필수 확인
+## 배포 상태
 
-Cloudflare Git 연결 빌드에서 다음 명령을 실행합니다.
-
-```bash
-npm install
-npm run typecheck
-npm test
-npm run build
-```
-
-빌드 성공 후 Worker의 `/mcp` 주소를 ChatGPT 개발자 모드에 연결합니다.
+코드와 로컬·dry-run 검증은 완료했습니다. 실제 Cloudflare 공개 배포는 사용자 계정 인증과 저장소 연결 승인이 필요하므로 아직 수행하지 않았습니다. 공개 URL 발급 후 ChatGPT 모바일 개발자 모드에서 `/mcp`를 연결하면 됩니다.
