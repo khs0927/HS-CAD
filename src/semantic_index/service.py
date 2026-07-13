@@ -6,7 +6,7 @@ from typing import Any
 
 from src.corpus.schema import FileizedDrawingRecord
 from src.semantic_index.features import FEATURE_VERSION, GeometryFeatureExtractor
-from src.semantic_index.schema import SearchHit
+from src.semantic_index.schema import SearchHit, SemanticVector
 from src.semantic_index.store import SemanticIndexStore
 
 
@@ -24,6 +24,7 @@ class SemanticIndexService:
 
         indexed = 0
         skipped = 0
+        empty_geometry: list[str] = []
         failures: list[dict[str, str]] = []
         for path in sorted(root.rglob('*.json')):
             try:
@@ -31,7 +32,12 @@ class SemanticIndexService:
                 if record.status != 'ok':
                     skipped += 1
                     continue
-                self.store.upsert(self.extractor.extract(record))
+                vector = self.extractor.extract(record)
+                if not _has_indexable_geometry(vector):
+                    skipped += 1
+                    empty_geometry.append(str(path))
+                    continue
+                self.store.upsert(vector)
                 indexed += 1
             except Exception as exc:
                 failures.append({'path': str(path), 'error': str(exc)})
@@ -40,6 +46,7 @@ class SemanticIndexService:
             'records_dir': str(root),
             'indexed': indexed,
             'skipped': skipped,
+            'empty_geometry': empty_geometry,
             'failures': failures,
             'total_in_index': self.store.count(FEATURE_VERSION),
         }
@@ -47,6 +54,8 @@ class SemanticIndexService:
     def search_record(self, record_path: str | Path, *, limit: int = 10, include_self: bool = False) -> list[SearchHit]:
         record = load_record(record_path)
         vector = self.extractor.extract(record)
+        if not _has_indexable_geometry(vector):
+            raise ValueError('query drawing has no indexable geometry after text removal')
         return self.store.search(
             vector,
             limit=limit,
@@ -61,6 +70,10 @@ class SemanticIndexService:
             'mode': 'offline-local',
             'text_used': False,
         }
+
+
+def _has_indexable_geometry(vector: SemanticVector) -> bool:
+    return any(abs(value) > 1e-12 for value in vector.vector)
 
 
 def load_record(path: str | Path) -> FileizedDrawingRecord:
