@@ -23,9 +23,11 @@ def _record(file_id: str, relative_path: str, *, rotated: bool = False, include_
         {'entity_type': 'INSERT', 'layer': 'A-DOOR', 'name': 'D01', 'insert': [5, 0]},
     ]
     texts = []
+    layers = [{'name': 'A-WALL', 'entity_count': 3}, {'name': 'A-DOOR', 'entity_count': 1}]
     if include_text:
-        entities.append({'entity_type': 'TEXT', 'layer': 'A-TEXT', 'text': '기계실', 'insert': [2, 2]})
+        entities.append({'entity_type': 'TEXT', 'layer': 'A-TEXT', 'text': '기계실', 'insert': [2000, 2000]})
         texts.append({'entity_type': 'TEXT', 'layer': 'A-TEXT', 'text': '기계실'})
+        layers.append({'name': 'A-TEXT', 'entity_count': 100})
     return FileizedDrawingRecord(
         file_id=file_id,
         source_path=f'C:/{relative_path}',
@@ -33,7 +35,7 @@ def _record(file_id: str, relative_path: str, *, rotated: bool = False, include_
         extension='.dxf',
         status='ok',
         engine='test',
-        layers=[{'name': 'A-WALL', 'entity_count': 3}, {'name': 'A-DOOR', 'entity_count': 1}],
+        layers=layers,
         blocks=[{'name': 'D01', 'count': 1}],
         entities=entities,
         texts=texts,
@@ -52,19 +54,19 @@ def test_geometry_vector_is_normalized_and_stable() -> None:
     assert np.isclose(np.linalg.norm(np.asarray(vector.vector)), 1.0)
 
 
-def test_text_content_does_not_change_geometry_vector() -> None:
+def test_text_entities_do_not_change_geometry_vector() -> None:
     extractor = GeometryFeatureExtractor()
     without_text = extractor.extract(_record('a', 'a.dxf', include_text=False))
     with_text = extractor.extract(_record('b', 'b.dxf', include_text=True))
-    # TEXT entities are intentionally mapped to OTHER only when present, so the
-    # actual string value is ignored. Removing a text object changes geometry
-    # inventory, but changing its content must not.
     changed_text = _record('c', 'c.dxf', include_text=True)
     changed_text.entities[-1]['text'] = '전혀 다른 문자'
     changed_text.texts[-1]['text'] = '전혀 다른 문자'
     changed = extractor.extract(changed_text)
-    assert with_text.vector == changed.vector
-    assert without_text.vector != with_text.vector
+
+    assert without_text.vector == with_text.vector == changed.vector
+    assert with_text.metadata['ignored_text_entity_count'] == 1
+    assert with_text.metadata['entity_count'] == without_text.metadata['entity_count']
+    assert with_text.metadata['layer_count'] == without_text.metadata['layer_count']
 
 
 def test_build_and_query_local_index(tmp_path: Path) -> None:
