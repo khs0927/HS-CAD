@@ -11,7 +11,7 @@
     "build": "vite build",
     "deploy": "npm run build && wrangler deploy",
     "typecheck": "tsc --noEmit",
-    "test": "npm run test:bootstrap && npm run test:deployment && vitest run",
+    "test": "npm run test:bootstrap && npm run test:deployment && vitest run --exclude '**/*.test.mjs'",
     "test:bootstrap": "node --test bootstrap.test.mjs",
     "test:deployment": "node --test deployment-script.test.mjs",
     "validate": "npm run typecheck && npm test && npm run build",

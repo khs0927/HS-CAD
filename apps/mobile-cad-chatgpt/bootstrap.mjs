@@ -19,6 +19,11 @@ const payload = (
 const { files, digest } = decodePayload(payload);
 
 for (const [path, content] of Object.entries(files).sort(([left], [right]) => left.localeCompare(right))) {
+  // Keep repository-level ignore rules managed by Git. Older payloads may
+  // contain a stale .gitignore and must not overwrite deployment safeguards.
+  if (path === ".gitignore") {
+    continue;
+  }
   const target = resolveOutputPath(appRoot, path);
   await mkdir(dirname(target), { recursive: true });
   await writeFile(target, content, "utf8");

@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { join, resolve } from "node:path";
 import { gzipSync } from "node:zlib";
 import test from "node:test";
 
@@ -34,11 +35,11 @@ test("payload decoding validates gzip JSON and returns a stable digest", () => {
 });
 
 test("output paths remain inside the mobile app root", () => {
-  const root = "/workspace/apps/mobile-cad-chatgpt";
+  const root = resolve("/workspace/apps/mobile-cad-chatgpt");
 
   assert.equal(
     resolveOutputPath(root, "src/index.ts"),
-    "/workspace/apps/mobile-cad-chatgpt/src/index.ts",
+    join(root, "src/index.ts"),
   );
   assert.throws(() => resolveOutputPath(root, "../outside.txt"), /escapes app root/);
   assert.throws(() => resolveOutputPath(root, "/tmp/outside.txt"), /absolute payload path/);
