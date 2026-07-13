@@ -27,8 +27,9 @@ class FileizerRegistry:
     """Ordered extractor registry with completeness-aware fallback selection.
 
     A successful file open is not enough. If the first matching extractor
-    returns an incomplete record, the registry continues to the next available
-    extractor and keeps the highest-quality result.
+    returns an incomplete record or raises a recoverable exception, the
+    registry continues to the next available extractor and keeps the
+    highest-quality result.
     """
 
     def __init__(
@@ -69,11 +70,27 @@ class FileizerRegistry:
             if not fileizer.supports(source):
                 continue
             matched = True
-            record = fileizer.fileize(
-                source,
-                file_id=file_id,
-                relative_path=relative_path,
-            )
+            try:
+                record = fileizer.fileize(
+                    source,
+                    file_id=file_id,
+                    relative_path=relative_path,
+                )
+            except Exception as exc:
+                # A native CAD automation failure must not prevent a safer
+                # read-only fallback (for example ezdxf) from being attempted.
+                # The failure remains visible in the attempt history and can be
+                # selected as the final result only when every fallback fails.
+                record = FileizedDrawingRecord.failed(
+                    file_id=file_id,
+                    source_path=source,
+                    relative_path=relative_path,
+                    extension=source.suffix,
+                    engine=fileizer.engine_name,
+                    reason=f"{type(exc).__name__}: {exc}",
+                    error_type="fileizer_exception",
+                )
+
             result = self.policy.apply(record)
             score = self.policy.quality_score(record)
             attempts.append(
@@ -128,4 +145,3 @@ class FileizerRegistry:
             return str(first.get("reason") or first.get("error") or first)
         report = record.extraction_report or {}
         return str(report.get("failure_reason") or "")
-
