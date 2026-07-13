@@ -60,6 +60,12 @@ class CompletenessPolicy:
             reasons.append(error)
             blockers.append(f"error:{error_type}")
 
+        # Respect an extractor's explicit negative assertion even when an older
+        # adapter did not yet provide a structured reason. This prevents a
+        # policy upgrade from silently turning an unknown omission into PASS.
+        if report.get("complete") is False and not blockers:
+            blockers.append("extractor_reported_incomplete")
+
         blockers = self._unique(blockers)
         return CompletenessResult(
             complete=record.status == "ok" and not blockers,
