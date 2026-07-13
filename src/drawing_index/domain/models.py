@@ -1,11 +1,61 @@
 from __future__ import annotations
 
+from collections.abc import Iterable
 from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
-from typing import Any, Iterable
+from typing import Any
 from uuid import uuid4
 
 from src.corpus.schema import FileizedDrawingRecord
+
+PUBLIC_REPORT_FIELDS = frozenset(
+    {
+        "schema_version",
+        "scanner",
+        "entity_count",
+        "text_occurrence_count",
+        "layout_count",
+        "block_definition_entity_count",
+        "xref_count",
+        "requires_ocr_count",
+        "unsupported_proxy_count",
+        "unresolved_xref_count",
+        "missing_layout_count",
+        "entity_failure_count",
+        "warning_count",
+        "error_count",
+        "complete",
+        "coverage",
+        "blockers",
+        "attempt_count",
+        "selected_engine",
+        "fallback_used",
+        "fileizer_attempts",
+    }
+)
+
+
+def public_extraction_report(report: dict[str, Any]) -> dict[str, Any]:
+    """Return metrics safe for the optional remote summary control plane."""
+
+    public = {key: value for key, value in report.items() if key in PUBLIC_REPORT_FIELDS}
+    coverage = public.get("coverage")
+    if isinstance(coverage, dict):
+        public["coverage"] = {
+            str(key): bool(value) for key, value in coverage.items()
+        }
+    attempts = public.get("fileizer_attempts")
+    if isinstance(attempts, list):
+        public["fileizer_attempts"] = [
+            {
+                key: attempt[key]
+                for key in ("engine", "status", "complete", "quality_score")
+                if key in attempt
+            }
+            for attempt in attempts
+            if isinstance(attempt, dict)
+        ]
+    return public
 
 
 def utc_now_iso() -> str:
@@ -39,7 +89,7 @@ class FileIndexSummary:
     extraction_report: dict[str, Any] = field(default_factory=dict)
 
     @classmethod
-    def from_record(cls, record: FileizedDrawingRecord) -> "FileIndexSummary":
+    def from_record(cls, record: FileizedDrawingRecord) -> FileIndexSummary:
         report = dict(record.extraction_report or {})
         blockers = tuple(str(item) for item in report.get("blockers") or [])
         return cls(
@@ -61,7 +111,7 @@ class FileIndexSummary:
             unsupported_proxy_count=int(report.get("unsupported_proxy_count") or 0),
             unresolved_xref_count=int(report.get("unresolved_xref_count") or 0),
             blockers=blockers,
-            extraction_report=report,
+            extraction_report=public_extraction_report(report),
         )
 
     def to_dict(self) -> dict[str, Any]:
@@ -96,7 +146,7 @@ class IndexRunSummary:
         files: Iterable[FileIndexSummary],
         metadata: dict[str, Any] | None = None,
         run_id: str | None = None,
-    ) -> "IndexRunSummary":
+    ) -> IndexRunSummary:
         rows = tuple(files)
         failed = sum(1 for item in rows if item.status == "failed")
         unavailable = sum(1 for item in rows if item.status == "unavailable")

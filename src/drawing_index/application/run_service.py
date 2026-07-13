@@ -60,7 +60,6 @@ class DrawingIndexRunService:
                 "root_fingerprint": self._path_fingerprint(Path(root)),
                 "sample": sample,
                 "limit": limit,
-                "stage_results": stages,
             },
         )
 

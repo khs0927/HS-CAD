@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from typing import Protocol, Sequence
+from collections.abc import Sequence
+from typing import Protocol
 
 from src.drawing_index.domain.models import FileIndexSummary, IndexRunSummary
 
@@ -28,3 +29,4 @@ class NullRunSummarySink:
             "run_id": run.run_id,
             "file_count": len(files),
         }
+

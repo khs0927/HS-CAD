@@ -2,6 +2,10 @@ from __future__ import annotations
 
 from pathlib import Path
 
+import ezdxf
+from ezdxf import xref
+
+from src.adapters.ezdxf_corpus_scanner import EzdxfCorpusScanner
 from src.corpus.indexer import CorpusIndexer
 from src.corpus.query import CorpusQuery
 from src.corpus.schema import FileizedDrawingRecord, text_rows_from_entities
@@ -118,3 +122,52 @@ def test_v2_index_preserves_evidence_location(tmp_path: Path) -> None:
     assert match["handle"] == "AA"
     assert match["block_path"] == ["SHEET", "NOTE"]
     assert match["x"] == 1250.5
+
+
+def test_ezdxf_scanner_does_not_treat_normal_insert_as_xref() -> None:
+    doc = ezdxf.new()
+    doc.blocks.new("NORMAL_BLOCK").add_text("BLOCK TEXT")
+    doc.modelspace().add_blockref("NORMAL_BLOCK", (0, 0))
+
+    result = EzdxfCorpusScanner(doc).scan()
+
+    assert result["report"]["xref_count"] == 0
+    assert result["report"]["unresolved_xref_count"] == 0
+
+
+def test_ezdxf_scanner_collects_real_xref_path() -> None:
+    doc = ezdxf.new()
+    xref.attach(doc, block_name="EXTERNAL", filename="refs/external.dwg")
+
+    result = EzdxfCorpusScanner(doc).scan()
+
+    assert result["report"]["xref_count"] == 1
+    assert result["xrefs"][0]["name"] == "EXTERNAL"
+    assert result["xrefs"][0]["path"] == "refs/external.dwg"
+
+
+def test_ezdxf_scanner_reads_acad_table_cells(monkeypatch) -> None:
+    from ezdxf.entities import acad_table
+
+    class FakeTable:
+        dxf = type("DXF", (), {"handle": "AA", "layer": "SCHEDULE"})()
+
+        @staticmethod
+        def dxftype() -> str:
+            return "ACAD_TABLE"
+
+    monkeypatch.setattr(
+        acad_table,
+        "read_acad_table_content",
+        lambda entity: [["문번호", "규격"], ["D-101", "900x2100"]],
+    )
+    item = EzdxfCorpusScanner(doc=None).entity_to_dict(
+        FakeTable(), layout="문일람표", space="paper"
+    )
+
+    assert item["table_cells"] == [
+        {"row": 0, "column": 0, "text": "문번호"},
+        {"row": 0, "column": 1, "text": "규격"},
+        {"row": 1, "column": 0, "text": "D-101"},
+        {"row": 1, "column": 1, "text": "900x2100"},
+    ]

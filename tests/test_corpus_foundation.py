@@ -78,7 +78,7 @@ def test_pdf_fileizer_extracts_text(tmp_path: Path) -> None:
         pdf, file_id="pdf", relative_path="sample.pdf"
     )
     assert record.status == "ok"
-    assert record.engine == "pymupdf"
+    assert record.engine == PDFPyMuPDFFileizer.engine_name
     assert any("T180" in row["text"] for row in record.texts)
 
 

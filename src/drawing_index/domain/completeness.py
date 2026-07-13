@@ -1,7 +1,8 @@
 from __future__ import annotations
 
+from collections.abc import Iterable
 from dataclasses import dataclass
-from typing import Any, Iterable
+from typing import Any
 
 from src.corpus.schema import FileizedDrawingRecord
 
@@ -60,10 +61,11 @@ class CompletenessPolicy:
             reasons.append(error)
             blockers.append(f"error:{error_type}")
 
-        # Respect an extractor's explicit negative assertion even when an older
-        # adapter did not yet provide a structured reason. This prevents a
-        # policy upgrade from silently turning an unknown omission into PASS.
-        if report.get("complete") is False and not blockers:
+        # Completion is fail-closed: a successful file open without an explicit
+        # positive extraction assertion must never become PASS.
+        if "complete" not in report:
+            blockers.append("complete_assertion_missing")
+        elif report.get("complete") is not True:
             blockers.append("extractor_reported_incomplete")
 
         blockers = self._unique(blockers)

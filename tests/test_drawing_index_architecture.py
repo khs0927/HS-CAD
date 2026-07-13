@@ -74,6 +74,14 @@ def test_completeness_policy_never_accepts_warning_as_complete() -> None:
     assert record.extraction_report["complete"] is False
 
 
+def test_completeness_policy_requires_explicit_positive_assertion() -> None:
+    record = _record("legacy", complete=True)
+    record.extraction_report.pop("complete")
+    result = CompletenessPolicy().apply(record)
+    assert result.complete is False
+    assert "complete_assertion_missing" in result.blockers
+
+
 def test_registry_continues_after_incomplete_result_and_selects_complete_fallback() -> None:
     native = _FakeFileizer(
         "native",
@@ -147,6 +155,21 @@ class _Session:
 
 def test_supabase_sink_publishes_summary_without_private_source_path_or_text() -> None:
     record = _record("native", complete=True, texts=2)
+    record.extraction_report.update(
+        {
+            "private_text": "DO_NOT_UPLOAD_DRAWING_TEXT",
+            "absolute_path": "C:/private/source.dwg",
+            "fileizer_attempts": [
+                {
+                    "engine": "native",
+                    "status": "ok",
+                    "complete": True,
+                    "reason": "C:/private/source.dwg contains DO_NOT_UPLOAD_DRAWING_TEXT",
+                    "quality_score": [1, 1, 2, 1, 0],
+                }
+            ],
+        }
+    )
     file_summary = FileIndexSummary.from_record(record)
     run = IndexRunSummary.build(
         workspace_id="workspace-test",
@@ -167,7 +190,7 @@ def test_supabase_sink_publishes_summary_without_private_source_path_or_text() -
 
     assert result["published"] is True
     assert len(session.calls) == 2
-    payload_text = repr(session.calls)
+    payload_text = repr([kwargs["json"] for _, kwargs in session.calls])
     assert "C:/private/source.dwg" not in payload_text
-    assert "T0" not in payload_text
+    assert "DO_NOT_UPLOAD_DRAWING_TEXT" not in payload_text
     assert "plans/source.dwg" in payload_text

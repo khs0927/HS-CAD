@@ -1,7 +1,8 @@
 from __future__ import annotations
 
 from collections import Counter
-from typing import Any, Iterable
+from collections.abc import Iterable
+from typing import Any
 
 
 class EzdxfCorpusScanner:
@@ -38,8 +39,8 @@ class EzdxfCorpusScanner:
             lambda: entity.plain_text(),
             lambda: entity.plain_mtext(fast=True),
             lambda: entity.plain_mtext(),
-            lambda: getattr(entity, "text"),
-            lambda: getattr(entity.dxf, "text"),
+            lambda: entity.text,
+            lambda: entity.dxf.text,
         ):
             try:
                 value = call()
@@ -51,6 +52,15 @@ class EzdxfCorpusScanner:
                 continue
         return None
 
+    @staticmethod
+    def _bool_member(value: Any) -> bool:
+        """Evaluate ezdxf boolean properties and zero-argument predicates safely."""
+
+        try:
+            return bool(value() if callable(value) else value)
+        except Exception:
+            return False
+
     def _attribute_row(self, attr: Any) -> dict[str, Any]:
         return {
             "handle": self._safe(attr, "handle"),
@@ -58,8 +68,8 @@ class EzdxfCorpusScanner:
             "text": self._plain_text(attr),
             "insert": self._xyz(self._safe(attr, "insert")),
             "layer": self._safe(attr, "layer"),
-            "is_const": bool(getattr(attr, "is_const", False)),
-            "is_invisible": bool(getattr(attr, "is_invisible", False)),
+            "is_const": self._bool_member(getattr(attr, "is_const", False)),
+            "is_invisible": self._bool_member(getattr(attr, "is_invisible", False)),
         }
 
     def _attributes(self, entity: Any) -> list[dict[str, Any]]:
@@ -75,7 +85,7 @@ class EzdxfCorpusScanner:
         rows: list[dict[str, Any]] = []
         for attdef in block.query("ATTDEF"):
             flags = int(self._safe(attdef, "flags", 0) or 0)
-            if bool(getattr(attdef, "is_const", False)) or flags & 2:
+            if self._bool_member(getattr(attdef, "is_const", False)) or flags & 2:
                 rows.append(self._attribute_row(attdef))
         return rows
 
@@ -136,6 +146,23 @@ class EzdxfCorpusScanner:
         return rows
 
     def _table_cells(self, entity: Any) -> list[dict[str, Any]]:
+        # ezdxf exposes AutoCAD tables as ACAD_TABLE and documents this helper
+        # as the supported way to decode their cell matrix.
+        standard_error = "unknown ACAD_TABLE decoding error"
+        try:
+            from ezdxf.entities.acad_table import read_acad_table_content
+
+            content = read_acad_table_content(entity)
+            return [
+                {"row": row, "column": column, "text": str(value)}
+                for row, values in enumerate(content)
+                for column, value in enumerate(values)
+                if value not in (None, "")
+            ]
+        except Exception as exc:
+            standard_error = str(exc)
+
+        # Retain a defensive fallback for vendor-specific table wrappers.
         out: list[dict[str, Any]] = []
         for attr in ("cells", "table_cells"):
             try:
@@ -143,7 +170,7 @@ class EzdxfCorpusScanner:
             except Exception:
                 continue
             try:
-                iterable = cells.items() if hasattr(cells, "items") else cells
+                iterable = cells.items() if hasattr(cells, "items") else enumerate(cells)
                 for key, cell in iterable:
                     row = column = None
                     if isinstance(key, tuple) and len(key) >= 2:
@@ -153,6 +180,14 @@ class EzdxfCorpusScanner:
                         out.append({"row": row, "column": column, "text": str(value)})
             except Exception:
                 continue
+        if not out:
+            self.warnings.append(
+                {
+                    "type": "dxf_table_content_unavailable",
+                    "handle": self._safe(entity, "handle"),
+                    "error": standard_error,
+                }
+            )
         return out
 
     def entity_to_dict(
@@ -197,7 +232,9 @@ class EzdxfCorpusScanner:
             item["z_scale"] = self._safe(entity, "zscale")
             item["attributes"] = self._attributes(entity)
             item["constant_attributes"] = self._constant_attributes(entity)
-            item["is_xref"] = bool(getattr(entity, "is_xref", False))
+            # Insert.is_xref is a method in current ezdxf releases. Treating
+            # the bound method itself as a bool marks every INSERT as an XREF.
+            item["is_xref"] = self._bool_member(getattr(entity, "is_xref", False))
             if item["is_xref"]:
                 try:
                     block = entity.block()
@@ -239,7 +276,7 @@ class EzdxfCorpusScanner:
             item["leader_texts"] = self._mleader_texts(entity)
         elif etype == "LEADER":
             item["leader_texts"] = self._leader_annotation_texts(entity)
-        elif etype == "TABLE":
+        elif etype in {"TABLE", "ACAD_TABLE"}:
             item["table_cells"] = self._table_cells(entity)
         elif "IMAGE" in etype or "OLE" in etype:
             item["requires_ocr"] = True
@@ -364,12 +401,18 @@ class EzdxfCorpusScanner:
         }
 
     def _iter_layouts(self) -> Iterable[tuple[str, str, Any]]:
+        yielded: set[str] = set()
         try:
             for layout in self.doc.layouts:
                 name = str(layout.name)
+                yielded.add(name.casefold())
                 yield name, "model" if name.lower() == "model" else "paper", layout
-        except Exception:
-            yield "Model", "model", self.doc.modelspace()
+        except Exception as exc:
+            self.warnings.append(
+                {"type": "dxf_layout_enumeration_failed", "error": str(exc)}
+            )
+            if "model" not in yielded:
+                yield "Model", "model", self.doc.modelspace()
 
     @staticmethod
     def _deduplicate_text_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -386,7 +429,7 @@ class EzdxfCorpusScanner:
     @classmethod
     def _block_is_xref(cls, block: Any) -> bool:
         try:
-            return bool(block.is_xref)
+            return cls._bool_member(block.is_xref)
         except Exception:
             pass
         flags = cls._safe(getattr(block, "block_record", block), "flags", 0)

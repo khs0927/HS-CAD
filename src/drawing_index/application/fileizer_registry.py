@@ -1,8 +1,8 @@
 from __future__ import annotations
 
+from collections.abc import Iterable
 from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import Iterable
 
 from src.corpus.schema import FileizedDrawingRecord
 from src.drawing_index.domain.completeness import CompletenessPolicy
@@ -128,3 +128,4 @@ class FileizerRegistry:
             return str(first.get("reason") or first.get("error") or first)
         report = record.extraction_report or {}
         return str(report.get("failure_reason") or "")
+

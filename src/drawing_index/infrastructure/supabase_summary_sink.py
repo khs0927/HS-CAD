@@ -1,8 +1,9 @@
 from __future__ import annotations
 
 import os
+from collections.abc import Sequence
 from dataclasses import dataclass
-from typing import Any, Sequence
+from typing import Any
 from urllib.parse import urlparse
 
 import requests
@@ -19,7 +20,7 @@ class SupabaseSummarySettings:
     batch_size: int = 200
 
     @classmethod
-    def from_env(cls) -> "SupabaseSummarySettings | None":
+    def from_env(cls) -> SupabaseSummarySettings | None:
         url = os.getenv("HSCAD_SUPABASE_URL", "").strip().rstrip("/")
         key = os.getenv("HSCAD_SUPABASE_SERVICE_ROLE_KEY", "").strip()
         if not url or not key:
@@ -57,7 +58,7 @@ class SupabaseRunSummarySink(RunSummarySink):
         self.session = session or requests.Session()
 
     @classmethod
-    def from_env(cls) -> "SupabaseRunSummarySink | None":
+    def from_env(cls) -> SupabaseRunSummarySink | None:
         settings = SupabaseSummarySettings.from_env()
         return None if settings is None else cls(settings)
 
@@ -143,3 +144,4 @@ class SupabaseRunSummarySink(RunSummarySink):
             "blockers": list(item.blockers),
             "extraction_report": item.extraction_report,
         }
+
