@@ -3,6 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from src.adapters.zwcad_com_adapter import ZWCADCOMAdapter
+from src.adapters.zwcad_corpus_scanner import ZWCADCorpusScanner
 from src.corpus.schema import (
     FileizedDrawingRecord,
     block_rows_from_entities,
@@ -14,22 +15,33 @@ from src.fileizers.base import DrawingFileizer
 
 
 class ZWCADDWGFileizer(DrawingFileizer):
-    engine_name = 'zwcad_com'
-    supported_extensions = ('.dwg',)
+    """Completeness-oriented native DWG fileizer."""
+
+    engine_name = "zwcad_com_complete"
+    supported_extensions = (".dwg",)
 
     def is_available(self) -> tuple[bool, str]:
         try:
             import comtypes.client  # noqa: F401
         except Exception as exc:
-            return False, f'comtypes unavailable: {exc}'
+            try:
+                import win32com.client  # noqa: F401
+            except Exception:
+                return False, f"Windows COM bindings unavailable: {exc}"
         try:
             adapter = ZWCADCOMAdapter(visible=False)
             adapter.connect()
-            return True, 'ZWCAD COM available'
+            return True, "ZWCAD COM available"
         except Exception as exc:
-            return False, f'ZWCAD COM unavailable: {exc}'
+            return False, f"ZWCAD COM unavailable: {exc}"
 
-    def fileize(self, path: str | Path, *, file_id: str, relative_path: str | Path) -> FileizedDrawingRecord:
+    def fileize(
+        self,
+        path: str | Path,
+        *,
+        file_id: str,
+        relative_path: str | Path,
+    ) -> FileizedDrawingRecord:
         src = Path(path)
         available, reason = self.is_available()
         if not available:
@@ -41,26 +53,47 @@ class ZWCADDWGFileizer(DrawingFileizer):
                 engine=self.engine_name,
                 reason=reason,
             )
+
         adapter = ZWCADCOMAdapter(visible=False)
         try:
             adapter.connect()
             adapter.open_document(str(src))
-            entities = adapter.scan_modelspace()
-            warnings = list(adapter.warnings)
+            result = ZWCADCorpusScanner(adapter).scan_document()
+            entities = result["entities"]
+            texts = text_rows_from_entities(entities)
+            report = dict(result["report"])
+            report["text_occurrence_count"] = len(texts)
+            report["complete"] = (
+                report.get("warning_count", 0) == 0
+                and report.get("requires_ocr_count", 0) == 0
+            )
             return FileizedDrawingRecord(
                 file_id=file_id,
                 source_path=str(src),
                 relative_path=str(relative_path),
                 extension=src.suffix.lower(),
-                status='ok',
+                status="ok",
                 engine=self.engine_name,
                 layers=layer_rows_from_entities(entities),
                 blocks=block_rows_from_entities(entities),
                 entities=entities,
-                texts=text_rows_from_entities(entities),
+                texts=texts,
                 dimensions=dimension_rows_from_entities(entities),
-                metadata={'object_count': len(entities)},
-                warnings=warnings,
+                layouts=result["layouts"],
+                xrefs=result["xrefs"],
+                extraction_report=report,
+                metadata={
+                    "object_count": len(entities),
+                    "text_occurrence_count": len(texts),
+                    "cad_product": str(
+                        ZWCADCorpusScanner._safe_get(adapter.app, "Name", "ZWCAD")
+                    ),
+                    "cad_version": str(
+                        ZWCADCorpusScanner._safe_get(adapter.app, "Version", "")
+                    ),
+                    "active_progid": adapter.active_progid,
+                },
+                warnings=[*adapter.warnings, *result["warnings"]],
             )
         except Exception as exc:
             return FileizedDrawingRecord.failed(
