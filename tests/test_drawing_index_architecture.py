@@ -10,7 +10,7 @@ from src.drawing_index.infrastructure.supabase_summary_sink import (
     SupabaseRunSummarySink,
     SupabaseSummarySettings,
 )
-from src.fileizers.base import DrawingFileizer
+from src.fileizers.base import DrawingFileizer, FileizedRecordWriter
 
 
 def _record(
@@ -112,6 +112,23 @@ def test_registry_stops_after_first_complete_result() -> None:
     assert result.engine == "native"
     assert native.calls == 1
     assert fallback.calls == 0
+
+
+def test_record_writer_places_incomplete_ok_record_in_review_queue(tmp_path: Path) -> None:
+    record = _record(
+        "native",
+        complete=False,
+        warnings=[{"type": "unsupported_proxy"}],
+    )
+    CompletenessPolicy().apply(record)
+    paths = FileizedRecordWriter(tmp_path).write(record)
+
+    assert "review" in paths
+    assert Path(paths["review"]).exists()
+    assert "failure" not in paths
+    markdown = Path(paths["markdown"]).read_text(encoding="utf-8")
+    assert "Review blockers" in markdown
+    assert "warning:unsupported_proxy" in markdown
 
 
 class _Response:
