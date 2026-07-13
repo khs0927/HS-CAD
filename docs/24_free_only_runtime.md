@@ -36,7 +36,15 @@ All drawing bytes, extracted text, coordinates, entities, and search indexes rem
 
 ZWCAD itself is not bundled or licensed by HS-CAD. When ZWCAD is unavailable, DWG conversion/fallback capabilities depend on the locally installed converter; DXF, PDF, image, SQLite, and search functions remain free.
 
-## One-command local run
+## One-command Windows setup
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\setup_free_local.ps1
+```
+
+The script creates a Python 3.11 virtual environment, installs only the open-source local dependencies, runs the free-only policy check, and runs the drawing-index test set.
+
+Manual equivalent:
 
 ```powershell
 py -3.11 -m venv .venv
@@ -74,7 +82,7 @@ pip install -e ".[ocr]"
 
 PaddleOCR is the preferred Korean drawing OCR engine. EasyOCR is a local fallback. Hosted OCR, fal.ai enhancement, OpenAI vision, or other metered APIs are not part of the runtime.
 
-For predictable offline use, pre-download the selected open model once and then set:
+For predictable offline use, download the selected open model once on a trusted network and then set:
 
 ```text
 HF_HUB_OFFLINE=1
@@ -86,9 +94,13 @@ Synthetic/mock OCR output is not allowed into the production corpus.
 
 ## Optional Supabase free-tier summary
 
-Supabase is not required. It is retained only as an optional control plane for non-sensitive counts and completeness status.
+Supabase is not required. It is retained only as an optional control plane for non-sensitive counts and completeness status. The free-local profile blocks external summaries until the operator explicitly opts in.
 
 ```powershell
+$env:HSCAD_ALLOW_EXTERNAL_SUMMARY = "1"
+$env:HSCAD_SUPABASE_URL = "https://YOUR_FREE_PROJECT.supabase.co"
+$env:HSCAD_SUPABASE_SERVICE_ROLE_KEY = "set-only-in-this-trusted-session"
+
 python -m src.main corpus-run complete `
   --root "D:\CAD" `
   --workspace "outputs\drawing-index-v2" `
