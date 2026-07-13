@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
 import typer
@@ -7,6 +8,7 @@ from rich.table import Table
 
 from src.app.cli import app as root_app
 from src.app.logger import console, success
+from src.semantic_index.evaluation import evaluate_group_csv
 from src.semantic_index.service import SemanticIndexService
 
 semantic_app = typer.Typer(help='Offline text-independent CAD similarity index')
@@ -42,6 +44,31 @@ def query_index(
             hit.feature_version,
         )
     console.print(table)
+
+
+@semantic_app.command('evaluate')
+def evaluate_index(
+    labels: Path = typer.Option(..., exists=True, dir_okay=False, help='CSV with record,group columns'),
+    db: Path = typer.Option(Path('outputs/semantic_index/semantic.sqlite3'), help='Local SQLite index path'),
+    top_k: int = typer.Option(5, min=1, max=100, help='Precision/recall cutoff'),
+    out: Path | None = typer.Option(None, help='Optional JSON report path'),
+) -> None:
+    report = evaluate_group_csv(SemanticIndexService(db), labels, top_k=top_k)
+    precision_key = f'precision_at_{top_k}'
+    recall_key = f'recall_at_{top_k}'
+    hit_key = f'hit_at_{top_k}'
+    table = Table('Queries', f'P@{top_k}', f'R@{top_k}', f'Hit@{top_k}')
+    table.add_row(
+        str(report['evaluated_queries']),
+        f"{report[precision_key]:.4f}",
+        f"{report[recall_key]:.4f}",
+        f"{report[hit_key]:.4f}",
+    )
+    console.print(table)
+    if out:
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding='utf-8')
+        success(f'Evaluation report written: {out}')
 
 
 @semantic_app.command('status')
