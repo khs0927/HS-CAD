@@ -154,6 +154,8 @@ class ZWCADCorpusScanner:
                 or self._safe_get(obj, "SourceFileName")
                 or self._safe_get(obj, "Name")
             )
+        if "PROXY" in upper:
+            item["unsupported_proxy"] = True
         return item
 
     def _append_entity(
@@ -194,38 +196,59 @@ class ZWCADCorpusScanner:
                 }
             )
 
-    def _scan_space(self, collection: Any, *, layout: str, space: str) -> list[dict[str, Any]]:
+    def _scan_space(
+        self, collection: Any, *, layout: str, space: str
+    ) -> list[dict[str, Any]]:
         out: list[dict[str, Any]] = []
         for obj in self._iter_collection(collection):
             self._append_entity(out, obj, layout=layout, space=space)
         return out
 
-    def _scan_layouts(self, doc: Any) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    def _scan_layouts(
+        self, doc: Any
+    ) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
         entities: list[dict[str, Any]] = []
         layouts: list[dict[str, Any]] = []
         scanned_model = False
-        for layout_obj in self._iter_collection(self._safe_get(doc, "Layouts")):
+        layout_collection = list(self._iter_collection(self._safe_get(doc, "Layouts")))
+        for layout_obj in layout_collection:
             name = str(self._safe_get(layout_obj, "Name") or "Layout")
             model_type = bool(
                 self._safe_get(layout_obj, "ModelType", name.lower() == "model")
             )
-            block = self._safe_get(layout_obj, "Block")
             space = "model" if model_type else "paper"
-            if block is None:
-                block = self._safe_get(
-                    doc, "ModelSpace" if model_type else "PaperSpace"
-                )
+            block = self._safe_get(layout_obj, "Block")
+            if block is None and model_type:
+                block = self._safe_get(doc, "ModelSpace")
+            # doc.PaperSpace is only the active paper layout. Reusing it for every
+            # layout creates duplicated/misattributed text, so an unavailable
+            # per-layout Block is reported instead of silently substituting it.
             if block is None:
                 self.warnings.append(
-                    {"type": "layout_collection_unavailable", "layout": name}
+                    {
+                        "type": "layout_block_unavailable",
+                        "layout": name,
+                        "space": space,
+                    }
+                )
+                layouts.append(
+                    {
+                        "name": name,
+                        "space": space,
+                        "available": False,
+                        "tab_order": self._safe_get(layout_obj, "TabOrder"),
+                    }
                 )
                 continue
-            entities.extend(self._scan_space(block, layout=name, space=space))
+            layout_entities = self._scan_space(block, layout=name, space=space)
+            entities.extend(layout_entities)
             scanned_model = scanned_model or model_type
             layouts.append(
                 {
                     "name": name,
                     "space": space,
+                    "available": True,
+                    "entity_count": len(layout_entities),
                     "tab_order": self._safe_get(layout_obj, "TabOrder"),
                     "block_handle": self._safe_get(block, "Handle"),
                 }
@@ -233,11 +256,25 @@ class ZWCADCorpusScanner:
         if not scanned_model:
             model = self._safe_get(doc, "ModelSpace")
             if model is not None:
-                entities.extend(self._scan_space(model, layout="Model", space="model"))
-                layouts.append({"name": "Model", "space": "model"})
+                model_entities = self._scan_space(model, layout="Model", space="model")
+                entities.extend(model_entities)
+                layouts.append(
+                    {
+                        "name": "Model",
+                        "space": "model",
+                        "available": True,
+                        "entity_count": len(model_entities),
+                    }
+                )
+            else:
+                self.warnings.append({"type": "modelspace_unavailable"})
+        if not layout_collection:
+            self.warnings.append({"type": "layout_collection_unavailable"})
         return entities, layouts
 
-    def _scan_block_definitions(self, doc: Any) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    def _scan_block_definitions(
+        self, doc: Any
+    ) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
         entities: list[dict[str, Any]] = []
         xrefs: list[dict[str, Any]] = []
         for block in self._iter_collection(self._safe_get(doc, "Blocks")):
@@ -283,6 +320,34 @@ class ZWCADCorpusScanner:
         entities.extend(block_entities)
         counts = Counter(str(item.get("entity_type") or "UNKNOWN") for item in entities)
         required_ocr = sum(1 for item in entities if item.get("requires_ocr"))
+        proxy_count = sum(1 for item in entities if item.get("unsupported_proxy"))
+        unresolved_xrefs = sum(
+            1
+            for item in xrefs
+            if not item.get("loaded") or not str(item.get("path") or "").strip()
+        )
+        warning_count = len(self.warnings)
+        coverage = {
+            "model_space": any(
+                row.get("space") == "model" and row.get("available", True)
+                for row in layouts
+            ),
+            "paper_space": all(
+                row.get("available", False)
+                for row in layouts
+                if row.get("space") == "paper"
+            ),
+            "block_definitions": True,
+            "block_attributes": True,
+            "constant_attributes": True,
+            "dimensions": True,
+            "leaders": True,
+            "tables": True,
+            "xrefs_declared": True,
+            "xrefs_resolved": unresolved_xrefs == 0,
+            "embedded_raster_ocr": required_ocr == 0,
+            "proxy_objects": proxy_count == 0,
+        }
         report = {
             "schema_version": 2,
             "scanner": "zwcad_com_complete",
@@ -291,20 +356,16 @@ class ZWCADCorpusScanner:
             "layout_count": len(layouts),
             "block_definition_entity_count": len(block_entities),
             "xref_count": len(xrefs),
+            "unresolved_xref_count": unresolved_xrefs,
             "requires_ocr_count": required_ocr,
-            "warning_count": len(self.warnings),
-            "coverage": {
-                "model_space": any(row.get("space") == "model" for row in layouts),
-                "paper_space": any(row.get("space") == "paper" for row in layouts),
-                "block_definitions": True,
-                "block_attributes": True,
-                "constant_attributes": True,
-                "dimensions": True,
-                "leaders": True,
-                "tables": True,
-                "xrefs_declared": True,
-                "embedded_raster_ocr": required_ocr == 0,
-            },
+            "unsupported_proxy_count": proxy_count,
+            "warning_count": warning_count,
+            "coverage": coverage,
+            "complete": warning_count == 0
+            and required_ocr == 0
+            and proxy_count == 0
+            and unresolved_xrefs == 0
+            and all(coverage.values()),
         }
         return {
             "entities": entities,
