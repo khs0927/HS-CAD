@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 import platform
 from pathlib import Path
 
@@ -39,6 +40,19 @@ class ZWCADDWGFileizer(DrawingFileizer):
             errors.append(f"comtypes={exc}")
         return False, "Windows COM bindings unavailable: " + "; ".join(errors)
 
+    @staticmethod
+    def _open_read_only(adapter: ZWCADCOMAdapter, path: Path) -> tuple[bool, str | None]:
+        absolute = os.path.abspath(path).replace("/", "\\")
+        try:
+            adapter.doc = adapter.app.Documents.Open(absolute, True)
+            return True, None
+        except Exception as read_only_error:
+            # Some ZWCAD COM versions expose a one-argument Open method only.
+            # The fallback remains non-mutating, but the record is intentionally
+            # marked incomplete so the weaker lock mode is visible to reviewers.
+            adapter.open_document(absolute)
+            return False, str(read_only_error)
+
     def fileize(
         self,
         path: str | Path,
@@ -61,18 +75,30 @@ class ZWCADDWGFileizer(DrawingFileizer):
         adapter = ZWCADCOMAdapter(visible=False)
         try:
             adapter.connect()
-            adapter.open_document(str(src))
+            opened_read_only, read_only_error = self._open_read_only(adapter, src)
             result = ZWCADCorpusScanner(adapter).scan_document()
             entities = result["entities"]
             texts = text_rows_from_entities(entities)
             warnings = [*adapter.warnings, *result["warnings"]]
+            if not opened_read_only:
+                warnings.append(
+                    {
+                        "type": "read_only_open_unavailable",
+                        "reason": read_only_error,
+                    }
+                )
             report = dict(result["report"])
             report["text_occurrence_count"] = len(texts)
+            report["opened_read_only"] = opened_read_only
             report["adapter_warning_count"] = len(adapter.warnings)
             report["warning_count"] = int(report.get("warning_count", 0)) + len(
                 adapter.warnings
+            ) + (0 if opened_read_only else 1)
+            report["complete"] = (
+                bool(report.get("complete", False))
+                and opened_read_only
+                and not warnings
             )
-            report["complete"] = bool(report.get("complete", False)) and not warnings
             return FileizedDrawingRecord(
                 file_id=file_id,
                 source_path=str(src),
@@ -91,6 +117,7 @@ class ZWCADDWGFileizer(DrawingFileizer):
                 metadata={
                     "object_count": len(entities),
                     "text_occurrence_count": len(texts),
+                    "opened_read_only": opened_read_only,
                     "cad_product": str(
                         ZWCADCorpusScanner._safe_get(adapter.app, "Name", "ZWCAD")
                     ),
