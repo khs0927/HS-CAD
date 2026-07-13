@@ -29,22 +29,24 @@ ENTITY_TYPES = (
     'VIEWPORT',
     'OTHER',
 )
+TEXT_ENTITY_TYPES = {'TEXT', 'MTEXT', 'ATTRIB', 'ATTDEF'}
 ANGLE_BIN_COUNT = 12
 
 
 class GeometryFeatureExtractor:
-    """Build a deterministic, text-independent vector from a fileized drawing."""
+    """Build a deterministic vector after completely removing text entities."""
 
     feature_version = FEATURE_VERSION
 
     def extract(self, record: FileizedDrawingRecord) -> SemanticVector:
-        entities = list(record.entities or [])
+        source_entities = list(record.entities or [])
+        entities = [item for item in source_entities if not _is_text_entity(item)]
         entity_counts = Counter(_entity_type(item) for item in entities)
         total = max(1, len(entities))
 
         entity_hist = [entity_counts.get(name, 0) / total for name in ENTITY_TYPES]
         angle_hist, orthogonal_ratio = _angle_features(entities)
-        layer_features = _distribution_features(_layer_names(record, entities))
+        layer_features = _distribution_features(_layer_names(entities))
         block_features = _block_features(record)
 
         polyline_count = entity_counts['LWPOLYLINE'] + entity_counts['POLYLINE']
@@ -70,7 +72,9 @@ class GeometryFeatureExtractor:
             vector=vector.astype(float).tolist(),
             metadata={
                 'entity_count': len(entities),
-                'layer_count': len(record.layers or []),
+                'source_entity_count': len(source_entities),
+                'ignored_text_entity_count': len(source_entities) - len(entities),
+                'layer_count': len(set(_layer_names(entities))),
                 'block_count': len(record.blocks or []),
                 'text_ignored': True,
                 'vector_dimensions': int(vector.size),
@@ -78,23 +82,24 @@ class GeometryFeatureExtractor:
         )
 
 
-def _entity_type(item: dict[str, Any]) -> str:
+def _raw_entity_type(item: dict[str, Any]) -> str:
     value = str(item.get('entity_type') or item.get('type') or item.get('ObjectName') or '').upper()
-    value = value.removeprefix('ACDB').removeprefix('ZWCAD.')
+    return value.removeprefix('ACDB').removeprefix('ZWCAD.')
+
+
+def _is_text_entity(item: dict[str, Any]) -> bool:
+    value = _raw_entity_type(item)
+    return value in TEXT_ENTITY_TYPES or value.endswith('TEXT') or value.endswith('ATTRIBUTE')
+
+
+def _entity_type(item: dict[str, Any]) -> str:
+    value = _raw_entity_type(item)
     aliases = {'INSERTREF': 'INSERT', 'BLOCKREFERENCE': 'INSERT', 'POLYLINE2D': 'POLYLINE'}
     value = aliases.get(value, value)
     return value if value in ENTITY_TYPES else 'OTHER'
 
 
-def _layer_names(record: FileizedDrawingRecord, entities: list[dict[str, Any]]) -> list[str]:
-    names: list[str] = []
-    for row in record.layers or []:
-        name = str(row.get('name') or '').strip()
-        count = int(row.get('entity_count') or 1)
-        if name:
-            names.extend([name] * max(1, count))
-    if names:
-        return names
+def _layer_names(entities: list[dict[str, Any]]) -> list[str]:
     return [str(item.get('layer') or item.get('Layer') or '0') for item in entities]
 
 
