@@ -95,32 +95,55 @@ class SemanticIndexStore:
         query_vector = np.asarray(query.vector, dtype=np.float32)
         if query_vector.ndim != 1:
             raise ValueError('query vector must be one-dimensional')
+        if not np.isfinite(query_vector).all():
+            raise ValueError('query vector contains non-finite values')
+        query_norm = float(np.linalg.norm(query_vector))
+        if query_norm <= 1e-12:
+            raise ValueError('query drawing has no indexable geometry')
+        query_vector = query_vector / query_norm
+
         with self.connect() as connection:
             rows = connection.execute(
                 'SELECT * FROM semantic_drawings WHERE feature_version = ?',
                 (query.feature_version,),
             ).fetchall()
 
-        hits: list[SearchHit] = []
+        candidates: list[sqlite3.Row] = []
+        vectors: list[np.ndarray] = []
         for row in rows:
             if exclude_file_id and row['file_id'] == exclude_file_id:
                 continue
             candidate = np.asarray(json.loads(row['vector_json']), dtype=np.float32)
-            if candidate.shape != query_vector.shape:
+            if candidate.shape != query_vector.shape or not np.isfinite(candidate).all():
                 continue
-            score = float(np.dot(query_vector, candidate))
+            candidate_norm = float(np.linalg.norm(candidate))
+            if candidate_norm <= 1e-12:
+                continue
+            candidates.append(row)
+            vectors.append(candidate / candidate_norm)
+
+        if not vectors:
+            return []
+
+        matrix = np.vstack(vectors)
+        scores = matrix @ query_vector
+        file_ids = np.asarray([str(row['file_id']) for row in candidates], dtype=object)
+        order = np.lexsort((file_ids, -scores))
+
+        hits: list[SearchHit] = []
+        for index in order[: max(1, int(limit))]:
+            row = candidates[int(index)]
             hits.append(
                 SearchHit(
                     file_id=row['file_id'],
                     relative_path=row['relative_path'],
                     source_path=row['source_path'],
-                    score=score,
+                    score=float(scores[int(index)]),
                     feature_version=row['feature_version'],
                     metadata=json.loads(row['metadata_json'] or '{}'),
                 )
             )
-        hits.sort(key=lambda item: item.score, reverse=True)
-        return hits[: max(1, limit)]
+        return hits
 
     def count(self, feature_version: str | None = None) -> int:
         with self.connect() as connection:
