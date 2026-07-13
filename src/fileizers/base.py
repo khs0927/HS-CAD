@@ -31,18 +31,20 @@ class DrawingFileizer(ABC):
 
 
 class FileizedRecordWriter:
-    """Write stable JSON and complete searchable Markdown evidence."""
+    """Write stable JSON, review evidence, and searchable Markdown."""
 
     def __init__(self, root: str | Path):
         self.root = Path(root)
         self.json_dir = self.root / "fileized" / "json"
         self.md_dir = self.root / "fileized" / "markdown"
         self.failure_dir = self.root / "failures"
+        self.review_dir = self.root / "reviews"
 
     def write(self, record: FileizedDrawingRecord) -> dict[str, str]:
         self.json_dir.mkdir(parents=True, exist_ok=True)
         self.md_dir.mkdir(parents=True, exist_ok=True)
         self.failure_dir.mkdir(parents=True, exist_ok=True)
+        self.review_dir.mkdir(parents=True, exist_ok=True)
 
         json_path = self.json_dir / f"{record.file_id}.json"
         json_path.write_text(
@@ -61,6 +63,19 @@ class FileizedRecordWriter:
                 encoding="utf-8",
             )
             paths["failure"] = str(failure_path)
+
+        complete = bool((record.extraction_report or {}).get("complete"))
+        if record.status != "ok" or not complete:
+            review_path = self.review_dir / f"{record.file_id}.json"
+            review_path.write_text(
+                json.dumps(record.to_dict(), ensure_ascii=False, indent=2),
+                encoding="utf-8",
+            )
+            paths["review"] = str(review_path)
+        else:
+            stale_review = self.review_dir / f"{record.file_id}.json"
+            if stale_review.exists():
+                stale_review.unlink()
         return paths
 
     @staticmethod
@@ -93,6 +108,11 @@ class FileizedRecordWriter:
             f"- Extraction complete: `{bool(report.get('complete'))}`",
             "",
         ]
+        blockers = report.get("blockers") or []
+        if blockers:
+            lines.extend(["## Review blockers", ""])
+            lines.extend(f"- `{cls._display_value(item)}`" for item in blockers)
+            lines.append("")
         if report:
             lines.extend(
                 [
