@@ -16,7 +16,8 @@ HS-CAD already contains the correct foundation:
 - corpus record writer;
 - SQLite/FTS index;
 - file, layer, entity, text, block, dimension and failure tables;
-- evidence packages and query/report commands.
+- evidence packages and query/report commands;
+- PDF raster, PaddleOCR text-region, OCR-to-CAD matching and text-evidence fusion workers.
 
 V2 extends these components rather than starting over.
 
@@ -26,8 +27,9 @@ V2 extends these components rather than starting over.
 |---|---:|---|---|
 | `mozman/ezdxf` | MIT | Adopt | Primary DXF parser and non-Windows test engine |
 | SQLite FTS5 | Public domain | Adopt | Local full-text index |
-| `PaddlePaddle/PaddleOCR` | Apache-2.0 | Optional adopt | Korean/rotated raster text OCR |
-| `tesseract-ocr/tesseract` | Apache-2.0 | Optional fallback | CPU OCR fallback |
+| `PaddlePaddle/PaddleOCR` | Apache-2.0 | Reuse existing | Korean/rotated raster text OCR |
+| EasyOCR | Apache-2.0 | Existing optional fallback | OCR fallback in non-corpus workflows |
+| `tesseract-ocr/tesseract` | Apache-2.0 | Future lightweight fallback | CPU OCR fallback |
 | `LibreDWG/libredwg` | GPL-3.0 | External optional only | DWG recovery/conversion when CAD is absent |
 | `DomCR/ACadSharp` | MIT | Keep as .NET fallback candidate | Independent DWG/DXF cross-check, not Python core |
 | `LibreCAD/libdxfrw` | GPL-2.0 | Do not embed | C++ integration cost and weaker fit than ezdxf |
@@ -73,7 +75,7 @@ Raw, visible and normalized text are all retained. Search never replaces the evi
 The V2 ZWCAD scanner covers:
 
 - ModelSpace;
-- every paper-space Layout;
+- every paper-space Layout whose layout block is exposed by COM;
 - TEXT, MTEXT, ATTRIB and constant attributes;
 - block definitions and block-reference attributes;
 - dimensions: override, evaluated display and measurement fallback;
@@ -81,7 +83,10 @@ The V2 ZWCAD scanner covers:
 - Table cell values;
 - XREF declarations and paths;
 - handles, layers, layout names, block paths and positions;
-- raster/OLE detection with an explicit OCR-required flag.
+- raster/OLE detection with an explicit OCR-required flag;
+- proxy-object detection.
+
+A missing layout block is never replaced with the active `PaperSpace`, because that would duplicate and mislabel text. It is recorded as incomplete instead.
 
 DXF receives the same canonical structure through ezdxf and scans all layouts, block definitions and INSERT attributes.
 
@@ -91,13 +96,14 @@ DXF receives the same canonical structure through ezdxf and scans all layouts, b
 
 - entity and text occurrence counts;
 - layout and block-definition counts;
-- XREF count;
+- XREF and unresolved-XREF counts;
 - warning count;
 - raster/OLE OCR-required count;
+- unsupported proxy-object count;
 - per-capability coverage flags;
 - fallback attempts.
 
-A drawing is marked complete only when no extraction warnings remain and no unprocessed raster/OLE text source is detected. Unsupported proxy objects, password-protected/corrupt files and unloaded XREFs remain visible as failures, not silently ignored.
+A drawing is marked complete only when no extraction warnings remain, all exposed layouts were scanned, XREF declarations are resolved, no unsupported proxy object remains and no unprocessed raster/OLE text source is detected. Password-protected/corrupt files and unavailable engines remain visible as failures, not silently ignored.
 
 ## Storage
 
@@ -120,18 +126,20 @@ For DWG:
 3. optional external LibreDWG adapter in a separate process;
 4. metadata-only failure record.
 
-The runner now continues to the next fileizer when an earlier engine is unavailable or fails, and records every attempt.
+The runner continues to the next fileizer when an earlier engine is unavailable or fails, and records every attempt. Availability checks do not launch a second ZWCAD instance.
 
 ## Raster/OCR phase
 
 Native CAD text and OCR text must not be mixed without provenance.
 
+- The existing `src/ocr/text_region_analysis.py` is the corpus-safe OCR route: it runs real PaddleOCR when installed and otherwise reports `paddleocr unavailable`; it does not fabricate text.
+- The older `neuro_seq_cad/ocr/paddleocr_adapter.py` mock fallback is excluded from corpus indexing because synthetic text must never enter the search index.
 - Native CAD text uses confidence `1.0`.
 - OCR rows use `source_kind=ocr`, engine/model metadata and per-box confidence.
 - Embedded images and OLE objects are first recorded as OCR-required evidence.
-- PaddleOCR is the preferred optional Korean/rotation-aware engine.
-- Tesseract is a lightweight fallback.
-- OCR output is always supplemental and never overwrites native text.
+- Existing OCR-to-CAD matching now reads canonical V2 text occurrences, including attributes, dimensions, leaders and tables.
+- Existing text-evidence fusion remains the review/conflict layer.
+- OCR output is supplemental and never overwrites native text.
 
 ## Local validation
 
@@ -142,7 +150,7 @@ python -m pytest -q tests/test_drawing_index_v2.py
 python -m pytest -q tests/test_corpus_foundation.py
 ```
 
-Windows/ZWCAD smoke test:
+Windows/ZWCAD fixture test:
 
 ```powershell
 python -m src.main corpus-run prepare --root "D:\CAD" --workspace "outputs\index-v2" --sample 5
@@ -156,4 +164,7 @@ For each sample, inspect `fileized/json/*.json` and confirm:
 - all layouts are listed;
 - native and block-attribute strings are present;
 - table/leader/dimension strings are present where applicable;
+- raster/OLE and proxy objects are explicitly reported;
 - `extraction_report.complete` is true, or every missing category has a reason.
+
+No claim of complete production coverage is valid until this real ZWCAD fixture matrix passes.
