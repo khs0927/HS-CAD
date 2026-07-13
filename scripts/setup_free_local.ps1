@@ -55,7 +55,8 @@ if (-not $SkipTests) {
         tests\test_corpus_foundation.py `
         tests\test_drawing_index_v2.py `
         tests\test_drawing_index_architecture.py `
-        tests\test_free_only_runtime.py
+        tests\test_free_only_runtime.py `
+        tests\test_compare_drawing_index_fixture_runs.py
     if ($LASTEXITCODE -ne 0) { throw "Local tests failed" }
 }
 
