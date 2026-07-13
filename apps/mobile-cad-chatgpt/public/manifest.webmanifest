@@ -1,0 +1,11 @@
+{
+  "name": "HS-CAD Mobile",
+  "short_name": "HS-CAD",
+  "description": "모바일 전용 건축 도면 및 DXF/SVG 생성기",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#eef2f7",
+  "theme_color": "#193b66",
+  "lang": "ko",
+  "orientation": "any"
+}
