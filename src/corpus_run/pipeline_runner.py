@@ -35,8 +35,6 @@ class CorpusPipelineRunner:
 
         if fileizers is None:
             configured: list[DrawingFileizer] = []
-            if include_com_fallback:
-                configured.append(ZWCADDWGFileizer())
             configured.extend(
                 [
                     DWGToDXFEzdxfFileizer(temp_root=self.workspace / "tmp" / "dxf"),
@@ -45,6 +43,11 @@ class CorpusPipelineRunner:
                     ImageMetadataFileizer(),
                 ]
             )
+            if include_com_fallback:
+                # COM is deliberately last: the registry tries fileizers in
+                # order, so local extraction gets first chance and ZWCAD is
+                # used only when the fallback path cannot complete a DWG.
+                configured.append(ZWCADDWGFileizer())
         else:
             configured = list(fileizers)
         self.registry = FileizerRegistry(configured)
