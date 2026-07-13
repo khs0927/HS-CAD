@@ -14,22 +14,10 @@ Set-Location $repo
 $env:HSCAD_RUNTIME_PROFILE = "free-local"
 $env:HSCAD_SUMMARY_BACKEND = "local"
 $env:HSCAD_ALLOW_PAID_SERVICES = "0"
+$env:HSCAD_ALLOW_EXTERNAL_SUMMARY = "0"
 $env:HSCAD_ALLOW_NETWORK_MODELS = "0"
 $env:HF_HUB_OFFLINE = "1"
 $env:TRANSFORMERS_OFFLINE = "1"
-
-function Invoke-PythonCommand {
-    param([string]$Arguments)
-    $parts = $Python -split " ", 2
-    if ($parts.Count -eq 1) {
-        & $parts[0] $Arguments.Split(" ")
-    } else {
-        & $parts[0] $parts[1] $Arguments.Split(" ")
-    }
-    if ($LASTEXITCODE -ne 0) {
-        throw "Python command failed: $Python $Arguments"
-    }
-}
 
 if (-not (Test-Path "$Venv\Scripts\python.exe")) {
     Write-Host "[HS-CAD] Creating Python 3.11 virtual environment: $Venv"
@@ -47,10 +35,13 @@ $pythonExe = Resolve-Path "$Venv\Scripts\python.exe"
 if (-not $SkipInstall) {
     Write-Host "[HS-CAD] Installing open-source local runtime"
     & $pythonExe -m pip install --upgrade pip
+    if ($LASTEXITCODE -ne 0) { throw "pip upgrade failed" }
     & $pythonExe -m pip install -e ".[dev]"
+    if ($LASTEXITCODE -ne 0) { throw "project installation failed" }
     if ($WithOCR) {
         Write-Host "[HS-CAD] Installing optional local OCR packages"
         & $pythonExe -m pip install -e ".[ocr]"
+        if ($LASTEXITCODE -ne 0) { throw "OCR package installation failed" }
     }
 }
 
