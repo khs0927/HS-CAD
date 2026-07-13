@@ -94,6 +94,7 @@ def _required_files(root: Path) -> list[dict[str, str]]:
         "src/drawing_index/infrastructure/local_sqlite_summary_sink.py",
         "config/free-only.env.example",
         "docs/24_free_only_runtime.md",
+        "scripts/setup_free_local.ps1",
     ]
     return [
         {"type": "missing_required_file", "path": value}
@@ -120,6 +121,8 @@ def validate(root: Path) -> dict[str, Any]:
             "HSCAD_RUNTIME_PROFILE=free-local",
             "HSCAD_SUMMARY_BACKEND=local",
             "HSCAD_ALLOW_PAID_SERVICES=0",
+            "HSCAD_ALLOW_EXTERNAL_SUMMARY=0",
+            "HSCAD_ALLOW_NETWORK_MODELS=0",
         ):
             if required_setting not in profile_text:
                 issues.append(
@@ -140,6 +143,7 @@ def validate(root: Path) -> dict[str, Any]:
             "Default run summaries are stored in local SQLite.",
             "No paid AI SDK is a required dependency.",
             "Cloud services are optional and disabled by default.",
+            "Network model downloads are disabled in the free-local profile.",
             "Drawing bytes and extracted text remain local by default.",
         ],
     }
