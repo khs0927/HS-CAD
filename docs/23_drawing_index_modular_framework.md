@@ -45,6 +45,11 @@ For a DWG file the registry now:
 4. otherwise continues to DWG-to-DXF/ezdxf;
 5. selects the highest-quality result and records every attempt.
 
+If an extractor raises an exception, the registry converts that attempt into a
+failed evidence record and continues to the next matching read-only fallback.
+This prevents one COM, licensing, proxy, or parser failure from aborting the
+entire corpus while preserving the failure reason for review.
+
 This fixes the previous behavior where the first `status=ok` result was accepted
 even when its extraction report was incomplete.
 
@@ -80,6 +85,29 @@ file is:
 
 ```text
 outputs/drawing-index-v2/DRAWING_INDEX_RUN_SUMMARY.json
+```
+
+## Connected Windows/ZWCAD fixture gate
+
+The final release gate requires the user's real Windows 11 computer, licensed
+ZWCAD 2026 installation, and private drawing fixtures. Run the native and
+fallback comparison matrix with:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\run_windows_drawing_index_fixture_matrix.ps1 `
+  -Root "D:\PRIVATE-DRAWING-FIXTURES" `
+  -Workspace "outputs\codex-windows-fixture-matrix" `
+  -Query "평면도","입면도","단면도","창호","구조"
+```
+
+This produces separate native/fallback reports and a release-gate comparison.
+The local `outputs/` evidence must not be committed because it can contain
+private paths and extracted drawing content.
+
+The complete copy-paste Codex task is stored in:
+
+```text
+docs/CODEX_HANDOFF_WINDOWS_ZWCAD_VALIDATION.md
 ```
 
 ## Optional Supabase control plane
