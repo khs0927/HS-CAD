@@ -53,6 +53,8 @@ function Invoke-ValidationPass {
 
     Write-Host ""
     Write-Host "[HS-CAD] Running $Name fixture pass"
+    New-Item -ItemType Directory -Force -Path $TargetWorkspace | Out-Null
+    $logPath = Join-Path $TargetWorkspace "console.log"
     $args = @(
         "scripts\validate_drawing_index_v2.py",
         $rootPath,
@@ -65,8 +67,11 @@ function Invoke-ValidationPass {
     }
     if ($NoNative) { $args += "--no-native-zwcad" }
 
-    & $python @args 2>&1 | Tee-Object -FilePath (Join-Path $TargetWorkspace "console.log")
-    return $LASTEXITCODE
+    & $python @args 2>&1 |
+        Tee-Object -FilePath $logPath |
+        ForEach-Object { Write-Host $_ }
+    $exitCode = $LASTEXITCODE
+    return $exitCode
 }
 
 $nativeExit = Invoke-ValidationPass -Name "native ZWCAD + fallback" -TargetWorkspace $nativeWorkspace
@@ -82,7 +87,7 @@ Write-Host "[HS-CAD] Comparing fixture passes"
 $comparisonExit = $LASTEXITCODE
 
 $zwcadProcesses = @(Get-Process -ErrorAction SilentlyContinue | Where-Object {
-    $_.ProcessName -match "^(ZWCAD|ZWCAD.exe)$"
+    $_.ProcessName -match "^ZWCAD$"
 })
 $zwcadStatus = if ($zwcadProcesses.Count -gt 0) {
     "Detected running ZWCAD process"
@@ -93,13 +98,13 @@ $zwcadStatus = if ($zwcadProcesses.Count -gt 0) {
 $lines = @(
     "# Codex Windows/ZWCAD Validation Result",
     "",
-    "- Date: `$(Get-Date -Format o)`",
-    "- Repository: `$repo`",
-    "- Drawing root: `$rootPath`",
-    "- Native pass exit code: `$nativeExit`",
-    "- Fallback pass exit code: `$fallbackExit`",
-    "- Comparison exit code: `$comparisonExit`",
-    "- ZWCAD observation: `$zwcadStatus`",
+    "- Date: $(Get-Date -Format o)",
+    "- Repository: $repo",
+    "- Drawing root: $rootPath",
+    "- Native pass exit code: $nativeExit",
+    "- Fallback pass exit code: $fallbackExit",
+    "- Comparison exit code: $comparisonExit",
+    "- ZWCAD observation: $zwcadStatus",
     "",
     "## Artifacts",
     "",
