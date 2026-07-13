@@ -3,31 +3,39 @@
   "version": "0.2.0",
   "private": true,
   "type": "module",
+  "engines": {
+    "node": ">=22.18.0"
+  },
   "scripts": {
-    "build": "vite build",
     "dev": "npm run build && wrangler dev",
+    "build": "vite build",
     "deploy": "npm run build && wrangler deploy",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "validate": "npm run typecheck && npm test && npm run build"
+    "validate": "npm run typecheck && npm test && npm run build",
+    "predev": "node bootstrap.mjs",
+    "prebuild": "node bootstrap.mjs",
+    "predeploy": "node bootstrap.mjs",
+    "pretypecheck": "node bootstrap.mjs",
+    "pretest": "node bootstrap.mjs"
   },
   "dependencies": {
-    "@modelcontextprotocol/ext-apps": "^1.7.4",
-    "@modelcontextprotocol/sdk": "^1.29.0",
-    "agents": "^0.17.3",
-    "react": "^19.2.7",
-    "react-dom": "^19.2.7",
-    "zod": "^4.4.3"
+    "@modelcontextprotocol/ext-apps": "1.7.4",
+    "@modelcontextprotocol/sdk": "1.29.0",
+    "agents": "0.17.3",
+    "react": "19.2.7",
+    "react-dom": "19.2.7",
+    "zod": "4.4.3"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^5.20260713.1",
-    "@types/react": "^19.2.6",
-    "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react": "^6.0.3",
-    "typescript": "^5.8.3",
-    "vite": "^8.1.4",
-    "vite-plugin-singlefile": "^2.3.3",
-    "vitest": "^4.1.10",
-    "wrangler": "^4.110.0"
+    "@cloudflare/workers-types": "5.20260713.1",
+    "@types/react": "19.2.6",
+    "@types/react-dom": "19.2.3",
+    "@vitejs/plugin-react": "6.0.3",
+    "typescript": "5.8.3",
+    "vite": "8.1.4",
+    "vite-plugin-singlefile": "2.3.3",
+    "vitest": "4.1.10",
+    "wrangler": "4.110.0"
   }
 }
