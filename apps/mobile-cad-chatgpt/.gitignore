@@ -2,3 +2,5 @@ node_modules/
 dist/
 .wrangler/
 .dev.vars
+deployment-logs/
+CODEX_DEPLOYMENT_RESULT.md
