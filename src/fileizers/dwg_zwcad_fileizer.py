@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import platform
 from pathlib import Path
 
 from src.adapters.zwcad_com_adapter import ZWCADCOMAdapter
@@ -21,19 +22,22 @@ class ZWCADDWGFileizer(DrawingFileizer):
     supported_extensions = (".dwg",)
 
     def is_available(self) -> tuple[bool, str]:
+        if platform.system() != "Windows":
+            return False, "ZWCAD COM requires Windows"
+        errors: list[str] = []
+        try:
+            import win32com.client  # noqa: F401
+
+            return True, "pywin32 COM binding available"
+        except Exception as exc:
+            errors.append(f"pywin32={exc}")
         try:
             import comtypes.client  # noqa: F401
+
+            return True, "comtypes COM binding available"
         except Exception as exc:
-            try:
-                import win32com.client  # noqa: F401
-            except Exception:
-                return False, f"Windows COM bindings unavailable: {exc}"
-        try:
-            adapter = ZWCADCOMAdapter(visible=False)
-            adapter.connect()
-            return True, "ZWCAD COM available"
-        except Exception as exc:
-            return False, f"ZWCAD COM unavailable: {exc}"
+            errors.append(f"comtypes={exc}")
+        return False, "Windows COM bindings unavailable: " + "; ".join(errors)
 
     def fileize(
         self,
@@ -61,12 +65,14 @@ class ZWCADDWGFileizer(DrawingFileizer):
             result = ZWCADCorpusScanner(adapter).scan_document()
             entities = result["entities"]
             texts = text_rows_from_entities(entities)
+            warnings = [*adapter.warnings, *result["warnings"]]
             report = dict(result["report"])
             report["text_occurrence_count"] = len(texts)
-            report["complete"] = (
-                report.get("warning_count", 0) == 0
-                and report.get("requires_ocr_count", 0) == 0
+            report["adapter_warning_count"] = len(adapter.warnings)
+            report["warning_count"] = int(report.get("warning_count", 0)) + len(
+                adapter.warnings
             )
+            report["complete"] = bool(report.get("complete", False)) and not warnings
             return FileizedDrawingRecord(
                 file_id=file_id,
                 source_path=str(src),
@@ -93,7 +99,7 @@ class ZWCADDWGFileizer(DrawingFileizer):
                     ),
                     "active_progid": adapter.active_progid,
                 },
-                warnings=[*adapter.warnings, *result["warnings"]],
+                warnings=warnings,
             )
         except Exception as exc:
             return FileizedDrawingRecord.failed(
