@@ -5,7 +5,7 @@ import platform
 from pathlib import Path
 
 from src.adapters.zwcad_com_adapter import ZWCADCOMAdapter
-from src.adapters.zwcad_corpus_scanner import ZWCADCorpusScanner
+from src.adapters.zwcad_complete_corpus_scanner import ZWCADCompleteCorpusScanner
 from src.corpus.schema import (
     FileizedDrawingRecord,
     block_rows_from_entities,
@@ -76,7 +76,7 @@ class ZWCADDWGFileizer(DrawingFileizer):
         try:
             adapter.connect()
             opened_read_only, read_only_error = self._open_read_only(adapter, src)
-            result = ZWCADCorpusScanner(adapter).scan_document()
+            result = ZWCADCompleteCorpusScanner(adapter).scan_document()
             entities = result["entities"]
             texts = text_rows_from_entities(entities)
             warnings = [*adapter.warnings, *result["warnings"]]
@@ -119,10 +119,14 @@ class ZWCADDWGFileizer(DrawingFileizer):
                     "text_occurrence_count": len(texts),
                     "opened_read_only": opened_read_only,
                     "cad_product": str(
-                        ZWCADCorpusScanner._safe_get(adapter.app, "Name", "ZWCAD")
+                        ZWCADCompleteCorpusScanner._safe_get(
+                            adapter.app, "Name", "ZWCAD"
+                        )
                     ),
                     "cad_version": str(
-                        ZWCADCorpusScanner._safe_get(adapter.app, "Version", "")
+                        ZWCADCompleteCorpusScanner._safe_get(
+                            adapter.app, "Version", ""
+                        )
                     ),
                     "active_progid": adapter.active_progid,
                 },
