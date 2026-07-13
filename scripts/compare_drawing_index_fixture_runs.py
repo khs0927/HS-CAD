@@ -83,7 +83,7 @@ def classify(native: dict[str, Any], fallback: dict[str, Any]) -> tuple[str, lis
         reasons.append("native path remains incomplete")
 
     if fallback["present"] and native["layouts"] < fallback["layouts"]:
-        severity = "BLOCK" if severity == "PASS" else severity
+        severity = "BLOCK"
         reasons.append(
             f"native layouts {native['layouts']} < fallback layouts {fallback['layouts']}"
         )
