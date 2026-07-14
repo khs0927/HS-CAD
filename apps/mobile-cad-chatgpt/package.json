@@ -1,30 +1,25 @@
 {
   "name": "hscad-mobile-chatgpt-app",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "type": "module",
   "engines": {
     "node": ">=22.18.0"
   },
   "scripts": {
-    "dev": "npm run build && wrangler dev",
-    "build": "vite build",
-    "deploy": "npm run build && wrangler deploy",
+    "dev": "npm run build:ui && wrangler dev",
+    "build": "npm run build:ui",
+    "build:ui": "vite build",
+    "deploy": "npm run validate:ci && wrangler deploy",
     "typecheck": "tsc --noEmit",
-    "test": "npm run test:bootstrap && npm run test:deployment && vitest run --exclude '**/*.test.mjs'",
-    "test:bootstrap": "node --test bootstrap.test.mjs",
-    "test:deployment": "node --test deployment-script.test.mjs",
-    "validate": "npm run typecheck && npm test && npm run build",
-    "validate:ci": "npm run validate && wrangler deploy --dry-run",
-    "predev": "node bootstrap.mjs",
-    "prebuild": "node bootstrap.mjs",
-    "predeploy": "node bootstrap.mjs",
-    "pretypecheck": "node bootstrap.mjs",
-    "pretest": "node bootstrap.mjs"
+    "test": "vitest run",
+    "validate": "npm run typecheck && npm test && npm run build:ui",
+    "validate:ci": "npm run validate && wrangler deploy --dry-run"
   },
   "dependencies": {
     "@modelcontextprotocol/ext-apps": "1.7.4",
     "@modelcontextprotocol/sdk": "1.29.0",
+    "@tarikjabiri/dxf": "3.0.0-alpha.13",
     "agents": "0.17.3",
     "react": "19.2.7",
     "react-dom": "19.2.7",
