@@ -1,3 +1,4 @@
+import { BUILDING_SCHEMA_VERSION } from "./types";
 import type {
   BuildingSpec,
   DrawingMetrics,
@@ -5,16 +6,27 @@ import type {
   DrawingView,
   Entity,
   Facade,
+  FacadeFeature,
+  GridAxis,
   Opening,
   OpeningScheduleRow,
   Point,
+  RoomLabel,
   Segment,
   StairSpec,
+  SymbolItem,
+  ValidationIssue,
 } from "./types";
 
-export const ENGINE_VERSION = "0.2.0";
+export const ENGINE_VERSION = "0.3.0";
 
 const EPS = 1e-6;
+const MAX_OUTLINE_POINTS = 64;
+const MAX_INTERIOR_WALLS = 128;
+const MAX_OPENINGS = 128;
+const MAX_SYMBOLS = 256;
+const COORDINATE_LIMIT = 100000;
+const DEFAULT_GENERATED_AT = "1970-01-01T00:00:00.000Z";
 
 const DEFAULT_OUTLINE = (width: number, depth: number): Point[] => [
   { x: 0, y: 0 },
@@ -67,6 +79,16 @@ const polygonArea = (points: Point[]): number => {
     area += a.x * b.y - b.x * a.y;
   }
   return Math.abs(area) / 2;
+};
+
+const polygonSignedArea = (points: Point[]): number => {
+  let area = 0;
+  for (let i = 0; i < points.length; i += 1) {
+    const a = points[i];
+    const b = points[(i + 1) % points.length];
+    area += a.x * b.y - b.x * a.y;
+  }
+  return area / 2;
 };
 
 const polygonPerimeter = (points: Point[]): number => points.reduce((total, point, index) => {
@@ -136,27 +158,38 @@ const pointOnWall = (outline: Point[], wallIndex: number, offset: number): { poi
   return { point: { x: a.x + dx * t, y: a.y + dy * t }, angle: Math.atan2(dy, dx), length };
 };
 
+const lineIntersection = (a: Point, directionA: Point, b: Point, directionB: Point): Point | null => {
+  const cross = directionA.x * directionB.y - directionA.y * directionB.x;
+  if (Math.abs(cross) < EPS) return null;
+  const dx = b.x - a.x;
+  const dy = b.y - a.y;
+  const t = (dx * directionB.y - dy * directionB.x) / cross;
+  return { x: a.x + directionA.x * t, y: a.y + directionA.y * t };
+};
+
+/** Parallel polygon offset used for both orthogonal and diagonal wall segments. */
 const insetOutline = (points: Point[], thickness: number): Point[] => {
-  const b = bounds(points);
-  const isAxisRect = points.length === 4 && points.every((point) =>
-    (Math.abs(point.x - b.minX) < EPS || Math.abs(point.x - b.maxX) < EPS) &&
-    (Math.abs(point.y - b.minY) < EPS || Math.abs(point.y - b.maxY) < EPS));
-  if (isAxisRect) {
-    return [
-      { x: b.minX + thickness, y: b.minY + thickness },
-      { x: b.maxX - thickness, y: b.minY + thickness },
-      { x: b.maxX - thickness, y: b.maxY - thickness },
-      { x: b.minX + thickness, y: b.maxY - thickness },
-    ];
-  }
-  const centroid = points.reduce((acc, point) => ({ x: acc.x + point.x, y: acc.y + point.y }), { x: 0, y: 0 });
-  centroid.x /= points.length;
-  centroid.y /= points.length;
-  return points.map((point) => {
-    const dx = centroid.x - point.x;
-    const dy = centroid.y - point.y;
+  if (points.length < 3) return points.map((point) => ({ ...point }));
+  const ccw = polygonSignedArea(points) > 0;
+  const edges = points.map((point, index) => {
+    const next = points[(index + 1) % points.length];
+    const dx = next.x - point.x;
+    const dy = next.y - point.y;
     const length = Math.hypot(dx, dy) || 1;
-    return { x: point.x + (dx / length) * thickness, y: point.y + (dy / length) * thickness };
+    const direction = { x: dx / length, y: dy / length };
+    const normal = ccw ? { x: -direction.y, y: direction.x } : { x: direction.y, y: -direction.x };
+    return { direction, normal };
+  });
+  return points.map((point, index) => {
+    const previous = edges[(index - 1 + edges.length) % edges.length];
+    const current = edges[index];
+    const previousPoint = { x: point.x + previous.normal.x * thickness, y: point.y + previous.normal.y * thickness };
+    const currentPoint = { x: point.x + current.normal.x * thickness, y: point.y + current.normal.y * thickness };
+    const intersection = lineIntersection(previousPoint, previous.direction, currentPoint, current.direction);
+    if (intersection && Math.hypot(intersection.x - point.x, intersection.y - point.y) <= thickness * 8) return intersection;
+    const average = { x: previous.normal.x + current.normal.x, y: previous.normal.y + current.normal.y };
+    const length = Math.hypot(average.x, average.y) || 1;
+    return { x: point.x + average.x / length * thickness, y: point.y + average.y / length * thickness };
   });
 };
 
@@ -209,10 +242,10 @@ const sectionMarker = (entities: Entity[], start: Point, end: Point, label: stri
   entities.push(text({ x: end.x - 80, y: end.y - 55 }, label, 120, "A-SECT"));
 };
 
-const defaultInteriorWalls = (width: number, depth: number): Segment[] => [
-  { start: { x: width * 0.34, y: 0 }, end: { x: width * 0.34, y: depth * 0.58 } },
-  { start: { x: width * 0.34, y: depth * 0.58 }, end: { x: width, y: depth * 0.58 } },
-  { start: { x: width * 0.68, y: depth * 0.58 }, end: { x: width * 0.68, y: depth } },
+const defaultInteriorWalls = (width: number, depth: number, minX = 0, minY = 0): Segment[] => [
+  { start: { x: minX + width * 0.34, y: minY }, end: { x: minX + width * 0.34, y: minY + depth * 0.58 } },
+  { start: { x: minX + width * 0.34, y: minY + depth * 0.58 }, end: { x: minX + width, y: minY + depth * 0.58 } },
+  { start: { x: minX + width * 0.68, y: minY + depth * 0.58 }, end: { x: minX + width * 0.68, y: minY + depth } },
 ];
 
 const defaultOpenings = (width: number, depth: number): Opening[] => [
@@ -225,94 +258,201 @@ const defaultOpenings = (width: number, depth: number): Opening[] => [
   { kind: "window", wallIndex: 3, offset: depth * 0.28, width: 1200, height: 1200, sill: 900, label: "W2" },
 ];
 
-const defaultStair = (width: number, depth: number): StairSpec => ({
-  x: width * 0.39,
-  y: depth * 0.28,
+const defaultStair = (width: number, depth: number, minX = 0, minY = 0): StairSpec => ({
+  x: minX + width * 0.39,
+  y: minY + depth * 0.28,
   width: Math.min(3000, width * 0.26),
   length: Math.min(3600, depth * 0.3),
   risers: 14,
   direction: "up-north",
+  treadDepth: 250,
+  landingDepth: Math.min(1000, depth * 0.09),
+  railing: "both",
 });
 
-const addOpeningPlan = (entities: Entity[], outline: Point[], opening: Opening, wallThickness: number): void => {
-  if (opening.wallIndex < 0 || opening.wallIndex >= outline.length) return;
-  const start = pointOnWall(outline, opening.wallIndex, opening.offset);
-  const end = pointOnWall(outline, opening.wallIndex, opening.offset + opening.width);
-  const nx = -Math.sin(start.angle);
-  const ny = Math.cos(start.angle);
-  const tx = Math.cos(start.angle);
-  const ty = Math.sin(start.angle);
-  const jamb = wallThickness * 0.55;
-  entities.push(line({ x: start.point.x - nx * jamb, y: start.point.y - ny * jamb }, { x: start.point.x + nx * jamb, y: start.point.y + ny * jamb }, "A-OPEN"));
-  entities.push(line({ x: end.point.x - nx * jamb, y: end.point.y - ny * jamb }, { x: end.point.x + nx * jamb, y: end.point.y + ny * jamb }, "A-OPEN"));
+const defaultWallIds = (count: number): string[] => Array.from({ length: count }, (_, index) => `WALL-${String(index + 1).padStart(3, "0")}`);
+
+const defaultGridAxes = (b: ReturnType<typeof bounds>): GridAxis[] => [
+  { id: "1", start: { x: b.minX + b.width * 0.25, y: b.minY - 450 }, end: { x: b.minX + b.width * 0.25, y: b.maxY + 450 } },
+  { id: "2", start: { x: b.minX + b.width * 0.75, y: b.minY - 450 }, end: { x: b.minX + b.width * 0.75, y: b.maxY + 450 } },
+  { id: "A", start: { x: b.minX - 450, y: b.minY + b.height * 0.25 }, end: { x: b.maxX + 450, y: b.minY + b.height * 0.25 } },
+  { id: "B", start: { x: b.minX - 450, y: b.minY + b.height * 0.75 }, end: { x: b.maxX + 450, y: b.minY + b.height * 0.75 } },
+];
+
+const defaultRoomLabels = (b: ReturnType<typeof bounds>): RoomLabel[] => [
+  { name: "LOBBY", at: { x: b.minX + b.width * 0.44, y: b.minY + b.height * 0.22 } },
+  { name: "ROOM 1", at: { x: b.minX + b.width * 0.08, y: b.minY + b.height * 0.78 } },
+  { name: "ROOM 2", at: { x: b.minX + b.width * 0.46, y: b.minY + b.height * 0.78 } },
+  { name: "SERVICE", at: { x: b.minX + b.width * 0.76, y: b.minY + b.height * 0.78 } },
+];
+
+const defaultSymbols = (b: ReturnType<typeof bounds>): SymbolItem[] => [
+  { id: "C1", kind: "column", at: { x: b.minX + b.width * 0.08, y: b.minY + b.height * 0.08 }, width: 300, depth: 300 },
+  { id: "C2", kind: "column", at: { x: b.maxX - b.width * 0.08, y: b.minY + b.height * 0.08 }, width: 300, depth: 300 },
+  { kind: "sink", at: { x: b.minX + b.width * 0.82, y: b.minY + b.height * 0.72 }, width: 700, depth: 500 },
+  { kind: "toilet", at: { x: b.minX + b.width * 0.86, y: b.minY + b.height * 0.82 }, width: 420, depth: 680 },
+  { kind: "cabinet", at: { x: b.minX + b.width * 0.72, y: b.minY + b.height * 0.64 }, width: b.width * 0.2, depth: 600 },
+];
+
+const defaultFacadeFeatures = (spec: BuildingSpec): FacadeFeature[] => [
+  { id: "AW-1", kind: "attic-window", facade: "front", offset: spec.width / 2 - 500, width: 1000, height: 700, sill: spec.atticFloorHeight + 450, label: "AW1" },
+  { id: "V-1", kind: "vent", facade: "front", offset: spec.width / 2 - 140, width: 280, height: 220, sill: spec.ridgeHeight - 520 },
+  { id: "DS-1", kind: "downspout", facade: "front", offset: 190 },
+  { id: "DS-2", kind: "downspout", facade: "front", offset: spec.width - 190 },
+];
+
+const wallIndexForOpening = (opening: Opening, wallIds: string[], count: number): number => {
+  if (opening.wallId) return wallIds.indexOf(opening.wallId);
+  return Number.isInteger(opening.wallIndex) && opening.wallIndex! >= 0 && opening.wallIndex! < count ? opening.wallIndex! : -1;
+};
+
+const wallInteriorNormal = (outline: Point[], angle: number): Point => {
+  const sign = polygonSignedArea(outline) >= 0 ? 1 : -1;
+  return { x: -Math.sin(angle) * sign, y: Math.cos(angle) * sign };
+};
+
+const lerpPoint = (a: Point, b: Point, t: number): Point => ({ x: a.x + (b.x - a.x) * t, y: a.y + (b.y - a.y) * t });
+
+const exteriorWallEntities = (outline: Point[], thickness: number, openings: Opening[], wallIds: string[]): Entity[] => {
+  const inner = insetOutline(outline, thickness);
+  const entities: Entity[] = [];
+  for (let wallIndex = 0; wallIndex < outline.length; wallIndex += 1) {
+    const a = outline[wallIndex];
+    const b = outline[(wallIndex + 1) % outline.length];
+    const ia = inner[wallIndex];
+    const ib = inner[(wallIndex + 1) % inner.length];
+    const length = Math.hypot(b.x - a.x, b.y - a.y);
+    if (length <= EPS) continue;
+    const intervals = openings
+      .filter((opening) => opening.placement !== "attic" && wallIndexForOpening(opening, wallIds, outline.length) === wallIndex)
+      .map((opening) => ({ start: clamp(opening.offset, 0, length), end: clamp(opening.offset + opening.width, 0, length) }))
+      .filter((interval) => interval.end - interval.start > EPS)
+      .sort((first, second) => first.start - second.start);
+    const merged: Array<{ start: number; end: number }> = [];
+    for (const interval of intervals) {
+      const previous = merged.at(-1);
+      if (previous && interval.start <= previous.end + EPS) previous.end = Math.max(previous.end, interval.end);
+      else merged.push({ ...interval });
+    }
+    let cursor = 0;
+    const addPiece = (start: number, end: number): void => {
+      if (end - start <= EPS) return;
+      const t0 = start / length;
+      const t1 = end / length;
+      entities.push(poly([lerpPoint(a, b, t0), lerpPoint(a, b, t1), lerpPoint(ia, ib, t1), lerpPoint(ia, ib, t0)], true, "A-WALL"));
+    };
+    for (const interval of merged) {
+      addPiece(cursor, interval.start);
+      cursor = Math.max(cursor, interval.end);
+    }
+    addPiece(cursor, length);
+  }
+  return entities;
+};
+
+const normalizedAngle = (value: number): number => ((value % 360) + 360) % 360;
+
+const shortArc = (center: Point, radius: number, firstAngle: number, secondAngle: number): Entity => {
+  const first = normalizedAngle(firstAngle);
+  const second = normalizedAngle(secondAngle);
+  const delta = normalizedAngle(second - first);
+  return delta <= 180 ? arc(center, radius, first, second, "A-DOOR") : arc(center, radius, second, first, "A-DOOR");
+};
+
+const addOpeningPlan = (entities: Entity[], outline: Point[], opening: Opening, wallThickness: number, wallIds: string[]): void => {
+  if (opening.placement === "attic") return;
+  const wallIndex = wallIndexForOpening(opening, wallIds, outline.length);
+  if (wallIndex < 0) return;
+  const start = pointOnWall(outline, wallIndex, opening.offset);
+  const end = pointOnWall(outline, wallIndex, opening.offset + opening.width);
+  const inward = wallInteriorNormal(outline, start.angle);
+  const directionSign = opening.openingDirection === "out" ? -1 : 1;
+  const nx = inward.x * directionSign;
+  const ny = inward.y * directionSign;
+  const wallNormal = wallInteriorNormal(outline, start.angle);
+  entities.push(line(start.point, { x: start.point.x + wallNormal.x * wallThickness, y: start.point.y + wallNormal.y * wallThickness }, "A-OPEN"));
+  entities.push(line(end.point, { x: end.point.x + wallNormal.x * wallThickness, y: end.point.y + wallNormal.y * wallThickness }, "A-OPEN"));
   if (opening.kind === "door") {
-    const angle = (start.angle * 180) / Math.PI;
-    const side = opening.swing === "left" ? -1 : 1;
+    const wallAngle = (start.angle * 180) / Math.PI;
+    const openAngle = Math.atan2(ny, nx) * 180 / Math.PI;
     if (opening.swing === "double") {
       const half = opening.width / 2;
-      const mid = pointOnWall(outline, opening.wallIndex, opening.offset + half).point;
-      entities.push(line(start.point, { x: start.point.x + tx * half + nx * half, y: start.point.y + ty * half + ny * half }, "A-DOOR"));
-      entities.push(arc(start.point, half, angle, angle + 90, "A-DOOR"));
-      entities.push(line(end.point, { x: end.point.x - tx * half + nx * half, y: end.point.y - ty * half + ny * half }, "A-DOOR"));
-      entities.push(arc(end.point, half, angle + 90, angle + 180, "A-DOOR"));
+      const mid = pointOnWall(outline, wallIndex, opening.offset + half).point;
+      entities.push(line(start.point, { x: start.point.x + nx * half, y: start.point.y + ny * half }, "A-DOOR"));
+      entities.push(shortArc(start.point, half, wallAngle, openAngle));
+      entities.push(line(end.point, { x: end.point.x + nx * half, y: end.point.y + ny * half }, "A-DOOR"));
+      entities.push(shortArc(end.point, half, wallAngle + 180, openAngle));
       entities.push(circle(mid, 35, "A-DOOR"));
     } else {
+      const hingeAtEnd = opening.swing === "left";
+      const hinge = hingeAtEnd ? end.point : start.point;
       const leafEnd = {
-        x: start.point.x + tx * opening.width + nx * opening.width * side,
-        y: start.point.y + ty * opening.width + ny * opening.width * side,
+        x: hinge.x + nx * opening.width,
+        y: hinge.y + ny * opening.width,
       };
-      entities.push(line(start.point, leafEnd, "A-DOOR"));
-      entities.push(arc(start.point, opening.width, side > 0 ? angle : angle - 90, side > 0 ? angle + 90 : angle, "A-DOOR"));
+      entities.push(line(hinge, leafEnd, "A-DOOR"));
+      entities.push(shortArc(hinge, opening.width, wallAngle + (hingeAtEnd ? 180 : 0), openAngle));
     }
   } else {
-    const gap = 45;
-    entities.push(line({ x: start.point.x + nx * gap, y: start.point.y + ny * gap }, { x: end.point.x + nx * gap, y: end.point.y + ny * gap }, "A-WIND"));
-    entities.push(line({ x: start.point.x - nx * gap, y: start.point.y - ny * gap }, { x: end.point.x - nx * gap, y: end.point.y - ny * gap }, "A-WIND"));
-    const mid = pointOnWall(outline, opening.wallIndex, opening.offset + opening.width / 2).point;
-    entities.push(line({ x: mid.x - nx * 95, y: mid.y - ny * 95 }, { x: mid.x + nx * 95, y: mid.y + ny * 95 }, "A-WIND"));
+    const firstDepth = wallThickness * 0.3;
+    const secondDepth = wallThickness * 0.7;
+    entities.push(line({ x: start.point.x + wallNormal.x * firstDepth, y: start.point.y + wallNormal.y * firstDepth }, { x: end.point.x + wallNormal.x * firstDepth, y: end.point.y + wallNormal.y * firstDepth }, "A-WIND"));
+    entities.push(line({ x: start.point.x + wallNormal.x * secondDepth, y: start.point.y + wallNormal.y * secondDepth }, { x: end.point.x + wallNormal.x * secondDepth, y: end.point.y + wallNormal.y * secondDepth }, "A-WIND"));
+    const mid = pointOnWall(outline, wallIndex, opening.offset + opening.width / 2).point;
+    entities.push(line({ x: mid.x, y: mid.y }, { x: mid.x + wallNormal.x * wallThickness, y: mid.y + wallNormal.y * wallThickness }, "A-WIND"));
   }
-  if (opening.label) entities.push(text({ x: (start.point.x + end.point.x) / 2 + nx * 280, y: (start.point.y + end.point.y) / 2 + ny * 280 }, opening.label, 120, "A-TEXT"));
+  if (opening.label) entities.push(text({ x: (start.point.x + end.point.x) / 2 + wallNormal.x * (wallThickness + 120), y: (start.point.y + end.point.y) / 2 + wallNormal.y * (wallThickness + 120) }, opening.label, 120, "A-TEXT"));
 };
 
 const addStairPlan = (entities: Entity[], stair: StairSpec): void => {
   const { x, y, width, length, risers } = stair;
-  entities.push(rect(x, y, x + width, y + length, "A-STRS"));
-  const landing = length * 0.32;
-  const flightWidth = width * 0.38;
-  entities.push(rect(x + flightWidth, y + landing, x + width - flightWidth, y + length - landing, "A-STRS"));
-  const lowerSteps = Math.max(4, Math.floor(risers / 2));
-  const upperSteps = Math.max(4, risers - lowerSteps);
-  for (let i = 1; i < lowerSteps; i += 1) {
-    const yy = y + (landing / lowerSteps) * i;
-    entities.push(line({ x, y: yy }, { x: x + flightWidth, y: yy }, "A-STRS"));
+  const map = (u: number, v: number): Point => {
+    if (stair.direction === "up-south") return { x: x + width - u, y: y + length - v };
+    if (stair.direction === "up-east") return { x: x + v, y: y + u };
+    if (stair.direction === "up-west") return { x: x + length - v, y: y + width - u };
+    return { x: x + u, y: y + v };
+  };
+  const landingDepth = clamp(stair.landingDepth ?? Math.max(750, length * 0.18), 300, Math.max(300, length * 0.4));
+  const flightLength = Math.max(length - landingDepth, length * 0.5);
+  const treadDepth = clamp(stair.treadDepth ?? flightLength / Math.max(risers, 1), 120, 450);
+  entities.push(poly([map(0, 0), map(width, 0), map(width, length), map(0, length)], true, "A-STRS"));
+  const treadCount = Math.max(1, Math.min(risers - 1, Math.floor(flightLength / treadDepth)));
+  for (let index = 1; index <= treadCount; index += 1) {
+    const v = Math.min(flightLength, index * flightLength / (treadCount + 1));
+    entities.push(line(map(0, v), map(width, v), "A-STRS"));
   }
-  for (let i = 1; i < upperSteps; i += 1) {
-    const yy = y + length - (landing / upperSteps) * i;
-    entities.push(line({ x: x + width - flightWidth, y: yy }, { x: x + width, y: yy }, "A-STRS"));
-  }
-  for (let i = 1; i < 7; i += 1) {
-    const xx = x + flightWidth + ((width - 2 * flightWidth) / 7) * i;
-    entities.push(line({ x: xx, y: y + landing }, { x: xx, y: y + length - landing }, "A-STRS"));
-  }
-  entities.push(line({ x: x + flightWidth / 2, y: y + 250 }, { x: x + flightWidth / 2, y: y + landing - 120 }, "A-STRS"));
+  entities.push(line(map(0, flightLength), map(width, flightLength), "A-STRS"));
+  const railing = stair.railing ?? "both";
+  if (railing === "left" || railing === "both") entities.push(line(map(90, 0), map(90, length), "A-STRS"));
+  if (railing === "right" || railing === "both") entities.push(line(map(width - 90, 0), map(width - 90, length), "A-STRS"));
+  const arrowStart = map(width / 2, Math.min(250, flightLength * 0.2));
+  const arrowEnd = map(width / 2, flightLength * 0.82);
+  const beforeEnd = map(width / 2, Math.max(0, flightLength * 0.82 - 170));
+  const tangent = { x: arrowEnd.x - beforeEnd.x, y: arrowEnd.y - beforeEnd.y };
+  const tangentLength = Math.hypot(tangent.x, tangent.y) || 1;
+  const unit = { x: tangent.x / tangentLength, y: tangent.y / tangentLength };
+  const side = { x: -unit.y, y: unit.x };
+  entities.push(line(arrowStart, arrowEnd, "A-STRS"));
   entities.push(poly([
-    { x: x + flightWidth / 2, y: y + landing - 40 },
-    { x: x + flightWidth / 2 - 80, y: y + landing - 180 },
-    { x: x + flightWidth / 2 + 80, y: y + landing - 180 },
+    arrowEnd,
+    { x: arrowEnd.x - unit.x * 170 + side.x * 85, y: arrowEnd.y - unit.y * 170 + side.y * 85 },
+    { x: arrowEnd.x - unit.x * 170 - side.x * 85, y: arrowEnd.y - unit.y * 170 - side.y * 85 },
   ], true, "A-STRS"));
-  entities.push(text({ x: x + 180, y: y + 120 }, "UP", 130, "A-STRS"));
+  const upLabel = map(width * 0.1, Math.min(180, flightLength * 0.15));
+  entities.push(text(upLabel, "UP", 130, "A-STRS"));
+  if (stair.showDownArrow) entities.push(text(map(width * 0.1, length - 180), "DN", 130, "A-STRS"));
 };
 
-const addFurniturePlan = (entities: Entity[], width: number, depth: number): void => {
-  const tableX = width * 0.08;
-  const tableY = depth * 0.72;
+const addFurniturePlan = (entities: Entity[], width: number, depth: number, minX = 0, minY = 0): void => {
+  const tableX = minX + width * 0.08;
+  const tableY = minY + depth * 0.72;
   entities.push(rect(tableX, tableY, tableX + 1700, tableY + 800, "A-FURN"));
   for (const cx of [tableX + 280, tableX + 850, tableX + 1420]) {
     entities.push(rect(cx - 150, tableY - 350, cx + 150, tableY - 80, "A-FURN"));
     entities.push(rect(cx - 150, tableY + 880, cx + 150, tableY + 1150, "A-FURN"));
   }
-  const roundX = width * 0.14;
-  const roundY = depth * 0.18;
+  const roundX = minX + width * 0.14;
+  const roundY = minY + depth * 0.18;
   entities.push(circle({ x: roundX, y: roundY }, 420, "A-FURN"));
   for (let index = 0; index < 4; index += 1) {
     const angle = (Math.PI / 2) * index;
@@ -322,26 +462,70 @@ const addFurniturePlan = (entities: Entity[], width: number, depth: number): voi
   }
 };
 
+const addGridAxes = (entities: Entity[], axes: GridAxis[]): void => {
+  for (const axis of axes) {
+    entities.push(line(axis.start, axis.end, "A-GRID"));
+    entities.push(circle(axis.start, 140, "A-GRID"));
+    entities.push(circle(axis.end, 140, "A-GRID"));
+    entities.push(text({ x: axis.start.x - 45, y: axis.start.y - 45 }, axis.id, 100, "A-GRID"));
+    entities.push(text({ x: axis.end.x - 45, y: axis.end.y - 45 }, axis.id, 100, "A-GRID"));
+  }
+};
+
+const addSymbolsPlan = (entities: Entity[], symbols: SymbolItem[]): void => {
+  for (const symbol of symbols) {
+    const width = symbol.width ?? 500;
+    const depth = symbol.depth ?? 500;
+    const x1 = symbol.at.x - width / 2;
+    const y1 = symbol.at.y - depth / 2;
+    const x2 = symbol.at.x + width / 2;
+    const y2 = symbol.at.y + depth / 2;
+    if (symbol.kind === "column") {
+      entities.push(rect(x1, y1, x2, y2, "A-COLS"));
+      entities.push(line({ x: x1, y: y1 }, { x: x2, y: y2 }, "A-COLS"));
+      entities.push(line({ x: x1, y: y2 }, { x: x2, y: y1 }, "A-COLS"));
+    } else if (symbol.kind === "toilet") {
+      entities.push(rect(x1, y1, x2, y1 + depth * 0.3, "A-FIXT"));
+      entities.push(circle({ x: symbol.at.x, y: y1 + depth * 0.65 }, Math.min(width, depth) * 0.3, "A-FIXT"));
+    } else if (symbol.kind === "sink") {
+      entities.push(rect(x1, y1, x2, y2, "A-FIXT"));
+      entities.push(circle(symbol.at, Math.min(width, depth) * 0.18, "A-FIXT"));
+    } else if (symbol.kind === "tub" || symbol.kind === "cabinet" || symbol.kind === "table") {
+      entities.push(rect(x1, y1, x2, y2, symbol.kind === "cabinet" ? "A-FURN" : "A-FIXT"));
+    } else if (symbol.kind === "chair") {
+      entities.push(circle(symbol.at, Math.min(width, depth) / 2, "A-FURN"));
+    }
+    if (symbol.label || symbol.kind === "label") entities.push(text({ x: x1, y: y2 + 100 }, symbol.label ?? symbol.id ?? "", 110, "A-TEXT", symbol.rotation ?? 0));
+  }
+};
+
 const planView = (spec: BuildingSpec): DrawingView => {
   const outline = normalizeOutline(spec.outline?.length ? spec.outline : DEFAULT_OUTLINE(spec.width, spec.depth));
   const b = bounds(outline);
-  const entities: Entity[] = [poly(outline, true, "A-WALL"), poly(insetOutline(outline, spec.wallThickness), true, "A-WALL")];
-  const walls = spec.interiorWalls?.length ? spec.interiorWalls : defaultInteriorWalls(spec.width, spec.depth);
+  const wallIds = spec.wallIds?.length === outline.length ? spec.wallIds : defaultWallIds(outline.length);
+  const openings = spec.openings ?? defaultOpenings(spec.width, spec.depth);
+  const entities: Entity[] = [];
+  addGridAxes(entities, spec.gridAxes ?? defaultGridAxes(b));
+  entities.push(...exteriorWallEntities(outline, spec.wallThickness, openings, wallIds));
+  const walls = spec.interiorWalls ?? defaultInteriorWalls(b.width, b.height, b.minX, b.minY);
   for (const wall of walls) entities.push(thickSegment(wall, spec.wallThickness));
-  const openings = spec.openings?.length ? spec.openings : defaultOpenings(spec.width, spec.depth);
-  for (const opening of openings) addOpeningPlan(entities, outline, opening, spec.wallThickness);
-  addStairPlan(entities, spec.stair ?? defaultStair(spec.width, spec.depth));
-  addFurniturePlan(entities, spec.width, spec.depth);
+  for (const opening of openings) addOpeningPlan(entities, outline, opening, spec.wallThickness, wallIds);
+  if (spec.stairEnabled !== false) addStairPlan(entities, spec.stair ?? defaultStair(b.width, b.height, b.minX, b.minY));
+  addFurniturePlan(entities, b.width, b.height, b.minX, b.minY);
+  addSymbolsPlan(entities, spec.symbols ?? defaultSymbols(b));
 
-  entities.push(text({ x: b.minX + b.width * 0.44, y: b.minY + b.height * 0.22 }, "LOBBY", 220));
-  entities.push(text({ x: b.minX + b.width * 0.08, y: b.minY + b.height * 0.78 }, "ROOM 1", 180));
-  entities.push(text({ x: b.minX + b.width * 0.46, y: b.minY + b.height * 0.78 }, "ROOM 2", 180));
-  entities.push(text({ x: b.minX + b.width * 0.76, y: b.minY + b.height * 0.78 }, "SERVICE", 180));
+  for (const room of spec.roomLabels ?? defaultRoomLabels(b)) {
+    if (room.polygon && room.polygon.length >= 3) entities.push(poly(room.polygon, true, "A-HIDD"));
+    entities.push(text(room.at, room.name, 180));
+  }
 
   dimHorizontal(entities, b.minX, b.maxX, b.minY - 700, `${Math.round(b.width)}`);
   dimVertical(entities, b.minY, b.maxY, b.minX - 700, `${Math.round(b.height)}`);
-  sectionMarker(entities, { x: b.minX + b.width * 0.5, y: b.minY - 180 }, { x: b.minX + b.width * 0.5, y: b.maxY + 180 }, "A");
-  sectionMarker(entities, { x: b.minX - 180, y: b.minY + b.height * 0.5 }, { x: b.maxX + 180, y: b.minY + b.height * 0.5 }, "B");
+  const sectionCuts = spec.sectionCuts ?? [
+    { id: "A", start: { x: b.minX + b.width * 0.5, y: b.minY - 180 }, end: { x: b.minX + b.width * 0.5, y: b.maxY + 180 } },
+    { id: "B", start: { x: b.minX - 180, y: b.minY + b.height * 0.5 }, end: { x: b.maxX + 180, y: b.minY + b.height * 0.5 } },
+  ];
+  for (const cut of sectionCuts) sectionMarker(entities, cut.start, cut.end, cut.id);
 
   const northX = b.maxX - 600;
   const northY = b.minY + 900;
@@ -378,6 +562,28 @@ const addElevationOpening = (entities: Entity[], opening: Opening, length: numbe
   if (opening.label) entities.push(text({ x: x + opening.width / 2 - 90, y: opening.kind === "door" ? opening.height + 140 : (opening.sill ?? 900) + opening.height + 140 }, opening.label, 120));
 };
 
+const addFacadeFeature = (entities: Entity[], feature: FacadeFeature, spec: BuildingSpec): void => {
+  const width = feature.width ?? (feature.kind === "attic-window" ? 1000 : 280);
+  const height = feature.height ?? (feature.kind === "attic-window" ? 700 : 220);
+  const sill = feature.sill ?? (feature.kind === "attic-window" ? spec.atticFloorHeight + 450 : spec.ridgeHeight - 520);
+  if (feature.kind === "downspout") {
+    entities.push(line({ x: feature.offset, y: spec.eaveHeight - 40 }, { x: feature.offset, y: 220 }, "A-DRAIN"));
+    return;
+  }
+  const layer = feature.kind === "attic-window" ? "A-WIND" : "A-VENT";
+  entities.push(rect(feature.offset, sill, feature.offset + width, sill + height, layer));
+  if (feature.kind === "attic-window") {
+    entities.push(line({ x: feature.offset + width / 2, y: sill }, { x: feature.offset + width / 2, y: sill + height }, "A-GLAZ"));
+  } else {
+    const divisions = Math.max(2, Math.floor(height / 70));
+    for (let index = 1; index < divisions; index += 1) {
+      const y = sill + height * index / divisions;
+      entities.push(line({ x: feature.offset, y }, { x: feature.offset + width, y }, "A-VENT"));
+    }
+  }
+  if (feature.label) entities.push(text({ x: feature.offset, y: sill + height + 130 }, feature.label, 110, "A-TEXT"));
+};
+
 const addWallFinishPattern = (entities: Entity[], width: number, eaveHeight: number): void => {
   for (let y = 550; y < eaveHeight - 100; y += 260) entities.push(line({ x: 40, y }, { x: width - 40, y }, "A-MATL"));
   entities.push(rect(0, 0, width, 450, "A-PLIN"));
@@ -412,28 +618,24 @@ const elevationView = (spec: BuildingSpec, facade: Facade, title: string): Drawi
     ], true, "A-ELEV"));
     entities.push(line({ x: -spec.roofOverhang, y: spec.eaveHeight - 70 }, { x: 140, y: spec.eaveHeight - 70 }, "A-ROOF"));
     entities.push(line({ x: width - 140, y: spec.eaveHeight - 70 }, { x: width + spec.roofOverhang, y: spec.eaveHeight - 70 }, "A-ROOF"));
-    entities.push(rect(width / 2 - 500, spec.atticFloorHeight + 450, width / 2 + 500, spec.atticFloorHeight + 1150, "A-WIND"));
-    entities.push(line({ x: width / 2, y: spec.atticFloorHeight + 450 }, { x: width / 2, y: spec.atticFloorHeight + 1150 }, "A-GLAZ"));
-    entities.push(rect(width / 2 - 140, spec.ridgeHeight - 520, width / 2 + 140, spec.ridgeHeight - 300, "A-VENT"));
   } else {
     entities.push(rect(0, 0, width, spec.eaveHeight, "A-ELEV"));
     entities.push(line({ x: -spec.roofOverhang, y: spec.eaveHeight - 70 }, { x: width + spec.roofOverhang, y: spec.eaveHeight - 70 }, "A-ROOF"));
     entities.push(line({ x: width * 0.08, y: spec.ridgeHeight }, { x: width * 0.92, y: spec.ridgeHeight }, "A-ROOF"));
     entities.push(line({ x: width * 0.08, y: spec.ridgeHeight }, { x: 0, y: spec.eaveHeight }, "A-ROOF"));
     entities.push(line({ x: width * 0.92, y: spec.ridgeHeight }, { x: width, y: spec.eaveHeight }, "A-ROOF"));
-    entities.push(rect(width / 2 - 450, spec.atticFloorHeight + 500, width / 2 + 450, spec.atticFloorHeight + 1100, "A-WIND"));
   }
 
   addWallFinishPattern(entities, width, spec.eaveHeight);
   addRoofFinishPattern(entities, width, spec, gable);
   const wallIndex = facadeWallIndex(facade);
   const outline = normalizeOutline(spec.outline?.length ? spec.outline : DEFAULT_OUTLINE(spec.width, spec.depth));
-  const openings = spec.openings?.length ? spec.openings : defaultOpenings(spec.width, spec.depth);
-  for (const opening of openings.filter((item) => item.wallIndex === wallIndex)) addElevationOpening(entities, opening, wallLength(outline, wallIndex) || width);
+  const wallIds = spec.wallIds?.length === outline.length ? spec.wallIds : defaultWallIds(outline.length);
+  const openings = spec.openings ?? defaultOpenings(spec.width, spec.depth);
+  for (const opening of openings.filter((item) => wallIndexForOpening(item, wallIds, outline.length) === wallIndex)) addElevationOpening(entities, opening, wallLength(outline, wallIndex) || width);
+  for (const feature of (spec.facadeFeatures ?? defaultFacadeFeatures(spec)).filter((item) => item.facade === facade)) addFacadeFeature(entities, feature, spec);
 
   entities.push(line({ x: 0, y: spec.atticFloorHeight }, { x: width, y: spec.atticFloorHeight }, "A-HIDD"));
-  entities.push(line({ x: 190, y: spec.eaveHeight - 40 }, { x: 190, y: 220 }, "A-DRAIN"));
-  entities.push(line({ x: width - 190, y: spec.eaveHeight - 40 }, { x: width - 190, y: 220 }, "A-DRAIN"));
   entities.push(line({ x: -500, y: 0 }, { x: width + 500, y: 0 }, "A-GRID"));
   levelMarker(entities, width + 250, 0, "±0");
   levelMarker(entities, width + 250, spec.atticFloorHeight, `ATTIC ${spec.atticFloorHeight}`);
@@ -525,9 +727,18 @@ const sectionB = (spec: BuildingSpec): DrawingView => {
     const x = width * ratio;
     entities.push(rect(x, 0, x + spec.wallThickness, spec.atticFloorHeight, "A-CUT"));
   }
-  entities.push(rect(width * 0.12, 900, width * 0.23, 2100, "A-WIND"));
-  entities.push(rect(width * 0.42, 0, width * 0.5, 2100, "A-DOOR"));
-  entities.push(rect(width * 0.74, 900, width * 0.85, 2100, "A-WIND"));
+  const outline = normalizeOutline(spec.outline?.length ? spec.outline : DEFAULT_OUTLINE(spec.width, spec.depth));
+  const wallIds = spec.wallIds?.length === outline.length ? spec.wallIds : defaultWallIds(outline.length);
+  const sectionWallIndexes = spec.roofDirection === "ridge-along-depth" ? [1, 3] : [0, 2];
+  const projected = new Set<string>();
+  for (const opening of spec.openings ?? []) {
+    const wallIndex = wallIndexForOpening(opening, wallIds, outline.length);
+    if (!sectionWallIndexes.includes(wallIndex) || opening.placement === "attic") continue;
+    const key = `${opening.kind}|${opening.offset}|${opening.width}|${opening.height}|${opening.sill ?? 0}`;
+    if (projected.has(key)) continue;
+    projected.add(key);
+    addElevationOpening(entities, { ...opening, wallIndex: sectionWallIndexes[0] }, width);
+  }
   addFoldDownLadder(entities, width * 0.56, spec.atticFloorHeight);
   entities.push(text({ x: width * 0.44, y: spec.atticFloorHeight + 900 }, "ATTIC SPACE", 180));
   entities.push(text({ x: width * 0.1, y: 1200 }, "ROOM", 150));
@@ -559,9 +770,14 @@ const calculateMetrics = (spec: BuildingSpec, outline: Point[], openings: Openin
   const rise = spec.ridgeHeight - spec.eaveHeight;
   const roofPitchDegrees = Math.atan2(rise, halfSpan) * 180 / Math.PI;
   const atticPeakHeight = spec.ridgeHeight - spec.atticFloorHeight;
-  const heightAtUse = 1800;
-  const usableRatio = atticPeakHeight > heightAtUse ? (atticPeakHeight - heightAtUse) / Math.max(atticPeakHeight - (spec.eaveHeight - spec.atticFloorHeight), 1) : 0;
-  const atticUsableWidthAt1800 = clamp(span * usableRatio, 0, span);
+  const usableWidthAt = (heightAtUse: number): number => {
+    if (atticPeakHeight <= heightAtUse) return 0;
+    const usableRatio = (atticPeakHeight - heightAtUse) / Math.max(atticPeakHeight - (spec.eaveHeight - spec.atticFloorHeight), 1);
+    return clamp(span * usableRatio, 0, span);
+  };
+  const minimumHeight = spec.atticMinimumClearHeight ?? 1800;
+  const atticUsableWidthAt1800 = usableWidthAt(1800);
+  const ratioDenominator = rise > EPS ? halfSpan / rise : 0;
   return {
     footprintAreaM2: round(polygonArea(outline) / 1_000_000, 2),
     perimeterM: round(polygonPerimeter(outline) / 1000, 2),
@@ -570,82 +786,302 @@ const calculateMetrics = (spec: BuildingSpec, outline: Point[], openings: Openin
     atticUsableWidthAt1800: round(atticUsableWidthAt1800, 0),
     exteriorWallCount: outline.length,
     openingCount: openings.length,
+    roofPitchRatio: ratioDenominator > 0 ? `1:${round(ratioDenominator, 2)}` : "invalid",
+    atticMinimumClearHeight: minimumHeight,
+    atticUsableWidthAtMinimum: round(usableWidthAt(minimumHeight), 0),
   };
 };
 
-export const normalizeSpec = (input: Partial<BuildingSpec>): BuildingSpec => ({
-  projectName: input.projectName?.trim() || "HS-CAD PROJECT",
-  unit: "mm",
-  width: clamp(Number(input.width ?? 12000), 3000, 50000),
-  depth: clamp(Number(input.depth ?? 11300), 3000, 50000),
-  wallThickness: clamp(Number(input.wallThickness ?? 200), 80, 600),
-  eaveHeight: clamp(Number(input.eaveHeight ?? 3200), 2400, 15000),
-  ridgeHeight: clamp(Number(input.ridgeHeight ?? 5000), 2600, 20000),
-  atticFloorHeight: clamp(Number(input.atticFloorHeight ?? 2600), 1800, 12000),
-  ceilingHeight: clamp(Number(input.ceilingHeight ?? 2500), 2100, 10000),
-  roofDirection: input.roofDirection ?? "ridge-along-depth",
-  roofOverhang: clamp(Number(input.roofOverhang ?? 450), 0, 2000),
-  roofThickness: clamp(Number(input.roofThickness ?? 220), 80, 800),
-  floorSlabThickness: clamp(Number(input.floorSlabThickness ?? 180), 80, 800),
-  foundationDepth: clamp(Number(input.foundationDepth ?? 700), 250, 4000),
-  roofFinish: input.roofFinish?.trim() || "Standing seam metal",
-  wallFinish: input.wallFinish?.trim() || "Exterior render / panel",
-  plinthFinish: input.plinthFinish?.trim() || "Exposed concrete / stone",
-  outline: input.outline ? normalizeOutline(input.outline) : undefined,
-  interiorWalls: input.interiorWalls,
-  openings: input.openings,
-  stair: input.stair,
-});
+const boundedNumber = (value: unknown, fallback: number, min: number, max: number): number => {
+  const numeric = Number(value ?? fallback);
+  return Number.isFinite(numeric) ? clamp(numeric, min, max) : fallback;
+};
 
-export const validateSpec = (spec: BuildingSpec): string[] => {
-  const warnings: string[] = [];
+const finiteCoordinate = (value: unknown): number => {
+  const numeric = Number(value);
+  return Number.isFinite(numeric) ? numeric : 0;
+};
+
+const stableInputLayer = (value: string | undefined): string | undefined => {
+  if (value === undefined) return undefined;
+  const normalized = value.normalize("NFKD").toUpperCase().replace(/[^A-Z0-9_-]+/g, "_").replace(/^_+|_+$/g, "").slice(0, 31);
+  return /^A-[A-Z0-9_-]+$/.test(normalized) ? normalized : "A-WALL";
+};
+
+const normalizePoint = (point: Point): Point => ({ x: finiteCoordinate(point.x), y: finiteCoordinate(point.y) });
+
+export const normalizeSpec = (input: Partial<BuildingSpec>): BuildingSpec => {
+  const width = boundedNumber(input.width, 12000, 3000, 50000);
+  const depth = boundedNumber(input.depth, 11300, 3000, 50000);
+  const outline = input.outline === undefined ? undefined : normalizeOutline(input.outline.slice(0, MAX_OUTLINE_POINTS).map(normalizePoint));
+  const wallIds = input.wallIds?.slice(0, MAX_OUTLINE_POINTS).map((id, index) => id.trim().slice(0, 48) || `WALL-${String(index + 1).padStart(3, "0")}`);
+  const interiorWalls = input.interiorWalls === undefined ? undefined : input.interiorWalls.slice(0, MAX_INTERIOR_WALLS).map((wall, index) => ({
+    id: wall.id?.trim().slice(0, 48) || `IW-${String(index + 1).padStart(3, "0")}`,
+    start: normalizePoint(wall.start),
+    end: normalizePoint(wall.end),
+    thickness: wall.thickness === undefined ? undefined : boundedNumber(wall.thickness, 200, 20, 2000),
+    layer: stableInputLayer(wall.layer),
+  }));
+  const openings = input.openings === undefined ? undefined : input.openings.slice(0, MAX_OPENINGS).map((opening) => ({
+    ...opening,
+    wallId: opening.wallId?.trim().slice(0, 48) || undefined,
+    wallIndex: opening.wallIndex === undefined || !Number.isFinite(Number(opening.wallIndex)) ? undefined : Math.trunc(Number(opening.wallIndex)),
+    offset: finiteCoordinate(opening.offset),
+    width: finiteCoordinate(opening.width),
+    height: finiteCoordinate(opening.height),
+    sill: opening.sill === undefined ? undefined : finiteCoordinate(opening.sill),
+    label: opening.label?.trim().slice(0, 48),
+  }));
+  const stair = input.stair ? {
+    ...input.stair,
+    x: finiteCoordinate(input.stair.x),
+    y: finiteCoordinate(input.stair.y),
+    width: finiteCoordinate(input.stair.width),
+    length: finiteCoordinate(input.stair.length),
+    risers: Math.trunc(finiteCoordinate(input.stair.risers)),
+    treadDepth: input.stair.treadDepth === undefined ? undefined : finiteCoordinate(input.stair.treadDepth),
+    landingDepth: input.stair.landingDepth === undefined ? undefined : finiteCoordinate(input.stair.landingDepth),
+  } : undefined;
+  return {
+    schemaVersion: BUILDING_SCHEMA_VERSION,
+    projectName: input.projectName?.trim().slice(0, 120) || "HS-CAD PROJECT",
+    unit: "mm",
+    width,
+    depth,
+    wallThickness: boundedNumber(input.wallThickness, 200, 80, 600),
+    eaveHeight: boundedNumber(input.eaveHeight, 3200, 2400, 15000),
+    ridgeHeight: boundedNumber(input.ridgeHeight, 5000, 2600, 20000),
+    atticFloorHeight: boundedNumber(input.atticFloorHeight, 2600, 1800, 12000),
+    ceilingHeight: boundedNumber(input.ceilingHeight, 2500, 2100, 10000),
+    roofDirection: input.roofDirection === "ridge-along-width" ? "ridge-along-width" : "ridge-along-depth",
+    roofOverhang: boundedNumber(input.roofOverhang, 450, 0, 2000),
+    roofThickness: boundedNumber(input.roofThickness, 220, 80, 800),
+    floorSlabThickness: boundedNumber(input.floorSlabThickness, 180, 80, 800),
+    foundationDepth: boundedNumber(input.foundationDepth, 700, 250, 4000),
+    drawingScale: input.drawingScale?.trim().slice(0, 24) || "1:100",
+    atticMinimumClearHeight: boundedNumber(input.atticMinimumClearHeight, 1800, 900, 3000),
+    roofFinish: input.roofFinish?.trim().slice(0, 120) || "Standing seam metal",
+    wallFinish: input.wallFinish?.trim().slice(0, 120) || "Exterior render / panel",
+    plinthFinish: input.plinthFinish?.trim().slice(0, 120) || "Exposed concrete / stone",
+    frameFinish: input.frameFinish?.trim().slice(0, 120) || "Powder-coated metal / timber",
+    gutterDownspoutSpec: input.gutterDownspoutSpec?.trim().slice(0, 120) || "150 mm gutter / 100 mm downspout",
+    outline,
+    wallIds,
+    interiorWalls,
+    openings,
+    stair,
+    stairEnabled: input.stairEnabled ?? true,
+    roomLabels: input.roomLabels?.slice(0, 128).map((room) => ({ ...room, name: room.name.trim().slice(0, 80), at: normalizePoint(room.at), polygon: room.polygon?.slice(0, MAX_OUTLINE_POINTS).map(normalizePoint) })),
+    gridAxes: input.gridAxes?.slice(0, 64).map((axis) => ({ ...axis, id: axis.id.trim().slice(0, 24), start: normalizePoint(axis.start), end: normalizePoint(axis.end) })),
+    sectionCuts: input.sectionCuts?.slice(0, 16).map((cut) => ({ ...cut, id: cut.id.trim().slice(0, 24), start: normalizePoint(cut.start), end: normalizePoint(cut.end) })),
+    symbols: input.symbols?.slice(0, MAX_SYMBOLS).map((symbol) => ({ ...symbol, at: normalizePoint(symbol.at), width: symbol.width === undefined ? undefined : finiteCoordinate(symbol.width), depth: symbol.depth === undefined ? undefined : finiteCoordinate(symbol.depth), label: symbol.label?.trim().slice(0, 80) })),
+    facadeFeatures: input.facadeFeatures?.slice(0, 128).map((feature) => ({ ...feature, offset: finiteCoordinate(feature.offset), width: feature.width === undefined ? undefined : finiteCoordinate(feature.width), height: feature.height === undefined ? undefined : finiteCoordinate(feature.height), sill: feature.sill === undefined ? undefined : finiteCoordinate(feature.sill), label: feature.label?.trim().slice(0, 48) })),
+  };
+};
+
+const issue = (code: string, path: string, severity: ValidationIssue["severity"], message: string): ValidationIssue => ({ code, path, severity, message });
+const allFinite = (point: Point): boolean => Number.isFinite(Number(point.x)) && Number.isFinite(Number(point.y));
+
+export const validateSpecDetailed = (input: Partial<BuildingSpec>): ValidationIssue[] => {
+  const issues: ValidationIssue[] = [];
+  const suppliedVersion = input.schemaVersion as unknown;
+  if (suppliedVersion !== undefined && suppliedVersion !== BUILDING_SCHEMA_VERSION) issues.push(issue("schema.version", "schemaVersion", "error", `지원하지 않는 schemaVersion입니다. ${BUILDING_SCHEMA_VERSION}을 사용해야 합니다.`));
+  const suppliedUnit = input.unit as unknown;
+  if (suppliedUnit !== undefined && suppliedUnit !== "mm") issues.push(issue("schema.unit", "unit", "error", "unit은 mm로 고정되어야 합니다."));
+  const suppliedRoofDirection = input.roofDirection as unknown;
+  if (suppliedRoofDirection !== undefined && suppliedRoofDirection !== "ridge-along-width" && suppliedRoofDirection !== "ridge-along-depth") issues.push(issue("schema.roof-direction", "roofDirection", "error", "roofDirection 값이 유효하지 않습니다."));
+  const numericRanges: Array<[keyof BuildingSpec, number, number]> = [
+    ["width", 3000, 50000], ["depth", 3000, 50000], ["wallThickness", 80, 600], ["eaveHeight", 2400, 15000],
+    ["ridgeHeight", 2600, 20000], ["atticFloorHeight", 1800, 12000], ["ceilingHeight", 2100, 10000],
+    ["roofOverhang", 0, 2000], ["roofThickness", 80, 800], ["floorSlabThickness", 80, 800], ["foundationDepth", 250, 4000],
+  ];
+  for (const [key, min, max] of numericRanges) {
+    const value = input[key];
+    if (value === undefined) continue;
+    const numeric = Number(value);
+    if (!Number.isFinite(numeric)) issues.push(issue("number.nonfinite", String(key), "error", `${String(key)} 값은 유한한 숫자여야 합니다.`));
+    else if (numeric < min || numeric > max) issues.push(issue("number.range", String(key), "error", `${String(key)} 값은 ${min}~${max} 범위여야 합니다.`));
+  }
+  const spec = normalizeSpec(input);
+  if (spec.ridgeHeight <= spec.eaveHeight) issues.push(issue("height.ridge", "ridgeHeight", "error", "용마루 높이는 처마 높이보다 높아야 합니다."));
+  if (spec.atticFloorHeight >= spec.eaveHeight) issues.push(issue("height.attic", "atticFloorHeight", "error", "다락 바닥 높이는 처마 높이보다 낮아야 합니다."));
+  if (spec.ceilingHeight > spec.atticFloorHeight) issues.push(issue("height.ceiling", "ceilingHeight", "error", "실내 천장 높이는 다락 바닥 높이보다 낮거나 같아야 합니다."));
+  if (spec.ridgeHeight - spec.atticFloorHeight < (spec.atticMinimumClearHeight ?? 1800)) issues.push(issue("height.attic-clear", "atticMinimumClearHeight", "warning", "다락 최고 유효높이가 설정된 최소 높이보다 낮습니다."));
+  if (spec.wallThickness > Math.min(spec.width, spec.depth) / 8) issues.push(issue("wall.thickness", "wallThickness", "warning", "벽체 두께가 건물 크기에 비해 과도합니다."));
+
+  if (input.outline && input.outline.length > MAX_OUTLINE_POINTS) issues.push(issue("count.outline", "outline", "error", `외곽점은 ${MAX_OUTLINE_POINTS}개를 초과할 수 없습니다.`));
+  if (input.interiorWalls && input.interiorWalls.length > MAX_INTERIOR_WALLS) issues.push(issue("count.interiorWalls", "interiorWalls", "error", `내부 벽은 ${MAX_INTERIOR_WALLS}개를 초과할 수 없습니다.`));
+  if (input.openings && input.openings.length > MAX_OPENINGS) issues.push(issue("count.openings", "openings", "error", `개구부는 ${MAX_OPENINGS}개를 초과할 수 없습니다.`));
+  if (input.symbols && input.symbols.length > MAX_SYMBOLS) issues.push(issue("count.symbols", "symbols", "error", `기호는 ${MAX_SYMBOLS}개를 초과할 수 없습니다.`));
+  if (input.gridAxes && input.gridAxes.length > 64) issues.push(issue("count.gridAxes", "gridAxes", "error", "그리드 축은 64개를 초과할 수 없습니다."));
+  if (input.sectionCuts && input.sectionCuts.length > 16) issues.push(issue("count.sectionCuts", "sectionCuts", "error", "단면선은 16개를 초과할 수 없습니다."));
+  if (input.roomLabels && input.roomLabels.length > 128) issues.push(issue("count.roomLabels", "roomLabels", "error", "실 정보는 128개를 초과할 수 없습니다."));
+  if (input.facadeFeatures && input.facadeFeatures.length > 128) issues.push(issue("count.facadeFeatures", "facadeFeatures", "error", "입면 요소는 128개를 초과할 수 없습니다."));
+  const validatePoint = (point: Point, path: string, label: string): void => {
+    if (!allFinite(point)) issues.push(issue("coordinate.nonfinite", path, "error", `${label} 좌표는 유한해야 합니다.`));
+    else if (Math.abs(Number(point.x)) > COORDINATE_LIMIT || Math.abs(Number(point.y)) > COORDINATE_LIMIT) issues.push(issue("coordinate.range", path, "error", `${label} 좌표는 ±${COORDINATE_LIMIT} mm 범위여야 합니다.`));
+  };
+  input.outline?.forEach((point, index) => {
+    validatePoint(point, `outline[${index}]`, `외곽점 ${index + 1}의`);
+  });
   const outline = normalizeOutline(spec.outline?.length ? spec.outline : DEFAULT_OUTLINE(spec.width, spec.depth));
-  const openings = spec.openings?.length ? spec.openings : defaultOpenings(spec.width, spec.depth);
-  if (spec.ridgeHeight <= spec.eaveHeight) warnings.push("용마루 높이는 처마 높이보다 높아야 합니다.");
-  if (spec.atticFloorHeight >= spec.eaveHeight) warnings.push("다락 바닥 높이는 처마 높이보다 낮아야 합니다.");
-  if (spec.ceilingHeight > spec.atticFloorHeight) warnings.push("실내 천장 높이는 다락 바닥 높이보다 낮거나 같아야 합니다.");
-  if (spec.ridgeHeight - spec.atticFloorHeight < 1800) warnings.push("다락 최고 유효높이가 1.8m 미만입니다.");
-  if (spec.wallThickness > Math.min(spec.width, spec.depth) / 8) warnings.push("벽체 두께가 건물 크기에 비해 과도합니다.");
-  if (outline.length < 3) warnings.push("외곽 폴리라인은 최소 3개 점이 필요합니다.");
-  if (polygonArea(outline) < 1_000_000) warnings.push("외곽 폴리라인 면적이 지나치게 작습니다.");
-  if (isSelfIntersecting(outline)) warnings.push("외곽 폴리라인이 자기 교차합니다.");
-  if (spec.outline && outline.length !== 4) warnings.push("비정형 외곽선의 입면·단면은 경계상자 기준 개념도로 생성됩니다.");
-  for (const [index, opening] of openings.entries()) {
-    if (opening.wallIndex < 0 || opening.wallIndex >= outline.length) {
-      warnings.push(`개구부 ${index + 1}의 wallIndex가 외곽 벽 범위를 벗어났습니다.`);
-      continue;
+  if (input.outline !== undefined && normalizeOutline(input.outline.map(normalizePoint)).length < 3) issues.push(issue("outline.points", "outline", "error", "외곽 폴리라인은 최소 3개 점이 필요합니다."));
+  if (polygonArea(outline) < 1_000_000) issues.push(issue("outline.area", "outline", "error", "외곽 폴리라인 면적이 지나치게 작습니다."));
+  if (outline.length >= 3 && isSelfIntersecting(outline)) issues.push(issue("outline.self-intersection", "outline", "error", "외곽 폴리라인이 자기 교차합니다."));
+  if (spec.outline && outline.length !== 4) issues.push(issue("outline.nonrectangular", "outline", "warning", "비정형 외곽선의 입면·단면은 경계상자 기준 개념도로 생성됩니다."));
+  const outlineBounds = bounds(outline);
+  if (spec.outline && (Math.abs(outlineBounds.width - spec.width) > EPS || Math.abs(outlineBounds.height - spec.depth) > EPS)) issues.push(issue("outline.dimension-mismatch", "outline", "warning", "외곽선 경계 크기와 width/depth가 일치하지 않습니다."));
+
+  const wallIds = spec.wallIds?.length === outline.length ? spec.wallIds : defaultWallIds(outline.length);
+  if (spec.wallIds && spec.wallIds.length !== outline.length) issues.push(issue("wallIds.count", "wallIds", "error", "wallIds 개수는 외곽 벽 개수와 같아야 합니다."));
+  if (new Set(wallIds).size !== wallIds.length) issues.push(issue("wallIds.duplicate", "wallIds", "error", "wallIds는 중복될 수 없습니다."));
+  input.interiorWalls?.forEach((wall, index) => {
+    validatePoint(wall.start, `interiorWalls[${index}].start`, `내부 벽 ${index + 1} 시작점의`);
+    validatePoint(wall.end, `interiorWalls[${index}].end`, `내부 벽 ${index + 1} 끝점의`);
+    if (allFinite(wall.start) && allFinite(wall.end) && samePoint(wall.start, wall.end)) issues.push(issue("wall.zero-length", `interiorWalls[${index}]`, "error", `내부 벽 ${index + 1}의 길이는 0일 수 없습니다.`));
+    if (wall.thickness !== undefined && (!Number.isFinite(Number(wall.thickness)) || Number(wall.thickness) <= 0)) issues.push(issue("wall.thickness", `interiorWalls[${index}].thickness`, "error", `내부 벽 ${index + 1}의 두께는 양의 유한한 숫자여야 합니다.`));
+    if (wall.layer && stableInputLayer(wall.layer) !== wall.layer) issues.push(issue("layer.invalid", `interiorWalls[${index}].layer`, "error", `내부 벽 ${index + 1}의 레이어 이름이 안전하지 않습니다.`));
+  });
+  input.gridAxes?.forEach((axis, index) => {
+    validatePoint(axis.start, `gridAxes[${index}].start`, `그리드 축 ${index + 1} 시작점의`);
+    validatePoint(axis.end, `gridAxes[${index}].end`, `그리드 축 ${index + 1} 끝점의`);
+    if (allFinite(axis.start) && allFinite(axis.end) && samePoint(axis.start, axis.end)) issues.push(issue("grid.zero-length", `gridAxes[${index}]`, "error", `그리드 축 ${index + 1}의 길이는 0일 수 없습니다.`));
+  });
+  input.sectionCuts?.forEach((cut, index) => {
+    validatePoint(cut.start, `sectionCuts[${index}].start`, `단면선 ${index + 1} 시작점의`);
+    validatePoint(cut.end, `sectionCuts[${index}].end`, `단면선 ${index + 1} 끝점의`);
+    if (allFinite(cut.start) && allFinite(cut.end) && samePoint(cut.start, cut.end)) issues.push(issue("section.zero-length", `sectionCuts[${index}]`, "error", `단면선 ${index + 1}의 길이는 0일 수 없습니다.`));
+  });
+  input.symbols?.forEach((symbol, index) => {
+    validatePoint(symbol.at, `symbols[${index}].at`, `기호 ${index + 1}의`);
+    for (const [key, value] of [["width", symbol.width], ["depth", symbol.depth]] as const) {
+      if (value !== undefined && (!Number.isFinite(Number(value)) || Number(value) <= 0)) issues.push(issue("symbol.dimension", `symbols[${index}].${key}`, "error", `기호 ${index + 1}의 ${key}는 양의 유한한 숫자여야 합니다.`));
     }
-    const length = wallLength(outline, opening.wallIndex);
-    if (opening.offset + opening.width > length + EPS) warnings.push(`개구부 ${index + 1}가 해당 벽 길이를 초과합니다.`);
-    if (opening.kind === "window" && (opening.sill ?? 0) + opening.height > spec.eaveHeight) warnings.push(`창호 ${index + 1}의 상단이 처마 높이를 초과합니다.`);
-    if (opening.kind === "door" && opening.height > spec.eaveHeight) warnings.push(`문 ${index + 1}의 높이가 처마 높이를 초과합니다.`);
+  });
+  input.roomLabels?.forEach((room, index) => {
+    validatePoint(room.at, `roomLabels[${index}].at`, `실명 ${index + 1}의`);
+    room.polygon?.forEach((point, pointIndex) => validatePoint(point, `roomLabels[${index}].polygon[${pointIndex}]`, `실 경계점의`));
+  });
+  input.facadeFeatures?.forEach((feature, index) => {
+    const facade = feature.facade as unknown;
+    const kind = feature.kind as unknown;
+    if (!["front", "right", "rear", "left"].includes(String(facade))) issues.push(issue("facade.reference", `facadeFeatures[${index}].facade`, "error", `입면 요소 ${index + 1}의 facade가 유효하지 않습니다.`));
+    if (!["attic-window", "vent", "louver", "downspout"].includes(String(kind))) issues.push(issue("facade.kind", `facadeFeatures[${index}].kind`, "error", `입면 요소 ${index + 1}의 kind가 유효하지 않습니다.`));
+    for (const [key, value] of [["offset", feature.offset], ["width", feature.width], ["height", feature.height], ["sill", feature.sill]] as const) {
+      if (value !== undefined && (!Number.isFinite(Number(value)) || Math.abs(Number(value)) > COORDINATE_LIMIT || ((key === "width" || key === "height") && Number(value) <= 0))) issues.push(issue("facade.dimension", `facadeFeatures[${index}].${key}`, "error", `입면 요소 ${index + 1}의 ${key} 값이 유효하지 않습니다.`));
+    }
+  });
+
+  const openings = spec.openings ?? defaultOpenings(spec.width, spec.depth);
+  const intervals = new Map<number, Array<{ start: number; end: number; index: number }>>();
+  openings.forEach((opening, index) => {
+    const path = `openings[${index}]`;
+    if (opening.kind !== "door" && opening.kind !== "window") issues.push(issue("opening.kind", `${path}.kind`, "error", `개구부 ${index + 1}의 kind가 유효하지 않습니다.`));
+    if (opening.swing && !["left", "right", "double"].includes(opening.swing)) issues.push(issue("opening.swing", `${path}.swing`, "error", `개구부 ${index + 1}의 swing 값이 유효하지 않습니다.`));
+    if (![opening.offset, opening.width, opening.height, opening.sill ?? 0].every(Number.isFinite)) {
+      issues.push(issue("opening.nonfinite", path, "error", `개구부 ${index + 1}의 치수는 유한해야 합니다.`));
+      return;
+    }
+    if (opening.offset < 0 || opening.width <= 0 || opening.height <= 0 || (opening.sill ?? 0) < 0) issues.push(issue("opening.dimension", path, "error", `개구부 ${index + 1}의 치수가 유효하지 않습니다.`));
+    const wallIndex = wallIndexForOpening(opening, wallIds, outline.length);
+    if (wallIndex < 0) {
+      issues.push(issue("opening.wall-reference", `${path}.${opening.wallId ? "wallId" : "wallIndex"}`, "error", `개구부 ${index + 1}의 벽 참조가 외곽 벽 범위를 벗어났습니다.`));
+      return;
+    }
+    const length = wallLength(outline, wallIndex);
+    if (opening.offset + opening.width > length + EPS) issues.push(issue("opening.wall-overflow", path, "error", `개구부 ${index + 1}가 해당 벽 길이를 초과합니다.`));
+    if (opening.kind === "window" && (opening.sill ?? 0) + opening.height > spec.ridgeHeight) issues.push(issue("opening.window-head", path, "error", `창호 ${index + 1}의 상단이 지붕 최고 높이를 초과합니다.`));
+    if (opening.kind === "door" && opening.height > spec.eaveHeight) issues.push(issue("opening.door-head", path, "error", `문 ${index + 1}의 높이가 처마 높이를 초과합니다.`));
+    const list = intervals.get(wallIndex) ?? [];
+    if (opening.placement !== "attic") list.push({ start: opening.offset, end: opening.offset + opening.width, index });
+    intervals.set(wallIndex, list);
+  });
+  for (const list of intervals.values()) {
+    list.sort((first, second) => first.start - second.start);
+    for (let index = 1; index < list.length; index += 1) {
+      if (list[index].start < list[index - 1].end - EPS) issues.push(issue("opening.overlap", `openings[${list[index].index}]`, "error", "같은 벽의 개구부가 서로 겹칩니다."));
+    }
+  }
+  if (input.stair) {
+    validatePoint({ x: input.stair.x, y: input.stair.y }, "stair", "계단 원점의");
+    const stairValues = [input.stair.x, input.stair.y, input.stair.width, input.stair.length, input.stair.risers, input.stair.treadDepth ?? 250, input.stair.landingDepth ?? 900];
+    if (!stairValues.every((value) => Number.isFinite(Number(value)))) issues.push(issue("stair.nonfinite", "stair", "error", "계단 좌표와 치수는 유한해야 합니다."));
+    if (Number(input.stair.width) <= 0 || Number(input.stair.length) <= 0 || !Number.isInteger(Number(input.stair.risers)) || Number(input.stair.risers) < 3 || Number(input.stair.risers) > 40) issues.push(issue("stair.dimension", "stair", "error", "계단 폭·길이·단수는 유효한 범위여야 합니다."));
+    if (!["up-north", "up-south", "up-east", "up-west"].includes(String(input.stair.direction))) issues.push(issue("stair.direction", "stair.direction", "error", "계단 direction 값이 유효하지 않습니다."));
   }
   const span = spec.roofDirection === "ridge-along-depth" ? spec.width : spec.depth;
   const pitch = Math.atan2(spec.ridgeHeight - spec.eaveHeight, span / 2 + spec.roofOverhang) * 180 / Math.PI;
-  if (pitch < 5) warnings.push("지붕 경사가 5° 미만으로 배수 상세 검토가 필요합니다.");
-  if (pitch > 60) warnings.push("지붕 경사가 60°를 초과합니다.");
-  return [...new Set(warnings)];
+  if (pitch < 5) issues.push(issue("roof.pitch-low", "ridgeHeight", "warning", "지붕 경사가 5° 미만으로 배수 상세 검토가 필요합니다."));
+  if (pitch > 60) issues.push(issue("roof.pitch-high", "ridgeHeight", "warning", "지붕 경사가 60°를 초과합니다."));
+  const seen = new Set<string>();
+  return issues.filter((item) => {
+    const key = `${item.code}|${item.path}|${item.message}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
 };
 
-export const generateDrawingSet = (input: Partial<BuildingSpec>, generatedAt = new Date().toISOString()): DrawingSet => {
+export const validateSpec = (spec: Partial<BuildingSpec>): string[] => [...new Set(validateSpecDetailed(spec).map((item) => item.message))];
+
+const canRenderOutline = (outline: Point[]): boolean => outline.length >= 3 && outline.every(allFinite) && polygonArea(outline) >= 1_000_000 && !isSelfIntersecting(outline);
+
+export const generateDrawingSet = (input: Partial<BuildingSpec>, generatedAt = DEFAULT_GENERATED_AT): DrawingSet => {
+  const validationIssues = validateSpecDetailed(input);
   const spec = normalizeSpec(input);
-  const outline = normalizeOutline(spec.outline?.length ? spec.outline : DEFAULT_OUTLINE(spec.width, spec.depth));
-  const openings = spec.openings?.length ? spec.openings : defaultOpenings(spec.width, spec.depth);
+  const requestedOutline = normalizeOutline(spec.outline ?? DEFAULT_OUTLINE(spec.width, spec.depth));
+  const outline = canRenderOutline(requestedOutline) ? requestedOutline : DEFAULT_OUTLINE(spec.width, spec.depth);
+  const wallIds = spec.wallIds?.length === outline.length && new Set(spec.wallIds).size === spec.wallIds.length ? spec.wallIds : defaultWallIds(outline.length);
+  const requestedOpenings = spec.openings ?? defaultOpenings(spec.width, spec.depth);
+  const openings = requestedOpenings.flatMap((opening) => {
+    const wallIndex = wallIndexForOpening(opening, wallIds, outline.length);
+    const length = wallIndex >= 0 ? wallLength(outline, wallIndex) : 0;
+    const finite = [opening.offset, opening.width, opening.height, opening.sill ?? 0].every(Number.isFinite);
+    if (!finite || wallIndex < 0 || opening.offset < 0 || opening.width <= EPS || opening.height <= EPS || opening.offset + opening.width > length + EPS) return [];
+    return [{ ...opening, wallIndex, wallId: wallIds[wallIndex] }];
+  });
+  const interiorWalls = spec.interiorWalls?.filter((wall) => allFinite(wall.start) && allFinite(wall.end) && !samePoint(wall.start, wall.end));
+  const stair = spec.stair && [spec.stair.x, spec.stair.y, spec.stair.width, spec.stair.length, spec.stair.risers].every(Number.isFinite) && spec.stair.width > EPS && spec.stair.length > EPS && spec.stair.risers >= 3
+    ? spec.stair
+    : undefined;
+  const gridAxes = spec.gridAxes?.filter((axis) => allFinite(axis.start) && allFinite(axis.end) && !samePoint(axis.start, axis.end));
+  const sectionCuts = spec.sectionCuts?.filter((cut) => allFinite(cut.start) && allFinite(cut.end) && !samePoint(cut.start, cut.end));
+  const symbols = spec.symbols?.filter((symbol) => allFinite(symbol.at) && (symbol.width === undefined || symbol.width > EPS) && (symbol.depth === undefined || symbol.depth > EPS));
+  const facadeFeatures = (spec.facadeFeatures ?? defaultFacadeFeatures(spec)).filter((feature) => Number.isFinite(feature.offset) && (feature.width === undefined || feature.width > EPS) && (feature.height === undefined || feature.height > EPS));
+  const drawingSpec: BuildingSpec = {
+    ...spec,
+    outline,
+    wallIds,
+    openings,
+    interiorWalls,
+    stair,
+    gridAxes,
+    sectionCuts,
+    symbols,
+    facadeFeatures,
+  };
   const views: DrawingView[] = [
-    planView({ ...spec, outline, openings }),
-    elevationView({ ...spec, outline, openings }, "front", "FRONT ELEVATION"),
-    elevationView({ ...spec, outline, openings }, "rear", "REAR ELEVATION"),
-    elevationView({ ...spec, outline, openings }, "left", "LEFT ELEVATION"),
-    elevationView({ ...spec, outline, openings }, "right", "RIGHT ELEVATION"),
-    sectionA(spec),
-    sectionB(spec),
+    planView(drawingSpec),
+    elevationView(drawingSpec, "front", "FRONT ELEVATION"),
+    elevationView(drawingSpec, "rear", "REAR ELEVATION"),
+    elevationView(drawingSpec, "left", "LEFT ELEVATION"),
+    elevationView(drawingSpec, "right", "RIGHT ELEVATION"),
+    sectionA(drawingSpec),
+    sectionB(drawingSpec),
   ];
+  const schedule = openingSchedule(openings);
+  const layerList = [...new Set(views.flatMap((view) => view.entities.map((entity) => entity.layer)))].sort();
   return {
-    spec: { ...spec, outline, openings },
+    spec: drawingSpec,
     views,
-    warnings: validateSpec({ ...spec, outline, openings }),
-    metrics: calculateMetrics(spec, outline, openings),
-    openingSchedule: openingSchedule(openings),
+    warnings: [...new Set(validationIssues.map((item) => item.message))],
+    validationIssues,
+    metrics: calculateMetrics(drawingSpec, outline, openings),
+    openingSchedule: schedule,
+    doorSchedule: schedule.filter((row) => row.kind === "door"),
+    windowSchedule: schedule.filter((row) => row.kind === "window"),
+    drawingViewList: views.map((view) => ({ id: view.id, title: view.title })),
+    layerList,
     generatedAt,
     engineVersion: ENGINE_VERSION,
   };

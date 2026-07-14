@@ -1,68 +1,110 @@
-# Context7 및 통합 검증 보고서
+# Official documentation and Context7 validation
 
-검증일: 2026-07-13
+Validation date: 2026-07-13
 
-## Context7 확인 결과
+The implementation was checked against current official OpenAI Apps SDK and
+Cloudflare documentation. Context7 was then used for installed-version API
+details. Runtime and development dependencies are exact versions in
+`package-lock.json`; no range-based install is used for release validation.
 
-### Model Context Protocol TypeScript SDK
+## OpenAI Apps SDK
 
-- 검증 대상: `/modelcontextprotocol/typescript-sdk/v1.29.0`
-- 원격 MCP에는 Streamable HTTP가 권장됩니다.
-- 도구는 `McpServer.registerTool()` 또는 Apps SDK의 `registerAppTool()`로 등록합니다.
-- 입력·출력 스키마는 Zod 4 기반으로 정의합니다.
-- 상태가 필요 없는 서버는 세션과 Durable Object 없이 운영할 수 있습니다.
-- HTTP+SSE는 레거시 호환 경로이므로 사용하지 않습니다.
+Official pages reviewed:
 
-### Cloudflare Agents
+- Apps SDK quickstart and tool-planning guide
+- MCP server, ChatGPT UI, examples, and reference
+- deployment, ChatGPT connection, testing, and current Developer mode guides
+- security and privacy guide
+- current Codex-as-MCP and remote MCP safety documentation
 
-- 검증 대상: `/cloudflare/agents`
-- `createMcpHandler()`는 Cloudflare Worker에서 stateless MCP를 제공하는 공식 패턴입니다.
-- MCP SDK 서버는 한 번 연결된 후 다른 transport에 재사용할 수 없으므로 요청마다 새 `McpServer`를 생성해야 합니다.
-- stateless 방식에는 Durable Objects나 migration이 필요하지 않습니다.
-- 정적 위젯은 Workers Assets binding으로 제공합니다.
+Applied decisions:
 
-### OpenAI Apps SDK
+- Interactive-decoupled architecture with a small reliable tool set.
+- Versioned `ui://hscad-mobile/editor-v3.html` resource using
+  `text/html;profile=mcp-app` through `RESOURCE_MIME_TYPE`.
+- Standard MCP Apps `ui/*` JSON-RPC bridge is the baseline; documented
+  `window.openai` capabilities are feature-detected enhancements.
+- Concise `content` and `structuredContent`; complete DXF/SVG values are
+  widget-only `_meta`.
+- Exact output schemas for model-visible structured results.
+- Minimal resource CSP/domain metadata and explicit border preference.
+- Current ChatGPT registration path: web **Settings → Security and login →
+  Developer mode**, followed by **Settings → Plugins → +** and selection from
+  the composer's Developer mode menu.
 
-- 위젯 리소스는 `text/html;profile=mcp-app` MIME 형식과 versioned `ui://` URI를 사용합니다.
-- 도구 결과는 모델용 `content`, 모델·위젯 공용 `structuredContent`, 위젯 전용 `_meta`로 구분합니다.
-- 렌더링 도구에 `_meta.ui.resourceUri`를 연결합니다.
-- 위젯의 CSP는 `_meta.ui.csp`에서 연결·리소스 도메인을 최소 허용합니다.
-- `window.openai`를 통해 전체화면, 후속 메시지, 위젯 상태, 자동 높이 보고를 사용합니다.
+## Context7 packages checked
 
-## 코드 보강 사항
+### `@modelcontextprotocol/sdk` 1.29.0
 
-- MCP SDK 1.29.0, ext-apps 1.7.4, Agents 0.17.3, Zod 4.4.3으로 고정
-- `registerAppResource`, `registerAppTool`, `RESOURCE_MIME_TYPE` 적용
-- versioned UI URI `ui://hscad-mobile/editor-v2.html`
-- 요청당 새 MCP 서버 생성
-- 표준 `_meta.ui.resourceUri`, `_meta.ui.csp`, `_meta.ui.domain`, `_meta.ui.prefersBorder` 적용
-- 생성 전 입력 검증과 구조화된 오류 반환
-- `/health` 엔드포인트 추가
-- app-only 생성 도구와 모델 노출 도구 분리
+Context7 source: `/modelcontextprotocol/typescript-sdk/v1.29.0`
 
-## 실제 실행 검증
+- Remote MCP uses Web Standard Streamable HTTP.
+- A stateless endpoint can run without session IDs.
+- A transport/server is not reused across independent requests.
+- Tool input and output schemas are Zod-compatible object shapes.
 
-```text
-npm install                         PASS (266 packages audited, 0 vulnerabilities)
-npm run typecheck                  PASS
-npm test                           PASS (7 tests / 7 passed)
-npm run build                      PASS
-wrangler deploy --dry-run          PASS
-GET /health                        PASS (HTTP 200)
-MCP initialize                     PASS (protocol 2025-06-18)
-MCP tools/list                     PASS (4 tools)
-MCP tools/call validate            PASS
-MCP resources/list                 PASS
-MCP resources/read widget          PASS
-```
+### `@modelcontextprotocol/ext-apps` 1.7.4
 
-빌드 결과:
+Context7 source: `/modelcontextprotocol/ext-apps`
 
-- 단일 위젯 HTML: 약 235 KB, gzip 약 74 KB
-- Worker dry-run upload: 약 2.13 MB, gzip 약 388 KB
-- 위젯 MIME: `text/html;profile=mcp-app`
-- 총 도면 뷰: 평면 1 + 입면 4 + 단면 2
+- `registerAppTool`, `registerAppResource`, and `RESOURCE_MIME_TYPE` are the
+  current server helpers.
+- `_meta.ui.resourceUri`, resource CSP/domain metadata, and app/model visibility
+  match MCP Apps conventions.
+- The UI bridge uses `ui/initialize`, `ui/notifications/initialized`, tool input
+  and result notifications, `tools/call`, `ui/message`, and
+  `ui/update-model-context`.
 
-## 남은 외부 계정 작업
+### Cloudflare Agents 0.17.3 and Wrangler 4.110.0
 
-코드·테스트·로컬 MCP 검증은 완료했습니다. 실제 공개 URL 발급은 사용자의 Cloudflare 계정 인증 및 배포 승인이 필요합니다. 이 단계 전까지 PR은 Draft로 유지하는 것이 안전합니다.
+Context7 sources: `/cloudflare/agents`, `/cloudflare/workers-sdk`
+
+- `createMcpHandler` is the stateless Worker integration.
+- A new `McpServer` is created within every request path.
+- Workers Assets is the correct binding for the bundled widget/PWA.
+- The selected design needs neither a Durable Object nor a migration.
+- Wrangler JSON configuration and dry-run bundle inspection match the installed
+  CLI.
+
+### React 19.2.7 and Vite 8.1.4
+
+Context7 sources: `/react/react/v19.2.7`, `/vitejs/vite`
+
+- `createRoot` mounts the widget.
+- Host bridge subscriptions use stable external-store/effect cleanup patterns.
+- Vite performs the production build; `vite-plugin-singlefile` embeds runtime
+  JavaScript and CSS in the resource HTML.
+
+Context7 did not expose a version-specific Vite 8.1.4 page. The current Vite
+documentation was combined with the installed CLI/type declarations and an
+actual production build.
+
+### Zod 4.4.3
+
+Context7 source: `/websites/zod_dev_v4`
+
+- `z.strictObject` rejects unknown fields.
+- finite numeric bounds, collection limits, discriminated unions, and semantic
+  refinements enforce the BuildingSpec/tool contracts.
+- User-readable issues are derived without echoing drawing payloads.
+
+### `dxf-parser` 1.1.2
+
+Context7 did not contain this package/version. The independent test verifier was
+therefore checked against its installed type declarations, package metadata,
+and actual parsing behavior. It is test-only and is not shipped in the Worker
+runtime.
+
+## Deliberate compatibility metadata
+
+The server emits both MCP Apps `ui` metadata and current OpenAI compatibility
+aliases such as `openai/outputTemplate`, invocation text, widget description,
+and border preference. These aliases are deliberate for current ChatGPT hosts;
+the canonical MCP Apps resource and bridge remain authoritative.
+
+## Reproducible evidence
+
+`TESTING.md` records the final clean-install, type, unit/integration, production
+bundle, security, Wrangler, local Worker, remote Worker, and mobile viewport
+results. Claims in this document are architecture/API findings, not substitutes
+for those executable checks.

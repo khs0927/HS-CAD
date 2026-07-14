@@ -1,37 +1,119 @@
-# 모바일만으로 배포하기
+# Mobile-only deployment and acceptance
 
-## Cloudflare 모바일 브라우저
+This path needs no Windows PC, desktop CAD application, local Python, or local
+MCP server. The repository builds and runs on Cloudflare Workers; deployment and
+ChatGPT registration can be completed from a mobile browser.
 
-1. Cloudflare 대시보드에서 Workers & Pages를 엽니다.
-2. 저장소 가져오기를 선택합니다.
-3. `khs0927/HS-CAD`를 연결합니다.
-4. Root directory를 `apps/mobile-cad-chatgpt`로 지정합니다.
-5. Build command는 `npm run build`입니다.
-6. Deploy command는 `npx wrangler deploy`입니다.
-7. Node.js 버전은 22.18 이상으로 지정합니다.
-8. 배포 후 `/health`가 `ok: true`를 반환하는지 확인합니다.
-9. `/mcp` 주소를 ChatGPT 개발자 모드의 커스텀 앱으로 등록합니다.
+## 1. Preflight
 
-무료 모바일 MVP는 Worker 안에서 결정론적 DXF/SVG 생성만 수행합니다. OCR, 이미지 추론, DWG 직접 변환은 별도 고성능 서비스가 필요한 확장 범위입니다.
+From `apps/mobile-cad-chatgpt`:
 
-## 모바일 수락 테스트
-
-```text
-HS-CAD 모바일 편집기를 열어줘.
+```bash
+node --version
+npm --version
+npm ci
+npm run validate
+npm audit --audit-level=high
+npm run security:local
+npm run check:worker
+npx wrangler whoami
 ```
 
-```text
-가로 12m, 세로 11.3m, 벽 두께 200mm, 처마 3.2m, 용마루 5m, 다락 바닥 2.6m인 박공지붕 건물의 평면도 1면, 입면도 4면, 단면도 2면을 생성해줘.
+Expected runtime baseline: Node.js 22.18.0 or newer and npm 10.9.3. Do not
+continue if typecheck, tests, production build, bundle inspection, high-severity
+audit, license/secret checks, or Wrangler dry-run fails.
+
+## 2. Deploy with Wrangler
+
+```bash
+npm run deploy
 ```
 
-```text
-외곽선 폐합, 자기교차, 창호 범위, 다락 유효폭, 지붕 경사를 검증하고 DXF와 SVG를 내려받을 수 있게 해줘.
+Wrangler creates or updates `hscad-mobile-cad` and prints its HTTPS URL. The
+configuration uses a stateless Worker and Workers Assets only; it does not
+enable Durable Objects, storage, AI inference, or another paid feature.
+
+If a token is present but deployment returns Cloudflare error 10000, update its
+account selection and Workers Scripts read/edit permissions under **Cloudflare
+profile → API Tokens**. Do not paste the token into chat.
+
+## 3. Optional Cloudflare Git deployment
+
+In **Workers & Pages → Create → Import a repository**:
+
+1. Connect `khs0927/HS-CAD`.
+2. Select `main` for production after PR review.
+3. Set root directory to `apps/mobile-cad-chatgpt`.
+4. Set build command to `npm run build`.
+5. Set deploy command to `npx wrangler deploy`.
+6. Set Node.js to 22.18.0 or newer.
+7. Keep dependency installation locked with `npm ci`.
+
+## 4. Remote acceptance
+
+Replace the origin below with Wrangler's result:
+
+```bash
+curl -i https://<worker>.workers.dev/health
+node scripts/smoke-mcp.mjs https://<worker>.workers.dev/mcp
 ```
 
-## 정상 배포 확인
+Accept only when all of these are verified:
 
-- `GET /health`: HTTP 200
-- MCP initialize: protocol negotiation 성공
-- tools/list: 4개 도구 노출
-- resources/read: `text/html;profile=mcp-app`
-- 모바일 위젯에서 DXF와 SVG 다운로드 버튼 작동
+- `/health` is HTTP 200 and reports the expected service/widget versions.
+- MCP initialize negotiates successfully over Streamable HTTP.
+- `tools/list` exposes exactly the four documented tools.
+- `resources/list` and `resources/read` return the v3 widget with
+  `text/html;profile=mcp-app`.
+- Every tool call succeeds for the reference 12,000 × 11,300 mm building.
+- Invalid and oversized input fails without leaking the payload.
+- The root PWA loads and no source map, local path, token, or development-only
+  file is served.
+
+## 5. Connect ChatGPT
+
+When custom MCP apps are enabled for the account, use ChatGPT on the web (the
+current documented eligibility surface is web for Pro, Plus, Business,
+Enterprise, and Education accounts):
+
+1. Open ChatGPT **Settings**.
+2. Open **Security and login** and enable **Developer mode**.
+3. Open **Settings → Plugins** or `https://chatgpt.com/plugins`.
+4. Select `+` and create a developer-mode Draft app using
+   `https://<worker>.workers.dev/mcp`.
+5. Start a new chat, open the composer `+` menu, choose **Developer mode**, and
+   select HS-CAD.
+
+Success means all four tool names appear, `open_mobile_cad` mounts the Korean
+touch editor, and the reference drawing generates seven views. Then ask:
+
+```text
+처마 높이를 3.4m로 변경하고 다락 유효폭을 다시 계산해줘.
+```
+
+Confirm that the mounted widget updates, metrics change, and DXF, an individual
+SVG, combined SVG sheet, and project JSON download on a mobile viewport.
+
+## 6. Mobile viewport checklist
+
+Test 375 × 812, 390 × 844, 430 × 932, a tablet width, embedded ChatGPT, and
+full-screen display:
+
+- no horizontal page overflow;
+- safe-area padding and approximately 44px touch controls;
+- all seven view tabs/selectors accessible;
+- pan, zoom, fit, reset, and layer visibility work;
+- warnings, schedules, and metrics remain readable in both themes;
+- basic and JSON modes validate before generation;
+- revision requests and downloads report a clear unsupported-host fallback.
+
+## Free-plan posture
+
+The deployed Worker performs bounded deterministic computation and serves a
+small static app. It uses no paid binding. Track request volume, CPU time, bundle
+size, and 429/5xx rates in Cloudflare. Before public promotion, configure an
+account-level `/mcp` rate limit appropriate for the audience; obtain explicit
+approval before enabling any paid feature.
+
+See `TROUBLESHOOTING.md` for authentication, ChatGPT caching, CI billing, DXF
+viewer, and rollback procedures.

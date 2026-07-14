@@ -1,15 +1,26 @@
 <!doctype html>
 <html lang="ko">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <meta name="theme-color" content="#193b66" />
-  <meta name="description" content="모바일 전용 건축 도면 및 DXF 생성기" />
-  <link rel="manifest" href="/manifest.webmanifest" />
-  <title>HS-CAD Mobile</title>
-</head>
-<body>
-  <div id="root"></div>
-  <script type="module" src="/src/app.tsx"></script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5,viewport-fit=cover" />
+    <meta name="description" content="모바일 건축 도면 편집, 검토 및 DXF/SVG 내보내기를 위한 HS-CAD 앱" />
+    <meta name="application-name" content="HS-CAD Mobile" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="HS-CAD" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#f4f6f8" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0f141a" media="(prefers-color-scheme: dark)" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="icon" href="/icons/hscad-icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/icons/hscad-icon.svg" />
+    <title>HS-CAD Mobile</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <noscript>HS-CAD Mobile을 사용하려면 JavaScript를 활성화하세요.</noscript>
+    <script type="module" src="/src/app.tsx"></script>
+  </body>
 </html>

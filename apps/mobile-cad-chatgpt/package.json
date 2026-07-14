@@ -13,7 +13,12 @@
     "deploy": "npm run validate && wrangler deploy",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "validate": "npm run typecheck && npm test && npm run build",
+    "validate": "npm run typecheck && npm test && npm run build && npm run check:bundle",
+    "check:bundle": "node scripts/check-bundle.mjs",
+    "check:licenses": "node scripts/check-licenses.mjs",
+    "scan:secrets": "node scripts/scan-secrets.mjs",
+    "security:local": "npm run check:licenses && npm run scan:secrets",
+    "smoke:mcp": "node scripts/smoke-mcp.mjs",
     "check:worker": "wrangler deploy --dry-run --outdir .wrangler/dry-run"
   },
   "dependencies": {
@@ -26,9 +31,13 @@
   },
   "devDependencies": {
     "@cloudflare/workers-types": "5.20260713.1",
+    "@testing-library/react": "16.3.2",
+    "@testing-library/user-event": "14.6.1",
     "@types/react": "19.2.6",
     "@types/react-dom": "19.2.3",
     "@vitejs/plugin-react": "6.0.3",
+    "dxf-parser": "1.1.2",
+    "happy-dom": "20.10.6",
     "typescript": "5.8.3",
     "vite": "8.1.4",
     "vite-plugin-singlefile": "2.3.3",
