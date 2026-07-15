@@ -3,3 +3,5 @@ dist/
 .wrangler/
 .dev.vars
 *.log
+deployment-logs/
+CODEX_DEPLOYMENT_RESULT.md

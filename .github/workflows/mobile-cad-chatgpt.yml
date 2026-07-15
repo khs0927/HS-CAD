@@ -1,12 +1,12 @@
 name: Mobile CAD ChatGPT App
 
 on:
-  pull_request:
+  push:
     branches: [main]
     paths:
       - "apps/mobile-cad-chatgpt/**"
       - ".github/workflows/mobile-cad-chatgpt.yml"
-  push:
+  pull_request:
     branches: [main]
     paths:
       - "apps/mobile-cad-chatgpt/**"
@@ -21,11 +21,14 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  verify:
+  validate:
+    name: Node 22 validation and Worker dry-run
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     defaults:
       run:
         working-directory: apps/mobile-cad-chatgpt
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -33,27 +36,10 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22.18.0
-          cache: npm
-          cache-dependency-path: apps/mobile-cad-chatgpt/package-lock.json
+          node-version: "22"
 
-      - name: Install locked dependencies
-        run: npm ci
+      - name: Install exact direct dependencies
+        run: npm install --ignore-scripts --no-audit --no-fund
 
-      - name: Typecheck
-        run: npm run typecheck
-
-      - name: Test
-        run: npm test
-
-      - name: Build and inspect bundle
-        run: npm run build && npm run check:bundle
-
-      - name: Dependency audit
-        run: npm audit --audit-level=high
-
-      - name: License and secret checks
-        run: npm run security:local
-
-      - name: Wrangler dry-run
-        run: npm run check:worker
+      - name: Validate source, tests, build, and Worker bundle
+        run: npm run validate:ci
