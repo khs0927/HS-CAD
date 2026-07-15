@@ -1,44 +1,70 @@
-# HS-CAD Mobile Cloud Development Framework
+# HS-CAD Free-Only Mobile Development Framework
 
-## Goal
+## Final conclusion
 
-Develop, test, package, and review HS-CAD from an iPhone or iPad without owning a desktop computer.
+A desktop computer is not required for most HS-CAD development, testing, packaging, and mobile CAD work.
 
-The framework deliberately separates work into three layers so a paid GPU desktop is only used when a real Windows GUI, ZWCAD, or Rhino is required.
-
-## Recommended architecture
+The permanent zero-cost path is:
 
 ```text
-Mobile ChatGPT / GitHub mobile / Safari
-                |
-                +--> GitHub Codespaces (default interactive development)
-                |      - Python 3.11
-                |      - Node.js 22
-                |      - VS Code in browser
-                |      - forwarded web/MCP ports
-                |
-                +--> GitHub Actions Mobile Remote Control
-                |      - doctor
-                |      - Python tests
-                |      - Windows package build
-                |      - mobile CAD tests
-                |
-                +--> Temporary Windows cloud workstation
-                       - only for ZWCAD/Rhino/COM/GPU validation
-                       - Azure VM, Vagon, or another licensed Windows GPU PC
-                       - Windows App or browser remote desktop
-                       - Google Drive for result backup, not program installation
+Mobile ChatGPT + GitHub connector
+        |
+        +--> github.dev browser editor (unlimited editor, no compute)
+        |
+        +--> GitHub Actions included quota (manual runs only)
+        |      - Linux tests by default
+        |      - Windows doctor/package only when necessary
+        |
+        +--> GitHub Codespaces included quota (optional interactive terminal)
+        |
+        +--> Cloudflare Workers Free (mobile CAD/MCP deployment)
+        |
+        +--> Local SQLite by default
+               or one free Neon/Supabase project when remote data is required
 ```
 
-## Layer 1: Codespaces is the default desktop replacement
+A permanently free interactive Windows GPU desktop capable of running Rhino and ZWCAD is not available from the reviewed mainstream services. Microsoft Dev Box, Windows 365, Azure GPU VMs, Azure Virtual Desktop, AWS WorkSpaces, Vagon, and similar services are excluded from the free-only architecture.
 
-Create a Codespace from the required branch. The repository's `.devcontainer` configuration installs Python 3.11, Node.js 22, GitHub CLI, project dependencies, and mobile CAD dependencies when that app exists on the branch.
+## What can be completed for free
 
-Recommended branch choices:
+- Repository inspection and code changes through ChatGPT and the GitHub connector
+- Lightweight browser editing through `github.dev`
+- Python and TypeScript development through the monthly Codespaces allowance
+- Linux and Windows CI within the monthly GitHub Actions allowance
+- Windows EXE and installer packaging on a temporary GitHub-hosted Windows runner
+- Mobile CAD SVG/DXF generation from PR #127 without ZWCAD
+- MCP and mobile web deployment on Cloudflare Workers Free
+- Local SQLite indexing and audit history
+- Small remote database workloads on Neon Free or Supabase Free
+- Final-result backup within the user's existing Google Drive free storage allowance
 
-- `feature/mobile-only-chatgpt-cad-app`: mobile CAD/MCP work from PR #127
-- `agent/drawing-index-v2`: drawing index V2 work from PR #126
-- `feature/mobile-cloud-dev-framework`: this framework
+## What cannot be completed permanently for free
+
+- Interactive ZWCAD or Rhino GUI sessions in a cloud Windows desktop
+- GPU/OpenGL validation using a permanent cloud GPU workstation
+- Live ZWCAD COM automation against a licensed installed application
+- Live xiCAD command execution
+- Rhino plug-in and Rhino MCP validation against a licensed Rhino installation
+
+GitHub-hosted Windows runners are temporary, non-interactive machines. They can compile, test, and package Windows software, but they cannot be used as an RDP desktop and cannot preserve CAD licenses between runs.
+
+## Layer 1: github.dev is the default editor
+
+Use `github.dev` for quick edits, reviews, Markdown, YAML, and small code changes. It runs as a browser editor and does not consume Codespaces compute.
+
+For this project, most code generation and repository changes can also be completed remotely by ChatGPT through the connected GitHub tools, so the mobile browser is mainly needed for review and approval.
+
+## Layer 2: Codespaces is optional, not the default
+
+Use Codespaces only when an interactive terminal or live web preview is necessary.
+
+The repository `.devcontainer` requests the smallest practical machine:
+
+- 2 CPU cores
+- 8 GB memory
+- Python 3.11
+- Node.js 22
+- GitHub CLI
 
 The configuration forwards:
 
@@ -46,87 +72,121 @@ The configuration forwards:
 - `5173`: Vite preview
 - `8787`: Cloudflare Worker/MCP local development
 
-Codespaces is Linux. It cannot run Windows COM, ZWCAD, Rhino, or interactive Windows installers.
+Free-quota rules:
 
-## Layer 2: Mobile Remote Control workflow
+1. Use a 2-core codespace.
+2. Stop the codespace immediately after each session.
+3. Delete unused codespaces instead of retaining them.
+4. Do not enable prebuilds.
+5. Keep large DWG, PDF, OCR model, and build-output files outside the codespace.
+6. Keep the GitHub billing budget at zero or do not register a payment method if accidental billing must be impossible.
+
+Codespaces is Linux and cannot run Windows COM, ZWCAD, Rhino, or Windows installers interactively.
+
+## Layer 3: Mobile Remote Control workflow
 
 Open **Actions -> Mobile Remote Control -> Run workflow** from the GitHub mobile app or browser.
 
-Available tasks:
+The workflow is manual-only so commits and pull requests do not consume minutes automatically.
 
-- `doctor`: run the HS-CAD environment diagnostic on a fresh Windows runner
-- `python-tests`: install the project and run the Python test suite
-- `windows-package`: build the Windows release package
-- `mobile-cad-tests`: type-check, test, and build the mobile CAD app when present
-- `all-safe-tests`: run non-destructive safe tests
+Tasks:
 
-The workflow uploads logs and outputs as a seven-day artifact. GitHub-hosted runners are temporary and cannot preserve CAD licenses or provide an interactive ZWCAD/Rhino desktop.
+- `doctor-linux`: cheapest default environment check
+- `python-tests-linux`: Python test suite on Linux
+- `mobile-cad-tests-linux`: TypeScript mobile CAD checks and build
+- `windows-doctor`: Windows-specific diagnostic only when required
+- `windows-package`: Windows EXE and installer build only when required
 
-## Layer 3: Temporary Windows cloud workstation
+Cost-control behavior:
 
-Use this layer only for:
+- Linux is used for routine work.
+- Windows runners are used only for Windows-specific validation.
+- Every job has a 30-minute timeout.
+- Result artifacts are retained for one day.
+- Concurrent duplicate jobs are canceled.
+- No scheduled or pull-request-triggered runs are configured.
 
-- ZWCAD 2025/2026 COM smoke tests
-- xiCAD live command validation
-- Rhino 8 and Rhino MCP testing
-- 3D/OpenGL/GPU validation
-- licensed installer and GUI interaction
+For a private repository, these jobs consume the account's included monthly Actions allowance. With no valid payment method, GitHub blocks further usage after the allowance is exhausted rather than continuing as paid usage.
 
-### Simplest provider choice
+## Deployment
 
-For the fewest setup steps, a managed browser cloud computer such as Vagon is simpler than building Azure Virtual Desktop or Microsoft Dev Box infrastructure. Confirm the nearest region, latency, Windows edition, GPU, administrator rights, and CAD license compatibility before paying.
+Use the PR #127 Cloudflare Workers deployment as the default mobile CAD/MCP hosting target.
 
-For maximum control and repeatability, use an Azure Windows VM. Start with a CPU VM for setup and 2D tests, then use an NVadsA10 v5 or equivalent GPU VM only when Rhino/3D testing requires it. Configure automatic shutdown and verify that the VM is deallocated after use.
+Cloudflare Workers Free is preferred over Vercel Hobby for this project because Vercel Hobby is restricted to non-commercial personal use. The HS-CAD repository is private and may support professional work, so Vercel Hobby should not be treated as the default zero-cost production host.
 
-### Bootstrap
+Free deployment rules:
 
-After connecting to the Windows cloud PC, open PowerShell and run the repository script:
+- Keep the Worker stateless where possible.
+- Keep CPU work below the free invocation limit.
+- Do not attach paid Workers services.
+- Do not switch the account to the Workers Paid plan.
+- Use Cloudflare D1 Free only if a database is necessary; otherwise retain local SQLite or the existing free database.
 
-```powershell
-Set-ExecutionPolicy -Scope Process Bypass
-.\scripts\bootstrap_cloud_windows.ps1 -InstallGoogleDrive
-```
+## Database choice
 
-Optional Docker installation:
+Use only one remote database to avoid duplicated maintenance.
 
-```powershell
-.\scripts\bootstrap_cloud_windows.ps1 -InstallGoogleDrive -InstallDocker
-```
+Recommended order:
 
-The script installs development tools with `winget`, clones or updates HS-CAD, creates `.venv`, installs dependencies, and writes `cloud-doctor.txt`.
+1. Local SQLite for drawing indexes, local run history, and sensitive CAD metadata.
+2. Neon Free for a small always-available development database with scale-to-zero behavior.
+3. Supabase Free only when Supabase Auth, Storage, or Realtime is specifically required.
 
-ZWCAD and Rhino remain manual because their installers, accounts, licenses, and activation rules are vendor-controlled.
+Do not provision paid branches, paid compute, point-in-time recovery, custom domains, or usage-based add-ons.
 
-## Google Drive usage
+## Google Drive
 
-Google Drive is for synchronized inputs, outputs, screenshots, PDFs, DXFs, 3DM files, test evidence, and release backups.
+Google Drive is backup storage only. It is not a cloud computer and cannot host Windows applications.
 
-Do not install Windows, ZWCAD, Rhino, Python environments, `node_modules`, Docker data, Git repositories, SQLite working databases, or build caches inside a synchronized Google Drive folder. Work on the cloud PC's local SSD and copy final results to Drive.
+Store only compact final outputs:
 
-Recommended layout:
+- PDF exports
+- compressed DXF/3DM test files
+- screenshots
+- test reports
+- release installers
+- ZIP archives
 
-```text
-C:\HS-CAD\                 source, virtual environment, builds
-D:\CAD-Test-Workspace\     DWG/DXF/3DM fixtures and temporary copies
-G:\My Drive\HS-CAD\        final evidence and backups only
-```
+Do not store live `.venv`, `node_modules`, `.git`, Docker data, SQLite working databases, build caches, or synchronized CAD temporary files.
 
-## Remote control after a Windows cloud PC exists
+## Rhino and ZWCAD validation policy
 
-The assistant can remotely maintain GitHub branches, workflows, issues, releases, Vercel deployments, databases, and logs through connected tools. Direct control of the Windows GUI requires one of these bridges:
+Until access to a real licensed Windows CAD computer is available, PRs that require live ZWCAD/Rhino verification must remain Draft and clearly state that limitation.
 
-1. A GitHub Actions self-hosted runner installed on the cloud PC.
-2. A purpose-built HS-CAD agent/MCP service running on the cloud PC.
-3. Manual Windows App access by the user for license prompts and visual verification.
+Use the following substitutes in the free path:
 
-Use a short-lived self-hosted runner registration token. Never commit runner tokens, CAD licenses, passwords, API keys, service-role keys, or `.env` files.
+- `ezdxf` for DXF structure and geometry validation
+- SVG/PDF rendering for visual review
+- synthetic fixture drawings
+- unit and contract tests for COM adapter methods
+- GitHub-hosted Windows runners for imports, packaging, and non-interactive checks
+- PR #127 browser CAD engine for mobile-generated drawing sets
 
-## Simplest operational path
+These substitutes validate code and file generation but do not prove that a real ZWCAD/Rhino installation behaves correctly.
 
-1. Use PR #127 mobile CAD app for new DXF/SVG generation without Windows.
-2. Use Codespaces for coding and local web/MCP previews.
-3. Trigger Windows packaging and tests with Mobile Remote Control.
-4. Rent a Windows GPU cloud PC only for the final ZWCAD/Rhino fixture matrix.
-5. Save evidence to GitHub artifacts and Google Drive, then stop/deallocate the cloud PC.
+## Operational sequence
 
-This avoids maintaining Microsoft Dev Box, Azure Virtual Desktop host pools, or an always-running Windows server.
+1. ChatGPT modifies the repository through GitHub tools.
+2. Review files in the GitHub mobile app or `github.dev`.
+3. Run `doctor-linux` or focused Linux tests manually.
+4. Run Windows jobs only before packaging or merging Windows-specific changes.
+5. Use Codespaces only for terminal-based debugging that cannot be done through Actions.
+6. Deploy the mobile CAD/MCP app to Cloudflare Workers Free.
+7. Store only final compact evidence in Google Drive.
+8. Leave ZWCAD/Rhino-dependent PRs in Draft until a licensed physical or sponsored Windows machine becomes available.
+
+## Zero-cost safety checklist
+
+- GitHub metered-product budget: zero
+- No paid GitHub larger runners
+- No Codespaces prebuilds
+- 2-core Codespaces only
+- Manual Actions only
+- One-day artifact retention
+- Cloudflare Workers Free plan only
+- No Azure, AWS WorkSpaces, Dev Box, Windows 365, Vagon, or paid GPU VM
+- No Fal paid inference in required runtime
+- No Hugging Face paid Jobs or Endpoints in required runtime
+- Local SQLite by default
+- Neon or Supabase Free only when necessary
+- No paid domain required; use provider subdomains
