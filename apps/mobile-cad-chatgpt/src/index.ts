@@ -6,6 +6,8 @@ import {
 } from "@modelcontextprotocol/ext-apps/server";
 import { createMcpHandler } from "agents/mcp";
 import { z } from "zod";
+
+import { WIDGET_URI } from "./app-constants";
 import {
   ENGINE_VERSION,
   generateDrawingSet,
@@ -25,7 +27,6 @@ interface Env {
   ASSETS: Fetcher;
 }
 
-export const WIDGET_URI = "ui://hscad-mobile/editor-v3.html";
 
 const MCP_ROUTE = "/mcp";
 const MAX_REQUEST_BYTES = 256 * 1024;

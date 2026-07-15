@@ -22,7 +22,8 @@ vi.mock("agents/mcp", async () => {
   };
 });
 
-import worker, { WIDGET_URI } from "../src/index";
+import { WIDGET_URI } from "../src/app-constants";
+import worker from "../src/index";
 
 const MCP_URL = "https://cad.example.test/mcp";
 const MCP_HEADERS = {
