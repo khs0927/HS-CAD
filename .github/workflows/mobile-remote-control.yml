@@ -18,17 +18,27 @@ on:
         description: Optional note identifying the requested test
         required: false
         type: string
+  pull_request:
+    branches: [main]
+    paths:
+      - '.devcontainer/**'
+      - '.github/workflows/mobile-remote-control.yml'
+      - 'scripts/bootstrap_cloud_windows.ps1'
+      - 'docs/MOBILE_CLOUD_DEV_FRAMEWORK.md'
 
 permissions:
   contents: read
 
+env:
+  REQUESTED_TASK: ${{ inputs.task || 'doctor' }}
+
 concurrency:
-  group: mobile-remote-${{ github.ref }}-${{ inputs.task }}
+  group: mobile-remote-${{ github.ref }}-${{ inputs.task || 'doctor' }}
   cancel-in-progress: false
 
 jobs:
   remote-control:
-    name: ${{ inputs.task }} on Windows
+    name: ${{ inputs.task || 'doctor' }} on Windows
     runs-on: windows-latest
     timeout-minutes: 60
 
@@ -41,7 +51,7 @@ jobs:
         run: |
           New-Item -ItemType Directory -Force -Path test-results | Out-Null
           @"
-          task=${{ inputs.task }}
+          task=$env:REQUESTED_TASK
           ref=${{ github.ref }}
           sha=${{ github.sha }}
           note=${{ inputs.ref_note }}
@@ -49,36 +59,36 @@ jobs:
           "@ | Set-Content -Encoding utf8 test-results/mobile-request.txt
 
       - name: Set up Python 3.11
-        if: inputs.task != 'mobile-cad-tests'
+        if: env.REQUESTED_TASK != 'mobile-cad-tests'
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
           cache: pip
 
       - name: Install Python project
-        if: inputs.task != 'mobile-cad-tests'
+        if: env.REQUESTED_TASK != 'mobile-cad-tests'
         shell: pwsh
         run: |
           python -m pip install --upgrade pip
           python -m pip install -e ".[dev]"
 
       - name: Run environment doctor
-        if: inputs.task == 'doctor' || inputs.task == 'all-safe-tests'
+        if: env.REQUESTED_TASK == 'doctor' || env.REQUESTED_TASK == 'all-safe-tests'
         shell: pwsh
         run: python -m src.main doctor | Tee-Object -FilePath test-results/doctor.txt
 
       - name: Run Python tests
-        if: inputs.task == 'python-tests' || inputs.task == 'all-safe-tests'
+        if: env.REQUESTED_TASK == 'python-tests' || env.REQUESTED_TASK == 'all-safe-tests'
         shell: pwsh
         run: python -m pytest -q --disable-warnings --maxfail=1 --junitxml=test-results/junit.xml
 
       - name: Build Windows package
-        if: inputs.task == 'windows-package'
+        if: env.REQUESTED_TASK == 'windows-package'
         shell: pwsh
         run: ./scripts/build_windows_release.ps1
 
       - name: Detect mobile CAD app
-        if: inputs.task == 'mobile-cad-tests' || inputs.task == 'all-safe-tests'
+        if: env.REQUESTED_TASK == 'mobile-cad-tests' || env.REQUESTED_TASK == 'all-safe-tests'
         id: mobile_app
         shell: pwsh
         run: |
@@ -91,7 +101,7 @@ jobs:
           }
 
       - name: Set up Node.js 22
-        if: (inputs.task == 'mobile-cad-tests' || inputs.task == 'all-safe-tests') && steps.mobile_app.outputs.present == 'true'
+        if: (env.REQUESTED_TASK == 'mobile-cad-tests' || env.REQUESTED_TASK == 'all-safe-tests') && steps.mobile_app.outputs.present == 'true'
         uses: actions/setup-node@v4
         with:
           node-version: '22'
@@ -99,7 +109,7 @@ jobs:
           cache-dependency-path: apps/mobile-cad-chatgpt/package-lock.json
 
       - name: Test mobile CAD app
-        if: (inputs.task == 'mobile-cad-tests' || inputs.task == 'all-safe-tests') && steps.mobile_app.outputs.present == 'true'
+        if: (env.REQUESTED_TASK == 'mobile-cad-tests' || env.REQUESTED_TASK == 'all-safe-tests') && steps.mobile_app.outputs.present == 'true'
         shell: pwsh
         run: |
           npm --prefix apps/mobile-cad-chatgpt ci
@@ -111,7 +121,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: mobile-remote-${{ inputs.task }}-${{ github.run_number }}
+          name: mobile-remote-${{ inputs.task || 'doctor' }}-${{ github.run_number }}
           path: |
             test-results/
             dist/
