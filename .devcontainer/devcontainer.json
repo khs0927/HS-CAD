@@ -8,9 +8,8 @@
     "ghcr.io/devcontainers/features/github-cli:1": {}
   },
   "hostRequirements": {
-    "cpus": 4,
-    "memory": "8gb",
-    "storage": "32gb"
+    "cpus": 2,
+    "memory": "8gb"
   },
   "forwardPorts": [3000, 5173, 8787],
   "portsAttributes": {
