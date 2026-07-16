@@ -11,4 +11,4 @@ COPY . .
 RUN python -m pip install --upgrade pip \
     && python -m pip install -e ".[dev]"
 
-CMD ["python", "scripts/run_plugin_orchestrator.py", "--profile", "auto", "--output", "/tmp/hscad-orchestrator-result.json"]
+CMD ["sh", "-c", "python scripts/run_plugin_orchestrator.py --profile auto --output /tmp/hscad-orchestrator-result.json; status=$?; test -f /tmp/hscad-orchestrator-result.json && cat /tmp/hscad-orchestrator-result.json; exit $status"]
