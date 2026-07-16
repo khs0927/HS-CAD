@@ -153,7 +153,7 @@ class _Session:
         return _Response()
 
 
-def test_supabase_sink_publishes_summary_without_private_source_path_or_text() -> None:
+def test_supabase_sink_publishes_summary_without_paths_or_drawing_text() -> None:
     record = _record("native", complete=True, texts=2)
     record.extraction_report.update(
         {
@@ -193,4 +193,5 @@ def test_supabase_sink_publishes_summary_without_private_source_path_or_text() -
     payload_text = repr([kwargs["json"] for _, kwargs in session.calls])
     assert "C:/private/source.dwg" not in payload_text
     assert "DO_NOT_UPLOAD_DRAWING_TEXT" not in payload_text
-    assert "plans/source.dwg" in payload_text
+    assert "plans/source.dwg" not in payload_text
+    assert SupabaseRunSummarySink.REDACTED_PATH in payload_text
