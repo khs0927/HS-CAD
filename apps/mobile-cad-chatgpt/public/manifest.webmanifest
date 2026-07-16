@@ -1,0 +1,30 @@
+{
+  "id": "/",
+  "name": "HS-CAD Mobile",
+  "short_name": "HS-CAD",
+  "description": "모바일 건축 도면 편집, 검토 및 DXF/SVG 내보내기",
+  "lang": "ko-KR",
+  "dir": "ltr",
+  "start_url": "/?source=pwa",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
+  "orientation": "any",
+  "background_color": "#f4f6f8",
+  "theme_color": "#185f8d",
+  "categories": ["productivity", "design", "utilities"],
+  "icons": [
+    {
+      "src": "/icons/hscad-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/hscad-maskable.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}

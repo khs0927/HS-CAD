@@ -1,0 +1,51 @@
+{
+  "name": "hscad-mobile-chatgpt-app",
+  "version": "0.3.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.18.0"
+  },
+  "packageManager": "npm@10.9.3",
+  "scripts": {
+    "dev": "npm run build:ui && wrangler dev",
+    "build": "npm run build:ui",
+    "build:ui": "vite build",
+    "deploy": "npm run validate:ci && wrangler deploy",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:bootstrap": "node --test bootstrap.test.mjs deployment-script.test.mjs",
+    "validate": "npm run typecheck && npm test && npm run test:bootstrap && npm run build:ui && npm run check:bundle",
+    "validate:ci": "npm run validate && npm run check:worker",
+    "check:bundle": "node scripts/check-bundle.mjs",
+    "check:licenses": "node scripts/check-licenses.mjs",
+    "scan:secrets": "node scripts/scan-secrets.mjs",
+    "security:local": "npm run check:licenses && npm run scan:secrets",
+    "smoke:mcp": "node scripts/smoke-mcp.mjs",
+    "check:worker": "wrangler deploy --dry-run --outdir .wrangler/dry-run"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/ext-apps": "1.7.4",
+    "@modelcontextprotocol/sdk": "1.29.0",
+    "@tarikjabiri/dxf": "3.0.0-alpha.13",
+    "agents": "0.17.3",
+    "react": "19.2.7",
+    "react-dom": "19.2.7",
+    "zod": "4.4.3"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "5.20260713.1",
+    "@testing-library/react": "16.3.2",
+    "@testing-library/user-event": "14.6.1",
+    "@types/react": "19.2.6",
+    "@types/react-dom": "19.2.3",
+    "@vitejs/plugin-react": "6.0.3",
+    "dxf-parser": "1.1.2",
+    "happy-dom": "20.10.6",
+    "typescript": "5.8.3",
+    "vite": "8.1.4",
+    "vite-plugin-singlefile": "2.3.3",
+    "vitest": "4.1.10",
+    "wrangler": "4.110.0"
+  }
+}

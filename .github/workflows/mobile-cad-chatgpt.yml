@@ -1,0 +1,45 @@
+name: Mobile CAD ChatGPT App
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "apps/mobile-cad-chatgpt/**"
+      - ".github/workflows/mobile-cad-chatgpt.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "apps/mobile-cad-chatgpt/**"
+      - ".github/workflows/mobile-cad-chatgpt.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: mobile-cad-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Node 22 validation and Worker dry-run
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: apps/mobile-cad-chatgpt
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install exact direct dependencies
+        run: npm install --ignore-scripts --no-audit --no-fund
+
+      - name: Validate source, tests, build, and Worker bundle
+        run: npm run validate:ci
