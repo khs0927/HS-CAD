@@ -56,15 +56,36 @@ def _require_non_negative_int(mapping: Mapping[str, Any], key: str) -> int:
     return value
 
 
-def _clean_summary(value: object) -> dict[str, int]:
+def _clean_summary(
+    value: object,
+    *,
+    top_level_status: str,
+    result_count: int,
+) -> dict[str, int]:
     if not isinstance(value, Mapping):
         raise ValueError("evidence field 'summary' must be an object")
     summary = {
         key: _require_non_negative_int(value, key)
         for key in ("total", "passed", "failed", "blocked")
     }
+
+    orchestrator_selection_failure = {
+        "total": 0,
+        "passed": 0,
+        "failed": 1,
+        "blocked": 0,
+    }
+    if (
+        top_level_status == "failed"
+        and result_count == 0
+        and summary == orchestrator_selection_failure
+    ):
+        return {"total": 0, "passed": 0, "failed": 0, "blocked": 0}
+
     if summary["total"] != summary["passed"] + summary["failed"] + summary["blocked"]:
         raise ValueError("summary counts do not add up to total")
+    if summary["total"] != result_count:
+        raise ValueError("summary total must equal the number of sanitized results")
     return summary
 
 
@@ -133,9 +154,11 @@ def build_record(
     if not isinstance(results_value, list):
         raise ValueError("evidence field 'results' must be an array")
     results = [_clean_result(item) for item in results_value]
-    summary = _clean_summary(evidence.get("summary"))
-    if summary["total"] != len(results):
-        raise ValueError("summary total must equal the number of sanitized results")
+    summary = _clean_summary(
+        evidence.get("summary"),
+        top_level_status=status,
+        result_count=len(results),
+    )
 
     sanitized_evidence = {
         "schema_version": schema_version,
