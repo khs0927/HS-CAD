@@ -152,6 +152,31 @@ def test_rejects_summary_that_does_not_match_results() -> None:
         )
 
 
+def test_normalizes_zero_check_orchestrator_failure() -> None:
+    module = _load_module()
+    evidence = {
+        "schema_version": "hscad.plugin-orchestrator.v1.1",
+        "completed_at": "2026-07-17T00:00:00+00:00",
+        "status": "failed",
+        "profiles": ["drawing-index"],
+        "summary": {"total": 0, "passed": 0, "failed": 1, "blocked": 0},
+        "results": [],
+    }
+
+    record = module.build_record(
+        evidence,
+        repository_ref="owner/repository",
+        branch_ref="feature/example",
+        commit_sha="0123456789abcdef0123456789abcdef01234567",
+        runner="local-container",
+        namespace="namespace",
+    )
+
+    assert record["status"] == "failed"
+    assert record["summary"] == {"total": 0, "passed": 0, "failed": 0, "blocked": 0}
+    assert record["results"] == []
+
+
 def test_publish_requires_https() -> None:
     module = _load_module()
 
