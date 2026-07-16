@@ -22,26 +22,76 @@ Profiles:
 
 | Profile | Scope |
 |---|---|
-| `core` | compile, portable pytest, Ruff, wheel build |
-| `drawing-index` | free-only policy, drawing-index contract and tests |
+| `core` | Python compile, portable pytest, Ruff, wheel build |
+| `drawing-index` | free-only policy, drawing-index contract, corpus/privacy/fallback tests |
 | `semantic` | semantic-index tests discovered by filename |
+| `mobile` | Node version, locked install, tests/build/Worker dry-run, license and secret scans |
 | `windows-cad` | real Windows/ZWCAD fixture matrix |
-| `auto` | detects modules present in the current branch |
+| `auto` | detects modules and apps present in the current branch |
 
-The runner never uses `shell=True`, does not print environment-variable values, redacts repository/home/private-fixture paths, and fails closed on a non-zero command, timeout, process error, platform mismatch, or an explicitly requested profile with no runnable checks.
+Profiles can be combined by repeating `--profile`, except that `auto` cannot be combined with explicit profiles.
 
-By default, evidence contains only SHA-256 hashes of stdout/stderr. Sanitized log tails are included only when `--include-logs` is explicitly supplied. This prevents drawing names, customer paths, or extracted text from being copied into an external control plane by default.
+The runner never uses `shell=True`, does not print environment-variable values, redacts repository/home/private-fixture paths, restricts per-check working directories to the repository tree, and fails closed on a non-zero command, timeout, process error, platform mismatch, path escape, or an explicitly requested profile with no runnable checks.
 
-## Container execution
+By default, evidence contains only SHA-256 hashes of stdout/stderr. Sanitized log tails are included only when `--include-logs` is explicitly supplied. This prevents drawing names, customer paths, extracted text, and package-manager output from being copied into an external control plane by default.
+
+## Hybrid container execution
+
+The shared image contains Python 3.11 and Node.js 22.18 so the same runner validates the Python desktop/index code and the mobile ChatGPT app.
 
 ```powershell
 docker build -f Dockerfile.orchestrator -t hscad-orchestrator .
 docker run --rm hscad-orchestrator
 ```
 
-`Dockerfile.orchestrator.dockerignore` excludes Git metadata, virtual environments, environment files, build/output folders, private fixture folders, and DWG/DXF files from the build context. A hosted runner receives source code and tests, not local office drawing data.
+`Dockerfile.orchestrator.dockerignore` excludes Git metadata, Python and Node virtual/dependency folders, Wrangler output, environment files, build/output folders, private fixture folders, and DWG/DXF files from the build context. Committed synthetic test fixtures under `tests/fixtures/` remain available. A hosted runner receives source code and tests, not local office drawing data.
 
 This is the preferred Linux validation path for Manufact or any other authenticated private-repository builder.
+
+## Direct profile commands
+
+Drawing Index V2:
+
+```powershell
+python scripts/run_plugin_orchestrator.py `
+  --profile core `
+  --profile drawing-index `
+  --continue-on-error
+```
+
+Semantic Index:
+
+```powershell
+python scripts/run_plugin_orchestrator.py `
+  --profile core `
+  --profile semantic `
+  --continue-on-error
+```
+
+Mobile ChatGPT CAD App:
+
+```powershell
+python scripts/run_plugin_orchestrator.py `
+  --profile mobile `
+  --continue-on-error
+```
+
+The mobile profile runs, in order:
+
+1. Node.js 22.18+ guard;
+2. `npm ci --no-audit --no-fund`;
+3. `npm run validate:ci`;
+4. `npm run security:local`.
+
+`validate:ci` includes TypeScript checking, unit tests, bootstrap/deployment-script tests, Vite build, bundle inspection, and Cloudflare Worker dry-run.
+
+Windows/ZWCAD acceptance:
+
+```powershell
+python scripts/run_plugin_orchestrator.py `
+  --profile windows-cad `
+  --fixture-root "D:\PRIVATE-DRAWING-FIXTURES"
+```
 
 ## Orchestration lanes
 
@@ -52,10 +102,11 @@ This is the preferred Linux validation path for Manufact or any other authentica
 
 ### Validation plane
 
-1. Local or hosted container executes `run_plugin_orchestrator.py`.
-2. Manufact is the preferred connected private-repository runner after its GitHub App is granted access.
+1. Local or hosted hybrid container executes `run_plugin_orchestrator.py`.
+2. Manufact is the preferred connected private-repository runner after repository access is granted.
 3. Windows/ZWCAD acceptance runs only on a licensed Windows host with private fixtures.
-4. Netlify and Vercel validate web/PWA/MCP surfaces, not desktop COM behavior.
+4. Cloudflare validates the production MCP/Widget runtime.
+5. Netlify and Vercel validate web/PWA/API surfaces, not desktop COM behavior.
 
 ### Documentation plane
 
@@ -70,9 +121,10 @@ This is the preferred Linux validation path for Manufact or any other authentica
 
 ### Observability plane
 
-- Alpic monitors deployed MCP traffic.
-- Manufact provides build and runtime logs.
-- Deployment health is evidence, but it does not replace test or Windows fixture evidence.
+- Alpic monitors deployed MCP traffic after a project is connected.
+- Manufact provides build and runtime logs after repository access is connected.
+- Vercel provides web runtime logs where Vercel is the selected deployment surface.
+- Deployment health is evidence, but it does not replace tests or Windows fixture evidence.
 
 ## PR release gates
 
@@ -100,26 +152,28 @@ Required:
 
 Required:
 
-1. Public health and MCP protocol checks pass.
-2. ChatGPT custom app registration succeeds.
-3. iPhone/iPad widget acceptance succeeds.
-4. SVG and DXF export are manually checked.
-5. Deployment logs show no release-blocking runtime errors.
+1. `mobile` profile passes.
+2. Public health and MCP protocol checks pass.
+3. ChatGPT custom app registration succeeds.
+4. iPhone/iPad widget acceptance succeeds.
+5. SVG and DXF exports are manually checked.
+6. Deployment logs show no release-blocking runtime errors.
 
 ## Failure routing
 
 | Failure | Route |
 |---|---|
 | GitHub Actions unavailable | Ignore Actions; use orchestrator container |
-| Manufact cannot read private repo | GitHub App access gate; continue static review and local/container preparation |
+| Manufact cannot read private repo | Repository-access gate; continue static review and local/container preparation |
 | Context7 authentication unavailable | Record documentation gate as blocked; do not claim API verification |
-| Netlify/Vercel unavailable | Keep local PWA build and public Worker health evidence |
+| Netlify/Vercel unavailable | Keep local mobile profile and public Worker health evidence |
 | Supabase unavailable | Continue local SQLite; remote summary is optional |
-| No Windows/ZWCAD host | Keep PR Draft; do not claim production acceptance |
+| No Windows/ZWCAD host | Keep PR #126 Draft; do not claim production acceptance |
+| ChatGPT app not registered | Keep PR #127 Draft; public Worker health is not mobile acceptance |
 
 ## Release order
 
-1. Merge this orchestrator foundation.
+1. Merge the orchestrator v1.1 profile expansion.
 2. Validate and merge Drawing Index V2.
 3. Rebase, evaluate and merge Semantic Index.
 4. Complete mobile app registration and merge the ChatGPT app.

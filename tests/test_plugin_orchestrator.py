@@ -89,3 +89,64 @@ def test_logs_are_only_included_by_explicit_opt_in() -> None:
 
     assert result.status == "passed"
     assert "safe-log" in result.stdout
+
+
+def test_working_directory_cannot_escape_repository() -> None:
+    module = _load_module()
+    check = module.Check(
+        name="escape-probe",
+        command=(sys.executable, "-c", "print('should-not-run')"),
+        working_directory="../outside",
+    )
+
+    result = module.run_check(
+        check,
+        timeout=30,
+        fixture_root=None,
+        include_logs=False,
+    )
+
+    assert result.status == "error"
+    assert "escapes repository root" in result.reason
+    assert result.return_code is None
+
+
+def test_mobile_profile_uses_locked_install_and_app_directory(monkeypatch, tmp_path: Path) -> None:
+    module = _load_module()
+    app = tmp_path / "apps" / "mobile-cad-chatgpt"
+    app.mkdir(parents=True)
+    (app / "package.json").write_text("{}", encoding="utf-8")
+    (app / "package-lock.json").write_text("{}", encoding="utf-8")
+    monkeypatch.setattr(module, "ROOT", tmp_path)
+
+    profiles, checks = module.build_checks(["mobile"], None)
+
+    assert profiles == ["mobile"]
+    assert [item.name for item in checks] == [
+        "mobile-node-version",
+        "mobile-npm-clean-install",
+        "mobile-validation",
+        "mobile-security",
+    ]
+    assert all(item.working_directory == "apps/mobile-cad-chatgpt" for item in checks)
+    assert checks[1].command == ("npm", "ci", "--no-audit", "--no-fund")
+    assert checks[2].command == ("npm", "run", "validate:ci")
+    assert checks[3].command == ("npm", "run", "security:local")
+
+
+def test_auto_profile_detects_mobile_app(monkeypatch, tmp_path: Path) -> None:
+    module = _load_module()
+    (tmp_path / "src").mkdir()
+    (tmp_path / "scripts").mkdir()
+    (tmp_path / "tests").mkdir()
+    app = tmp_path / "apps" / "mobile-cad-chatgpt"
+    app.mkdir(parents=True)
+    (app / "package.json").write_text("{}", encoding="utf-8")
+    (app / "package-lock.json").write_text("{}", encoding="utf-8")
+    (tmp_path / "pyproject.toml").write_text("[build-system]", encoding="utf-8")
+    monkeypatch.setattr(module, "ROOT", tmp_path)
+
+    profiles, checks = module.build_checks(["auto"], None)
+
+    assert profiles == ["core", "mobile"]
+    assert any(item.name == "mobile-validation" for item in checks)
