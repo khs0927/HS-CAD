@@ -47,4 +47,13 @@ jobs:
         run: python -m src.main doctor
 
       - name: Run tests
-        run: python -m pytest -q --disable-warnings --maxfail=1
+        run: python -m pytest -q --disable-warnings --maxfail=1 --junitxml=test-results/junit.xml
+
+      - name: Upload test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pytest-${{ matrix.os }}-${{ matrix.python-version }}
+          path: test-results/junit.xml
+          if-no-files-found: warn
+          retention-days: 7
