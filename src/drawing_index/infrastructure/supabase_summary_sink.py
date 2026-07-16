@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import os
 from collections.abc import Sequence
 from dataclasses import dataclass
@@ -41,10 +42,10 @@ class SupabaseRunSummarySink(RunSummarySink):
     """Publish aggregate statistics without uploading drawing identifiers.
 
     Relative paths remain available to the local SQLite history but are replaced
-    with a fixed redaction marker in the optional remote control plane. The
-    service-role key is accepted only through environment variables. This
-    adapter belongs in trusted automation/server contexts and must never be
-    bundled into a client installer.
+    with a fixed marker remotely. Workspace labels and local file IDs are hashed
+    again at the remote boundary so operator labels and deterministic path hashes
+    cannot be correlated across runs. The service-role key is accepted only
+    through environment variables and must never be bundled into a client.
     """
 
     backend = "supabase_rest"
@@ -107,11 +108,11 @@ class SupabaseRunSummarySink(RunSummarySink):
                 f"HTTP {response.status_code}: {detail}"
             )
 
-    @staticmethod
-    def _run_row(run: IndexRunSummary) -> dict[str, Any]:
+    @classmethod
+    def _run_row(cls, run: IndexRunSummary) -> dict[str, Any]:
         return {
             "run_id": run.run_id,
-            "workspace_id": run.workspace_id,
+            "workspace_id": cls._hash_token("workspace", run.workspace_id),
             "started_at": run.started_at,
             "completed_at": run.completed_at,
             "status": run.status,
@@ -129,7 +130,7 @@ class SupabaseRunSummarySink(RunSummarySink):
     def _file_row(cls, run_id: str, item: FileIndexSummary) -> dict[str, Any]:
         return {
             "run_id": run_id,
-            "file_id": item.file_id,
+            "file_id": cls._hash_token("file", f"{run_id}:{item.file_id}"),
             "relative_path": cls.REDACTED_PATH,
             "extension": item.extension,
             "status": item.status,
@@ -147,3 +148,8 @@ class SupabaseRunSummarySink(RunSummarySink):
             "blockers": list(item.blockers),
             "extraction_report": item.extraction_report,
         }
+
+    @staticmethod
+    def _hash_token(namespace: str, value: str) -> str:
+        digest = hashlib.sha256(f"{namespace}:{value}".encode("utf-8")).hexdigest()
+        return f"sha256:{digest}"
