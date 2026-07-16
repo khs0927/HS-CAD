@@ -1,0 +1,18 @@
+FROM python:3.11-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    HSCAD_RUNTIME_PROFILE=free-local \
+    HSCAD_SUMMARY_BACKEND=local \
+    HSCAD_ALLOW_PAID_SERVICES=0 \
+    HSCAD_ALLOW_EXTERNAL_SUMMARY=0 \
+    HSCAD_ALLOW_NETWORK_MODELS=0
+
+WORKDIR /app
+COPY . .
+
+RUN bash scripts/manufact_validate_drawing_index.sh
+
+EXPOSE 8000
+CMD ["python", "-m", "http.server", "8000", "--bind", "0.0.0.0"]
