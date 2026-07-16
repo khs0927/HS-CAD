@@ -1,0 +1,70 @@
+schema_version: hscad.plugin-orchestrator.v1
+policy:
+  github_actions: disabled
+  source_repository_visibility: private
+  default_validation_command: python scripts/run_plugin_orchestrator.py --profile auto
+  evidence_format: outputs/orchestrator/latest.json
+  fail_closed: true
+
+control_plane:
+  linear:
+    role: plan, dependencies, acceptance gates, blocker history
+  github:
+    role: source, branches, pull requests, code review, release history
+
+documentation_plane:
+  context7:
+    role: current primary-library API verification
+    required_for:
+      - dependency API changes
+      - SDK upgrades
+
+data_plane:
+  supabase:
+    role: optional redacted aggregate run summaries
+    restrictions:
+      - no drawing bytes
+      - no absolute or relative paths
+      - no extracted text
+      - no geometry or coordinates
+  neon:
+    role: optional server-side SQL validation only
+    restrictions:
+      - not required for local CAD runtime
+
+validation_plane:
+  local_container:
+    priority: 1
+    dockerfile: Dockerfile.orchestrator
+    command: docker build -f Dockerfile.orchestrator -t hscad-orchestrator .
+  manufact:
+    priority: 2
+    role: authenticated private-repository build runner
+    status: blocked_until_github_app_has_repo_access
+    wait_for_ci: false
+  netlify:
+    priority: 3
+    role: web-widget and static preview validation only
+    restrictions:
+      - not authoritative for Python desktop or ZWCAD validation
+  vercel:
+    priority: 3
+    role: web, PWA, API and preview deployment validation
+    restrictions:
+      - not authoritative for Windows COM or ZWCAD validation
+  windows_zwcad_host:
+    priority: 1
+    role: final native CAD acceptance
+    command: python scripts/run_plugin_orchestrator.py --profile windows-cad --fixture-root <private-dir>
+
+observability_plane:
+  alpic:
+    role: deployed MCP monitoring and analytics
+  manufact:
+    role: build and runtime logs
+
+release_order:
+  - plugin-orchestrator
+  - drawing-index-v2
+  - semantic-index
+  - mobile-chatgpt-app
