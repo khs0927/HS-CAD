@@ -2,9 +2,7 @@
 
 ## Guarantee
 
-The required HS-CAD drawing-index runtime is local, offline-capable, and free to operate.
-
-It requires no OpenAI, Anthropic, fal.ai, Hugging Face hosted Job, Vercel, Neon, Alpic, Aleph, Network Solutions, or other paid account. No API key is required for DWG/DXF/PDF indexing and local search.
+The required HS-CAD drawing-index runtime is local, offline-capable, and free to operate. It requires no hosted AI, paid inference endpoint, cloud database, or API key for DWG/DXF/PDF indexing and local search.
 
 ## Default architecture
 
@@ -18,13 +16,13 @@ Local drawing folder
   -> CLI / SketchArch / Docufinder consumer
 ```
 
-All drawing bytes, extracted text, coordinates, entities, and search indexes remain on the workstation by default.
+Drawing bytes, paths, extracted text, coordinates, entities, and search indexes remain on the workstation by default.
 
 ## Free components
 
 | Function | Default component | Cost/account requirement |
 |---|---|---|
-| DWG native extraction | Installed ZWCAD COM | Uses the user's existing CAD installation; HS-CAD adds no service charge |
+| DWG native extraction | Installed ZWCAD COM | Uses the user's existing CAD installation |
 | DXF extraction | ezdxf | Open source, local |
 | Text search | SQLite FTS5 | Included with Python, local |
 | PDF extraction | PyMuPDF | Open source, local |
@@ -34,15 +32,13 @@ All drawing bytes, extracted text, coordinates, entities, and search indexes rem
 | Search export | JSON and Markdown | Local files |
 | Development tests | pytest and ruff | Open source, local |
 
-ZWCAD itself is not bundled or licensed by HS-CAD. When ZWCAD is unavailable, DWG conversion/fallback capabilities depend on the locally installed converter; DXF, PDF, image, SQLite, and search functions remain free.
+ZWCAD itself is not bundled or licensed by HS-CAD. When ZWCAD is unavailable, DWG conversion depends on a locally installed converter; DXF, PDF, image, SQLite, and search functions remain free.
 
 ## One-command Windows setup
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File scripts\setup_free_local.ps1
 ```
-
-The script creates a Python 3.11 virtual environment, installs only the open-source local dependencies, runs the free-only policy check, and runs the drawing-index test set.
 
 Manual equivalent:
 
@@ -74,15 +70,13 @@ outputs/drawing-index-v2/
 
 ## OCR without paid APIs
 
-Install optional OCR dependencies in a Python 3.11 environment:
-
 ```powershell
 pip install -e ".[ocr]"
 ```
 
-PaddleOCR is the preferred Korean drawing OCR engine. EasyOCR is a local fallback. Hosted OCR, fal.ai enhancement, OpenAI vision, or other metered APIs are not part of the runtime.
+PaddleOCR is the preferred Korean drawing OCR engine. EasyOCR is a local fallback. Hosted OCR, generative enhancement, or metered vision APIs are not part of the required runtime.
 
-For predictable offline use, download the selected open model once on a trusted network and then set:
+For predictable offline use:
 
 ```text
 HF_HUB_OFFLINE=1
@@ -90,11 +84,11 @@ TRANSFORMERS_OFFLINE=1
 HSCAD_ALLOW_NETWORK_MODELS=0
 ```
 
-Synthetic/mock OCR output is not allowed into the production corpus.
+Synthetic or mock OCR output is not allowed into the production corpus.
 
 ## Optional Supabase free-tier summary
 
-Supabase is not required. It is retained only as an optional control plane for non-sensitive counts and completeness status. The free-local profile blocks external summaries until the operator explicitly opts in.
+Supabase is not required. It is retained only as an optional control plane for non-sensitive aggregate counts and completeness status. The operator must explicitly opt in.
 
 ```powershell
 $env:HSCAD_ALLOW_EXTERNAL_SUMMARY = "1"
@@ -109,39 +103,45 @@ python -m src.main corpus-run complete `
 
 Only the following may leave the workstation:
 
-- run ID and timestamps;
-- relative file path;
+- run ID, timestamps, and a hashed workspace identifier;
+- opaque file ID and file extension;
 - extractor name and status;
-- entity/text/layout counts;
-- completeness blockers.
+- entity, text-occurrence, layout, and XREF counts;
+- completeness blockers and allowlisted extraction metrics.
 
-Drawing bytes, absolute paths, extracted text, geometry, coordinates, and thumbnails are excluded. The service-role key must never be shipped in an EXE. Users who want a strictly offline configuration leave all Supabase variables unset.
+The remote compatibility column named `relative_path` always receives the fixed marker `<redacted>`. Real relative paths remain only in local SQLite history.
+
+Never uploaded:
+
+- drawing bytes;
+- absolute or relative source paths;
+- extracted text;
+- entity payloads;
+- geometry or coordinates;
+- thumbnails or rendered drawing images.
+
+The service-role key must never be shipped in an EXE. Users who want a strictly offline configuration leave all Supabase variables unset.
 
 ## Services deliberately excluded from the required runtime
 
-- OpenAI API and OpenAI-hosted models;
-- fal.ai image enhancement;
-- Hugging Face hosted Jobs or paid inference endpoints;
+- OpenAI or Anthropic APIs;
+- fal.ai enhancement;
+- Hugging Face hosted Jobs or paid endpoints;
 - Vercel hosting;
 - Neon managed Postgres;
-- Alpic deployment;
-- Aleph governed data integrations;
-- paid domain services;
-- proprietary search SaaS and telemetry SDKs.
-
-These services may be evaluated separately, but the local drawing index must never depend on them.
+- Alpic or Aleph services;
+- paid domains;
+- proprietary search, telemetry, payment, or vector-database SDKs.
 
 ## Free-only validation
-
-Run before release:
 
 ```powershell
 python scripts\validate_free_only.py
 python -m pytest -q tests/test_free_only_runtime.py tests/test_drawing_index_architecture.py
 ```
 
-The validator fails when a known paid AI/telemetry/payment SDK becomes a required project dependency, when a paid-service secret is added to an environment example, or when the local summary backend is removed.
+The validator fails when a known paid AI, telemetry, payment, or vector-database SDK becomes a required dependency, when a paid-service secret is added to an environment example, or when the local summary backend is removed.
 
 ## GitHub Actions
 
-GitHub Actions is not required for building or testing. The authoritative validation commands run locally. Workflows must not upload artifacts by default and must use local commands that can also be executed on a developer workstation.
+GitHub Actions is not required for building or testing. The authoritative commands run locally. Workflows must use the same local commands and must not upload private drawing evidence.
