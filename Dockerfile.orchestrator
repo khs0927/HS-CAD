@@ -1,0 +1,14 @@
+FROM python:3.11-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PYTHONUTF8=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1
+
+WORKDIR /workspace
+COPY . .
+
+RUN python -m pip install --upgrade pip \
+    && python -m pip install -e ".[dev]"
+
+CMD ["python", "scripts/run_plugin_orchestrator.py", "--profile", "auto", "--output", "/tmp/hscad-orchestrator-result.json"]
