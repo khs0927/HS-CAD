@@ -1,0 +1,120 @@
+schema_version: hscad.plugin-orchestrator.v1.1
+policy:
+  github_actions: disabled
+  source_repository_visibility: private
+  default_validation_command: python scripts/run_plugin_orchestrator.py --profile auto
+  evidence_format: outputs/orchestrator/latest.json
+  evidence_logs_default: sha256_only
+  fail_closed: true
+
+profiles:
+  core:
+    runtime: python_3_11
+    gates:
+      - compile
+      - portable_pytest
+      - ruff
+      - wheel_build
+  drawing-index:
+    runtime: python_3_11
+    gates:
+      - free_only_policy
+      - drawing_index_contract
+      - corpus_and_privacy_tests
+  semantic:
+    runtime: python_3_11
+    gates:
+      - semantic_index_tests
+      - real_corpus_evaluation_external_gate
+  mobile:
+    runtime: node_22_18
+    working_directory: apps/mobile-cad-chatgpt
+    gates:
+      - locked_npm_install
+      - typecheck_and_tests
+      - bootstrap_tests
+      - vite_build
+      - bundle_check
+      - cloudflare_worker_dry_run
+      - license_scan
+      - secret_scan
+  windows-cad:
+    runtime: windows_11_with_zwcad_2026
+    gates:
+      - private_fixture_matrix
+      - native_fallback_comparison
+      - original_file_unchanged
+
+control_plane:
+  linear:
+    role: plan, dependencies, acceptance gates, blocker history
+  github:
+    role: source, branches, pull requests, code review, release history
+
+documentation_plane:
+  context7:
+    role: current primary-library API verification
+    required_for:
+      - dependency API changes
+      - SDK upgrades
+
+data_plane:
+  local_sqlite:
+    role: authoritative local drawing index and evidence
+  supabase:
+    role: optional redacted aggregate run summaries
+    restrictions:
+      - no drawing bytes
+      - no absolute or relative paths
+      - no extracted text
+      - no geometry or coordinates
+  neon:
+    role: optional server-side SQL validation only
+    restrictions:
+      - not required for local CAD runtime
+
+validation_plane:
+  local_container:
+    priority: 1
+    dockerfile: Dockerfile.orchestrator
+    runtimes:
+      - python_3_11
+      - node_22_18
+    command: docker build -f Dockerfile.orchestrator -t hscad-orchestrator .
+  manufact:
+    priority: 2
+    role: authenticated private-repository build runner
+    status: blocked_until_repository_access_is_granted
+    wait_for_ci: false
+  netlify:
+    priority: 3
+    role: web-widget and static preview validation only
+    restrictions:
+      - not authoritative for Python desktop or ZWCAD validation
+  vercel:
+    priority: 3
+    role: web, PWA, API and preview deployment validation
+    restrictions:
+      - not authoritative for Windows COM or ZWCAD validation
+  cloudflare_worker:
+    priority: 2
+    role: production MCP and mobile widget runtime
+    validation_command: npm run validate:ci
+  windows_zwcad_host:
+    priority: 1
+    role: final native CAD acceptance
+    command: python scripts/run_plugin_orchestrator.py --profile windows-cad --fixture-root <private-dir>
+
+observability_plane:
+  alpic:
+    role: deployed MCP monitoring and analytics
+  manufact:
+    role: build and runtime logs
+  vercel:
+    role: web deployment runtime logs where applicable
+
+release_order:
+  - plugin-orchestrator-v1-1
+  - drawing-index-v2
+  - semantic-index
+  - mobile-chatgpt-app
