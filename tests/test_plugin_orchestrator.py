@@ -46,12 +46,17 @@ def test_auto_cannot_be_mixed_with_explicit_profile() -> None:
         module.build_checks(["auto", "core"], None)
 
 
-def test_default_evidence_hashes_logs_without_including_them(tmp_path: Path) -> None:
+def test_default_evidence_hashes_logs_without_including_them(monkeypatch) -> None:
     module = _load_module()
     secret = "PRIVATE-DRAWING-NAME-DO-NOT-STORE"
+    monkeypatch.setenv("HSCAD_ORCHESTRATOR_TEST_SECRET", secret)
     check = module.Check(
         name="privacy-probe",
-        command=(sys.executable, "-c", f"print({secret!r})"),
+        command=(
+            sys.executable,
+            "-c",
+            "import os; print(os.environ['HSCAD_ORCHESTRATOR_TEST_SECRET'])",
+        ),
     )
 
     result = module.run_check(
