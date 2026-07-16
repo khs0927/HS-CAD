@@ -3,19 +3,27 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import math
 import os
 import re
 import sys
 import urllib.error
 import urllib.request
+from datetime import datetime
 from pathlib import Path
 from typing import Any, Mapping
 
 DEFAULT_EVIDENCE = Path("outputs/orchestrator/latest.json")
+MAX_EVIDENCE_BYTES = 2_000_000
+MAX_RESULTS = 128
+MAX_RESPONSE_BYTES = 65_536
 HEX_40 = re.compile(r"^[0-9a-f]{40}$")
 HEX_64 = re.compile(r"^[0-9a-f]{64}$")
+SAFE_LABEL = re.compile(r"^[a-z0-9][a-z0-9._-]{0,63}$")
+SCHEMA_VERSION = re.compile(r"^hscad\.plugin-orchestrator\.v[0-9]+(?:\.[0-9]+)*$")
 TOP_LEVEL_STATUSES = {"passed", "failed", "blocked"}
 RESULT_STATUSES = {"passed", "failed", "blocked", "timeout", "error"}
+PROFILE_NAMES = {"auto", "core", "drawing-index", "semantic", "mobile", "windows-cad"}
 RESULT_FIELDS = (
     "name",
     "status",
@@ -27,7 +35,13 @@ RESULT_FIELDS = (
 
 
 def _canonical_json(value: object) -> str:
-    return json.dumps(value, ensure_ascii=False, separators=(",", ":"), sort_keys=True)
+    return json.dumps(
+        value,
+        allow_nan=False,
+        ensure_ascii=False,
+        separators=(",", ":"),
+        sort_keys=True,
+    )
 
 
 def _sha256(value: str) -> str:
@@ -47,6 +61,24 @@ def _require_string(mapping: Mapping[str, Any], key: str) -> str:
     if not isinstance(value, str) or not value.strip():
         raise ValueError(f"evidence field '{key}' must be a non-empty string")
     return value.strip()
+
+
+def _safe_label(value: str, field: str) -> str:
+    normalized = value.strip().lower()
+    if not SAFE_LABEL.fullmatch(normalized):
+        raise ValueError(f"{field} must be a lowercase safe label of at most 64 characters")
+    return normalized
+
+
+def _completed_at(value: str) -> str:
+    normalized = value.strip()
+    try:
+        parsed = datetime.fromisoformat(normalized.replace("Z", "+00:00"))
+    except ValueError as exc:
+        raise ValueError("completed_at must be an ISO-8601 timestamp") from exc
+    if parsed.tzinfo is None:
+        raise ValueError("completed_at must include a timezone")
+    return parsed.isoformat()
 
 
 def _require_non_negative_int(mapping: Mapping[str, Any], key: str) -> int:
@@ -93,7 +125,7 @@ def _clean_result(value: object) -> dict[str, Any]:
     if not isinstance(value, Mapping):
         raise ValueError("each result must be an object")
 
-    name = _require_string(value, "name")
+    name = _safe_label(_require_string(value, "name"), "result name")
     status = _require_string(value, "status")
     if status not in RESULT_STATUSES:
         raise ValueError(f"unsupported result status: {status}")
@@ -103,8 +135,11 @@ def _clean_result(value: object) -> dict[str, Any]:
         raise ValueError("result return_code must be an integer or null")
 
     duration = value.get("duration_seconds")
-    if not isinstance(duration, (int, float)) or isinstance(duration, bool) or duration < 0:
-        raise ValueError("result duration_seconds must be a non-negative number")
+    if not isinstance(duration, (int, float)) or isinstance(duration, bool):
+        raise ValueError("result duration_seconds must be a non-negative finite number")
+    duration_number = float(duration)
+    if not math.isfinite(duration_number) or duration_number < 0:
+        raise ValueError("result duration_seconds must be a non-negative finite number")
 
     stdout_sha256 = _require_string(value, "stdout_sha256")
     stderr_sha256 = _require_string(value, "stderr_sha256")
@@ -115,7 +150,7 @@ def _clean_result(value: object) -> dict[str, Any]:
         "name": name,
         "status": status,
         "return_code": return_code,
-        "duration_seconds": round(float(duration), 3),
+        "duration_seconds": round(duration_number, 3),
         "stdout_sha256": stdout_sha256,
         "stderr_sha256": stderr_sha256,
     }
@@ -133,26 +168,36 @@ def build_record(
     namespace: str,
 ) -> dict[str, Any]:
     schema_version = _require_string(evidence, "schema_version")
-    completed_at = _require_string(evidence, "completed_at")
+    if not SCHEMA_VERSION.fullmatch(schema_version):
+        raise ValueError("unsupported orchestrator schema version format")
+    completed_at = _completed_at(_require_string(evidence, "completed_at"))
     status = _require_string(evidence, "status")
     if status not in TOP_LEVEL_STATUSES:
         raise ValueError(f"unsupported top-level status: {status}")
 
     if not HEX_40.fullmatch(commit_sha):
         raise ValueError("commit SHA must be 40 lowercase hexadecimal characters")
+    runner_label = _safe_label(runner, "runner")
 
     profiles_value = evidence.get("profiles")
     if not isinstance(profiles_value, list) or not profiles_value:
         raise ValueError("evidence field 'profiles' must be a non-empty array")
-    profiles = []
+    profiles: list[str] = []
     for profile in profiles_value:
-        if not isinstance(profile, str) or not profile.strip():
-            raise ValueError("every profile must be a non-empty string")
-        profiles.append(profile.strip())
+        if not isinstance(profile, str):
+            raise ValueError("every profile must be a string")
+        normalized = profile.strip().lower()
+        if normalized not in PROFILE_NAMES:
+            raise ValueError(f"unsupported orchestrator profile: {normalized}")
+        if normalized in profiles:
+            raise ValueError(f"duplicate orchestrator profile: {normalized}")
+        profiles.append(normalized)
 
     results_value = evidence.get("results")
     if not isinstance(results_value, list):
         raise ValueError("evidence field 'results' must be an array")
+    if len(results_value) > MAX_RESULTS:
+        raise ValueError(f"evidence may contain at most {MAX_RESULTS} results")
     results = [_clean_result(item) for item in results_value]
     summary = _clean_summary(
         evidence.get("summary"),
@@ -167,7 +212,7 @@ def build_record(
         "status": status,
         "summary": summary,
         "results": results,
-        "runner": runner,
+        "runner": runner_label,
         "completed_at": completed_at,
     }
 
@@ -181,7 +226,7 @@ def build_record(
         "summary": summary,
         "results": results,
         "evidence_sha256": _sha256(_canonical_json(sanitized_evidence)),
-        "runner": runner,
+        "runner": runner_label,
         "completed_at": completed_at,
     }
 
@@ -212,12 +257,15 @@ def publish_record(
     )
     try:
         with urllib.request.urlopen(request, timeout=max(1, timeout)) as response:
-            payload = json.loads(response.read().decode("utf-8"))
+            raw_payload = response.read(MAX_RESPONSE_BYTES + 1)
     except urllib.error.HTTPError as exc:
         raise RuntimeError(f"evidence insert failed with HTTP {exc.code}") from exc
     except urllib.error.URLError as exc:
         raise RuntimeError("evidence insert failed because the endpoint was unreachable") from exc
 
+    if len(raw_payload) > MAX_RESPONSE_BYTES:
+        raise RuntimeError("evidence insert response exceeded the allowed size")
+    payload = json.loads(raw_payload.decode("utf-8"))
     if not isinstance(payload, list) or len(payload) != 1 or not isinstance(payload[0], Mapping):
         raise RuntimeError("evidence insert returned an unexpected response")
     return payload[0]
@@ -244,6 +292,8 @@ def parse_args() -> argparse.Namespace:
 def main() -> int:
     args = parse_args()
     try:
+        if args.evidence.stat().st_size > MAX_EVIDENCE_BYTES:
+            raise ValueError(f"evidence file exceeds {MAX_EVIDENCE_BYTES} bytes")
         evidence = json.loads(args.evidence.read_text(encoding="utf-8"))
         if not isinstance(evidence, Mapping):
             raise ValueError("evidence root must be an object")
