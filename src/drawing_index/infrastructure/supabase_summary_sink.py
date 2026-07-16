@@ -38,14 +38,17 @@ class SupabaseSummarySettings:
 
 
 class SupabaseRunSummarySink(RunSummarySink):
-    """Publish run statistics without uploading drawings or extracted text.
+    """Publish aggregate statistics without uploading drawing identifiers.
 
-    The service-role key is intentionally accepted only through environment
-    variables. This adapter belongs in trusted automation/server contexts and
-    must never be bundled into a client installer.
+    Relative paths remain available to the local SQLite history but are replaced
+    with a fixed redaction marker in the optional remote control plane. The
+    service-role key is accepted only through environment variables. This
+    adapter belongs in trusted automation/server contexts and must never be
+    bundled into a client installer.
     """
 
     backend = "supabase_rest"
+    REDACTED_PATH = "<redacted>"
 
     def __init__(
         self,
@@ -122,12 +125,12 @@ class SupabaseRunSummarySink(RunSummarySink):
             "metadata": run.metadata,
         }
 
-    @staticmethod
-    def _file_row(run_id: str, item: FileIndexSummary) -> dict[str, Any]:
+    @classmethod
+    def _file_row(cls, run_id: str, item: FileIndexSummary) -> dict[str, Any]:
         return {
             "run_id": run_id,
             "file_id": item.file_id,
-            "relative_path": item.relative_path,
+            "relative_path": cls.REDACTED_PATH,
             "extension": item.extension,
             "status": item.status,
             "engine": item.engine,
@@ -144,4 +147,3 @@ class SupabaseRunSummarySink(RunSummarySink):
             "blockers": list(item.blockers),
             "extraction_report": item.extraction_report,
         }
-
