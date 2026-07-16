@@ -39,14 +39,19 @@ jobs:
 
       - name: Record request
         shell: bash
+        env:
+          REQUEST_TASK: ${{ inputs.task }}
+          REQUEST_REF: ${{ github.ref }}
+          REQUEST_SHA: ${{ github.sha }}
+          REQUEST_NOTE: ${{ inputs.ref_note }}
         run: |
           mkdir -p test-results
           {
-            echo "task=${{ inputs.task }}"
-            echo "ref=${{ github.ref }}"
-            echo "sha=${{ github.sha }}"
-            echo "note=${{ inputs.ref_note }}"
-            echo "requested_at=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+            printf 'task=%s\n' "$REQUEST_TASK"
+            printf 'ref=%s\n' "$REQUEST_REF"
+            printf 'sha=%s\n' "$REQUEST_SHA"
+            printf 'note=%s\n' "$REQUEST_NOTE"
+            printf 'requested_at=%s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
           } > test-results/mobile-request.txt
 
       - name: Set up Python 3.11
