@@ -101,17 +101,8 @@ def _clean_summary(
         for key in ("total", "passed", "failed", "blocked")
     }
 
-    orchestrator_selection_failure = {
-        "total": 0,
-        "passed": 0,
-        "failed": 1,
-        "blocked": 0,
-    }
-    if (
-        top_level_status == "failed"
-        and result_count == 0
-        and summary == orchestrator_selection_failure
-    ):
+    selection_failure = {"total": 0, "passed": 0, "failed": 1, "blocked": 0}
+    if top_level_status == "failed" and result_count == 0 and summary == selection_failure:
         return {"total": 0, "passed": 0, "failed": 0, "blocked": 0}
 
     if summary["total"] != summary["passed"] + summary["failed"] + summary["blocked"]:
@@ -128,7 +119,7 @@ def _clean_result(value: object) -> dict[str, Any]:
     name = _safe_label(_require_string(value, "name"), "result name")
     status = _require_string(value, "status")
     if status not in RESULT_STATUSES:
-        raise ValueError(f"unsupported result status: {status}")
+        raise ValueError("unsupported result status")
 
     return_code = value.get("return_code")
     if return_code is not None and (not isinstance(return_code, int) or isinstance(return_code, bool)):
@@ -170,27 +161,28 @@ def build_record(
     schema_version = _require_string(evidence, "schema_version")
     if not SCHEMA_VERSION.fullmatch(schema_version):
         raise ValueError("unsupported orchestrator schema version format")
+
     completed_at = _completed_at(_require_string(evidence, "completed_at"))
     status = _require_string(evidence, "status")
     if status not in TOP_LEVEL_STATUSES:
-        raise ValueError(f"unsupported top-level status: {status}")
-
+        raise ValueError("unsupported top-level status")
     if not HEX_40.fullmatch(commit_sha):
         raise ValueError("commit SHA must be 40 lowercase hexadecimal characters")
-    runner_label = _safe_label(runner, "runner")
 
+    runner_label = _safe_label(runner, "runner")
     profiles_value = evidence.get("profiles")
     if not isinstance(profiles_value, list) or not profiles_value:
         raise ValueError("evidence field 'profiles' must be a non-empty array")
+
     profiles: list[str] = []
     for profile in profiles_value:
         if not isinstance(profile, str):
             raise ValueError("every profile must be a string")
         normalized = profile.strip().lower()
         if normalized not in PROFILE_NAMES:
-            raise ValueError(f"unsupported orchestrator profile: {normalized}")
+            raise ValueError("unsupported orchestrator profile")
         if normalized in profiles:
-            raise ValueError(f"duplicate orchestrator profile: {normalized}")
+            raise ValueError("duplicate orchestrator profile")
         profiles.append(normalized)
 
     results_value = evidence.get("results")
@@ -198,13 +190,13 @@ def build_record(
         raise ValueError("evidence field 'results' must be an array")
     if len(results_value) > MAX_RESULTS:
         raise ValueError(f"evidence may contain at most {MAX_RESULTS} results")
+
     results = [_clean_result(item) for item in results_value]
     summary = _clean_summary(
         evidence.get("summary"),
         top_level_status=status,
         result_count=len(results),
     )
-
     sanitized_evidence = {
         "schema_version": schema_version,
         "commit_sha": commit_sha,
@@ -215,7 +207,6 @@ def build_record(
         "runner": runner_label,
         "completed_at": completed_at,
     }
-
     return {
         "schema_version": schema_version,
         "repository_token": _opaque_token(namespace, "repository", repository_ref),
@@ -261,7 +252,7 @@ def publish_record(
     except urllib.error.HTTPError as exc:
         raise RuntimeError(f"evidence insert failed with HTTP {exc.code}") from exc
     except urllib.error.URLError as exc:
-        raise RuntimeError("evidence insert failed because the endpoint was unreachable") from exc
+        raise RuntimeError("evidence insert endpoint was unreachable") from exc
 
     if len(raw_payload) > MAX_RESPONSE_BYTES:
         raise RuntimeError("evidence insert response exceeded the allowed size")
@@ -287,6 +278,20 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--timeout", type=int, default=30)
     parser.add_argument("--dry-run", action="store_true")
     return parser.parse_args()
+
+
+def _safe_failure_message(exc: BaseException) -> str:
+    if isinstance(exc, FileNotFoundError):
+        return "evidence file was not found"
+    if isinstance(exc, PermissionError):
+        return "evidence file could not be read"
+    if isinstance(exc, OSError):
+        return "evidence file operation failed"
+    if isinstance(exc, json.JSONDecodeError):
+        return "evidence JSON is invalid"
+    if isinstance(exc, RuntimeError):
+        return str(exc)
+    return str(exc)
 
 
 def main() -> int:
@@ -326,7 +331,7 @@ def main() -> int:
         )
         return 0
     except (OSError, ValueError, json.JSONDecodeError, RuntimeError) as exc:
-        print(f"evidence publish failed: {exc}", file=sys.stderr)
+        print(f"evidence publish failed: {_safe_failure_message(exc)}", file=sys.stderr)
         return 1
 
 
