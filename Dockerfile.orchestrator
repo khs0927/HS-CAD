@@ -15,7 +15,8 @@ RUN apt-get update \
         build-essential \
         ca-certificates \
     && rm -rf /var/lib/apt/lists/* \
-    && python3 -m venv "$VIRTUAL_ENV"
+    && python3 -m venv "$VIRTUAL_ENV" \
+    && npm install --global npm@10.9.3
 
 WORKDIR /workspace
 COPY . .
