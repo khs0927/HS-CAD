@@ -16,5 +16,7 @@ private
 fixtures/private
 *.dwg
 *.dxf
+!tests/fixtures/
+!tests/fixtures/**
 *.bak
 *.sv$
