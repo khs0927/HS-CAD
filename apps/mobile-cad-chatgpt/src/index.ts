@@ -413,13 +413,6 @@ const safeToolError = (requestId: string, toolName: string, error: unknown) => {
   return {
     isError: true as const,
     content: [{ type: "text" as const, text: message }],
-    ...(validationIssues ? {
-      structuredContent: {
-        valid: false,
-        issues: validationIssues,
-        warnings: [] as string[],
-      },
-    } : {}),
     _meta: { requestId, error: { code, ...(validationIssues ? { issues: validationIssues } : {}) } },
   };
 };

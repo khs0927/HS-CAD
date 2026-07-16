@@ -347,12 +347,13 @@ describe("HS-CAD MCP Streamable HTTP contract", () => {
     });
     expect(result.isError).toBe(true);
     expect(result.content[0].text).toContain("blocking validation issue");
-    expect(result.structuredContent).toMatchObject({
-      valid: false,
-      issues: expect.arrayContaining([expect.objectContaining({ severity: "error" })]),
-      warnings: [],
+    expect(result.structuredContent).toBeUndefined();
+    expect(result._meta).toMatchObject({
+      error: {
+        code: "VALIDATION_ERROR",
+        issues: expect.arrayContaining([expect.objectContaining({ severity: "error" })]),
+      },
     });
-    expect(result._meta).toMatchObject({ error: { code: "VALIDATION_ERROR" } });
     expect(result._meta).not.toHaveProperty("drawing");
     expect(result._meta).not.toHaveProperty("artifacts");
   });
