@@ -8,7 +8,7 @@
 - Wrangler: 4.110.0
 - Python: 3.12.10
 - ZWCAD: 2026, active COM connection
-- Worker URL: omitted because deployment is pending
+- Worker URL: `https://hscad-mobile-cad.candy-devourer.workers.dev` (claimed Cloudflare account)
 - Intended visibility: private ChatGPT Developer Mode app only
 
 ## Validation results
@@ -28,8 +28,8 @@
 | ZWCAD 2026 COM integration | PASS | 7 passed against a temporary copied DWG |
 | XiCAD live integration | NOT RUN | `XICAD_ROOT` is not configured on this computer |
 | ZWCAD 2025 integration | NOT RUN | connected installation is ZWCAD 2026 |
-| Cloudflare production deployment | BLOCKED | current API token lacks required account/Worker permissions; OAuth needs browser approval |
-| Hosted `/health` and `/mcp` smoke | PENDING | requires successful deployment |
+| Cloudflare Worker deployment | PASS | claimed Cloudflare Worker deployment completed |
+| Hosted `/health` and `/mcp` smoke | PASS | HTTP health and full Streamable HTTP MCP smoke completed |
 | Private ChatGPT app registration | PENDING | requires hosted HTTPS `/mcp` URL and connected ChatGPT browser session |
 | ChatGPT web/mobile acceptance prompts | PENDING | requires private app registration |
 
@@ -41,10 +41,7 @@
 
 ## Remaining connected-account steps
 
-1. Authenticate Wrangler with a token that can deploy Workers and read account membership, or complete `wrangler login` in a connected browser.
-2. Run `scripts/deploy_and_verify.ps1 -AllowUncommitted` and confirm the generated local deployment result.
-3. Run `npm run smoke:mcp -- https://<worker-host>/mcp` against the deployed endpoint.
-4. Register that HTTPS `/mcp` URL as a private ChatGPT Developer Mode app named `HS-CAD Mobile`.
-5. Run every prompt in `MOBILE_TEST_PROMPTS.md` on ChatGPT web and mobile, including SVG/DXF downloads and a dimension-changing follow-up.
+1. Register `https://hscad-mobile-cad.candy-devourer.workers.dev/mcp` as a private ChatGPT Developer Mode app named `HS-CAD Mobile`.
+2. Run every prompt in `MOBILE_TEST_PROMPTS.md` on ChatGPT web and mobile, including SVG/DXF downloads and a dimension-changing follow-up.
 
 No account identifiers, tokens, cookies, private endpoint URLs, customer drawings, or raw deployment logs are included in this file.
