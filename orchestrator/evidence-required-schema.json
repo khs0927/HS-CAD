@@ -1,7 +1,7 @@
 {
   "schema_version": "string",
-  "repository_ref": "string",
-  "branch": "string",
+  "repository_token": "string",
+  "branch_token": "string",
   "commit_sha": "string",
   "profiles": "array",
   "status": "string",
@@ -9,5 +9,5 @@
   "results": "array",
   "evidence_sha256": "string",
   "runner": "string",
-  "created_at": "string"
+  "completed_at": "string"
 }
