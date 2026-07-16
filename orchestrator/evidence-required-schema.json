@@ -1,0 +1,13 @@
+{
+  "schema_version": "string",
+  "repository_ref": "string",
+  "branch": "string",
+  "commit_sha": "string",
+  "profiles": "array",
+  "status": "string",
+  "summary": "object",
+  "results": "array",
+  "evidence_sha256": "string",
+  "runner": "string",
+  "created_at": "string"
+}
