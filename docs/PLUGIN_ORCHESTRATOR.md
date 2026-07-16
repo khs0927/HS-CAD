@@ -28,7 +28,9 @@ Profiles:
 | `windows-cad` | real Windows/ZWCAD fixture matrix |
 | `auto` | detects modules present in the current branch |
 
-The runner never uses `shell=True`, does not print environment-variable values, redacts the private fixture root from the JSON command record, and fails closed on a non-zero command, timeout, or process error.
+The runner never uses `shell=True`, does not print environment-variable values, redacts repository/home/private-fixture paths, and fails closed on a non-zero command, timeout, process error, platform mismatch, or an explicitly requested profile with no runnable checks.
+
+By default, evidence contains only SHA-256 hashes of stdout/stderr. Sanitized log tails are included only when `--include-logs` is explicitly supplied. This prevents drawing names, customer paths, or extracted text from being copied into an external control plane by default.
 
 ## Container execution
 
@@ -36,6 +38,8 @@ The runner never uses `shell=True`, does not print environment-variable values, 
 docker build -f Dockerfile.orchestrator -t hscad-orchestrator .
 docker run --rm hscad-orchestrator
 ```
+
+`Dockerfile.orchestrator.dockerignore` excludes Git metadata, virtual environments, environment files, build/output folders, private fixture folders, and DWG/DXF files from the build context. A hosted runner receives source code and tests, not local office drawing data.
 
 This is the preferred Linux validation path for Manufact or any other authenticated private-repository builder.
 
