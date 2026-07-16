@@ -22,6 +22,7 @@ MAX_CAPTURE_CHARS = 40_000
 class Check:
     name: str
     command: tuple[str, ...]
+    working_directory: str = "."
     required_paths: tuple[str, ...] = ()
     platforms: tuple[str, ...] = ()
     description: str = ""
@@ -32,6 +33,7 @@ class CheckResult:
     name: str
     status: str
     command: list[str]
+    working_directory: str
     return_code: int | None
     duration_seconds: float
     stdout_sha256: str
@@ -78,6 +80,18 @@ def _sanitize_text(value: str, fixture_root: str | None) -> str:
 
 def _safe_command(command: Sequence[str], fixture_root: str | None) -> list[str]:
     return [_sanitize_text(part, fixture_root) for part in command]
+
+
+def _resolve_working_directory(check: Check) -> Path:
+    root = ROOT.resolve()
+    candidate = (ROOT / check.working_directory).resolve()
+    try:
+        candidate.relative_to(root)
+    except ValueError as exc:
+        raise ValueError(
+            f"working directory escapes repository root: {check.working_directory}"
+        ) from exc
+    return candidate
 
 
 def _portable_checks() -> list[Check]:
@@ -131,10 +145,14 @@ def _drawing_index_checks() -> list[Check]:
     tests = tuple(
         path
         for path in (
+            "tests/test_corpus_foundation.py",
             "tests/test_drawing_index_v2.py",
             "tests/test_drawing_index_architecture.py",
             "tests/test_drawing_index_fallback_resilience.py",
+            "tests/test_compare_drawing_index_fixture_runs.py",
             "tests/test_free_only_runtime.py",
+            "tests/test_supabase_summary_privacy.py",
+            "tests/test_drawing_index_privacy.py",
             "tests/test_orchestrator_privacy.py",
         )
         if (ROOT / path).exists()
@@ -184,6 +202,49 @@ def _semantic_checks() -> list[Check]:
     ]
 
 
+def _mobile_checks() -> list[Check]:
+    app_dir = "apps/mobile-cad-chatgpt"
+    package_json = f"{app_dir}/package.json"
+    lock_file = f"{app_dir}/package-lock.json"
+    if not (ROOT / package_json).exists():
+        return []
+    required = (package_json, lock_file)
+    return [
+        Check(
+            name="mobile-node-version",
+            command=(
+                "node",
+                "-e",
+                "const [a,b]=process.versions.node.split('.').map(Number); process.exit(a>22 || (a===22 && b>=18) ? 0 : 1)",
+            ),
+            working_directory=app_dir,
+            required_paths=required,
+            description="Require Node.js 22.18 or newer.",
+        ),
+        Check(
+            name="mobile-npm-clean-install",
+            command=("npm", "ci", "--no-audit", "--no-fund"),
+            working_directory=app_dir,
+            required_paths=required,
+            description="Install the exact package-lock dependency graph.",
+        ),
+        Check(
+            name="mobile-validation",
+            command=("npm", "run", "validate:ci"),
+            working_directory=app_dir,
+            required_paths=required,
+            description="Run typecheck, tests, bootstrap tests, UI build, bundle check and Worker dry-run.",
+        ),
+        Check(
+            name="mobile-security",
+            command=("npm", "run", "security:local"),
+            working_directory=app_dir,
+            required_paths=required,
+            description="Run local license and secret scans.",
+        ),
+    ]
+
+
 def _windows_fixture_check(fixture_root: str | None) -> list[Check]:
     script = "scripts/run_windows_drawing_index_fixture_matrix.ps1"
     if not fixture_root or not (ROOT / script).exists():
@@ -216,6 +277,8 @@ def _checks_for_profile(profile: str, fixture_root: str | None) -> list[Check]:
         return _drawing_index_checks()
     if profile == "semantic":
         return _semantic_checks()
+    if profile == "mobile":
+        return _mobile_checks()
     if profile == "windows-cad":
         return _windows_fixture_check(fixture_root)
     raise ValueError(f"unknown profile: {profile}")
@@ -233,6 +296,8 @@ def build_checks(profiles: Iterable[str], fixture_root: str | None) -> tuple[lis
             requested.append("drawing-index")
         if (ROOT / "src/semantic_index").exists():
             requested.append("semantic")
+        if (ROOT / "apps/mobile-cad-chatgpt/package.json").exists():
+            requested.append("mobile")
         if fixture_root:
             requested.append("windows-cad")
 
@@ -265,6 +330,7 @@ def _result(
         name=check.name,
         status=status,
         command=_safe_command(check.command, fixture_root),
+        working_directory=_sanitize_text(check.working_directory, fixture_root),
         return_code=return_code,
         duration_seconds=round(duration_seconds, 3),
         stdout_sha256=_digest(safe_stdout),
@@ -283,6 +349,21 @@ def run_check(
     include_logs: bool,
 ) -> CheckResult:
     current_platform = platform.system()
+    try:
+        working_directory = _resolve_working_directory(check)
+    except ValueError as exc:
+        return _result(
+            check=check,
+            status="error",
+            return_code=None,
+            duration_seconds=0.0,
+            stdout="",
+            stderr="",
+            fixture_root=fixture_root,
+            include_logs=include_logs,
+            reason=str(exc),
+        )
+
     missing = [path for path in check.required_paths if not (ROOT / path).exists()]
     if missing:
         return _result(
@@ -316,7 +397,7 @@ def run_check(
     try:
         completed = subprocess.run(
             list(check.command),
-            cwd=ROOT,
+            cwd=working_directory,
             env=env,
             text=True,
             capture_output=True,
@@ -367,7 +448,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--profile",
         action="append",
-        choices=("auto", "core", "drawing-index", "semantic", "windows-cad"),
+        choices=("auto", "core", "drawing-index", "semantic", "mobile", "windows-cad"),
         default=[],
         help="Repeat to combine explicit profiles. The default auto-detects available modules.",
     )
@@ -395,7 +476,7 @@ def main() -> int:
         resolved_profiles, checks = build_checks(args.profile or ["auto"], args.fixture_root)
     except ValueError as exc:
         payload = {
-            "schema_version": "hscad.plugin-orchestrator.v1",
+            "schema_version": "hscad.plugin-orchestrator.v1.1",
             "started_at": started_at,
             "completed_at": utc_now(),
             "status": "failed",
@@ -425,7 +506,7 @@ def main() -> int:
 
     failed = [item for item in results if item.status != "passed"]
     payload = {
-        "schema_version": "hscad.plugin-orchestrator.v1",
+        "schema_version": "hscad.plugin-orchestrator.v1.1",
         "started_at": started_at,
         "completed_at": utc_now(),
         "status": "failed" if failed else "passed",
