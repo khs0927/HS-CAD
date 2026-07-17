@@ -27,7 +27,8 @@ def _complete_contract_tree(root: Path) -> None:
         'if ($env:OS -ne "Windows_NT") {}\n'
         '.venv-windows-runner\n'
         'validate_windows_runner_contract.py\n'
-        'test_windows_runner_virtualization.py\n',
+        'test_windows_runner_virtualization.py\n'
+        'test_windows_runner_contract.py\n',
     )
     _write(
         root,
@@ -43,6 +44,7 @@ def _complete_contract_tree(root: Path) -> None:
         "tests/test_windows_runner_virtualization.py",
         'monkeypatch\nmonkeypatch.setattr\n"system"\nGetActiveObject\nstatus == "blocked"\n',
     )
+    _write(root, "tests/test_windows_runner_contract.py", "# contract regression\n")
     _write(
         root,
         "tests/test_windows_cad_acceptance.py",
@@ -80,11 +82,24 @@ def test_contract_fails_when_windows_platform_gate_is_removed(tmp_path: Path):
     assert "orchestrator-windows-contract" in failed
 
 
+def test_contract_reports_missing_file_without_crashing(tmp_path: Path):
+    _complete_contract_tree(tmp_path)
+    (tmp_path / "tests/test_windows_cad_acceptance.py").unlink()
+
+    payload = validate(tmp_path)
+
+    assert payload["status"] == "failed"
+    failed = {item["name"] for item in payload["checks"] if not item["ok"]}
+    assert "file:tests/test_windows_cad_acceptance.py" in failed
+    acceptance = next(item for item in payload["checks"] if item["name"] == "acceptance-test-contract")
+    assert acceptance["detail"] == "missing:tests/test_windows_cad_acceptance.py"
+
+
 def test_contract_rejects_embedded_secret_patterns(tmp_path: Path):
     _complete_contract_tree(tmp_path)
     preflight = tmp_path / "scripts/windows-runner-preflight.ps1"
     preflight.write_text(
-        preflight.read_text(encoding="utf-8") + '\nHSCAD_SUPABASE_SERVICE_ROLE_KEY="embedded"\n',
+        preflight.read_text(encoding="utf-8") + '\nHSCAD_SUPABASE_SERVICE_ROLE_KEY = "embedded"\n',
         encoding="utf-8",
     )
 
