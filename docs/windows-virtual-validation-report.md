@@ -1,60 +1,156 @@
 # Windows Virtual Validation Report
 
 Date: 2026-07-18
+Branch: `chore/windows-virtual-validation`
 
 ## Scope
 
-Virtual validation is supporting evidence only. It is not a real Windows, COM, ZWCAD, DWG, corpus, or production acceptance pass.
+This report records what was actually validated before connecting a real Windows/ZWCAD runner. Virtual validation is supporting evidence only. It must not be described as a real Windows, COM, ZWCAD, DWG, or production acceptance pass.
 
-## Context7 basis
+## Documentation basis
 
-- pytest `/pytest-dev/pytest`: monkeypatch, temporary directories, markers, skip behavior, and subprocess isolation;
-- pywin32 `/mhammond/pywin32`: `CoInitialize()`, `CoUninitialize()`, and `GetActiveObject`;
-- comtypes `/enthought/comtypes`: active-object lookup, object creation, and adapter isolation.
+The implementation was checked against current Context7 documentation for:
 
-## Corrected defects
+- pytest `/pytest-dev/pytest`: `monkeypatch`, per-test temporary directories, platform markers, skip behavior, and subprocess isolation;
+- pywin32 `/mhammond/pywin32`: `pythoncom.CoInitialize()`, `CoUninitialize()`, and `GetActiveObject`;
+- comtypes `/enthought/comtypes`: `GetActiveObject`, `CreateObject`, and isolated COM adapters.
 
-- COM objects were converted to strings before `ActiveDocument.Name` was read.
-- COM initialization and release were not explicitly balanced.
-- package version was hard-coded.
-- the fixture gate had no dedicated acceptance tests.
-- strict mode did not require a DWG fixture.
-- fixture manifests exposed relative paths.
-- Windows PowerShell 5.1 path compatibility was incomplete.
-- missing contract files could stop validation instead of returning a failed check.
+## Defects found and corrected
 
-## Drawing Index integration
+1. `src/testing/environment_check.py` converted COM objects to strings inside `_safe_attr()`. This prevented `ActiveDocument.Name` from being read correctly.
+2. The environment report hard-coded package version `0.1.0` even though package metadata is authoritative.
+3. The Windows fixture script had no dedicated test module consuming its acceptance environment variables.
+4. Strict CAD acceptance did not require a DWG fixture.
+5. The fixture manifest exposed relative fixture paths.
+6. The preflight assumed the `py` launcher and did not robustly support a direct Python executable.
+7. COM initialization and release were not explicitly balanced by the environment probe.
+8. The contract validator could raise while formatting a missing path under a synthetic root instead of returning a failed check.
+9. The fixture script depended on `Path.GetRelativePath`; it now uses a Windows PowerShell 5.1-compatible root-prefix calculation and supports absolute Workspace paths.
 
-The Drawing Index branch keeps its native-versus-fallback fixture comparison. The unified script now runs:
+## Implemented validation layers
 
-1. hash-only manifest generation;
-2. static DXF/PDF or strict ZWCAD/DWG acceptance;
-3. native Drawing Index validation;
-4. fallback-only validation;
-5. comparison report generation; and
-6. manual REVIEW/BLOCK inspection requirements.
+### Portable contract validation
 
-## Previously executed portable results
+`scripts/validate_windows_runner_contract.py` checks:
 
-On an isolated non-Windows harness for the shared Windows validation implementation:
+- Python requirement `>=3.10,<3.13`;
+- required runner, publisher, test, and fixture files;
+- Windows platform gating;
+- strict fixture and hash-only manifest contracts;
+- Windows PowerShell-compatible path handling;
+- virtual Windows test coverage tokens;
+- real acceptance test coverage tokens;
+- forbidden embedded workflow, token, service-role assignment, and OpenAI key patterns.
+
+### Virtual Windows simulation
+
+`tests/test_windows_runner_virtualization.py` covers:
+
+- simulated Windows active COM connection;
+- COM initialization/uninitialization balance;
+- failed COM connection without a false pass;
+- active-object-first ZWCAD adapter behavior;
+- object creation fallback;
+- spawn refusal when disabled;
+- non-Windows orchestrator blocking without subprocess execution;
+- simulated Windows command success;
+- strict `windows-cad` profile selection.
+
+### Contract validator regression
+
+`tests/test_windows_runner_contract.py` proves that the validator:
+
+- passes a complete synthetic contract;
+- fails when Windows platform gating is removed;
+- reports a missing required file without crashing;
+- fails when a service-role secret assignment pattern is embedded, including spaced assignments;
+- rejects a regression to `Path.GetRelativePath`.
+
+### Real Windows/ZWCAD acceptance definition
+
+`tests/test_windows_cad_acceptance.py` is collected only as a definition outside Windows. On an authorized Windows runner it checks:
+
+- Windows dependencies;
+- hash-only fixture manifest;
+- every DXF fixture through ezdxf;
+- every PDF fixture through PyMuPDF;
+- every DWG fixture opened read-only in a running ZWCAD instance;
+- document close without save;
+- balanced `CoInitialize()` / `CoUninitialize()`.
+
+## Executed results
+
+Executed in an isolated non-Windows harness:
 
 ```text
-compileall                                                       PASS
-existing environment + virtual Windows + contract regressions    19 passed
-real Windows acceptance collection                               5 tests collected
-Ruff                                                             PASS
+python -m compileall -q scripts src tests                         PASS
+pytest existing environment + virtual Windows + contracts        19 passed
+pytest --collect-only real Windows acceptance                    5 tests collected
+ruff check modified Python validation files                      PASS
 ```
 
-The integrated Drawing Index branch still requires its own full repository and real Windows execution after merge.
+The isolated harness intentionally contains only the minimum modules needed for these tests. It is not a substitute for the full repository core profile.
+
+## Evidence registry re-verification
+
+Static re-verification confirmed:
+
+- result-field allowlisting;
+- namespaced repository/branch SHA-256 tokens;
+- lowercase commit and digest validation;
+- finite duration and count checks;
+- profile/status allowlists;
+- HTTPS-only Supabase endpoint;
+- service-role value read from environment only;
+- sanitized error output;
+- RLS enabled;
+- `anon` and `authenticated` revoked;
+- unique evidence digest.
+
+The separate Evidence Registry pytest files were inspected. A fresh execution was not counted because the isolated harness did not contain the full publisher implementation.
 
 ## Explicitly not passed
 
-- Windows PowerShell runtime execution;
-- Windows virtual-environment installation;
-- real pywin32/comtypes imports;
-- ZWCAD process and COM registration;
-- actual DWG open/close;
-- native-versus-fallback corpus comparison on approved fixtures;
-- manual entity inspection;
-- Supabase insert and duplicate rejection; and
-- GitHub Actions, which are not used as the execution path.
+The following remain unexecuted and must not be marked passed:
+
+- Windows PowerShell preflight on Windows;
+- creation and dependency installation of `.venv-windows-runner` on Windows;
+- real `pythoncom` and `comtypes` imports on Windows;
+- real ZWCAD process detection;
+- real ZWCAD COM registration and `GetActiveObject`;
+- actual DWG read-only open/close loop;
+- full Drawing Index fixture comparison and manual entity checks;
+- full repository core/drawing-index/semantic/mobile profiles after feature integration;
+- Supabase evidence insertion and duplicate rejection on a trusted runner;
+- iPhone/iPad mobile acceptance;
+- GitHub Actions. GitHub Actions are not used as the execution path.
+
+## Windows commands
+
+Virtual and portable preparation:
+
+```powershell
+Set-ExecutionPolicy -Scope Process Bypass
+.\scripts\windows-runner-preflight.ps1 -Install -RunVirtualWindows -RunPortable
+```
+
+Static-only DXF/PDF fixture validation:
+
+```powershell
+.\scripts\run_windows_drawing_index_fixture_matrix.ps1 `
+  -Root "C:\HS-CAD-Fixtures" `
+  -Workspace "outputs\orchestrator\windows-static" `
+  -AllowStaticOnly
+```
+
+Strict ZWCAD/DWG acceptance:
+
+```powershell
+.\scripts\run_windows_drawing_index_fixture_matrix.ps1 `
+  -Root "C:\HS-CAD-Fixtures" `
+  -Workspace "outputs\orchestrator\windows-fixture-matrix"
+```
+
+## Completion rule
+
+Virtual results may change the status from `not prepared` to `prepared for Windows execution`. Only evidence produced by a real authorized Windows runner with ZWCAD and approved fixtures may change native CAD acceptance to `passed`.
