@@ -37,7 +37,9 @@ def _complete_contract_tree(root: Path) -> None:
         'HSCAD_WINDOWS_STATIC_ONLY\n'
         'path_sha256\n'
         'test_windows_cad_acceptance.py\n'
-        'At least one DWG fixture is required\n',
+        'At least one DWG fixture is required\n'
+        '[IO.Path]::IsPathRooted\n'
+        '.Substring($fixturePrefix.Length)\n',
     )
     _write(
         root,
@@ -108,3 +110,18 @@ def test_contract_rejects_embedded_secret_patterns(tmp_path: Path):
     assert payload["status"] == "failed"
     failed = {item["name"] for item in payload["checks"] if not item["ok"]}
     assert "no-forbidden-runner-content" in failed
+
+
+def test_contract_rejects_get_relative_path_dependency(tmp_path: Path):
+    _complete_contract_tree(tmp_path)
+    matrix = tmp_path / "scripts/run_windows_drawing_index_fixture_matrix.ps1"
+    matrix.write_text(
+        matrix.read_text(encoding="utf-8") + "\n[IO.Path]::GetRelativePath($root, $path)\n",
+        encoding="utf-8",
+    )
+
+    payload = validate(tmp_path)
+
+    assert payload["status"] == "failed"
+    failed = {item["name"] for item in payload["checks"] if not item["ok"]}
+    assert "powershell-5-path-contract" in failed
