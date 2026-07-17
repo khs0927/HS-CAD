@@ -80,9 +80,20 @@ def validate(root: Path = ROOT) -> dict[str, object]:
         "path_sha256",
         "test_windows_cad_acceptance.py",
         "At least one DWG fixture is required",
+        "[IO.Path]::IsPathRooted",
+        ".Substring($fixturePrefix.Length)",
         root=root,
     )
     checks.append(ContractCheck("fixture-matrix-contract", ok, detail))
+
+    if matrix.exists():
+        matrix_text = matrix.read_text(encoding="utf-8")
+        compatible = "[IO.Path]::GetRelativePath" not in matrix_text
+        compatibility_detail = "ok" if compatible else "unsupported Path.GetRelativePath dependency"
+    else:
+        compatible = False
+        compatibility_detail = f"missing:{_display_path(matrix, root)}"
+    checks.append(ContractCheck("powershell-5-path-contract", compatible, compatibility_detail))
 
     orchestrator = root / "scripts/run_plugin_orchestrator.py"
     ok, detail = _contains(
