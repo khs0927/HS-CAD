@@ -99,6 +99,7 @@ $required = @(
   "scripts\publish_orchestrator_evidence.py",
   "scripts\validate_windows_runner_contract.py",
   "tests\test_windows_runner_virtualization.py",
+  "tests\test_windows_runner_contract.py",
   "tests\test_windows_cad_acceptance.py",
   "pyproject.toml"
 )
@@ -122,8 +123,10 @@ $contractOutput = Join-Path $RepoRoot "outputs\orchestrator\windows-runner-contr
 Write-Check "Windows runner contract" ($LASTEXITCODE -eq 0) $contractOutput
 
 if ($RunVirtualWindows) {
-  & $venvPython -m pytest -q --disable-warnings --maxfail=1 "tests\test_windows_runner_virtualization.py"
-  Write-Check "Virtual Windows simulation" ($LASTEXITCODE -eq 0) "mocked platform and COM paths"
+  & $venvPython -m pytest -q --disable-warnings --maxfail=1 `
+    "tests\test_windows_runner_virtualization.py" `
+    "tests\test_windows_runner_contract.py"
+  Write-Check "Virtual Windows simulation" ($LASTEXITCODE -eq 0) "mocked platform, COM, and fail-closed contracts"
 }
 
 if ($RunPortable) {
