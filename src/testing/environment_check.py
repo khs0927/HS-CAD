@@ -7,6 +7,7 @@ import platform
 import struct
 import sys
 from datetime import datetime
+from importlib.metadata import PackageNotFoundError, version as distribution_version
 from pathlib import Path
 from typing import Any
 
@@ -65,8 +66,7 @@ def check_imports() -> list[dict[str, Any]]:
 
 def _safe_attr(obj: Any, name: str) -> Any:
     try:
-        value = getattr(obj, name)
-        return str(value) if value is not None else None
+        return getattr(obj, name)
     except Exception:
         return None
 
@@ -88,17 +88,42 @@ def _error_payload(exc: BaseException) -> dict[str, Any]:
     return payload
 
 
+def _initialize_com() -> tuple[str, Any] | None:
+    try:
+        pythoncom = importlib.import_module("pythoncom")
+        pythoncom.CoInitialize()
+        return "pythoncom", pythoncom
+    except Exception:
+        pass
+    try:
+        comtypes = importlib.import_module("comtypes")
+        comtypes.CoInitialize()
+        return "comtypes", comtypes
+    except Exception:
+        return None
+
+
+def _uninitialize_com(token: tuple[str, Any] | None) -> None:
+    if token is None:
+        return
+    _backend, module = token
+    try:
+        module.CoUninitialize()
+    except Exception:
+        pass
+
+
 def _try_get_active(progid: str) -> tuple[Any | None, dict[str, Any]]:
     try:
         win32_client = importlib.import_module("win32com.client")
         app = win32_client.GetActiveObject(progid)
-        return app, {"ok": True, "method": "GetActiveObject"}
+        return app, {"ok": True, "method": "GetActiveObject", "backend": "pywin32"}
     except Exception as win32_exc:
         win32_error = _error_payload(win32_exc)
     try:
         comtypes_client = importlib.import_module("comtypes.client")
         app = comtypes_client.GetActiveObject(progid)
-        return app, {"ok": True, "method": "GetActiveObject"}
+        return app, {"ok": True, "method": "GetActiveObject", "backend": "comtypes"}
     except Exception as comtypes_exc:
         return None, {
             "ok": False,
@@ -111,13 +136,13 @@ def _try_create(progid: str) -> tuple[Any | None, dict[str, Any]]:
     try:
         win32_client = importlib.import_module("win32com.client")
         app = win32_client.Dispatch(progid)
-        return app, {"ok": True, "method": "CreateObject"}
+        return app, {"ok": True, "method": "CreateObject", "backend": "pywin32"}
     except Exception as win32_exc:
         win32_error = _error_payload(win32_exc)
     try:
         comtypes_client = importlib.import_module("comtypes.client")
         app = comtypes_client.CreateObject(progid)
-        return app, {"ok": True, "method": "CreateObject"}
+        return app, {"ok": True, "method": "CreateObject", "backend": "comtypes"}
     except Exception as comtypes_exc:
         return None, {
             "ok": False,
@@ -145,32 +170,37 @@ def probe_zwcad_com(version: str | None = None, start_zwcad: bool = False) -> di
         return payload
 
     payload["attempted"] = True
-    for progid in candidates:
-        row: dict[str, Any] = {"progid": progid, "active_object": None, "created_object": None}
-        app, active_result = _try_get_active(progid)
-        row["active_object"] = active_result
-        mode = "active_object"
-        if app is None and start_zwcad:
-            app, create_result = _try_create(progid)
-            row["created_object"] = create_result
-            mode = "created_object"
-        elif app is None:
-            row["created_object"] = {"ok": False, "skipped": True, "reason": "--start-zwcad not set"}
-        if app is not None:
-            payload.update(
-                {
-                    "connected": True,
-                    "active_progid": progid,
-                    "connection_mode": mode,
-                    "application_name": _safe_str_attr(app, "Name"),
-                    "version": _safe_str_attr(app, "Version"),
-                    "active_document": _safe_str_attr(_safe_attr(app, "ActiveDocument"), "Name"),
-                    "error": None,
-                }
-            )
+    com_token = _initialize_com()
+    try:
+        for progid in candidates:
+            row: dict[str, Any] = {"progid": progid, "active_object": None, "created_object": None}
+            app, active_result = _try_get_active(progid)
+            row["active_object"] = active_result
+            mode = "active_object"
+            if app is None and start_zwcad:
+                app, create_result = _try_create(progid)
+                row["created_object"] = create_result
+                mode = "created_object"
+            elif app is None:
+                row["created_object"] = {"ok": False, "skipped": True, "reason": "--start-zwcad not set"}
+            if app is not None:
+                active_document = _safe_attr(app, "ActiveDocument")
+                payload.update(
+                    {
+                        "connected": True,
+                        "active_progid": progid,
+                        "connection_mode": mode,
+                        "application_name": _safe_str_attr(app, "Name"),
+                        "version": _safe_str_attr(app, "Version"),
+                        "active_document": _safe_str_attr(active_document, "Name"),
+                        "error": None,
+                    }
+                )
+                payload["results"].append(row)
+                return payload
             payload["results"].append(row)
-            return payload
-        payload["results"].append(row)
+    finally:
+        _uninitialize_com(com_token)
 
     payload["connection_mode"] = "failed"
     payload["error"] = "No ZWCAD COM ProgID connected. If ZWCAD is installed, run it once as administrator or retry with --start-zwcad."
@@ -189,6 +219,13 @@ def build_recommendations(payload: dict[str, Any]) -> list[str]:
     if payload.get("zwcad_com_connect_attempted") and not payload.get("zwcad_com_connected"):
         recs.append("COM ProgID registration may be missing; repair or reinstall ZWCAD if all ProgIDs fail.")
     return recs
+
+
+def _package_version() -> str:
+    try:
+        return distribution_version("hs-cad")
+    except PackageNotFoundError:
+        return "unknown"
 
 
 def run_environment_check(
@@ -211,7 +248,7 @@ def run_environment_check(
         "platform": platform.platform(),
         "working_directory": str(Path.cwd()),
         "project_root": str(root),
-        "package_version": "0.1.0",
+        "package_version": _package_version(),
         "is_windows": platform.system().lower() == "windows",
         "is_64bit_python": struct.calcsize("P") * 8 == 64,
         "optional_imports": optional_imports,
