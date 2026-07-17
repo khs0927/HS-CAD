@@ -21,20 +21,11 @@ Set-ExecutionPolicy -Scope Process Bypass
 .\scripts\windows-runner-preflight.ps1 -Install -RunVirtualWindows -RunPortable
 ```
 
-This command:
-
-- creates `.venv-windows-runner`;
-- installs project and development dependencies;
-- checks Windows-only imports;
-- validates the runner contract;
-- runs virtual Windows/COM regression tests; and
-- runs the portable core orchestrator profile.
+This command creates `.venv-windows-runner`, installs dependencies, validates the runner contract, runs virtual Windows/COM regressions, and runs the portable core profile.
 
 A missing ZWCAD process remains `BLOCKED`; it is never converted into a pass.
 
 ## 3. Static-only DXF/PDF validation
-
-This validates approved DXF/PDF fixtures without claiming native CAD acceptance:
 
 ```powershell
 .\scripts\run_windows_drawing_index_fixture_matrix.ps1 `
@@ -42,6 +33,8 @@ This validates approved DXF/PDF fixtures without claiming native CAD acceptance:
   -Workspace "outputs\orchestrator\windows-static" `
   -AllowStaticOnly
 ```
+
+This validates approved DXF/PDF fixtures without claiming native CAD acceptance.
 
 ## 4. Strict Windows/ZWCAD/DWG acceptance
 
@@ -55,7 +48,7 @@ Start ZWCAD first. The fixture directory must contain at least one approved DWG:
 
 Strict mode refuses to pass when Windows, the dedicated virtual environment, a running ZWCAD process, a DWG fixture, dependency imports, COM access, or fixture tests are unavailable.
 
-The generated fixture manifest contains only:
+The fixture manifest contains only:
 
 - SHA-256 of each normalized relative fixture path;
 - extension;
