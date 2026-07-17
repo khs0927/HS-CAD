@@ -29,7 +29,8 @@ def _acceptance_context() -> tuple[Path, Path, bool]:
 
 
 def _fixture_files(root: Path, suffix: str) -> list[Path]:
-    return sorted(path for path in root.rglob(f"*{suffix}") if path.is_file())
+    expected = suffix.lower()
+    return sorted(path for path in root.rglob("*") if path.is_file() and path.suffix.lower() == expected)
 
 
 def test_windows_dependencies_are_importable():
@@ -92,7 +93,7 @@ def _get_active_app(client: Any) -> tuple[Any, str]:
     raise AssertionError(f"no active ZWCAD COM object; attempts={len(errors)}")
 
 
-def test_dwg_fixture_opens_read_only_in_running_zwcad():
+def test_all_dwg_fixtures_open_read_only_in_running_zwcad():
     fixture_root, _workspace, static_only = _acceptance_context()
     if static_only:
         pytest.skip("static-only fixture validation")
@@ -103,15 +104,18 @@ def test_dwg_fixture_opens_read_only_in_running_zwcad():
     import win32com.client
 
     pythoncom.CoInitialize()
-    document = None
     try:
         app, progid = _get_active_app(win32com.client)
-        document = app.Documents.Open(str(paths[0]), True)
-        assert document is not None
-        assert str(document.Name)
-        assert int(document.ModelSpace.Count) >= 0
         assert progid
+        for path in paths:
+            document = None
+            try:
+                document = app.Documents.Open(str(path), True)
+                assert document is not None
+                assert str(document.Name)
+                assert int(document.ModelSpace.Count) >= 0
+            finally:
+                if document is not None:
+                    document.Close(False)
     finally:
-        if document is not None:
-            document.Close(False)
         pythoncom.CoUninitialize()
