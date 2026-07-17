@@ -133,7 +133,10 @@ def validate(root: Path = ROOT) -> dict[str, object]:
     forbidden_patterns = [
         ("workflow-path", re.compile(re.escape(".github/workflows"), re.IGNORECASE)),
         ("github-token-assignment", re.compile(r"GITHUB_TOKEN\s*=", re.IGNORECASE)),
-        ("service-role-assignment", re.compile(r"HSCAD_SUPABASE_SERVICE_ROLE_KEY\s*=", re.IGNORECASE)),
+        (
+            "service-role-assignment",
+            re.compile(r"HSCAD_SUPABASE_SERVICE_ROLE_KEY\s*=", re.IGNORECASE),
+        ),
         ("openai-secret-prefix", re.compile(r"sk-proj-", re.IGNORECASE)),
     ]
     inspected = [preflight, matrix, virtual_test, acceptance_test]
@@ -148,13 +151,14 @@ def validate(root: Path = ROOT) -> dict[str, object]:
     checks.append(ContractCheck("no-forbidden-runner-content", not leaks, "none" if not leaks else ",".join(leaks)))
 
     passed = sum(1 for check in checks if check.ok)
-    return {
+    payload: dict[str, object] = {
         "schema_version": "1.0",
         "status": "passed" if passed == len(checks) else "failed",
         "passed": passed,
         "total": len(checks),
         "checks": [asdict(check) for check in checks],
     }
+    return payload
 
 
 def main() -> int:
