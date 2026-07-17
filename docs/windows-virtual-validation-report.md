@@ -25,6 +25,7 @@ The implementation was checked against current Context7 documentation for:
 6. The preflight assumed the `py` launcher and did not robustly support a direct Python executable.
 7. COM initialization and release were not explicitly balanced by the environment probe.
 8. The contract validator could raise while formatting a missing path under a synthetic root instead of returning a failed check.
+9. The fixture script depended on `Path.GetRelativePath`; it now uses a Windows PowerShell 5.1-compatible root-prefix calculation and supports absolute Workspace paths.
 
 ## Implemented validation layers
 
@@ -36,6 +37,7 @@ The implementation was checked against current Context7 documentation for:
 - required runner, publisher, test, and fixture files;
 - Windows platform gating;
 - strict fixture and hash-only manifest contracts;
+- Windows PowerShell-compatible path handling;
 - virtual Windows test coverage tokens;
 - real acceptance test coverage tokens;
 - forbidden embedded workflow, token, service-role assignment, and OpenAI key patterns.
@@ -61,7 +63,8 @@ The implementation was checked against current Context7 documentation for:
 - passes a complete synthetic contract;
 - fails when Windows platform gating is removed;
 - reports a missing required file without crashing;
-- fails when a service-role secret assignment pattern is embedded, including spaced assignments.
+- fails when a service-role secret assignment pattern is embedded, including spaced assignments;
+- rejects a regression to `Path.GetRelativePath`.
 
 ### Real Windows/ZWCAD acceptance definition
 
@@ -81,12 +84,12 @@ Executed in an isolated non-Windows harness:
 
 ```text
 python -m compileall -q scripts src tests                         PASS
-pytest virtual Windows + contract regression                     13 passed
+pytest existing environment + virtual Windows + contracts        19 passed
 pytest --collect-only real Windows acceptance                    5 tests collected
 ruff check modified Python validation files                      PASS
 ```
 
-The isolated harness intentionally contains only the minimum modules needed for virtual tests. It is not a substitute for the full repository core profile.
+The isolated harness intentionally contains only the minimum modules needed for these tests. It is not a substitute for the full repository core profile.
 
 ## Evidence registry re-verification
 
