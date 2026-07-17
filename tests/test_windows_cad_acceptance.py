@@ -18,9 +18,11 @@ def _acceptance_context() -> tuple[Path, Path, bool]:
         pytest.skip("real Windows acceptance requires Windows")
     if os.environ.get("HSCAD_WINDOWS_CAD_ACCEPTANCE") != "1":
         pytest.skip("HSCAD_WINDOWS_CAD_ACCEPTANCE=1 is required")
+
     fixture_root = Path(os.environ["HSCAD_FIXTURE_ROOT"]).resolve()
     workspace = Path(os.environ["HSCAD_FIXTURE_WORKSPACE"]).resolve()
     static_only = os.environ.get("HSCAD_WINDOWS_STATIC_ONLY") == "1"
+
     assert fixture_root.is_dir()
     workspace.mkdir(parents=True, exist_ok=True)
     return fixture_root, workspace, static_only
@@ -33,6 +35,7 @@ def _fixture_files(root: Path, suffix: str) -> list[Path]:
 
 def test_windows_dependencies_are_importable():
     _acceptance_context()
+
     import comtypes  # noqa: F401
     import ezdxf  # noqa: F401
     import fitz  # noqa: F401
@@ -43,7 +46,10 @@ def test_windows_dependencies_are_importable():
 
 def test_fixture_manifest_is_hash_only():
     _fixture_root, workspace, _static_only = _acceptance_context()
-    payload = json.loads((workspace / "fixture-manifest.json").read_text(encoding="utf-8-sig"))
+    manifest_path = workspace / "fixture-manifest.json"
+    assert manifest_path.exists()
+
+    payload = json.loads(manifest_path.read_text(encoding="utf-8-sig"))
     assert payload["fixture_count"] > 0
     for item in payload["files"]:
         assert set(item) == {"path_sha256", "extension", "size_bytes"}
@@ -56,9 +62,12 @@ def test_dxf_fixtures_parse_when_present():
     paths = _fixture_files(fixture_root, ".dxf")
     if not paths:
         pytest.skip("no DXF fixtures")
+
     import ezdxf
+
     for path in paths:
-        assert ezdxf.readfile(path).modelspace() is not None
+        document = ezdxf.readfile(path)
+        assert document.modelspace() is not None
 
 
 def test_pdf_fixtures_parse_when_present():
@@ -66,7 +75,9 @@ def test_pdf_fixtures_parse_when_present():
     paths = _fixture_files(fixture_root, ".pdf")
     if not paths:
         pytest.skip("no PDF fixtures")
+
     import fitz
+
     for path in paths:
         with fitz.open(path) as document:
             assert document.page_count > 0
@@ -88,8 +99,10 @@ def test_all_dwg_fixtures_open_read_only_in_running_zwcad():
         pytest.skip("static-only fixture validation")
     paths = _fixture_files(fixture_root, ".dwg")
     assert paths, "strict acceptance requires at least one DWG fixture"
+
     import pythoncom
     import win32com.client
+
     pythoncom.CoInitialize()
     try:
         app, progid = _get_active_app(win32com.client)
