@@ -26,7 +26,11 @@ if (-not (Test-Path $venvPython)) {
 }
 
 $fixtureRoot = (Resolve-Path $Root).Path
-$workspacePath = Join-Path $RepoRoot $Workspace
+$workspacePath = if ([IO.Path]::IsPathRooted($Workspace)) {
+  [IO.Path]::GetFullPath($Workspace)
+} else {
+  Join-Path $RepoRoot $Workspace
+}
 New-Item -ItemType Directory -Force -Path $workspacePath | Out-Null
 
 $fixtures = @(Get-ChildItem -Path $fixtureRoot -Recurse -File | Where-Object {
@@ -59,6 +63,9 @@ function Get-StringSha256([string]$Value) {
   }
 }
 
+$trimChars = [char[]]@([IO.Path]::DirectorySeparatorChar, [IO.Path]::AltDirectorySeparatorChar)
+$fixturePrefix = $fixtureRoot.TrimEnd($trimChars) + [IO.Path]::DirectorySeparatorChar
+
 $manifest = @{
   schema_version = "1.1"
   generated_at = [DateTime]::UtcNow.ToString("o")
@@ -68,7 +75,11 @@ $manifest = @{
     @{ extension = $_.Name.ToLowerInvariant(); count = $_.Count }
   })
   files = @($fixtures | ForEach-Object {
-    $relative = [IO.Path]::GetRelativePath($fixtureRoot, $_.FullName).Replace("\", "/").ToLowerInvariant()
+    $fullPath = [IO.Path]::GetFullPath($_.FullName)
+    if (-not $fullPath.StartsWith($fixturePrefix, [StringComparison]::OrdinalIgnoreCase)) {
+      throw "Fixture path escaped the approved fixture root."
+    }
+    $relative = $fullPath.Substring($fixturePrefix.Length).Replace("\", "/").ToLowerInvariant()
     @{
       path_sha256 = Get-StringSha256 $relative
       extension = $_.Extension.ToLowerInvariant()
