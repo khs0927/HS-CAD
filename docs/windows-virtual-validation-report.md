@@ -24,6 +24,7 @@ The implementation was checked against current Context7 documentation for:
 5. The fixture manifest exposed relative fixture paths.
 6. The preflight assumed the `py` launcher and did not robustly support a direct Python executable.
 7. COM initialization and release were not explicitly balanced by the environment probe.
+8. The contract validator could raise while formatting a missing path under a synthetic root instead of returning a failed check.
 
 ## Implemented validation layers
 
@@ -59,7 +60,8 @@ The implementation was checked against current Context7 documentation for:
 
 - passes a complete synthetic contract;
 - fails when Windows platform gating is removed;
-- fails when a service-role secret assignment pattern is embedded.
+- reports a missing required file without crashing;
+- fails when a service-role secret assignment pattern is embedded, including spaced assignments.
 
 ### Real Windows/ZWCAD acceptance definition
 
@@ -79,7 +81,7 @@ Executed in an isolated non-Windows harness:
 
 ```text
 python -m compileall -q scripts src tests                         PASS
-pytest virtual Windows + contract regression                     12 passed
+pytest virtual Windows + contract regression                     13 passed
 pytest --collect-only real Windows acceptance                    5 tests collected
 ruff check modified Python validation files                      PASS
 ```
