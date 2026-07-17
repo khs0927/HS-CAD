@@ -2,7 +2,8 @@ param(
   [string]$Python = "py",
   [string]$FixtureRoot = "",
   [switch]$Install,
-  [switch]$RunPortable
+  [switch]$RunPortable,
+  [switch]$RunVirtualWindows
 )
 
 $ErrorActionPreference = "Stop"
@@ -15,6 +16,18 @@ function Write-Check([string]$Name, [bool]$Ok, [string]$Detail) {
   $state = if ($Ok) { "PASS" } else { "FAIL" }
   Write-Host "[$state] $Name - $Detail"
   if (-not $Ok) { $script:Failed = $true }
+}
+
+function Test-SupportedVersion([string]$VersionText) {
+  if (-not $VersionText) { return $false }
+  try {
+    $parts = $VersionText.Trim().Split(".")
+    $major = [int]$parts[0]
+    $minor = [int]$parts[1]
+    return ($major -eq 3 -and $minor -ge 10 -and $minor -lt 13)
+  } catch {
+    return $false
+  }
 }
 
 $script:Failed = $false
@@ -33,16 +46,28 @@ if (-not $pythonCmd) {
   exit 2
 }
 
-$versionText = & $Python -3.12 -c "import sys; print('.'.join(map(str, sys.version_info[:3])))" 2>$null
-$pythonArgs = @("-3.12")
-if (-not $versionText) {
-  $versionText = & $Python -3.11 -c "import sys; print('.'.join(map(str, sys.version_info[:3])))" 2>$null
-  $pythonArgs = @("-3.11")
+$pythonArgs = @()
+$versionText = ""
+try {
+  $directVersion = & $Python -c "import sys; print('.'.join(map(str, sys.version_info[:3])))" 2>$null
+  if (Test-SupportedVersion $directVersion) {
+    $versionText = $directVersion
+  }
+} catch {}
+
+if (-not $versionText -and $pythonCmd.Name -match '^py(\.exe)?$') {
+  foreach ($candidate in @("3.12", "3.11", "3.10")) {
+    try {
+      $candidateVersion = & $Python "-$candidate" -c "import sys; print('.'.join(map(str, sys.version_info[:3])))" 2>$null
+      if (Test-SupportedVersion $candidateVersion) {
+        $versionText = $candidateVersion
+        $pythonArgs = @("-$candidate")
+        break
+      }
+    } catch {}
+  }
 }
-if (-not $versionText) {
-  $versionText = & $Python -3.10 -c "import sys; print('.'.join(map(str, sys.version_info[:3])))" 2>$null
-  $pythonArgs = @("-3.10")
-}
+
 Write-Check "Supported Python" ([bool]$versionText) ($(if ($versionText) { $versionText } else { "Required: >=3.10,<3.13" }))
 if (-not $versionText) { exit 2 }
 
@@ -62,12 +87,19 @@ if ($Install) {
   & $venvPython -m pip install --disable-pip-version-check -e ".[dev]"
 }
 
-& $venvPython -c "import comtypes, win32api, pydantic, ezdxf; print('imports-ok')" | Out-Null
-Write-Check "Windows dependencies" ($LASTEXITCODE -eq 0) "comtypes, pywin32, pydantic, ezdxf"
+try {
+  & $venvPython -c "import comtypes, win32api, win32com.client, pydantic, ezdxf; print('imports-ok')" | Out-Null
+  Write-Check "Windows dependencies" ($LASTEXITCODE -eq 0) "comtypes, pywin32, pydantic, ezdxf"
+} catch {
+  Write-Check "Windows dependencies" $false "Import verification failed."
+}
 
 $required = @(
   "scripts\run_plugin_orchestrator.py",
   "scripts\publish_orchestrator_evidence.py",
+  "scripts\validate_windows_runner_contract.py",
+  "tests\test_windows_runner_virtualization.py",
+  "tests\test_windows_cad_acceptance.py",
   "pyproject.toml"
 )
 foreach ($relative in $required) {
@@ -78,11 +110,20 @@ $zwcad = Get-Process -Name "ZWCAD" -ErrorAction SilentlyContinue
 if ($zwcad) {
   Write-Check "ZWCAD process" $true "PID $($zwcad.Id -join ',')"
 } else {
-  Write-Host "[BLOCKED] ZWCAD process - not running; portable checks remain available."
+  Write-Host "[BLOCKED] ZWCAD process - not running; portable and virtual checks remain available."
 }
 
 if ($FixtureRoot) {
-  Write-Check "Fixture root" (Test-Path $FixtureRoot) $FixtureRoot
+  Write-Check "Fixture root" (Test-Path $FixtureRoot -PathType Container) $FixtureRoot
+}
+
+$contractOutput = Join-Path $RepoRoot "outputs\orchestrator\windows-runner-contract.json"
+& $venvPython "scripts\validate_windows_runner_contract.py" --json-output $contractOutput
+Write-Check "Windows runner contract" ($LASTEXITCODE -eq 0) $contractOutput
+
+if ($RunVirtualWindows) {
+  & $venvPython -m pytest -q --disable-warnings --maxfail=1 "tests\test_windows_runner_virtualization.py"
+  Write-Check "Virtual Windows simulation" ($LASTEXITCODE -eq 0) "mocked platform and COM paths"
 }
 
 if ($RunPortable) {
