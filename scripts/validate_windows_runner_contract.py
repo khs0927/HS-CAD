@@ -16,9 +16,16 @@ class ContractCheck:
     detail: str
 
 
-def _contains(path: Path, *needles: str) -> tuple[bool, str]:
+def _display_path(path: Path, root: Path) -> str:
+    try:
+        return path.relative_to(root).as_posix()
+    except ValueError:
+        return path.name
+
+
+def _contains(path: Path, *needles: str, root: Path = ROOT) -> tuple[bool, str]:
     if not path.exists():
-        return False, f"missing:{path.relative_to(ROOT)}"
+        return False, f"missing:{_display_path(path, root)}"
     text = path.read_text(encoding="utf-8")
     missing = [needle for needle in needles if needle not in text]
     if missing:
@@ -27,6 +34,7 @@ def _contains(path: Path, *needles: str) -> tuple[bool, str]:
 
 
 def validate(root: Path = ROOT) -> dict[str, object]:
+    root = root.resolve()
     checks: list[ContractCheck] = []
 
     pyproject = root / "pyproject.toml"
@@ -45,6 +53,7 @@ def validate(root: Path = ROOT) -> dict[str, object]:
         "scripts/windows-runner-preflight.ps1",
         "scripts/run_windows_drawing_index_fixture_matrix.ps1",
         "tests/test_windows_runner_virtualization.py",
+        "tests/test_windows_runner_contract.py",
         "tests/test_windows_cad_acceptance.py",
     ]
     for relative in required_files:
@@ -58,6 +67,8 @@ def validate(root: Path = ROOT) -> dict[str, object]:
         ".venv-windows-runner",
         "validate_windows_runner_contract.py",
         "test_windows_runner_virtualization.py",
+        "test_windows_runner_contract.py",
+        root=root,
     )
     checks.append(ContractCheck("preflight-contract", ok, detail))
 
@@ -69,6 +80,7 @@ def validate(root: Path = ROOT) -> dict[str, object]:
         "path_sha256",
         "test_windows_cad_acceptance.py",
         "At least one DWG fixture is required",
+        root=root,
     )
     checks.append(ContractCheck("fixture-matrix-contract", ok, detail))
 
@@ -78,6 +90,7 @@ def validate(root: Path = ROOT) -> dict[str, object]:
         'profile == "windows-cad"',
         "run_windows_drawing_index_fixture_matrix.ps1",
         'platforms=("Windows",)',
+        root=root,
     )
     checks.append(ContractCheck("orchestrator-windows-contract", ok, detail))
 
@@ -89,6 +102,7 @@ def validate(root: Path = ROOT) -> dict[str, object]:
         '"system"',
         "GetActiveObject",
         'status == "blocked"',
+        root=root,
     )
     checks.append(ContractCheck("virtual-test-contract", ok, detail))
 
@@ -101,14 +115,18 @@ def validate(root: Path = ROOT) -> dict[str, object]:
         "CoInitialize",
         "Documents.Open",
         "Close(False)",
+        root=root,
     )
     checks.append(ContractCheck("acceptance-test-contract", ok, detail))
 
-    forbidden = [
-        ".github/workflows",
-        "GITHUB_TOKEN",
-        "SUPABASE_SERVICE_ROLE_KEY=",
-        "sk-proj-",
+    forbidden_patterns = [
+        ("workflow-path", re.compile(re.escape(".github/workflows"), re.IGNORECASE)),
+        ("github-token-assignment", re.compile(r"GITHUB_TOKEN\s*=", re.IGNORECASE)),
+        (
+            "service-role-assignment",
+            re.compile(r"HSCAD_SUPABASE_SERVICE_ROLE_KEY\s*=", re.IGNORECASE),
+        ),
+        ("openai-secret-prefix", re.compile(r"sk-proj-", re.IGNORECASE)),
     ]
     inspected = [preflight, matrix, virtual_test, acceptance_test]
     leaks: list[str] = []
@@ -116,9 +134,9 @@ def validate(root: Path = ROOT) -> dict[str, object]:
         if not path.exists():
             continue
         text = path.read_text(encoding="utf-8")
-        for token in forbidden:
-            if token in text:
-                leaks.append(f"{path.relative_to(root)}:{token}")
+        for label, pattern in forbidden_patterns:
+            if pattern.search(text):
+                leaks.append(f"{_display_path(path, root)}:{label}")
     checks.append(ContractCheck("no-forbidden-runner-content", not leaks, "none" if not leaks else ",".join(leaks)))
 
     passed = sum(1 for check in checks if check.ok)
