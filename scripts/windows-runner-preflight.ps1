@@ -50,7 +50,9 @@ $pythonArgs = @()
 $versionText = ""
 try {
   $directVersion = & $Python -c "import sys; print('.'.join(map(str, sys.version_info[:3])))" 2>$null
-  if (Test-SupportedVersion $directVersion) { $versionText = $directVersion }
+  if (Test-SupportedVersion $directVersion) {
+    $versionText = $directVersion
+  }
 } catch {}
 
 if (-not $versionText -and $pythonCmd.Name -match '^py(\.exe)?$') {
