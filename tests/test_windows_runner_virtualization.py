@@ -83,6 +83,25 @@ def test_environment_probe_simulates_windows_active_object(monkeypatch: pytest.M
     assert result["active_document"] == "virtual.dwg"
 
 
+def test_environment_probe_balances_com_lifecycle(monkeypatch: pytest.MonkeyPatch):
+    app = _FakeApp()
+    token = ("fake", object())
+    events: list[tuple[str, object]] = []
+    monkeypatch.setattr(environment_check.platform, "system", lambda: "Windows")
+    monkeypatch.setattr(environment_check, "_initialize_com", lambda: token)
+    monkeypatch.setattr(environment_check, "_uninitialize_com", lambda value: events.append(value))
+    monkeypatch.setattr(
+        environment_check,
+        "_try_get_active",
+        lambda _progid: (app, {"ok": True, "method": "GetActiveObject"}),
+    )
+
+    result = environment_check.probe_zwcad_com(version="2026", start_zwcad=False)
+
+    assert result["connected"] is True
+    assert events == [token]
+
+
 def test_environment_probe_simulates_windows_failure_without_false_pass(monkeypatch: pytest.MonkeyPatch):
     monkeypatch.setattr(environment_check.platform, "system", lambda: "Windows")
     monkeypatch.setattr(
