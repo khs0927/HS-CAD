@@ -148,8 +148,8 @@ AHM,xiMapArea,구적 삼각형 그리기,Area,legacy_binary_only,,False,False,Fa
 BA,xiBunArea,공유면적을 배분하여 합산면적과 함께 기록,Area,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
 CDB,xiCalDistBuilding,"인동거리 검토""",Area,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
 CDN,xiCheckDistNorth,북측 일조권 검토,Area,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
-COI,xiCommaIns,숫자에 천단위 콤마 넣기,Area,headless_contract_implemented,headless-core-batch5.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
-COR,xiCommaRem,숫자에 천단위 콤마 빼기,Area,headless_contract_implemented,headless-core-batch5.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+COI,xiCommaIns,숫자에 천단위 콤마 넣기,Area,headless_contract_implemented,headless-core-batch5.json,True,True,False,False,legacy equivalence verification and ZWCAD 2025 smoke
+COR,xiCommaRem,숫자에 천단위 콤마 빼기,Area,headless_contract_implemented,headless-core-batch5.json,True,True,False,False,legacy equivalence verification and ZWCAD 2025 smoke
 DAR,xiDyArea,살아있는 면적 문자 넣기,Area,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
 DEE,xiDrawEnergyElev,효율등급 입면적도 그리기,Area,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
 DM,xiDistMemory,폴리선 길이를 메모리로,Area,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
@@ -166,7 +166,7 @@ MRT,xiMakeRoomTable,폴리선 선택하여 실별면적표 만들기,Area,legacy
 ND,xiNumDivide,첫번째 숫자의 합을 두번째 숫자의 합으로 나눠 줌,Area,headless_contract_implemented,headless-core-batch5.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
 NP,xiNumBunyangPro,<1번째 숫자 * 2번째 숫자> + ... +<N번째 숫자 * N+1번째 숫자>...,Area,headless_contract_implemented,headless-core-batch5.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
 NS,xiNumSubtract,첫번째 숫자의 합에서 두번째 숫자의 합을 빼 줌...,Area,headless_contract_implemented,headless-core-batch5.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
-NUC,xiNumberCalulate,숫자에 일괄 계산 적용,Area,headless_contract_implemented,headless-core-batch5.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+NUC,xiNumberCalulate,숫자에 일괄 계산 적용,Area,headless_contract_implemented,headless-core-batch5.json,True,True,False,False,legacy equivalence verification and ZWCAD 2025 smoke
 PY,xiPy,m2를 평으로 변환 (숫자 한꺼번에 변경),Area,headless_contract_implemented,headless-core-batch5.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
 QD,xiQuickDist,두점의 거리를 문자로 표기,Area,headless_contract_implemented,headless-core-batch6.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
 SAR,xiSiteArea,부지 구적표 그리기,Area,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
@@ -179,10 +179,10 @@ A2M,xiAtt2Mt,속성문자를 다행문자로 변경,Txt1,legacy_binary_only,,Fal
 ABE,xiAttBlkEdit,속성블럭 문자 수정,Txt1,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
 CTX,xiCTX,문자 수정,Txt1,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
 FAM,xiFindAndMark,문자 찾아 표시,Txt1,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
-FAR,xiFindReplace,문자 찾아 바꾸기,Txt1,headless_contract_implemented,headless-core-batch5.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+FAR,xiFindReplace,문자 찾아 바꾸기,Txt1,headless_contract_implemented,headless-core-batch5.json,True,True,False,False,legacy equivalence verification and ZWCAD 2025 smoke
 FTT,xiField2Text,필드문자를 일반문자로,Txt1,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
 T2M,xiT2MT,문자를 다행문자로 변경,Txt1,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
-TAP,xiTextAp,문자에 접두어 접미어 넣기,Txt1,headless_contract_implemented,headless-core-batch5.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+TAP,xiTextAp,문자에 접두어 접미어 넣기,Txt1,headless_contract_implemented,headless-core-batch5.json,True,True,False,False,legacy equivalence verification and ZWCAD 2025 smoke
 TC,xiTextCopy,문자 복사하기 또는 Acad 테이블에 문자 넣기,Txt1,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
 TD,xiTextDivide,문자열 잘라서 새로운 문자열 생성,Txt1,headless_contract_implemented,headless-core-batch5.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
 TE,xiTextEdit,문자 종합수정,Txt1,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
@@ -192,7 +192,7 @@ TJ,xiTJus,문자정렬점 변경,Txt1,legacy_binary_only,,False,False,False,Fals
 TM,xiTextMerge,문자열병합,Txt1,headless_contract_implemented,headless-core-batch5.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
 TO,xiText2Center,문자열을 사각의 중심으로 보내기,Txt1,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
 TOA,xiTextOfAlign,문자열을 도형의 중심에 일괄 정렬,Txt1,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
-TS,xitsize,문자크기를 변경,Txt1,headless_contract_implemented,headless-core-batch5.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+TS,xitsize,문자크기를 변경,Txt1,headless_contract_implemented,headless-core-batch5.json,True,True,False,False,legacy equivalence verification and ZWCAD 2025 smoke
 TSA,xiTextStyleALL,문서내 모든 문자 스타일 변경,Txt1,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
 TSE,xiTextSE,여러 문자 연속 편집,Txt1,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
 TSH,xiTextShadow,문자에 음영넣기,Txt1,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core

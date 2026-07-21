@@ -109,7 +109,7 @@ HEADLESS_CONTRACTS: dict[str, str] = {
 }
 
 PRODUCTION_USABLE = {"%", "-", "/", "=", "00", "ABC"}
-CAD_MUTATION_TOOL_EXPOSED = {"WAL"}
+CAD_MUTATION_TOOL_EXPOSED = {"COI", "COR", "FAR", "NUC", "TAP", "TS", "WAL"}
 PLATFORM_EXCLUDED = {"SLD"}
 SEMANTIC_RENAME_ONLY = {"3TP", "LII", "RR"}
 
@@ -170,11 +170,12 @@ def build_headless_coverage(
         alias = item["alias"]
         if alias in HEADLESS_CONTRACTS:
             state = HeadlessState.IMPLEMENTED
-            next_requirement = (
-                "none for pure arithmetic"
-                if alias in PRODUCTION_USABLE
-                else "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
-            )
+            if alias in PRODUCTION_USABLE:
+                next_requirement = "none for pure arithmetic"
+            elif alias in CAD_MUTATION_TOOL_EXPOSED:
+                next_requirement = "legacy equivalence verification and ZWCAD 2025 smoke"
+            else:
+                next_requirement = "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
             row = HeadlessCoverageRow(
                 **item,
                 state=state,
