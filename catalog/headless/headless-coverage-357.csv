@@ -111,25 +111,25 @@ EW,xiSetCLayer,객체 선택하여 현재 값을 변경,Layer,headless_contract_
 LAM,xiLayerMerge,켜 병합하기,Layer,headless_contract_implemented,headless-core-batch9.json,True,True,False,False,legacy equivalence verification and ZWCAD 2025 smoke
 LC,xiChangeLayer,선택객체 켜 변경,Layer,headless_contract_implemented,headless-core-batch9.json,True,True,False,False,legacy equivalence verification and ZWCAD 2025 smoke
 LCC,xiColor2Layer,선택 색상의 객체를 특정 켜로 변경,Layer,headless_contract_implemented,headless-core-batch9.json,True,True,False,False,legacy equivalence verification and ZWCAD 2025 smoke
-LCD,xiColor2Layer2,선택 색상의 객체를 특정 켜로 변경 (목록에서 선택),Layer,headless_contract_implemented,headless-core-batch10.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
-LCO,xiChangeLayerOnly,"켜 변경 (색,선종류 유지)",Layer,headless_contract_implemented,headless-core-batch10.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
-LCS,xiLayerChaneSelectObject,동일객체 켜 일괄변경,Layer,headless_contract_implemented,headless-core-batch10.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
-LF,xiSelFreeze,선택 얼림,Layer,headless_contract_implemented,headless-core-batch10.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+LCD,xiColor2Layer2,선택 색상의 객체를 특정 켜로 변경 (목록에서 선택),Layer,headless_contract_implemented,headless-core-batch10.json,True,True,False,False,legacy equivalence verification and ZWCAD 2025 smoke
+LCO,xiChangeLayerOnly,"켜 변경 (색,선종류 유지)",Layer,headless_contract_implemented,headless-core-batch10.json,True,True,False,False,legacy equivalence verification and ZWCAD 2025 smoke
+LCS,xiLayerChaneSelectObject,동일객체 켜 일괄변경,Layer,headless_contract_implemented,headless-core-batch10.json,True,True,False,False,legacy equivalence verification and ZWCAD 2025 smoke
+LF,xiSelFreeze,선택 얼림,Layer,headless_contract_implemented,headless-core-batch10.json,True,True,False,False,legacy equivalence verification and ZWCAD 2025 smoke
 LFD,xiLayerFiltersDelete,레이어필터삭제,Layer,headless_contract_implemented,maintenance-core-contracts.json,True,True,False,False,legacy equivalence verification and ZWCAD 2025 smoke
-LFF,xiSelLayerFreeze,선택객체를 제외한 얼림,Layer,headless_contract_implemented,headless-core-batch10.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
-LFK,xiSelLayerLock,선택 켜를 제외하고 잠금,Layer,headless_contract_implemented,headless-core-batch10.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
-LK,xiSelLock,선택 켜 잠금,Layer,headless_contract_implemented,headless-core-batch10.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
-LLC,xiLayerOffColor,선택 색상만 끄기,Layer,headless_contract_implemented,headless-core-batch10.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
-LOC,xiLayerOnColor,선택된 색상 레이어만 보이고 나머지 끔,Layer,headless_contract_implemented,headless-core-batch10.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
-LOS,xiLayerOnSelect,꺼진 켜 중에서 선택하여 켜기,Layer,headless_contract_implemented,headless-core-batch10.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
-LP,xiLayerProperty,켜 특성 변경,Layer,headless_contract_implemented,headless-core-batch10.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+LFF,xiSelLayerFreeze,선택객체를 제외한 얼림,Layer,headless_contract_implemented,headless-core-batch10.json,True,True,False,False,legacy equivalence verification and ZWCAD 2025 smoke
+LFK,xiSelLayerLock,선택 켜를 제외하고 잠금,Layer,headless_contract_implemented,headless-core-batch10.json,True,True,False,False,legacy equivalence verification and ZWCAD 2025 smoke
+LK,xiSelLock,선택 켜 잠금,Layer,headless_contract_implemented,headless-core-batch10.json,True,True,False,False,legacy equivalence verification and ZWCAD 2025 smoke
+LLC,xiLayerOffColor,선택 색상만 끄기,Layer,headless_contract_implemented,headless-core-batch10.json,True,True,False,False,legacy equivalence verification and ZWCAD 2025 smoke
+LOC,xiLayerOnColor,선택된 색상 레이어만 보이고 나머지 끔,Layer,headless_contract_implemented,headless-core-batch10.json,True,True,False,False,legacy equivalence verification and ZWCAD 2025 smoke
+LOS,xiLayerOnSelect,꺼진 켜 중에서 선택하여 켜기,Layer,headless_contract_implemented,headless-core-batch10.json,True,True,False,False,legacy equivalence verification and ZWCAD 2025 smoke
+LP,xiLayerProperty,켜 특성 변경,Layer,headless_contract_implemented,headless-core-batch10.json,True,True,False,False,legacy equivalence verification and ZWCAD 2025 smoke
 LPP,xiLayerPrefix,켜 이름에 접두사 넣기,Layer,headless_contract_implemented,headless-core-batch1.json,True,True,False,False,legacy equivalence verification and ZWCAD 2025 smoke
 LPS,xiLayerSuffix,켜 이름에 접미사 넣기,Layer,headless_contract_implemented,headless-core-batch1.json,True,True,False,False,legacy equivalence verification and ZWCAD 2025 smoke
-LST,xiLayerList,도면의 모든 켜 리스트 작성,Layer,headless_contract_implemented,headless-core-batch10.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
-LT,xiLayerThaw,모든 레이어 녹임,Layer,legacy_wrapper_only,,False,False,False,False,capture prompts/DCL decisions and replace the legacy invocation with a structured headless core
-LTG,xiLayerOnOffToggle,"켜 반전 (켜진 것 끄고, 꺼진 것 켜고)",Layer,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
-LU,xiSelUnLock,선택 켜 풀림,Layer,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
-LUK,xiLayerUnlock,전체 풀림,Layer,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+LST,xiLayerList,도면의 모든 켜 리스트 작성,Layer,headless_contract_implemented,headless-core-batch10.json,True,False,True,False,none for pure arithmetic
+LT,xiLayerThaw,모든 레이어 녹임,Layer,headless_contract_implemented,headless-core-batch11.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+LTG,xiLayerOnOffToggle,"켜 반전 (켜진 것 끄고, 꺼진 것 켜고)",Layer,headless_contract_implemented,headless-core-batch11.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+LU,xiSelUnLock,선택 켜 풀림,Layer,headless_contract_implemented,headless-core-batch11.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+LUK,xiLayerUnlock,전체 풀림,Layer,headless_contract_implemented,headless-core-batch11.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
 BMT,xiBoxMoveTool,평면간 복사이동,DBox,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
 DAS,xiDyScale,살아있는 도면 축척 넣기,DBox,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
 DBC,xiDboxAutoCopy,도곽 자동인식 복사,DBox,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
@@ -215,14 +215,14 @@ TIP,xiTextPointInc,숫자 증가 복사 (위치지정),Txt2,legacy_binary_only,,
 TOO,xiTextOnObj,객체에 붙는 문자 넣기,Txt2,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
 TTT,xiTextsToTable,문자를 표로 모으기,Txt2,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
 TX,xiTextBox,글씨에 테두리 그리기,Txt2,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
-CDE,xiDedit,치수 문자 변경,Dim,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
-DCV,xiDimConvert,선형치수로 변환,Dim,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
-DDT,xiDimDTogle,치수보조선 감추기,Dim,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
-DE,xiConDim,기존 치수에 이어서 그리기,Dim,legacy_wrapper_only,,False,False,False,False,capture prompts/DCL decisions and replace the legacy invocation with a structured headless core
-DG,xiDimGap,치수선 간격 변경,Dim,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
-DH,xiDimTextHome,치수문자 원위치시키기,Dim,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
-DLA,xiDimsExLineArrange,치수 보조선 정렬,Dim,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
-DLL,xiDimsExLineLength,치수 보조선 길이,Dim,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+CDE,xiDedit,치수 문자 변경,Dim,headless_contract_implemented,headless-core-batch11.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+DCV,xiDimConvert,선형치수로 변환,Dim,headless_contract_implemented,headless-core-batch11.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+DDT,xiDimDTogle,치수보조선 감추기,Dim,headless_contract_implemented,headless-core-batch11.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+DE,xiConDim,기존 치수에 이어서 그리기,Dim,headless_contract_implemented,headless-core-batch11.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+DG,xiDimGap,치수선 간격 변경,Dim,headless_contract_implemented,headless-core-batch11.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+DH,xiDimTextHome,치수문자 원위치시키기,Dim,headless_contract_implemented,headless-core-batch11.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+DLA,xiDimsExLineArrange,치수 보조선 정렬,Dim,headless_contract_implemented,headless-core-batch11.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+DLL,xiDimsExLineLength,치수 보조선 길이,Dim,headless_contract_implemented,headless-core-batch11.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
 DPL,xiDimPL,폴리선 도형에 자동 치수 기입,Dim,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
 DQ,xiQuickDim,일괄 치수,Dim,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
 DSC,xiDimScale,치수 축척,Dim,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core

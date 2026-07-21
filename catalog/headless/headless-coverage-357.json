@@ -3,14 +3,14 @@
   "release_scope": "xicad-legacy-357",
   "summary": {
     "total_commands": 357,
-    "headless_contract_implemented": 99,
-    "production_usable": 10,
+    "headless_contract_implemented": 111,
+    "production_usable": 11,
     "platform_excluded": 1,
-    "wrapper_only": 10,
+    "wrapper_only": 8,
     "semantic_rename_only": 3,
-    "legacy_binary_only": 244,
-    "headless_contract_percent": 27.73,
-    "production_usable_percent": 2.8
+    "legacy_binary_only": 234,
+    "headless_contract_percent": 31.09,
+    "production_usable_percent": 3.08
   },
   "commands": [
     {
@@ -1477,10 +1477,10 @@
       "state": "headless_contract_implemented",
       "contract_source": "headless-core-batch10.json",
       "dialog_free": true,
-      "cad_mutation_tool_exposed": false,
+      "cad_mutation_tool_exposed": true,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+      "next_requirement": "legacy equivalence verification and ZWCAD 2025 smoke"
     },
     {
       "alias": "LCO",
@@ -1490,10 +1490,10 @@
       "state": "headless_contract_implemented",
       "contract_source": "headless-core-batch10.json",
       "dialog_free": true,
-      "cad_mutation_tool_exposed": false,
+      "cad_mutation_tool_exposed": true,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+      "next_requirement": "legacy equivalence verification and ZWCAD 2025 smoke"
     },
     {
       "alias": "LCS",
@@ -1503,10 +1503,10 @@
       "state": "headless_contract_implemented",
       "contract_source": "headless-core-batch10.json",
       "dialog_free": true,
-      "cad_mutation_tool_exposed": false,
+      "cad_mutation_tool_exposed": true,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+      "next_requirement": "legacy equivalence verification and ZWCAD 2025 smoke"
     },
     {
       "alias": "LF",
@@ -1516,10 +1516,10 @@
       "state": "headless_contract_implemented",
       "contract_source": "headless-core-batch10.json",
       "dialog_free": true,
-      "cad_mutation_tool_exposed": false,
+      "cad_mutation_tool_exposed": true,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+      "next_requirement": "legacy equivalence verification and ZWCAD 2025 smoke"
     },
     {
       "alias": "LFD",
@@ -1542,10 +1542,10 @@
       "state": "headless_contract_implemented",
       "contract_source": "headless-core-batch10.json",
       "dialog_free": true,
-      "cad_mutation_tool_exposed": false,
+      "cad_mutation_tool_exposed": true,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+      "next_requirement": "legacy equivalence verification and ZWCAD 2025 smoke"
     },
     {
       "alias": "LFK",
@@ -1555,10 +1555,10 @@
       "state": "headless_contract_implemented",
       "contract_source": "headless-core-batch10.json",
       "dialog_free": true,
-      "cad_mutation_tool_exposed": false,
+      "cad_mutation_tool_exposed": true,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+      "next_requirement": "legacy equivalence verification and ZWCAD 2025 smoke"
     },
     {
       "alias": "LK",
@@ -1568,10 +1568,10 @@
       "state": "headless_contract_implemented",
       "contract_source": "headless-core-batch10.json",
       "dialog_free": true,
-      "cad_mutation_tool_exposed": false,
+      "cad_mutation_tool_exposed": true,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+      "next_requirement": "legacy equivalence verification and ZWCAD 2025 smoke"
     },
     {
       "alias": "LLC",
@@ -1581,10 +1581,10 @@
       "state": "headless_contract_implemented",
       "contract_source": "headless-core-batch10.json",
       "dialog_free": true,
-      "cad_mutation_tool_exposed": false,
+      "cad_mutation_tool_exposed": true,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+      "next_requirement": "legacy equivalence verification and ZWCAD 2025 smoke"
     },
     {
       "alias": "LOC",
@@ -1594,10 +1594,10 @@
       "state": "headless_contract_implemented",
       "contract_source": "headless-core-batch10.json",
       "dialog_free": true,
-      "cad_mutation_tool_exposed": false,
+      "cad_mutation_tool_exposed": true,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+      "next_requirement": "legacy equivalence verification and ZWCAD 2025 smoke"
     },
     {
       "alias": "LOS",
@@ -1607,10 +1607,10 @@
       "state": "headless_contract_implemented",
       "contract_source": "headless-core-batch10.json",
       "dialog_free": true,
-      "cad_mutation_tool_exposed": false,
+      "cad_mutation_tool_exposed": true,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+      "next_requirement": "legacy equivalence verification and ZWCAD 2025 smoke"
     },
     {
       "alias": "LP",
@@ -1620,10 +1620,10 @@
       "state": "headless_contract_implemented",
       "contract_source": "headless-core-batch10.json",
       "dialog_free": true,
-      "cad_mutation_tool_exposed": false,
+      "cad_mutation_tool_exposed": true,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+      "next_requirement": "legacy equivalence verification and ZWCAD 2025 smoke"
     },
     {
       "alias": "LPP",
@@ -1660,61 +1660,61 @@
       "contract_source": "headless-core-batch10.json",
       "dialog_free": true,
       "cad_mutation_tool_exposed": false,
-      "production_usable": false,
+      "production_usable": true,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+      "next_requirement": "none for pure arithmetic"
     },
     {
       "alias": "LT",
       "symbol": "xiLayerThaw",
       "description": "모든 레이어 녹임",
       "category": "Layer",
-      "state": "legacy_wrapper_only",
-      "contract_source": null,
-      "dialog_free": false,
+      "state": "headless_contract_implemented",
+      "contract_source": "headless-core-batch11.json",
+      "dialog_free": true,
       "cad_mutation_tool_exposed": false,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "capture prompts/DCL decisions and replace the legacy invocation with a structured headless core"
+      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
     },
     {
       "alias": "LTG",
       "symbol": "xiLayerOnOffToggle",
       "description": "켜 반전 (켜진 것 끄고, 꺼진 것 켜고)",
       "category": "Layer",
-      "state": "legacy_binary_only",
-      "contract_source": null,
-      "dialog_free": false,
+      "state": "headless_contract_implemented",
+      "contract_source": "headless-core-batch11.json",
+      "dialog_free": true,
       "cad_mutation_tool_exposed": false,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "reverse-analyze prompts/DCL/assets and implement a structured headless core"
+      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
     },
     {
       "alias": "LU",
       "symbol": "xiSelUnLock",
       "description": "선택 켜 풀림",
       "category": "Layer",
-      "state": "legacy_binary_only",
-      "contract_source": null,
-      "dialog_free": false,
+      "state": "headless_contract_implemented",
+      "contract_source": "headless-core-batch11.json",
+      "dialog_free": true,
       "cad_mutation_tool_exposed": false,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "reverse-analyze prompts/DCL/assets and implement a structured headless core"
+      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
     },
     {
       "alias": "LUK",
       "symbol": "xiLayerUnlock",
       "description": "전체 풀림",
       "category": "Layer",
-      "state": "legacy_binary_only",
-      "contract_source": null,
-      "dialog_free": false,
+      "state": "headless_contract_implemented",
+      "contract_source": "headless-core-batch11.json",
+      "dialog_free": true,
       "cad_mutation_tool_exposed": false,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "reverse-analyze prompts/DCL/assets and implement a structured headless core"
+      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
     },
     {
       "alias": "BMT",
@@ -2826,104 +2826,104 @@
       "symbol": "xiDedit",
       "description": "치수 문자 변경",
       "category": "Dim",
-      "state": "legacy_binary_only",
-      "contract_source": null,
-      "dialog_free": false,
+      "state": "headless_contract_implemented",
+      "contract_source": "headless-core-batch11.json",
+      "dialog_free": true,
       "cad_mutation_tool_exposed": false,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "reverse-analyze prompts/DCL/assets and implement a structured headless core"
+      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
     },
     {
       "alias": "DCV",
       "symbol": "xiDimConvert",
       "description": "선형치수로 변환",
       "category": "Dim",
-      "state": "legacy_binary_only",
-      "contract_source": null,
-      "dialog_free": false,
+      "state": "headless_contract_implemented",
+      "contract_source": "headless-core-batch11.json",
+      "dialog_free": true,
       "cad_mutation_tool_exposed": false,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "reverse-analyze prompts/DCL/assets and implement a structured headless core"
+      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
     },
     {
       "alias": "DDT",
       "symbol": "xiDimDTogle",
       "description": "치수보조선 감추기",
       "category": "Dim",
-      "state": "legacy_binary_only",
-      "contract_source": null,
-      "dialog_free": false,
+      "state": "headless_contract_implemented",
+      "contract_source": "headless-core-batch11.json",
+      "dialog_free": true,
       "cad_mutation_tool_exposed": false,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "reverse-analyze prompts/DCL/assets and implement a structured headless core"
+      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
     },
     {
       "alias": "DE",
       "symbol": "xiConDim",
       "description": "기존 치수에 이어서 그리기",
       "category": "Dim",
-      "state": "legacy_wrapper_only",
-      "contract_source": null,
-      "dialog_free": false,
+      "state": "headless_contract_implemented",
+      "contract_source": "headless-core-batch11.json",
+      "dialog_free": true,
       "cad_mutation_tool_exposed": false,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "capture prompts/DCL decisions and replace the legacy invocation with a structured headless core"
+      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
     },
     {
       "alias": "DG",
       "symbol": "xiDimGap",
       "description": "치수선 간격 변경",
       "category": "Dim",
-      "state": "legacy_binary_only",
-      "contract_source": null,
-      "dialog_free": false,
+      "state": "headless_contract_implemented",
+      "contract_source": "headless-core-batch11.json",
+      "dialog_free": true,
       "cad_mutation_tool_exposed": false,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "reverse-analyze prompts/DCL/assets and implement a structured headless core"
+      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
     },
     {
       "alias": "DH",
       "symbol": "xiDimTextHome",
       "description": "치수문자 원위치시키기",
       "category": "Dim",
-      "state": "legacy_binary_only",
-      "contract_source": null,
-      "dialog_free": false,
+      "state": "headless_contract_implemented",
+      "contract_source": "headless-core-batch11.json",
+      "dialog_free": true,
       "cad_mutation_tool_exposed": false,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "reverse-analyze prompts/DCL/assets and implement a structured headless core"
+      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
     },
     {
       "alias": "DLA",
       "symbol": "xiDimsExLineArrange",
       "description": "치수 보조선 정렬",
       "category": "Dim",
-      "state": "legacy_binary_only",
-      "contract_source": null,
-      "dialog_free": false,
+      "state": "headless_contract_implemented",
+      "contract_source": "headless-core-batch11.json",
+      "dialog_free": true,
       "cad_mutation_tool_exposed": false,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "reverse-analyze prompts/DCL/assets and implement a structured headless core"
+      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
     },
     {
       "alias": "DLL",
       "symbol": "xiDimsExLineLength",
       "description": "치수 보조선 길이",
       "category": "Dim",
-      "state": "legacy_binary_only",
-      "contract_source": null,
-      "dialog_free": false,
+      "state": "headless_contract_implemented",
+      "contract_source": "headless-core-batch11.json",
+      "dialog_free": true,
       "cad_mutation_tool_exposed": false,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "reverse-analyze prompts/DCL/assets and implement a structured headless core"
+      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
     },
     {
       "alias": "DPL",
@@ -4656,17 +4656,17 @@
     }
   ],
   "next_campaign": [
-    "LCD",
-    "LCO",
-    "LCS",
-    "LF",
-    "LFF",
-    "LFK",
-    "LK",
-    "LLC",
-    "LOC",
-    "LOS",
-    "LP",
-    "LST"
+    "LT",
+    "LTG",
+    "LU",
+    "LUK",
+    "CDE",
+    "DCV",
+    "DDT",
+    "DE",
+    "DG",
+    "DH",
+    "DLA",
+    "DLL"
   ]
 }

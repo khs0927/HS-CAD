@@ -154,9 +154,21 @@ HEADLESS_CONTRACTS: dict[str, str] = {
     "LOS": "headless-core-batch10.json",
     "LP": "headless-core-batch10.json",
     "LST": "headless-core-batch10.json",
+    "LT": "headless-core-batch11.json",
+    "LTG": "headless-core-batch11.json",
+    "LU": "headless-core-batch11.json",
+    "LUK": "headless-core-batch11.json",
+    "CDE": "headless-core-batch11.json",
+    "DCV": "headless-core-batch11.json",
+    "DDT": "headless-core-batch11.json",
+    "DE": "headless-core-batch11.json",
+    "DG": "headless-core-batch11.json",
+    "DH": "headless-core-batch11.json",
+    "DLA": "headless-core-batch11.json",
+    "DLL": "headless-core-batch11.json",
 }
 
-PRODUCTION_USABLE = {"%", "-", "*", "/", "=", "00", "ABC", "ND", "NP", "NS"}
+PRODUCTION_USABLE = {"%", "-", "*", "/", "=", "00", "ABC", "LST", "ND", "NP", "NS"}
 CAD_MUTATION_TOOL_EXPOSED = {
     "1",
     "2",
@@ -188,6 +200,17 @@ CAD_MUTATION_TOOL_EXPOSED = {
     "LAM",
     "LC",
     "LCC",
+    "LCD",
+    "LCO",
+    "LCS",
+    "LF",
+    "LFF",
+    "LFK",
+    "LK",
+    "LLC",
+    "LOC",
+    "LOS",
+    "LP",
     "LTX",
     "LMA",
     "LNA",
@@ -237,18 +260,18 @@ PLATFORM_EXCLUDED = {"SLD"}
 SEMANTIC_RENAME_ONLY = {"3TP", "LII", "RR"}
 
 NEXT_CAMPAIGN = (
-    "LT",
-    "LTG",
-    "LU",
-    "LUK",
-    "CDE",
-    "DCV",
-    "DDT",
-    "DE",
-    "DG",
-    "DH",
-    "DLA",
-    "DLL",
+    "DPL",
+    "DQ",
+    "DSC",
+    "DSE",
+    "DSM",
+    "DTM",
+    "DTO",
+    "DU",
+    "ED",
+    "IL",
+    "LDA",
+    "LSE",
 )
 
 
