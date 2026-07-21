@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.0",
+  "batch": 7,
+  "commands": [
+    {"alias":"FAM","legacy_symbol":"xiFindAndMark","contract":"find_and_mark","evidence":["shortcut description: 문자 찾아 표시","recovered DCL: mark/count, scope, whitespace, case, whole string, target kinds, box/circle/line/block, layer and block options"]},
+    {"alias":"FTT","legacy_symbol":"xiField2Text","contract":"field_to_literal_text","evidence":["shortcut description: 필드문자를 일반문자로","field evaluation is supplied as snapshot; unresolved behavior is an explicit policy"]},
+    {"alias":"T2M","legacy_symbol":"xiT2MT","contract":"text_to_mtext","evidence":["shortcut description: 문자를 다행문자로 변경","source replacement/preservation and visual-width policy are explicit"]},
+    {"alias":"TEC","legacy_symbol":"xiTextEntryCopy","contract":"partial_text_copy","evidence":["shortcut description: 문자의 일부 복사","ambiguous extraction is represented by explicit slice or regex-group policy"]},
+    {"alias":"TJ","legacy_symbol":"xiTJus","contract":"text_justification_change","evidence":["shortcut description: 문자정렬점 변경","target justification and visual-position preservation are explicit"]},
+    {"alias":"TSA","legacy_symbol":"xiTextStyleALL","contract":"document_text_style_change","evidence":["shortcut description: 문서내 모든 문자 스타일 변경","spaces and entity kinds are explicit"]},
+    {"alias":"TSE","legacy_symbol":"xiTextSE","contract":"sequential_text_edit","evidence":["shortcut description: 여러 문자 연속 편집","every expected and replacement value is supplied structurally"]},
+    {"alias":"TSO","legacy_symbol":"xiTextStack","contract":"text_stack","evidence":["shortcut description: 문자열 정렬하기","direction, gap, anchor and ordering are explicit"]},
+    {"alias":"TSP","legacy_symbol":"xiTextSeparate","contract":"text_split","evidence":["shortcut description: 문자열 분리","delimiter, fixed-index and regex policies are explicit; source disposition is explicit"]},
+    {"alias":"TST","legacy_symbol":"xiTsty","contract":"selected_text_style_change","evidence":["shortcut description: 문자 스타일 변경","selected handles and target style are explicit"]},
+    {"alias":"TSW","legacy_symbol":"xiTextSW","contract":"text_content_swap","evidence":["shortcut description: 문자 서로 교체","exactly two distinct source handles are required"]},
+    {"alias":"TW","legacy_symbol":"xiTWid","contract":"text_width_change","evidence":["shortcut description: 문자 폭 변경","positive bounded width factor is explicit"]}
+  ],
+  "safety": {
+    "mcp_tools_are_read_only_planners": true,
+    "cad_mutation_tools_exposed": false,
+    "dry_run_default": true,
+    "live_mutation_requires_fingerprinted_approval": true,
+    "xref_and_locked_layer_mutation_rejected": true,
+    "ambiguous_legacy_choices_are_explicit_contract_fields": true,
+    "legacy_equivalence_verified_in_cad": false,
+    "production_live": 0
+  }
+}

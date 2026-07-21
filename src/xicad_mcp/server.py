@@ -12,7 +12,13 @@ from .headless_core_batch3 import register_headless_core_batch3_tools
 from .headless_core_batch4 import register_headless_core_batch4_tools
 from .headless_core_batch5 import register_headless_core_batch5_tools
 from .headless_core_batch6 import register_headless_core_batch6_tools
+from .headless_core_batch7 import register_headless_core_batch7_tools
 from .headless_coverage import HeadlessCoverageReport, register_headless_coverage_tools
+from .live_annotations import register_live_annotation_tools
+from .live_batch_remaining import register_live_remaining_tools
+from .live_dimensions import register_live_dimension_tools
+from .live_layers import register_live_layer_tools
+from .live_maintenance import register_live_maintenance_tools
 from .live_zwcad import register_live_zwcad_tools
 from .maintenance_cores import register_maintenance_core_tools
 from .semantic_reconciliation import FileReconciliationService, register_semantic_reconciliation_tools
@@ -23,10 +29,11 @@ def repository_root() -> Path:
 
 
 def create_server(root: str | Path | None = None) -> FastMCP:
-    """Build the local, planning-only xiCAD MCP server.
+    """Build the xiCAD MCP server with planning and approved live adapters.
 
-    No registered tool connects to CAD or mutates a drawing. Live adapter tools
-    stay excluded until their postconditions and Undo restoration are validated.
+    Live mutations require an exact named drawing, a preview fingerprint, and
+    adapter-specific postcondition checks. Unsupported legacy semantics remain
+    outside the live registry instead of being reported as successful.
     """
     repo = Path(root).resolve() if root is not None else repository_root()
     mcp = FastMCP("HS-CAD xiCAD Headless")
@@ -37,8 +44,14 @@ def create_server(root: str | Path | None = None) -> FastMCP:
     register_headless_core_batch4_tools(mcp)
     register_headless_core_batch5_tools(mcp)
     register_headless_core_batch6_tools(mcp)
+    register_headless_core_batch7_tools(mcp)
     register_maintenance_core_tools(mcp)
     register_live_zwcad_tools(mcp)
+    register_live_layer_tools(mcp)
+    register_live_dimension_tools(mcp)
+    register_live_maintenance_tools(mcp)
+    register_live_annotation_tools(mcp)
+    register_live_remaining_tools(mcp)
 
     register_compatibility_alias_tools(
         mcp,

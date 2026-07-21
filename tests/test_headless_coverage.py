@@ -13,17 +13,17 @@ def report():
     return build_headless_coverage(INVENTORY, {row["legacy_alias"] for row in data["wrappers"]})
 
 
-def test_truthful_357_summary_after_batch6():
+def test_truthful_357_summary_after_batch7():
     summary = report().summary
     assert summary.total_commands == 357
-    assert summary.headless_contract_implemented == 52
-    assert summary.production_usable == 9
+    assert summary.headless_contract_implemented == 63
+    assert summary.production_usable == 10
     assert summary.platform_excluded == 1
     assert summary.wrapper_only == 16
     assert summary.semantic_rename_only == 3
-    assert summary.legacy_binary_only == 285
-    assert summary.headless_contract_percent == 14.57
-    assert summary.production_usable_percent == 2.52
+    assert summary.legacy_binary_only == 274
+    assert summary.headless_contract_percent == 17.65
+    assert summary.production_usable_percent == 2.8
 
 
 def test_categories_sum_to_release_scope():
@@ -61,22 +61,37 @@ def test_batch5_is_headless_but_not_yet_production_live():
 def test_verified_live_mutation_tools_are_reported_truthfully():
     rows = {row.alias: row for row in report().commands}
     for alias in (
+        "ABD",
+        "APD",
+        "BAR",
         "COI",
         "COR",
         "CP",
+        "DTD",
+        "DVD",
         "FAR",
         "INA",
         "LIS",
+        "LFD",
         "LMA",
         "LNA",
+        "LPP",
+        "LPD",
+        "LPS",
         "M2",
+        "MTB1",
+        "MTB2",
         "NUC",
         "NUMC",
         "PY",
         "QD",
         "RC",
+        "JD",
+        "SCC",
+        "SCD",
         "SPN",
         "TAP",
+        "TBM",
         "TCT",
         "TD",
         "TIC",
@@ -121,5 +136,13 @@ def test_batch6_is_headless_but_not_yet_production_live():
         assert rows[alias].contract_source == "headless-core-batch6.json"
 
 
-def test_next_campaign_is_text_batch7():
-    assert report().next_campaign == ("FAM", "FTT", "T2M", "TEC", "TJ", "TSA", "TSE", "TSO", "TSP", "TST", "TSW", "TW")
+def test_batch7_is_headless_and_dialog_free():
+    rows = {row.alias: row for row in report().commands}
+    # TSP is implemented as a compatibility extension but is not one of the
+    # frozen 357 aliases, so it is intentionally absent from this report.
+    for alias in ("FAM", "FTT", "T2M", "TEC", "TJ", "TSA", "TSE", "TSO", "TST", "TSW", "TW"):
+        assert rows[alias].state is HeadlessState.IMPLEMENTED
+        assert rows[alias].dialog_free
+        assert not rows[alias].production_usable
+        assert not rows[alias].cad_mutation_tool_exposed
+        assert rows[alias].contract_source == "headless-core-batch7.json"
