@@ -63,38 +63,32 @@ def probe(
             doc.SendCommand("\x1b\x1b")
             raise TimeoutError(f"xiCAD runtime load did not finish within {timeout:.1f}s")
 
-    rows: list[dict[str, object]] = []
-    for offset in range(0, len(aliases), 20):
-        batch = aliases[offset : offset + 20]
-        checks = " ".join(
-            f'(if (atoms-family 1 (list "C:{alias}")) "1" "0")' for alias in batch
-        )
-        marker = f"HSCAD:{offset}:"
-        doc.SetVariable("USERS1", f"WAIT:{offset}")
-        doc.SendCommand(f'(setvar "USERS1" (strcat "{marker}" {checks}))(princ)\n')
-        deadline = time.monotonic() + timeout
-        value = ""
-        while time.monotonic() < deadline:
-            value = str(doc.GetVariable("USERS1"))
-            if value.startswith(marker):
-                break
-            time.sleep(0.1)
-        else:
-            doc.SendCommand("\x1b\x1b")
-            raise TimeoutError(f"xiCAD runtime probe batch at offset {offset} timed out")
-        flags = value.removeprefix(marker)
-        if len(flags) != len(batch):
-            raise RuntimeError(f"probe batch {offset} returned {len(flags)} flags for {len(batch)} aliases")
-        rows.extend(
-            {"alias": alias, "available": flag == "1"}
-            for alias, flag in zip(batch, flags, strict=True)
-        )
-
     output.parent.mkdir(parents=True, exist_ok=True)
-    output.write_text(
-        "".join(f"{row['alias']}\t{int(bool(row['available']))}\n" for row in rows),
-        encoding="utf-8",
+    output.unlink(missing_ok=True)
+    probe_lisp = Path(__file__).with_suffix(".lsp").resolve()
+    doc.SetVariable("USERS1", "HSCAD_PROBE_RUNNING")
+    doc.SendCommand(
+        "(progn "
+        f'(load "{_lisp_string(str(probe_lisp))}") '
+        f'(hscad:probe-xicad-runtime "{_lisp_string(str(key_file))}" '
+        f'"{_lisp_string(str(output))}"))\n'
     )
+    deadline = time.monotonic() + timeout
+    while time.monotonic() < deadline:
+        status = str(doc.GetVariable("USERS1"))
+        if status == "HSCAD_PROBE_DONE" and output.exists():
+            break
+        if status == "HSCAD_PROBE_FILE_OPEN_FAILED":
+            raise RuntimeError("xiCAD runtime probe could not open its inventory or output file")
+        time.sleep(0.1)
+    else:
+        doc.SendCommand("\x1b\x1b")
+        raise TimeoutError(f"xiCAD runtime probe did not finish within {timeout:.1f}s")
+
+    rows: list[dict[str, object]] = []
+    for line in output.read_text(encoding="ascii").splitlines():
+        alias, available = line.split("\t", 1)
+        rows.append({"alias": alias, "available": available == "1"})
     available = [row["alias"] for row in rows if row["available"]]
     missing = [row["alias"] for row in rows if not row["available"]]
     return {
