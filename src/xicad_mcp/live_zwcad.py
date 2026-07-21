@@ -65,6 +65,7 @@ class LiveTextCommand(StrEnum):
     NUMC = "NUMC"
     TIE = "TIE"
     TII = "TII"
+    TCT = "TCT"
 
 
 class LiveTextMutationPreviewRequest(BaseModel):
@@ -96,6 +97,34 @@ class LiveTextMutationResult(BaseModel):
     postcondition_verified: bool
 
 
+class LiveCpPreviewRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid", frozen=True)
+    document_name: str = Field(min_length=1)
+    arc_handle: str = Field(min_length=1)
+    source_policy: str = Field(pattern=r"^(preserve|replace)$")
+
+
+class LiveCpExecuteRequest(LiveCpPreviewRequest):
+    expected_center: tuple[float, float, float]
+    expected_radius: float = Field(gt=0)
+    expected_layer: str = Field(min_length=1)
+    approval_fingerprint: str = Field(pattern=r"^sha256:[0-9a-f]{64}$")
+
+    def expected_fingerprint(self) -> str:
+        payload = self.model_dump(mode="json", exclude={"approval_fingerprint"})
+        canonical = json.dumps(payload, sort_keys=True, separators=(",", ":"))
+        return "sha256:" + hashlib.sha256(canonical.encode()).hexdigest()
+
+
+class LiveCpResult(BaseModel):
+    model_config = ConfigDict(extra="forbid", frozen=True)
+    document_name: str
+    source_handle: str
+    created_handle: str
+    source_erased: bool
+    postcondition_verified: bool
+
+
 def _drawing(adapter: ZWCADCOMAdapter, document_name: str) -> Any:
     if adapter.app is None:
         import win32com.client
@@ -122,6 +151,67 @@ def preview_live_wal(request: LiveWalPreviewRequest) -> dict[str, Any]:
 
 def _objects_by_handle(doc: Any) -> dict[str, Any]:
     return {str(obj.Handle).casefold(): obj for obj in doc.ModelSpace}
+
+
+def _arc_snapshot(doc: Any, handle: str) -> tuple[Any, tuple[float, float, float], float, str]:
+    obj = _objects_by_handle(doc).get(handle.casefold())
+    if obj is None or "arc" not in str(obj.ObjectName).casefold():
+        raise ValueError(f"arc handle not found: {handle}")
+    center = tuple(float(value) for value in obj.Center)
+    if len(center) != 3:
+        raise RuntimeError(f"invalid arc center for {handle}")
+    return obj, center, float(obj.Radius), str(obj.Layer)
+
+
+def preview_live_cp(request: LiveCpPreviewRequest) -> dict[str, Any]:
+    adapter = ZWCADCOMAdapter(visible=True, version="2026", start_if_needed=False)
+    doc = _drawing(adapter, request.document_name)
+    _obj, center, radius, layer = _arc_snapshot(doc, request.arc_handle)
+    payload = {
+        **request.model_dump(mode="json"),
+        "expected_center": center,
+        "expected_radius": radius,
+        "expected_layer": layer,
+    }
+    canonical = json.dumps(payload, sort_keys=True, separators=(",", ":"))
+    return {**payload, "approval_fingerprint": "sha256:" + hashlib.sha256(canonical.encode()).hexdigest()}
+
+
+def execute_live_cp(request: LiveCpExecuteRequest) -> LiveCpResult:
+    if request.approval_fingerprint != request.expected_fingerprint():
+        raise ValueError("approval fingerprint does not match the exact CP request")
+    adapter = ZWCADCOMAdapter(visible=True, version="2026", start_if_needed=False)
+    doc = _drawing(adapter, request.document_name)
+    source, center, radius, layer = _arc_snapshot(doc, request.arc_handle)
+    if center != request.expected_center or abs(radius - request.expected_radius) > 1e-9 or layer != request.expected_layer:
+        raise ValueError("CP arc precondition no longer matches the approved geometry")
+    import pythoncom
+    import win32com.client
+
+    center_value = win32com.client.VARIANT(pythoncom.VT_ARRAY | pythoncom.VT_R8, list(center))
+    doc.StartUndoMark()
+    try:
+        circle = doc.ModelSpace.AddCircle(center_value, radius)
+        circle.Layer = layer
+        if request.source_policy == "replace":
+            source.Delete()
+    finally:
+        doc.EndUndoMark()
+    objects = _objects_by_handle(doc)
+    created_handle = str(circle.Handle)
+    source_erased = request.arc_handle.casefold() not in objects
+    verified = created_handle.casefold() in objects and (
+        request.source_policy == "preserve" or source_erased
+    )
+    if not verified:
+        raise RuntimeError("CP postcondition failed")
+    return LiveCpResult(
+        document_name=doc.Name,
+        source_handle=request.arc_handle,
+        created_handle=created_handle,
+        source_erased=source_erased,
+        postcondition_verified=True,
+    )
 
 
 def _validate_text_preconditions(doc: Any, request: LiveTextMutationPreviewRequest) -> dict[str, Any]:
@@ -301,3 +391,26 @@ def register_live_zwcad_tools(mcp: FastMCP) -> None:
 
     for command_alias in LiveTextCommand:
         register_text_executor(command_alias)
+
+    mcp.tool(
+        name="xicad_preview_live_cp",
+        description="Read one ZWCAD arc and create an exact fingerprint for dialog-free arc-to-circle conversion.",
+        annotations=ToolAnnotations(
+            title="Preview live xiCAD CP",
+            readOnlyHint=True,
+            destructiveHint=False,
+            idempotentHint=True,
+            openWorldHint=False,
+        ),
+    )(preview_live_cp)
+    mcp.tool(
+        name="xicad_execute_live_cp",
+        description="Convert one approved ZWCAD arc to a circle, optionally replacing the source arc.",
+        annotations=ToolAnnotations(
+            title="Execute live xiCAD CP",
+            readOnlyHint=False,
+            destructiveHint=True,
+            idempotentHint=False,
+            openWorldHint=False,
+        ),
+    )(execute_live_cp)

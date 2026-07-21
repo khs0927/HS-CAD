@@ -108,10 +108,11 @@ HEADLESS_CONTRACTS: dict[str, str] = {
     "TIN": "headless-core-batch6.json",
 }
 
-PRODUCTION_USABLE = {"%", "-", "/", "=", "00", "ABC"}
+PRODUCTION_USABLE = {"%", "-", "/", "=", "00", "ABC", "ND", "NP", "NS"}
 CAD_MUTATION_TOOL_EXPOSED = {
     "COI",
     "COR",
+    "CP",
     "FAR",
     "INA",
     "LIS",
@@ -124,6 +125,7 @@ CAD_MUTATION_TOOL_EXPOSED = {
     "QD",
     "SPN",
     "TAP",
+    "TCT",
     "TD",
     "TIC",
     "TIE",

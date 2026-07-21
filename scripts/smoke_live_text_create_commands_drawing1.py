@@ -36,6 +36,7 @@ def main() -> None:
         LiveTextCommand.NUMC,
         LiveTextCommand.TIE,
         LiveTextCommand.TII,
+        LiveTextCommand.TCT,
     )
     results = []
     for index, alias in enumerate(aliases):

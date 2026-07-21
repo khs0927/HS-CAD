@@ -4,13 +4,13 @@
   "summary": {
     "total_commands": 357,
     "headless_contract_implemented": 52,
-    "production_usable": 6,
+    "production_usable": 9,
     "platform_excluded": 1,
     "wrapper_only": 16,
     "semantic_rename_only": 3,
     "legacy_binary_only": 285,
     "headless_contract_percent": 14.57,
-    "production_usable_percent": 1.68
+    "production_usable_percent": 2.52
   },
   "commands": [
     {
@@ -2154,9 +2154,9 @@
       "contract_source": "headless-core-batch5.json",
       "dialog_free": true,
       "cad_mutation_tool_exposed": false,
-      "production_usable": false,
+      "production_usable": true,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+      "next_requirement": "none for pure arithmetic"
     },
     {
       "alias": "NP",
@@ -2167,9 +2167,9 @@
       "contract_source": "headless-core-batch5.json",
       "dialog_free": true,
       "cad_mutation_tool_exposed": false,
-      "production_usable": false,
+      "production_usable": true,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+      "next_requirement": "none for pure arithmetic"
     },
     {
       "alias": "NS",
@@ -2180,9 +2180,9 @@
       "contract_source": "headless-core-batch5.json",
       "dialog_free": true,
       "cad_mutation_tool_exposed": false,
-      "production_usable": false,
+      "production_usable": true,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+      "next_requirement": "none for pure arithmetic"
     },
     {
       "alias": "NUC",
@@ -2712,10 +2712,10 @@
       "state": "headless_contract_implemented",
       "contract_source": "headless-core-batch1.json",
       "dialog_free": true,
-      "cad_mutation_tool_exposed": false,
+      "cad_mutation_tool_exposed": true,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+      "next_requirement": "legacy equivalence verification and ZWCAD 2025 smoke"
     },
     {
       "alias": "TIC",
@@ -3258,10 +3258,10 @@
       "state": "headless_contract_implemented",
       "contract_source": "headless-core-batch1.json",
       "dialog_free": true,
-      "cad_mutation_tool_exposed": false,
+      "cad_mutation_tool_exposed": true,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+      "next_requirement": "legacy equivalence verification and ZWCAD 2025 smoke"
     },
     {
       "alias": "DRL",

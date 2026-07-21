@@ -238,7 +238,7 @@ class GroupNumericPlan(BaseModel):
     dialog_required: bool = False
     deterministic: bool = True
     legacy_equivalence_verified_in_cad: bool = False
-    production_usable: bool = False
+    production_usable: bool = True
 
 
 def _quantize(value: Decimal, places: int | None, rounding: str = ROUND_HALF_UP) -> Decimal:
