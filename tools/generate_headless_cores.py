@@ -1,4 +1,3 @@
-import os
 import json
 from pathlib import Path
 
@@ -118,22 +117,26 @@ def generate_headless_core_code(alias: str, function_name: str, args_spec: list[
             '    p1 = input_data.p1',
             '    block_name = getattr(input_data, "block_name", "Standard_Block")',
             '    ',
+            '    import pythoncom',
             '    import win32com.client',
+            '    origin = win32com.client.VARIANT(',
+            '        pythoncom.VT_ARRAY | pythoncom.VT_R8,',
+            '        [0.0, 0.0, 0.0],',
+            '    )',
             '    # Add standard Block if it does not exist',
             '    try:',
-            '        block = doc.Blocks.Add(array.array("d", [0.0, 0.0, 0.0]), block_name)',
-            '        # Add a simple circle indicator inside block',
-            '        block.AddCircle(array.array("d", [0.0, 0.0, 0.0]), 100.0)',
+            '        doc.Blocks.Item(block_name)',
             '    except Exception:',
-            '        pass',
+            '        block = doc.Blocks.Add(origin, block_name)',
+            '        block.AddCircle(origin, 100.0)',
             '        ',
             '    # Insert Block reference',
-            '    try:',
-            '        ins_pt = array.array("d", [p1[0], p1[1], 0.0])',
-            '        ref = ms.InsertBlock(ins_pt, block_name, 1.0, 1.0, 1.0, 0.0)',
-            '        created_handles.append(ref.Handle)',
-            '    except Exception:',
-            '        pass',
+            '    ins_pt = win32com.client.VARIANT(',
+            '        pythoncom.VT_ARRAY | pythoncom.VT_R8,',
+            '        [float(p1[0]), float(p1[1]), 0.0],',
+            '    )',
+            '    ref = ms.InsertBlock(ins_pt, block_name, 1.0, 1.0, 1.0, 0.0)',
+            '    created_handles.append(ref.Handle)',
         ])
     else:
         # Default placeholder core
@@ -162,7 +165,7 @@ def run_generation(target_aliases: list[str]):
         
         # Fallback to defaults if contract file does not exist
         if contract_file.exists():
-            with open(contract_file, "r", encoding="utf-8") as f:
+            with open(contract_file, encoding="utf-8") as f:
                 data = json.load(f)
             arg_templates = data.get("argument_templates", [])
             function_name = data.get("function", f"xi{alias}")

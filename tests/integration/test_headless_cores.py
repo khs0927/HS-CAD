@@ -1,11 +1,10 @@
-import os
 import time
-import pytest
-from pathlib import Path
+
 from src.adapters.zwcad_com_adapter import ZWCADCOMAdapter
-from src.headless_core.wal_core import WALInput, execute_wal
 from src.headless_core.mtb_core import MTBInput, execute_mtb
 from src.headless_core.q1_core import Q1Input, execute_q1
+from src.headless_core.wal_core import WALInput, execute_wal
+
 
 def test_headless_wal_and_undo():
     """
@@ -60,7 +59,6 @@ def test_headless_wal_and_undo():
         
     finally:
         # Close without saving
-        doc.Close(False)
         adapter.close()
 
 def test_headless_mtb_and_undo():
@@ -101,5 +99,37 @@ def test_headless_mtb_and_undo():
         print("[SUCCESS] MTB core test and rollback passed.")
         
     finally:
-        doc.Close(False)
+        adapter.close()
+
+
+def test_headless_q1_and_undo():
+    """Test headless Q1 block insertion and rollback in ZWCAD 2026."""
+    adapter = ZWCADCOMAdapter(visible=True, version="2026", start_if_needed=True)
+    adapter.connect()
+    doc = adapter.app.Documents.Add()
+    time.sleep(3)
+
+    try:
+        before_objects = adapter.scan_modelspace()
+        before_handles = {obj["handle"] for obj in before_objects if obj.get("handle")}
+
+        q1_data = Q1Input(p1=(2500.0, 2500.0), block_name="HSCAD_Q1_HEADLESS_TEST")
+
+        print("[INFO] Executing headless Q1...")
+        created_handles = execute_q1(adapter, q1_data)
+        assert len(created_handles) == 1, "Q1 core should return the inserted block handle"
+
+        after_objects = adapter.scan_modelspace()
+        after_handles = {obj["handle"] for obj in after_objects if obj.get("handle")}
+        assert created_handles[0] in after_handles
+
+        doc.SendCommand("_UNDO\n1\n")
+        time.sleep(2)
+
+        undo_objects = adapter.scan_modelspace()
+        undo_handles = {obj["handle"] for obj in undo_objects if obj.get("handle")}
+        assert undo_handles == before_handles
+        print("[SUCCESS] Q1 core test and rollback passed.")
+
+    finally:
         adapter.close()
