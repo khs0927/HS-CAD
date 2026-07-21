@@ -1,0 +1,358 @@
+﻿alias,symbol,description,category,state,contract_source,dialog_free,cad_mutation_tool_exposed,production_usable,legacy_equivalence_verified_in_cad,next_requirement
+CT,xiCopyconTents,"내용 복사 (문자,원지름,폴리선두께,블럭)",Comm,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+DTS,xiDATESTAMP,도면 생성 날짜 기록하기,Comm,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+FLT,xiFlatten,Z값 0으로 변경,Comm,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+GEE,xiGroupEdit,그룹 수정,Comm,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+STL,xiSteal,다른 도면에서 훔쳐오기,Comm,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+COM,xiCommandEdit,명령어 단축키 편집,Open,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+EXP,xiEXDWG,현재 작업폴더로 탐색기 실행하기,Open,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+OL,xiOpenList,현재 도면이 있는 폴더에서 파일 열기,Open,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+ON,xiOpenNext,현재 도면의 다음 순서 파일 열기,Open,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+QQ,xiQuickQuit,도면 일괄 닫기 (저장 또는 비저장),Open,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+STT,xiStart,도면 초기설정,Open,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+BE,xiBE,"H빔,C채널,L형강 그리기",Draw,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+BLI,xiBeamList,보일람표그리기,Draw,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+BPT,xiBPatt,블럭 해치 패턴 만들기,Draw,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+CALENDAR,xiCalendar,달력 그리기,Draw,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+CE,xiCenter,두선을 선택하여 중심선 그리기,Draw,legacy_wrapper_only,,False,False,False,False,capture prompts/DCL decisions and replace the legacy invocation with a structured headless core
+CEP,xiCenterPoly,폴리선 중심 그리기,Draw,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+CLI,xiColumnList,기둥일람표그리기,Draw,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+COL,xiDrawColumn,기둥그리기,Draw,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+CW,xiCWALL,커튼월 그리기,Draw,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+D1,xiDoor1,간단문그리기,Draw,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+D2,xiDoor2,문 그리기,Draw,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+D3,xiDoor3,문 그리기,Draw,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+DEV,xiDrawExplodedView,전개도 그리기,Draw,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+EED,xiEED,에스컬레이터 입면 그리기,Draw,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+ELV,xiElevator,엘리베이터 그리기,Draw,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+EPD,xiEPD,에스컬레이터 평면 그리기,Draw,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+HB,xiHatBDraw,해치경계 다시 그리기,Draw,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+HGRID,xiHeatGrid,바닥난방 XL파이프 그리기,Draw,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+HP,xiHatchPoint,해치기준점 변경,Draw,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+INS,xiINSUL,단열재 그리기,Draw,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+PK,xipk,주차장 그리기,Draw,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+PZ,xiPartialZoom,부분 확대도 그리기,Draw,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+QRC,xiQRcode,QR 코드 그리기,Draw,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+SCB,xiScaleBar,축척 막대 그리기,Draw,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+STB,xiSTB,철골보 평면 그리기,Draw,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+STC,xiSTC,계단 입면,Draw,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+STP,xiSTP,계단 평면 그리기,Draw,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+TAJ,xiTableWidAj,캐드 테이블 문자에 맞추어 폭 자동 변경,Draw,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+TRUSS,xitruss,트러스 그리기,Draw,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+W1,xiWin1,간단창그리기,Draw,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+W2,xiWin2,미서기창 그리기,Draw,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+W3,xiWin3,미서기창 그리기,Draw,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+WAL,xiDrawWall,벽 그리기,Draw,headless_contract_implemented,first-batch-contracts.json / wall_core.py,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+WO,xiWallOpening,개구부 그리기,Draw,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+ZIGZAG,xiZIGZAG,지그재그 폴리선 그리기,Draw,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+C2E,xiCad2Excel,캐드의 일반표를 엑셀로 보내기,Hatch,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+E2C,xiExcel2Cad,엑셀표를 캐드 일반표로 보내기,Hatch,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+HC,xiHatchClone,해치 복제,Hatch,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+HEX,xiHatchExport,해치 내보내기,Hatch,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+HM,xiHatchMerge,해치 합치기,Hatch,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+HPM,xiMakeHatchPtn,해치 문양 그리기,Hatch,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+RDS,xiRandomSolid,무작위 솔리드해치,Hatch,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+SOL,xiSOLID,솔리드 해치하기,Hatch,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+TB,xiTable,XiCAD 테이블그리기,Hatch,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+TBT,xiTableText,ACAD 테이블에 문자 넣기,Hatch,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+BAT,xiBreakAndText,선자르고 문자넣기,Cut,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+BB,xiBreakToCurrent,자르고 현재켜로 넣기,Cut,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+BBB,xiBreakMulti,다중 끊기,Cut,legacy_wrapper_only,,False,False,False,False,capture prompts/DCL decisions and replace the legacy invocation with a structured headless core
+BRO,xiBreakO,객체위의 객체 끊기,Cut,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+CB,xiCircleBreak,원 절단하기,Cut,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+CUT,xiCutter,닫힌 객체 안의 모든 객체 삭제,Cut,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+DTP,xiDivideToPoly,곡선을 직선으로 분할,Cut,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+FE,xiFilletExtend,길이 남기고 모따기,Cut,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+FF,xiFilletL,L 형태 벽체 정리,Cut,legacy_wrapper_only,,False,False,False,False,capture prompts/DCL decisions and replace the legacy invocation with a structured headless core
+FM,xiFilletMulti,여러 모서리 정리,Cut,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+FR,xiFilletRadious,곡면 모서리 벽체 정리,Cut,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+FT,xiFilletT,T 형태 벽체 정리,Cut,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+FX,xiFilletX,X 형태 벽체 정리,Cut,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+XT,xiXT,끊기와 연장을 한번에..,Cut,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+ARD,xiDynamicArr,입체 동적 배열,Multi,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+ARP,xiArrP,원형 동적 배열,Multi,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+ARV,xiArrV,직선 동적 배열,Multi,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+CNL,xiCopyToNewLayer,새 켜로 복사,Multi,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+CR,xiCopyRotate,복사 후 회전,Multi,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+CTL,xiCopyToCLayer,현재켜로 복사,Multi,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+DAC,xiDivideArcCopy,각도 등분 기록,Multi,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+DVC,xiDivideCopy,거리 등분 복사,Multi,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+EXL,xiExtendLine,선 길이 조정,Multi,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+JL,xiJoinLine,라인 이어주기,Multi,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+MC,xiMCopy,등간격 연속 복사 (하위버전을 위해),Multi,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+MLC,xiMlineCv,멀티라인을 일반 벽체레이어로 자동 변경,Multi,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+MM,xiMeasure,시작점에서의 길이 지정 Measure,Multi,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+OA,xiObjectsAlign,객체 정렬하기,Multi,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+OAA,xiObjectsAlignAngle,객체를 객체각도에 정렬,Multi,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+OB,xiofbs,양쪽으로 등간격 옵셋하기,Multi,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+OE,xiofe,옵셋 후 원본삭제,Multi,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+OI,xiOffsetIntegrate,붙어 있는 선까지 모두 함께 간격띄우기,Multi,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+OM,xiOffsetMulti,연속 간격띄우기,Multi,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+OO,xiofc,현재 layer로 offset하기,Multi,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+OT,xiOffsetTolerance,허용공차선 띄우기,Multi,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+RC,xiRC,원본을 남기고 회전,Multi,headless_contract_implemented,headless-core-batch1.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+RDC,xiRandomCopy,무작위 복사하기,Multi,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+RM,xiRotMulti,자기 자리에서 회전,Multi,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+RR,xiRR,참조 회전,Multi,semantic_rename_legacy_only,,False,False,False,False,capture the current command input/output contract and implement a structured headless core
+SB,xiSolidMoveBack,솔리드 뒤로 보내기,Multi,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+SM,xiScaleMulti,자기 자리에서 크기변경,Multi,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+SS,xiSCALE,배율값을 기억하여 연속 크기변경,Multi,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+WQ,xiOffsetAndClose,간격띄우고 연결,Multi,legacy_wrapper_only,,False,False,False,False,capture prompts/DCL decisions and replace the legacy invocation with a structured headless core
+WR,xiWallRecover,선 복구하기 (중간객체는 모두 삭제),Multi,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+1,xiSelOff,선택끄기,Layer,legacy_wrapper_only,,False,False,False,False,capture prompts/DCL decisions and replace the legacy invocation with a structured headless core
+2,xiSelLayerOn,선택된 레이어만 보이고 나머지 끔,Layer,legacy_wrapper_only,,False,False,False,False,capture prompts/DCL decisions and replace the legacy invocation with a structured headless core
+3,xiLayeron,모든 레이어 켬,Layer,legacy_wrapper_only,,False,False,False,False,capture prompts/DCL decisions and replace the legacy invocation with a structured headless core
+DOL,xiDraworderByLayer,켜순서로 정렬순서 바꾸기,Layer,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+ELY,xiEraseLayer,선택켜 객체 모두 삭제,Layer,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+EOO,xiEntOffOn,꺼진 객체 켬,Layer,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+ESF,xiEntSelOff,선택 객체 끔,Layer,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+ESO,xiEntSelOn,선택 객체 제외 끔,Layer,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+EW,xiSetCLayer,객체 선택하여 현재 값을 변경,Layer,legacy_wrapper_only,,False,False,False,False,capture prompts/DCL decisions and replace the legacy invocation with a structured headless core
+LAM,xiLayerMerge,켜 병합하기,Layer,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+LC,xiChangeLayer,선택객체 켜 변경,Layer,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+LCC,xiColor2Layer,선택 색상의 객체를 특정 켜로 변경,Layer,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+LCD,xiColor2Layer2,선택 색상의 객체를 특정 켜로 변경 (목록에서 선택),Layer,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+LCO,xiChangeLayerOnly,"켜 변경 (색,선종류 유지)",Layer,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+LCS,xiLayerChaneSelectObject,동일객체 켜 일괄변경,Layer,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+LF,xiSelFreeze,선택 얼림,Layer,legacy_wrapper_only,,False,False,False,False,capture prompts/DCL decisions and replace the legacy invocation with a structured headless core
+LFD,xiLayerFiltersDelete,레이어필터삭제,Layer,headless_contract_implemented,maintenance-core-contracts.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+LFF,xiSelLayerFreeze,선택객체를 제외한 얼림,Layer,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+LFK,xiSelLayerLock,선택 켜를 제외하고 잠금,Layer,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+LK,xiSelLock,선택 켜 잠금,Layer,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+LLC,xiLayerOffColor,선택 색상만 끄기,Layer,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+LOC,xiLayerOnColor,선택된 색상 레이어만 보이고 나머지 끔,Layer,legacy_wrapper_only,,False,False,False,False,capture prompts/DCL decisions and replace the legacy invocation with a structured headless core
+LOS,xiLayerOnSelect,꺼진 켜 중에서 선택하여 켜기,Layer,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+LP,xiLayerProperty,켜 특성 변경,Layer,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+LPP,xiLayerPrefix,켜 이름에 접두사 넣기,Layer,headless_contract_implemented,headless-core-batch1.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+LPS,xiLayerSuffix,켜 이름에 접미사 넣기,Layer,headless_contract_implemented,headless-core-batch1.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+LST,xiLayerList,도면의 모든 켜 리스트 작성,Layer,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+LT,xiLayerThaw,모든 레이어 녹임,Layer,legacy_wrapper_only,,False,False,False,False,capture prompts/DCL decisions and replace the legacy invocation with a structured headless core
+LTG,xiLayerOnOffToggle,"켜 반전 (켜진 것 끄고, 꺼진 것 켜고)",Layer,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+LU,xiSelUnLock,선택 켜 풀림,Layer,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+LUK,xiLayerUnlock,전체 풀림,Layer,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+BMT,xiBoxMoveTool,평면간 복사이동,DBox,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+DAS,xiDyScale,살아있는 도면 축척 넣기,DBox,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+DBC,xiDboxAutoCopy,도곽 자동인식 복사,DBox,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+DBS,xiDboxSort,도곽 정렬,DBox,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+DFS,xiDboxFindScale,도곽축척 확인,DBox,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+DSB,xiDimScaleBlock,도곽 블럭내부 치수축척 일괄변경,DBox,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+MDL,xiMakeDwgList,도곽블럭으로 도면목록표 만들기,DBox,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+PBS,xiPPlotBox,블럭도곽 경계 확인,DBox,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+TN,xiTitleNumbering,도곽블럭에 도면번호 일괄넣기,DBox,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+TOB,xiObjToBlk,객체를 블럭으로 교체,DBox,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+ZR,xiZoomRemember,줌 영역 꺼내쓰기,DBox,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+00,xiCalculator,숫자 계산,Area,headless_contract_implemented,headless-core-batch4.json,True,False,True,False,none for pure arithmetic
+ABC,xiABC,여러 숫자 연산,Area,headless_contract_implemented,headless-core-batch4.json,True,False,True,False,none for pure arithmetic
+AE,xiAE,면적표시 여러요소,Area,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+AHM,xiMapArea,구적 삼각형 그리기,Area,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+BA,xiBunArea,공유면적을 배분하여 합산면적과 함께 기록,Area,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+CDB,xiCalDistBuilding,"인동거리 검토""",Area,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+CDN,xiCheckDistNorth,북측 일조권 검토,Area,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+COI,xiCommaIns,숫자에 천단위 콤마 넣기,Area,headless_contract_implemented,headless-core-batch5.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+COR,xiCommaRem,숫자에 천단위 콤마 빼기,Area,headless_contract_implemented,headless-core-batch5.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+DAR,xiDyArea,살아있는 면적 문자 넣기,Area,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+DEE,xiDrawEnergyElev,효율등급 입면적도 그리기,Area,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+DM,xiDistMemory,폴리선 길이를 메모리로,Area,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+FFO,xiFindFieldObj,필드 연관 객체 표시,Area,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+HV,xiHVAREA,사각형 가로X세로 길이와 면적 표기,Area,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+HW,xiHWArea,삼각형 가로X세로 길이와 면적 표기,Area,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+INA,xiIndexNumAdd,색인 숫자 더해서 목록만들기,Area,headless_contract_implemented,headless-core-batch6.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+LIS,xiLineSum,선택한 선들의 길이 합산,Area,headless_contract_implemented,headless-core-batch6.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+LMA,xiLevelMoveAdd,레벨 복사 숫자 자동 변경,Area,headless_contract_implemented,headless-core-batch6.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+LNA,xiLevelNumAdd,레벨 숫자 일괄 변경,Area,headless_contract_implemented,headless-core-batch6.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+M2,xim2,평을 m2로 변경,Area,headless_contract_implemented,headless-core-batch6.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+MAC,xiMakeAreaCenter,중심선을 선택하여 면적선 만들기,Area,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+MRT,xiMakeRoomTable,폴리선 선택하여 실별면적표 만들기,Area,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+ND,xiNumDivide,첫번째 숫자의 합을 두번째 숫자의 합으로 나눠 줌,Area,headless_contract_implemented,headless-core-batch5.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+NP,xiNumBunyangPro,<1번째 숫자 * 2번째 숫자> + ... +<N번째 숫자 * N+1번째 숫자>...,Area,headless_contract_implemented,headless-core-batch5.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+NS,xiNumSubtract,첫번째 숫자의 합에서 두번째 숫자의 합을 빼 줌...,Area,headless_contract_implemented,headless-core-batch5.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+NUC,xiNumberCalulate,숫자에 일괄 계산 적용,Area,headless_contract_implemented,headless-core-batch5.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+PY,xiPy,m2를 평으로 변환 (숫자 한꺼번에 변경),Area,headless_contract_implemented,headless-core-batch5.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+QD,xiQuickDist,두점의 거리를 문자로 표기,Area,headless_contract_implemented,headless-core-batch6.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+SAR,xiSiteArea,부지 구적표 그리기,Area,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+SCA,xiScaleArea,면적 확대하기,Area,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+SE,xiSelectSameEntities,객체 특성으로 동일 객체 선택하기,Area,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+SL,xiSLOPE,경사도 표시,Area,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+SPN,xiSumPairNum,기호문자별 갯수합산,Area,headless_contract_implemented,headless-core-batch6.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+ZAE,xiZareaElev,에너지효율등급용 입면적 면적표 작성,Area,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+A2M,xiAtt2Mt,속성문자를 다행문자로 변경,Txt1,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+ABE,xiAttBlkEdit,속성블럭 문자 수정,Txt1,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+CTX,xiCTX,문자 수정,Txt1,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+FAM,xiFindAndMark,문자 찾아 표시,Txt1,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+FAR,xiFindReplace,문자 찾아 바꾸기,Txt1,headless_contract_implemented,headless-core-batch5.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+FTT,xiField2Text,필드문자를 일반문자로,Txt1,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+T2M,xiT2MT,문자를 다행문자로 변경,Txt1,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+TAP,xiTextAp,문자에 접두어 접미어 넣기,Txt1,headless_contract_implemented,headless-core-batch5.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+TC,xiTextCopy,문자 복사하기 또는 Acad 테이블에 문자 넣기,Txt1,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+TD,xiTextDivide,문자열 잘라서 새로운 문자열 생성,Txt1,headless_contract_implemented,headless-core-batch5.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+TE,xiTextEdit,문자 종합수정,Txt1,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+TEC,xiTextEntryCopy,문자의 일부 복사,Txt1,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+TFF,xiTextFrameFix,다행문자 테두리 맞춤,Txt1,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+TJ,xiTJus,문자정렬점 변경,Txt1,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+TM,xiTextMerge,문자열병합,Txt1,headless_contract_implemented,headless-core-batch5.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+TO,xiText2Center,문자열을 사각의 중심으로 보내기,Txt1,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+TOA,xiTextOfAlign,문자열을 도형의 중심에 일괄 정렬,Txt1,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+TS,xitsize,문자크기를 변경,Txt1,headless_contract_implemented,headless-core-batch5.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+TSA,xiTextStyleALL,문서내 모든 문자 스타일 변경,Txt1,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+TSE,xiTextSE,여러 문자 연속 편집,Txt1,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+TSH,xiTextShadow,문자에 음영넣기,Txt1,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+TSM,xiStyleMerge,문자스타일 병합하기,Txt1,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+TSO,xiTextStack,문자열 정렬하기,Txt1,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+TST,xiTsty,문자 스타일 변경,Txt1,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+TSW,xiTextSW,문자 서로 교체,Txt1,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+TW,xiTWid,문자 폭 변경,Txt1,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+DAT,xiDyTitle,살아있는 도면 제목 넣기,Txt2,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+LTX,xiLText,등 간격 문자열 쓰기,Txt2,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+NUMC,xiNumInc,자동 숫자 증가하여 쓰기,Txt2,headless_contract_implemented,headless-core-batch6.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+QT,xiCommonTxt,자주 사용하는 문장 골라쓰기,Txt2,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+QW,xiQickSpecialChar,특수문자입력기,Txt2,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+TCT,xiTextCount,문자열 갯수 기록,Txt2,headless_contract_implemented,headless-core-batch1.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+TIC,xiAutoNumbering,여러 숫자에 일괄 연속번호 넣기,Txt2,headless_contract_implemented,headless-core-batch6.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+TIE,xiPickNumInc,기존 문자 숫자증가,Txt2,headless_contract_implemented,headless-core-batch6.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+TII,xiTextIncInput,영문/숫자 증가입력,Txt2,headless_contract_implemented,headless-core-batch6.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+TIN,xiTextInEttsInc,객체 내부 숫자가 포함된 문자 숫자 증가시키기,Txt2,headless_contract_implemented,headless-core-batch6.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+TIP,xiTextPointInc,숫자 증가 복사 (위치지정),Txt2,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+TOO,xiTextOnObj,객체에 붙는 문자 넣기,Txt2,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+TTT,xiTextsToTable,문자를 표로 모으기,Txt2,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+TX,xiTextBox,글씨에 테두리 그리기,Txt2,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+CDE,xiDedit,치수 문자 변경,Dim,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+DCV,xiDimConvert,선형치수로 변환,Dim,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+DDT,xiDimDTogle,치수보조선 감추기,Dim,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+DE,xiConDim,기존 치수에 이어서 그리기,Dim,legacy_wrapper_only,,False,False,False,False,capture prompts/DCL decisions and replace the legacy invocation with a structured headless core
+DG,xiDimGap,치수선 간격 변경,Dim,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+DH,xiDimTextHome,치수문자 원위치시키기,Dim,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+DLA,xiDimsExLineArrange,치수 보조선 정렬,Dim,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+DLL,xiDimsExLineLength,치수 보조선 길이,Dim,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+DPL,xiDimPL,폴리선 도형에 자동 치수 기입,Dim,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+DQ,xiQuickDim,일괄 치수,Dim,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+DSC,xiDimScale,치수 축척,Dim,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+DSE,xiDimStyleEdit,치수 모양 수정,Dim,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+DSM,xiDimStyleMerge,치수모양 합치기,Dim,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+DTD,xiDimTxOverRideSep,치수 보조 설명글 분리하기,Dim,headless_contract_implemented,headless-core-batch2.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+DTM,xiDimTextMove,겹친 치수문자를 아래나 옆으로 옮겨 주기,Dim,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+DTO,xiDimTxOverRide,치수 보조 설명글 넣기,Dim,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+DU,xiDimUpdate,치수 업데이트,Dim,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+DVD,xiDivideDim,치수 등분하기,Dim,headless_contract_implemented,headless-core-batch2.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+ED,xiEditDimScale,치수 축척 변경,Dim,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+IL,xiIntLen,교차점을 찾아 길이 넣어 주기,Dim,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+JD,xiJDims,치수선 합치기,Dim,headless_contract_implemented,headless-core-batch2.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+LDA,xiLeaderAlign,지시선 끝점 정렬,Dim,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+LSE,xiLeaderStyleEdit,지시선 모양 변경,Dim,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+LX,xiAutoLeader,지시선 넣기,Dim,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+SD,xiSplitDim,치수선 나누기,Dim,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+TL,xiText2Leader,(다행)문자열에 지시선 넣기,Dim,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+2DP,xi2dPro,도형안의 객체를 다른 형태의 도형에 비추기,Shape,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+3TP,xi3dPolyToLwPoly,3D폴리->LwPoly,Shape,semantic_rename_legacy_only,,False,False,False,False,capture the current command input/output contract and implement a structured headless core
+BOO,xiBoo,폴리도형 합치기,Shape,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+BS,xiBrkSymDCL,절단선 기호 그리기,Shape,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+CBJ,xiContourBoxJoin,등고선과 테두리 이어주기,Shape,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+CM,xiCM,구름형 수정 마크 그리기,Shape,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+CMW,xiCloudMarkWidth,구름형 수정 마크 입체화,Shape,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+CP,xiCP,호를 선택해서 원그리기,Shape,headless_contract_implemented,headless-core-batch1.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+DRL,xiDirectionLine,선 방향 및 반전,Shape,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+JUL,xiJumpD,교차된 선에 점프선 넣기,Shape,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+K,xiK,K 기호그리기,Shape,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+LEX,xiLTEx,선 모양 내보내기,Shape,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+LXP,xiLineXp,선 모양대로 폭파하기,Shape,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+MTLT,xiMakeLt,문자포함 선 모양 만들기,Shape,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+PBB,xiPBoundingBox,객체 경계 박스 그리기,Shape,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+PC,xiPolyClose,열린 폴리선 닫기,Shape,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+PEC,xiPerCurve,자기 자리에서 수직선 그리기,Shape,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+PJ,xiPolylineJoin,폴리선 변경후 합치기,Shape,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+PV,xiPlineVertexAdd,폴리선에 정점 넣기,Shape,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+PVL,xiPlineVertListTable,폴리선 정점을 표로 만들기,Shape,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+PVR,xiPlineVertexRemove,폴리선 정점 정리하기,Shape,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+PVV,xiPlineVertexV,폴리선 정점 삭제하기,Shape,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+PW,xiPW,Pline 두께 수정,Shape,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+PWD,xiPlineWidth,Pline 두께주고 외곽선 그리기,Shape,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+R3,xiR3P,3점으로 사각형 그리기,Shape,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+RND,xiRound,곡면 표현하기,Shape,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+RS,xiSolidBox,사각형 솔리드 박스 그리기,Shape,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+UFD,xiUnfoldPoly,폴리선 펼치기,Shape,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+V,xiV,V 기호그리기,Shape,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+WE,xiPolyEndTab,평행선 끝점 잇기,Shape,legacy_wrapper_only,,False,False,False,False,capture prompts/DCL decisions and replace the legacy invocation with a structured headless core
+XX,xiX,X 기호그리기,Shape,legacy_wrapper_only,,False,False,False,False,capture prompts/DCL decisions and replace the legacy invocation with a structured headless core
+XZ,xiXZ,XZ 기호그리기,Shape,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+ABX,xiAllBlockExplode,내부 모든 블럭 폭파,Block,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+B2X,xiBlock2Xref,블럭을 외부참조로,Block,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+BAD,xiADDB,블럭에 객체 포함시키기,Block,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+BAM,xiBlockAutoMake,자동 블럭만들기,Block,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+BAR,xiABLRo,속성블럭 문자를 제외하고 나머지만 회전,Block,headless_contract_implemented,headless-core-batch3.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+BBL,xiLineBetweenBlock,블럭의 삽입점들을 선으로 이어주기,Block,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+BCC,xiBlockConditionChange,블럭 켜,Block,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+BCH,xiChgBlock,블럭을 다른 외부파일로 교체하기,Block,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+BCO,xiBlkCopyDefinition,블럭내부 객체 꺼내기,Block,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+BEX,xiExportBlock,도면내 블럭 내보내기,Block,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+BIN,xiBchin,블럭 삽입점 변경,Block,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+BLA,xiBLKLAY,블럭 내부 모든 켜 변경,Block,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+BLX,xiMakeBlock,자기 자리에 블럭만들기,Block,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+BQT,xiBlkQty,블럭 갯수 표만들기,Block,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+BRM,xiREMB,블럭 내부 객체 삭제,Block,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+BRN,xiRenameBL,블럭 이름 변경하기,Block,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+BSC,xiBlkScaChange,블럭 축척변경,Block,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+CX,xiCopy2xRef,객체를 xref 로 복사해 넣기,Block,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+EAR,xiExpAttRemainTxt,특성블럭 문자유지 폭파,Block,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+LII,xLi,블럭내부 객체 정보 표시,Block,semantic_rename_legacy_only,,False,False,False,False,capture the current command input/output contract and implement a structured headless core
+M2B,xiMultiBlockChange,다중삽입된 블럭을 일반블럭으로 변경,Block,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+MFB,xiMultiFilesChBlk,블럭 상태 변경,Block,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+MFX,xiMultiFilesChXref,외부참조 상태 변경,Block,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+MX,xiMultiXclip,다중 Xclip,Block,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+Q11,xiBlockLibrary,블럭 창고,Block,legacy_wrapper_only,,False,False,False,False,capture prompts/DCL decisions and replace the legacy invocation with a structured headless core
+QWB,xiWblockExport,WBLOCK 내보내기,Block,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+RBP,xiRemoveBindPrefix,외부참조 삽입문자($)제거,Block,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+WSL,xiWinSymList,창호기호 목록만들기,Block,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+XCX,xiXclipXplode,XClip 폭파후 정리,Block,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+XRC,xiXrefColor,Xref 색 일괄 변경,Block,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+XRR,xiResetXRefLayers,XRef 켜설정 초기화,Block,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+P2M,xiPsp2Msp,배치도면을 모형공간으로 내보내기,Paper,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+VA,xiVportAlign,뷰포트 수직,Paper,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+VGL,xiVportGuideLine,종이공간 Viewport영역으로 모형공간에 외곽선 그리기,Paper,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+VL,xiVpLock,Viewports 잠금,Paper,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+VLL,xiVpLockAll,모든 Viewports 잠금,Paper,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+VMO,xiVportMakeObject,모형공간 도형으로 종이공간 투영창만들기,Paper,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+VPP,xiVPLayProperty,VPlayer 설정,Paper,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+VR,xiVportViewRotate,Viewport 회전시키기,Paper,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+VSD,xiLayoutToDwgs,배치를 개별 파일로 분리,Paper,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+VU,xiVpUnlock,Viewports 풀림,Paper,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+VUU,xiVpUnlockAll,모든 Viewports 풀림,Paper,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+ABD,xiAllNullBlockDelete,유령블럭 모두 삭제,Plot,headless_contract_implemented,headless-core-batch3.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+AGD,xiAllGhostDelete,유령객체 모두 삭제,Plot,headless_contract_implemented,headless-core-batch3.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+APD,xiAllPointDelete,포인트 객체 모두 삭제,Plot,headless_contract_implemented,maintenance-core-contracts.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+BAK,xiDwgBackUp,도면 백업 저장,Plot,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+CER,xiCorrectError,미세한게 틀어진 도면 보정하기,Plot,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+IB,xiInsertBlks,블럭(도면) 삽입하기,Plot,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+LPD,xiLayerFiltersDelete,레이어 필터 삭제하기,Plot,headless_contract_implemented,maintenance-core-contracts.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+LPU,xiDGNLineTypePurge,DGN 선종류 삭제,Plot,headless_contract_implemented,headless-core-batch3.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+MSL,xiMSlide,여러 파일 자동 정리,Plot,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+PB,xiPlotBox,출력용 박스 그리기,Plot,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+PBD,xiDelPlotBox,출력용 박스 모두 지우기,Plot,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+PBM,xiPlotBoxMultiMake,일반 폴리박스에 출력용 박스 그리기,Plot,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+PPP,xiAutoPlot,모형공간 다중출력,Plot,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+PUA,xiPurgeAll,모든 것 퍼지,Plot,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+SVS,xiSaveSep,여러장 도면 각 파일로 분리하기,Plot,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+%,xiPercent,숫자 백분율,None,headless_contract_implemented,headless-core-batch4.json,True,False,True,False,none for pure arithmetic
+*,xiMultiplication,숫자 곱하기,None,headless_contract_implemented,headless-core-batch1.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+-,xiSubtraction,숫자 빼기,None,headless_contract_implemented,headless-core-batch4.json,True,False,True,False,none for pure arithmetic
+/,xiDivision,숫자 나누기,None,headless_contract_implemented,headless-core-batch4.json,True,False,True,False,none for pure arithmetic
+=,xiAddition,숫자 더하기,None,headless_contract_implemented,headless-core-batch4.json,True,False,True,False,none for pure arithmetic
+A0,xiSNGP,작업축 각도 직각으로,None,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+A1,xiSSNG,객체 선책하여 작업축 각도 변경(UCS 보다 권장),None,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+CV,xiCopyValue,객체 참조 현재값 변경,None,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+ELM,xiELMark,입단면 레벨 기호 그리기,None,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+HT,xiHatchThickness,두께 입력 해치,None,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+KCI,xiKICI,─형 주방가구 그리기,None,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+KCL,xiKICL,ㄴ형 주방가구 그리기,None,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+MK,xiMask,문단에 마스크 표시,None,legacy_wrapper_only,,False,False,False,False,capture prompts/DCL decisions and replace the legacy invocation with a structured headless core
+MTB1,xiMakeToiletBooth1,칸막이 화장실 그리기1,None,headless_contract_implemented,headless-core-batch3.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+MTB2,xiMakeToiletBooth2,칸막이 화장실 그리기2,None,headless_contract_implemented,headless-core-batch3.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+PLM,xiPLMark,평면 레벨 기호 그리기,None,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+PPB,xiPPB,상세도 참조 기호 그리기,None,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+RD,xiRoofDrain,지붕배수구 기호 그리기,None,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+RUB,xiRUB,잡석 그리기,None,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+SAB,xiSaveAsBlock,"블럭 파일로 저장, 0번 켜, 다른 모든 것 퍼지",None,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+SCC,xiSC,절단면 기호(단선)를 기입하는 명령어,None,headless_contract_implemented,headless-core-batch2.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+SCD,xiSCD,절단면 기호(복선)를 기입하는 명령어,None,headless_contract_implemented,headless-core-batch2.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+SLD,xiScaleListDelete,스케일리스트 삭제 (ZWCAD 미지원),None,platform_excluded,,False,False,False,False,retain explicit ZWCAD exclusion or implement a separately reviewed platform adapter
+SSL,xiSSL,단면도 기호 넣기,None,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+TBM,xiTBstyleMK,XI_TB_N 스타일 만들기,None,headless_contract_implemented,headless-core-batch2.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+WU,xiWU,우오수라인 그리기,None,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core

@@ -1,0 +1,37 @@
+{
+  "schema_version": "1.0",
+  "batch": "headless_core_batch4",
+  "commands": [
+    {
+      "aliases": ["=", "-", "/"],
+      "core_key": "decimal_sequence_arithmetic",
+      "dialog_free": true,
+      "cad_required": false,
+      "production_usable": true
+    },
+    {
+      "aliases": ["%"],
+      "core_key": "explicit_percentage_arithmetic",
+      "modes": ["of", "increase", "decrease", "ratio"],
+      "dialog_free": true,
+      "cad_required": false,
+      "production_usable": true
+    },
+    {
+      "aliases": ["00"],
+      "core_key": "safe_decimal_expression",
+      "allowed_syntax": ["numeric literals", "named decimal variables", "+", "-", "*", "/", "%", "parentheses"],
+      "rejected_syntax": ["function calls", "attribute access", "indexing", "power", "arbitrary Python"],
+      "dialog_free": true,
+      "cad_required": false,
+      "production_usable": true
+    },
+    {
+      "aliases": ["ABC"],
+      "core_key": "labeled_multi_calculation",
+      "dialog_free": true,
+      "cad_required": false,
+      "production_usable": true
+    }
+  ]
+}

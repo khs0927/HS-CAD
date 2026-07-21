@@ -1,0 +1,5 @@
+"""Dialog-free xiCAD contracts exposed through Model Context Protocol."""
+
+from .server import create_server
+
+__all__ = ["create_server"]

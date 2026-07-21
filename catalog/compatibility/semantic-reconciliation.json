@@ -1,0 +1,308 @@
+{
+  "schema_version": "1.0",
+  "source": {
+    "rules": "semantic-reconciliation-rules.json#sha256=ab8a4bf1fb32d1dc8ff76f8c80c4aa7cd1230a49e6a8043a6a154e6aaebb0eaa",
+    "frozen_shortcuts": "xiShortkey.key#sha256=d16045667ea86cec117f964d8a51a4a88650c778e2e5b337dcaebe16c94c3b0e",
+    "backup_shortcuts": "xiShortkey_003.bak.bin#sha256=e2a2986362d089abf5f72fd1e9036d0afa9e91634d24209be39e147efffdd300",
+    "current_shortcuts": "xicad_commands_all.json#sha256=573bfb2e97c9998058527ebe3aecb61c7db7ff781a198fb9b16cee1f5d495aa3",
+    "compiled_manifest": "xicad_550_compiled_manifest.json#sha256=c3e2d48c463da4c6d4301df84cba142472d11ca18ca80210aadae7360a3d9d83",
+    "previous_queue": "command-implementation-queue.json#sha256=48809ff628b30e784f46510745e0e5e419c4a63f37801bad68002c475434a76c"
+  },
+  "summary": {
+    "total": 4,
+    "alias_preserved_rename_candidates": 3,
+    "semantic_conflicts": 1,
+    "legacy_alias_static_candidates_added": 3,
+    "remaining_code_commands": 22,
+    "production_usable": 0
+  },
+  "commands": [
+    {
+      "alias": "3TP",
+      "legacy_symbol": "xi3dPolyToLwPoly",
+      "current_symbol": "xi3dPolyToLwp",
+      "legacy_description": "3D폴리->LwPoly",
+      "current_description": "3D폴리->LW폴리",
+      "compiled_entrypoint": "C:XI3DPOLYTOLWP",
+      "compiled_status": "compiled_function_resolved",
+      "module": "xiSym2",
+      "decision": "alias_preserved_rename_candidate",
+      "static_alias_invocation_candidate": true,
+      "code_wrapper_required": false,
+      "production_usable": false,
+      "evidence_paths": [
+        "xiShortkey.key#sha256=d16045667ea86cec117f964d8a51a4a88650c778e2e5b337dcaebe16c94c3b0e",
+        "xiShortkey_003.bak.bin#sha256=e2a2986362d089abf5f72fd1e9036d0afa9e91634d24209be39e147efffdd300",
+        "xicad_commands_all.json#sha256=573bfb2e97c9998058527ebe3aecb61c7db7ff781a198fb9b16cee1f5d495aa3",
+        "xicad_550_compiled_manifest.json#sha256=c3e2d48c463da4c6d4301df84cba142472d11ca18ca80210aadae7360a3d9d83"
+      ],
+      "rationale": [
+        "same frozen and current alias",
+        "descriptions identify the same 3D-polyline to lightweight-polyline operation",
+        "current function has a resolved compiled entrypoint"
+      ],
+      "blockers": [
+        "runtime equivalence and postconditions are not CAD-evidenced",
+        "fixture and dual-version CAD smoke evidence are missing"
+      ]
+    },
+    {
+      "alias": "LII",
+      "legacy_symbol": "xLi",
+      "current_symbol": "xiListInBlk",
+      "legacy_description": "블럭내부 객체 정보 표시",
+      "current_description": "블럭내 객체 정보",
+      "compiled_entrypoint": "C:XILISTINBLK",
+      "compiled_status": "compiled_function_resolved",
+      "module": "xiUtil5",
+      "decision": "alias_preserved_rename_candidate",
+      "static_alias_invocation_candidate": true,
+      "code_wrapper_required": false,
+      "production_usable": false,
+      "evidence_paths": [
+        "xiShortkey.key#sha256=d16045667ea86cec117f964d8a51a4a88650c778e2e5b337dcaebe16c94c3b0e",
+        "xiShortkey_003.bak.bin#sha256=e2a2986362d089abf5f72fd1e9036d0afa9e91634d24209be39e147efffdd300",
+        "xicad_commands_all.json#sha256=573bfb2e97c9998058527ebe3aecb61c7db7ff781a198fb9b16cee1f5d495aa3",
+        "xicad_550_compiled_manifest.json#sha256=c3e2d48c463da4c6d4301df84cba142472d11ca18ca80210aadae7360a3d9d83"
+      ],
+      "rationale": [
+        "same frozen and current alias",
+        "both descriptions identify block-contained object information",
+        "current function has a resolved compiled entrypoint"
+      ],
+      "blockers": [
+        "runtime equivalence and postconditions are not CAD-evidenced",
+        "fixture and dual-version CAD smoke evidence are missing"
+      ]
+    },
+    {
+      "alias": "RR",
+      "legacy_symbol": "xiRR",
+      "current_symbol": "xiRefRotate",
+      "legacy_description": "참조 회전",
+      "current_description": "참조 회전",
+      "compiled_entrypoint": "C:XIREFROTATE",
+      "compiled_status": "compiled_function_resolved",
+      "module": "xiUtil0",
+      "decision": "alias_preserved_rename_candidate",
+      "static_alias_invocation_candidate": true,
+      "code_wrapper_required": false,
+      "production_usable": false,
+      "evidence_paths": [
+        "xiShortkey.key#sha256=d16045667ea86cec117f964d8a51a4a88650c778e2e5b337dcaebe16c94c3b0e",
+        "xiShortkey_003.bak.bin#sha256=e2a2986362d089abf5f72fd1e9036d0afa9e91634d24209be39e147efffdd300",
+        "xicad_commands_all.json#sha256=573bfb2e97c9998058527ebe3aecb61c7db7ff781a198fb9b16cee1f5d495aa3",
+        "xicad_550_compiled_manifest.json#sha256=c3e2d48c463da4c6d4301df84cba142472d11ca18ca80210aadae7360a3d9d83"
+      ],
+      "rationale": [
+        "same frozen and current alias",
+        "legacy and current descriptions are identical",
+        "current function has a resolved compiled entrypoint"
+      ],
+      "blockers": [
+        "runtime equivalence and postconditions are not CAD-evidenced",
+        "fixture and dual-version CAD smoke evidence are missing"
+      ]
+    },
+    {
+      "alias": "TBM",
+      "legacy_symbol": "xiTBstyleMK",
+      "current_symbol": "xiTableMerge",
+      "legacy_description": "XI_TB_N 스타일 만들기",
+      "current_description": "캐드표 셀합치기",
+      "compiled_entrypoint": "C:XITABLEMERGE",
+      "compiled_status": "compiled_entrypoint_symbol_resolved",
+      "module": null,
+      "decision": "semantic_conflict",
+      "static_alias_invocation_candidate": false,
+      "code_wrapper_required": true,
+      "production_usable": false,
+      "evidence_paths": [
+        "xiShortkey.key#sha256=d16045667ea86cec117f964d8a51a4a88650c778e2e5b337dcaebe16c94c3b0e",
+        "xiShortkey_003.bak.bin#sha256=e2a2986362d089abf5f72fd1e9036d0afa9e91634d24209be39e147efffdd300",
+        "xicad_commands_all.json#sha256=573bfb2e97c9998058527ebe3aecb61c7db7ff781a198fb9b16cee1f5d495aa3",
+        "xicad_550_compiled_manifest.json#sha256=c3e2d48c463da4c6d4301df84cba142472d11ca18ca80210aadae7360a3d9d83"
+      ],
+      "rationale": [
+        "same alias now points to a different operation",
+        "legacy title-block style creation and current table-cell merge are not equivalent",
+        "automatic alias forwarding is prohibited"
+      ],
+      "blockers": [
+        "legacy implementation source or binary evidence is missing",
+        "current alias cannot be used as a compatibility target",
+        "a reviewed replacement core is required"
+      ]
+    }
+  ],
+  "next_queue": {
+    "completed_static": {
+      "compatibility_wrapper": 16,
+      "semantic_rename_candidates": 3
+    },
+    "remaining_code_commands": 22,
+    "lanes": {
+      "consolidated_core": 2,
+      "binary_recovery": 7,
+      "source_reimplementation": 13
+    },
+    "source_reimplementation_commands": [
+      {
+        "alias": "*",
+        "symbol": "xiMultiplication",
+        "disposition": "absent",
+        "binary_evidence": "not_in_compiled_manifest",
+        "compatibility_aliases": [],
+        "blockers": [
+          "the original alias/function pair was not found in compiled or shortcut evidence",
+          "compiled entrypoint evidence is not sufficient",
+          "fixture and dual-version CAD smoke evidence are missing"
+        ]
+      },
+      {
+        "alias": "BAR",
+        "symbol": "xiABLRo",
+        "disposition": "absent",
+        "binary_evidence": "not_in_compiled_manifest",
+        "compatibility_aliases": [],
+        "blockers": [
+          "the original alias/function pair was not found in compiled or shortcut evidence",
+          "compiled entrypoint evidence is not sufficient",
+          "fixture and dual-version CAD smoke evidence are missing"
+        ]
+      },
+      {
+        "alias": "CP",
+        "symbol": "xiCP",
+        "disposition": "absent",
+        "binary_evidence": "not_in_compiled_manifest",
+        "compatibility_aliases": [],
+        "blockers": [
+          "the original alias/function pair was not found in compiled or shortcut evidence",
+          "compiled entrypoint evidence is not sufficient",
+          "fixture and dual-version CAD smoke evidence are missing"
+        ]
+      },
+      {
+        "alias": "DTD",
+        "symbol": "xiDimTxOverRideSep",
+        "disposition": "absent",
+        "binary_evidence": "not_in_compiled_manifest",
+        "compatibility_aliases": [],
+        "blockers": [
+          "the original alias/function pair was not found in compiled or shortcut evidence",
+          "compiled entrypoint evidence is not sufficient",
+          "fixture and dual-version CAD smoke evidence are missing"
+        ]
+      },
+      {
+        "alias": "DVD",
+        "symbol": "xiDivideDim",
+        "disposition": "absent",
+        "binary_evidence": "not_in_compiled_manifest",
+        "compatibility_aliases": [],
+        "blockers": [
+          "the original alias/function pair was not found in compiled or shortcut evidence",
+          "compiled entrypoint evidence is not sufficient",
+          "fixture and dual-version CAD smoke evidence are missing"
+        ]
+      },
+      {
+        "alias": "JD",
+        "symbol": "xiJDims",
+        "disposition": "absent",
+        "binary_evidence": "not_in_compiled_manifest",
+        "compatibility_aliases": [],
+        "blockers": [
+          "the original alias/function pair was not found in compiled or shortcut evidence",
+          "compiled entrypoint evidence is not sufficient",
+          "fixture and dual-version CAD smoke evidence are missing"
+        ]
+      },
+      {
+        "alias": "LPP",
+        "symbol": "xiLayerPrefix",
+        "disposition": "absent",
+        "binary_evidence": "not_in_compiled_manifest",
+        "compatibility_aliases": [],
+        "blockers": [
+          "the original alias/function pair was not found in compiled or shortcut evidence",
+          "compiled entrypoint evidence is not sufficient",
+          "fixture and dual-version CAD smoke evidence are missing"
+        ]
+      },
+      {
+        "alias": "LPS",
+        "symbol": "xiLayerSuffix",
+        "disposition": "absent",
+        "binary_evidence": "not_in_compiled_manifest",
+        "compatibility_aliases": [],
+        "blockers": [
+          "the original alias/function pair was not found in compiled or shortcut evidence",
+          "compiled entrypoint evidence is not sufficient",
+          "fixture and dual-version CAD smoke evidence are missing"
+        ]
+      },
+      {
+        "alias": "RC",
+        "symbol": "xiRC",
+        "disposition": "absent",
+        "binary_evidence": "not_in_compiled_manifest",
+        "compatibility_aliases": [],
+        "blockers": [
+          "the original alias/function pair was not found in compiled or shortcut evidence",
+          "compiled entrypoint evidence is not sufficient",
+          "fixture and dual-version CAD smoke evidence are missing"
+        ]
+      },
+      {
+        "alias": "SCC",
+        "symbol": "xiSC",
+        "disposition": "absent",
+        "binary_evidence": "not_in_compiled_manifest",
+        "compatibility_aliases": [],
+        "blockers": [
+          "the original alias/function pair was not found in compiled or shortcut evidence",
+          "compiled entrypoint evidence is not sufficient",
+          "fixture and dual-version CAD smoke evidence are missing"
+        ]
+      },
+      {
+        "alias": "SCD",
+        "symbol": "xiSCD",
+        "disposition": "absent",
+        "binary_evidence": "not_in_compiled_manifest",
+        "compatibility_aliases": [],
+        "blockers": [
+          "the original alias/function pair was not found in compiled or shortcut evidence",
+          "compiled entrypoint evidence is not sufficient",
+          "fixture and dual-version CAD smoke evidence are missing"
+        ]
+      },
+      {
+        "alias": "TCT",
+        "symbol": "xiTextCount",
+        "disposition": "absent",
+        "binary_evidence": "not_in_compiled_manifest",
+        "compatibility_aliases": [],
+        "blockers": [
+          "the original alias/function pair was not found in compiled or shortcut evidence",
+          "compiled entrypoint evidence is not sufficient",
+          "fixture and dual-version CAD smoke evidence are missing"
+        ]
+      },
+      {
+        "alias": "TBM",
+        "symbol": "xiTBstyleMK",
+        "disposition": "semantic_conflict",
+        "binary_evidence": "not_in_compiled_manifest",
+        "compatibility_aliases": [],
+        "blockers": [
+          "legacy implementation source or binary evidence is missing",
+          "current alias cannot be used as a compatibility target",
+          "a reviewed replacement core is required"
+        ]
+      }
+    ]
+  }
+}
