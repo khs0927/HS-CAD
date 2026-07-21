@@ -45,12 +45,12 @@ def test_server_registers_all_planning_tool_families() -> None:
     tools = asyncio.run(server.list_tools())
     names = {tool.name for tool in tools}
 
-    assert len(names) == 334
+    assert len(names) == 364
     assert BATCH_5_TOOLS <= names
     assert BATCH_6_TOOLS <= names
     assert "xicad_headless_coverage_summary" in names
     assert "xicad_execute_live_wal" in names
-    assert sum(not tool.annotations.readOnlyHint for tool in tools if tool.annotations) == 107
+    assert sum(not tool.annotations.readOnlyHint for tool in tools if tool.annotations) == 113
 
 
 def test_stdio_server_lists_and_calls_structured_tool() -> None:
@@ -67,7 +67,7 @@ def test_stdio_server_lists_and_calls_structured_tool() -> None:
             async with ClientSession(read, write) as session:
                 await session.initialize()
                 listed = await session.list_tools()
-                assert len(listed.tools) == 334
+                assert len(listed.tools) == 364
                 result = await session.call_tool("xicad_headless_coverage_summary", arguments={})
                 assert not result.isError
                 preview = await session.call_tool(

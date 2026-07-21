@@ -19,14 +19,17 @@ from .headless_core_batch10 import register_headless_core_batch10_tools
 from .headless_core_batch11 import register_headless_core_batch11_tools
 from .headless_core_batch12 import register_headless_core_batch12_tools
 from .headless_core_batch13 import register_headless_core_batch13_tools
+from .headless_core_batch14 import register_headless_core_batch14_tools
 from .headless_coverage import HeadlessCoverageReport, register_headless_coverage_tools
 from .live_annotations import register_live_annotation_tools
 from .live_batch11a import register_live_batch11a_tools
+from .live_batch13a import register_live_batch13a_tools
 from .live_batch_remaining import register_live_remaining_tools
 from .live_dimension_batch11b import register_live_dimension_batch11b_tools
 from .live_dimension_batch12a import register_live_dimension_batch12a_tools
 from .live_dimension_batch12b import register_live_dimension_batch12b_tools
 from .live_dimensions import register_live_dimension_tools
+from .live_geometry_batch13b import register_live_geometry_batch13b_tools
 from .live_layer_batch9a import register_live_layer_batch9a_tools
 from .live_layer_batch9b import register_live_layer_batch9b_tools
 from .live_layer_batch10a import register_live_layer_batch10a_tools
@@ -69,6 +72,7 @@ def create_server(root: str | Path | None = None) -> FastMCP:
     register_headless_core_batch11_tools(mcp)
     register_headless_core_batch12_tools(mcp)
     register_headless_core_batch13_tools(mcp)
+    register_headless_core_batch14_tools(mcp)
     register_maintenance_core_tools(mcp)
     register_live_zwcad_tools(mcp)
     register_live_layer_tools(mcp)
@@ -81,9 +85,11 @@ def create_server(root: str | Path | None = None) -> FastMCP:
     register_live_annotation_tools(mcp)
     register_live_remaining_tools(mcp)
     register_live_batch11a_tools(mcp)
+    register_live_batch13a_tools(mcp)
     register_live_dimension_batch11b_tools(mcp)
     register_live_dimension_batch12a_tools(mcp)
     register_live_dimension_batch12b_tools(mcp)
+    register_live_geometry_batch13b_tools(mcp)
     register_live_text_batch7a_tools(mcp)
     register_live_text_batch7b_tools(mcp)
     register_live_text_batch8a_tools(mcp)
