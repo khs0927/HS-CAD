@@ -15,10 +15,13 @@ from .headless_core_batch6 import register_headless_core_batch6_tools
 from .headless_core_batch7 import register_headless_core_batch7_tools
 from .headless_core_batch8 import register_headless_core_batch8_tools
 from .headless_core_batch9 import register_headless_core_batch9_tools
+from .headless_core_batch10 import register_headless_core_batch10_tools
 from .headless_coverage import HeadlessCoverageReport, register_headless_coverage_tools
 from .live_annotations import register_live_annotation_tools
 from .live_batch_remaining import register_live_remaining_tools
 from .live_dimensions import register_live_dimension_tools
+from .live_layer_batch9a import register_live_layer_batch9a_tools
+from .live_layer_batch9b import register_live_layer_batch9b_tools
 from .live_layers import register_live_layer_tools
 from .live_maintenance import register_live_maintenance_tools
 from .live_text_batch7a import register_live_text_batch7a_tools
@@ -53,9 +56,12 @@ def create_server(root: str | Path | None = None) -> FastMCP:
     register_headless_core_batch7_tools(mcp)
     register_headless_core_batch8_tools(mcp)
     register_headless_core_batch9_tools(mcp)
+    register_headless_core_batch10_tools(mcp)
     register_maintenance_core_tools(mcp)
     register_live_zwcad_tools(mcp)
     register_live_layer_tools(mcp)
+    register_live_layer_batch9a_tools(mcp)
+    register_live_layer_batch9b_tools(mcp)
     register_live_dimension_tools(mcp)
     register_live_maintenance_tools(mcp)
     register_live_annotation_tools(mcp)

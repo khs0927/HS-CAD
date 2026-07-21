@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.0",
+  "batch": 10,
+  "commands": [
+    {"alias":"LCD","legacy_symbol":"xiColor2Layer2","contract":"batch_color_to_layer","evidence":["shortcut: 선택 색상의 객체를 특정 켜로 변경 (목록에서 선택)","recovered DCL: color-number creation, individual mapping, normalized list mapping, text and dimension overrides"]},
+    {"alias":"LCO","legacy_symbol":"xiChangeLayerOnly","contract":"change_layer_preserve_properties","evidence":["shortcut explicitly says preserve color and linetype"]},
+    {"alias":"LCS","legacy_symbol":"xiLayerChaneSelectObject","contract":"similar_objects_layer_change","evidence":["shortcut: 동일객체 켜 일괄변경","similarity criterion is an explicit policy"]},
+    {"alias":"LF","legacy_symbol":"xiSelFreeze","contract":"freeze_selected_layers","evidence":["shortcut: 선택 얼림","selected entity handles normalize to layers; current layer cannot freeze"]},
+    {"alias":"LFF","legacy_symbol":"xiSelLayerFreeze","contract":"freeze_except_selected_layers","evidence":["shortcut: 선택객체를 제외한 얼림"]},
+    {"alias":"LFK","legacy_symbol":"xiSelLayerLock","contract":"lock_except_selected_layers","evidence":["shortcut: 선택 켜를 제외하고 잠금"]},
+    {"alias":"LK","legacy_symbol":"xiSelLock","contract":"lock_selected_layers","evidence":["shortcut: 선택 켜 잠금"]},
+    {"alias":"LLC","legacy_symbol":"xiLayerOffColor","contract":"turn_off_color_layers","evidence":["shortcut: 선택 색상만 끄기","layer-color versus entity-color source is explicit"]},
+    {"alias":"LOC","legacy_symbol":"xiLayerOnColor","contract":"isolate_color_layers","evidence":["shortcut: 선택된 색상 레이어만 보이고 나머지 끔","current/xref policies are explicit"]},
+    {"alias":"LOS","legacy_symbol":"xiLayerOnSelect","contract":"activate_selected_layers","evidence":["recovered DCL independently selects off, frozen and locked layers"]},
+    {"alias":"LP","legacy_symbol":"xiLayerProperty","contract":"layer_property_edit","evidence":["recovered DCL: state/color/linetype/plot/VP freeze, To/From ByLayer, nested exclusion, merge and purge"]},
+    {"alias":"LST","legacy_symbol":"xiLayerList","contract":"layer_list","evidence":["shortcut: 도면의 모든 켜 리스트 작성","return-only, text and table destinations are explicit"]}
+  ],
+  "safety": {
+    "mcp_tools_are_read_only_planners": true,
+    "cad_mutation_tools_exposed": false,
+    "dry_run_default": true,
+    "live_mutation_requires_fingerprinted_approval": true,
+    "current_xref_and_locked_layer_guards": true,
+    "ambiguous_legacy_choices_are_explicit_contract_fields": true,
+    "legacy_equivalence_verified_in_cad": false,
+    "production_live": 0
+  }
+}
