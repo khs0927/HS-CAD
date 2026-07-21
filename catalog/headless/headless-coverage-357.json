@@ -3,13 +3,13 @@
   "release_scope": "xicad-legacy-357",
   "summary": {
     "total_commands": 357,
-    "headless_contract_implemented": 138,
+    "headless_contract_implemented": 150,
     "production_usable": 12,
     "platform_excluded": 1,
     "wrapper_only": 8,
     "semantic_rename_only": 2,
-    "legacy_binary_only": 208,
-    "headless_contract_percent": 38.66,
+    "legacy_binary_only": 196,
+    "headless_contract_percent": 42.02,
     "production_usable_percent": 3.36
   },
   "commands": [
@@ -18,156 +18,156 @@
       "symbol": "xiCopyconTents",
       "description": "내용 복사 (문자,원지름,폴리선두께,블럭)",
       "category": "Comm",
-      "state": "legacy_binary_only",
-      "contract_source": null,
-      "dialog_free": false,
+      "state": "headless_contract_implemented",
+      "contract_source": "headless-core-batch15.json",
+      "dialog_free": true,
       "cad_mutation_tool_exposed": false,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "reverse-analyze prompts/DCL/assets and implement a structured headless core"
+      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
     },
     {
       "alias": "DTS",
       "symbol": "xiDATESTAMP",
       "description": "도면 생성 날짜 기록하기",
       "category": "Comm",
-      "state": "legacy_binary_only",
-      "contract_source": null,
-      "dialog_free": false,
+      "state": "headless_contract_implemented",
+      "contract_source": "headless-core-batch15.json",
+      "dialog_free": true,
       "cad_mutation_tool_exposed": false,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "reverse-analyze prompts/DCL/assets and implement a structured headless core"
+      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
     },
     {
       "alias": "FLT",
       "symbol": "xiFlatten",
       "description": "Z값 0으로 변경",
       "category": "Comm",
-      "state": "legacy_binary_only",
-      "contract_source": null,
-      "dialog_free": false,
+      "state": "headless_contract_implemented",
+      "contract_source": "headless-core-batch15.json",
+      "dialog_free": true,
       "cad_mutation_tool_exposed": false,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "reverse-analyze prompts/DCL/assets and implement a structured headless core"
+      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
     },
     {
       "alias": "GEE",
       "symbol": "xiGroupEdit",
       "description": "그룹 수정",
       "category": "Comm",
-      "state": "legacy_binary_only",
-      "contract_source": null,
-      "dialog_free": false,
+      "state": "headless_contract_implemented",
+      "contract_source": "headless-core-batch15.json",
+      "dialog_free": true,
       "cad_mutation_tool_exposed": false,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "reverse-analyze prompts/DCL/assets and implement a structured headless core"
+      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
     },
     {
       "alias": "STL",
       "symbol": "xiSteal",
       "description": "다른 도면에서 훔쳐오기",
       "category": "Comm",
-      "state": "legacy_binary_only",
-      "contract_source": null,
-      "dialog_free": false,
+      "state": "headless_contract_implemented",
+      "contract_source": "headless-core-batch15.json",
+      "dialog_free": true,
       "cad_mutation_tool_exposed": false,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "reverse-analyze prompts/DCL/assets and implement a structured headless core"
+      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
     },
     {
       "alias": "COM",
       "symbol": "xiCommandEdit",
       "description": "명령어 단축키 편집",
       "category": "Open",
-      "state": "legacy_binary_only",
-      "contract_source": null,
-      "dialog_free": false,
+      "state": "headless_contract_implemented",
+      "contract_source": "headless-core-batch15.json",
+      "dialog_free": true,
       "cad_mutation_tool_exposed": false,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "reverse-analyze prompts/DCL/assets and implement a structured headless core"
+      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
     },
     {
       "alias": "EXP",
       "symbol": "xiEXDWG",
       "description": "현재 작업폴더로 탐색기 실행하기",
       "category": "Open",
-      "state": "legacy_binary_only",
-      "contract_source": null,
-      "dialog_free": false,
+      "state": "headless_contract_implemented",
+      "contract_source": "headless-core-batch15.json",
+      "dialog_free": true,
       "cad_mutation_tool_exposed": false,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "reverse-analyze prompts/DCL/assets and implement a structured headless core"
+      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
     },
     {
       "alias": "OL",
       "symbol": "xiOpenList",
       "description": "현재 도면이 있는 폴더에서 파일 열기",
       "category": "Open",
-      "state": "legacy_binary_only",
-      "contract_source": null,
-      "dialog_free": false,
+      "state": "headless_contract_implemented",
+      "contract_source": "headless-core-batch15.json",
+      "dialog_free": true,
       "cad_mutation_tool_exposed": false,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "reverse-analyze prompts/DCL/assets and implement a structured headless core"
+      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
     },
     {
       "alias": "ON",
       "symbol": "xiOpenNext",
       "description": "현재 도면의 다음 순서 파일 열기",
       "category": "Open",
-      "state": "legacy_binary_only",
-      "contract_source": null,
-      "dialog_free": false,
+      "state": "headless_contract_implemented",
+      "contract_source": "headless-core-batch15.json",
+      "dialog_free": true,
       "cad_mutation_tool_exposed": false,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "reverse-analyze prompts/DCL/assets and implement a structured headless core"
+      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
     },
     {
       "alias": "QQ",
       "symbol": "xiQuickQuit",
       "description": "도면 일괄 닫기 (저장 또는 비저장)",
       "category": "Open",
-      "state": "legacy_binary_only",
-      "contract_source": null,
-      "dialog_free": false,
+      "state": "headless_contract_implemented",
+      "contract_source": "headless-core-batch15.json",
+      "dialog_free": true,
       "cad_mutation_tool_exposed": false,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "reverse-analyze prompts/DCL/assets and implement a structured headless core"
+      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
     },
     {
       "alias": "STT",
       "symbol": "xiStart",
       "description": "도면 초기설정",
       "category": "Open",
-      "state": "legacy_binary_only",
-      "contract_source": null,
-      "dialog_free": false,
-      "cad_mutation_tool_exposed": false,
+      "state": "headless_contract_implemented",
+      "contract_source": "headless-core-batch15.json",
+      "dialog_free": true,
+      "cad_mutation_tool_exposed": true,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "reverse-analyze prompts/DCL/assets and implement a structured headless core"
+      "next_requirement": "legacy equivalence verification and ZWCAD 2025 smoke"
     },
     {
       "alias": "BE",
       "symbol": "xiBE",
       "description": "H빔,C채널,L형강 그리기",
       "category": "Draw",
-      "state": "legacy_binary_only",
-      "contract_source": null,
-      "dialog_free": false,
-      "cad_mutation_tool_exposed": false,
+      "state": "headless_contract_implemented",
+      "contract_source": "headless-core-batch15.json",
+      "dialog_free": true,
+      "cad_mutation_tool_exposed": true,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "reverse-analyze prompts/DCL/assets and implement a structured headless core"
+      "next_requirement": "legacy equivalence verification and ZWCAD 2025 smoke"
     },
     {
       "alias": "BLI",
@@ -3297,10 +3297,10 @@
       "state": "headless_contract_implemented",
       "contract_source": "headless-core-batch14.json",
       "dialog_free": true,
-      "cad_mutation_tool_exposed": false,
+      "cad_mutation_tool_exposed": true,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+      "next_requirement": "legacy equivalence verification and ZWCAD 2025 smoke"
     },
     {
       "alias": "LEX",
@@ -3323,10 +3323,10 @@
       "state": "headless_contract_implemented",
       "contract_source": "headless-core-batch14.json",
       "dialog_free": true,
-      "cad_mutation_tool_exposed": false,
+      "cad_mutation_tool_exposed": true,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+      "next_requirement": "legacy equivalence verification and ZWCAD 2025 smoke"
     },
     {
       "alias": "MTLT",
@@ -4656,17 +4656,17 @@
     }
   ],
   "next_campaign": [
-    "CT",
-    "DTS",
-    "FLT",
-    "GEE",
-    "STL",
-    "COM",
-    "EXP",
-    "OL",
-    "ON",
-    "QQ",
-    "STT",
-    "BE"
+    "BLI",
+    "BPT",
+    "CALENDAR",
+    "CEP",
+    "CLI",
+    "COL",
+    "CW",
+    "D1",
+    "D2",
+    "D3",
+    "DEV",
+    "EED"
   ]
 }

@@ -13,16 +13,16 @@ def report():
     return build_headless_coverage(INVENTORY, {row["legacy_alias"] for row in data["wrappers"]})
 
 
-def test_truthful_357_summary_after_batch14():
+def test_truthful_357_summary_after_batch15():
     summary = report().summary
     assert summary.total_commands == 357
-    assert summary.headless_contract_implemented == 138
+    assert summary.headless_contract_implemented == 150
     assert summary.production_usable == 12
     assert summary.platform_excluded == 1
     assert summary.wrapper_only == 8
     assert summary.semantic_rename_only == 2
-    assert summary.legacy_binary_only == 208
-    assert summary.headless_contract_percent == 38.66
+    assert summary.legacy_binary_only == 196
+    assert summary.headless_contract_percent == 42.02
     assert summary.production_usable_percent == 3.36
 
 
@@ -71,6 +71,7 @@ def test_verified_live_mutation_tools_are_reported_truthfully():
         "ABE",
         "APD",
         "BAR",
+        "BE",
         "BOO",
         "CBJ",
         "COI",
@@ -124,6 +125,7 @@ def test_verified_live_mutation_tools_are_reported_truthfully():
         "LOS",
         "LP",
         "LTX",
+        "LXP",
         "LT",
         "LTG",
         "LU",
@@ -142,10 +144,12 @@ def test_verified_live_mutation_tools_are_reported_truthfully():
         "QD",
         "RC",
         "JD",
+        "K",
         "SCC",
         "SCD",
         "SD",
         "SPN",
+        "STT",
         "TAP",
         "T2M",
         "TC",
@@ -287,10 +291,20 @@ def test_batch14_frozen_inventory_members_are_headless_and_dialog_free():
         assert rows[alias].state is HeadlessState.IMPLEMENTED
         assert rows[alias].dialog_free
         assert not rows[alias].production_usable
-        assert not rows[alias].cad_mutation_tool_exposed
+        assert rows[alias].cad_mutation_tool_exposed is (alias in {"K", "LXP"})
         assert rows[alias].contract_source == "headless-core-batch14.json"
 
     # The remaining Batch 14 planners are compatibility extensions. They are
     # not counted in the frozen xiCAD 357 inventory without legacy evidence.
     for alias in ("ME", "P2C", "PE", "PLB", "PLBC", "PLE", "PLR", "PR", "REC"):
         assert alias not in rows
+
+
+def test_batch15_is_headless_and_dialog_free():
+    rows = {row.alias: row for row in report().commands}
+    for alias in ("CT", "DTS", "FLT", "GEE", "STL", "COM", "EXP", "OL", "ON", "QQ", "STT", "BE"):
+        assert rows[alias].state is HeadlessState.IMPLEMENTED
+        assert rows[alias].dialog_free
+        assert not rows[alias].production_usable
+        assert rows[alias].cad_mutation_tool_exposed is (alias in {"STT", "BE"})
+        assert rows[alias].contract_source == "headless-core-batch15.json"

@@ -1,0 +1,42 @@
+{
+  "schema_version": "1.0",
+  "batch": 15,
+  "contract_kind": "dialog_free_read_only_execution_plan",
+  "source_evidence": [
+    "tests/fixtures/xiShortkey.357.key",
+    "C:/xicad/xiLib/xiShortkey.key (CP949, read-only)",
+    "C:/xicad/DialogBox/ACAD_xi0109_d.02.dcl",
+    "C:/xicad/DialogBox/ACAD_xi0194_d.01.dcl",
+    "C:/xicad/DialogBox/ACAD_xi0206_d.05.dcl",
+    "C:/xicad/DialogBox/ACAD_xi0269_d.01.dcl",
+    "C:/xicad/AutoSave/ACAD_xis001_d.01.dcl"
+  ],
+  "commands": [
+    {"alias": "CT", "symbol": "xiCopyconTents", "tool": "xicad_plan_ct", "semantics": "typed content copy"},
+    {"alias": "DTS", "symbol": "xiDATESTAMP", "tool": "xicad_plan_dts", "semantics": "explicit creation-date text"},
+    {"alias": "FLT", "symbol": "xiFlatten", "tool": "xicad_plan_flt", "semantics": "explicit target Z"},
+    {"alias": "GEE", "symbol": "xiGroupEdit", "tool": "xicad_plan_gee", "semantics": "explicit add/remove/rename"},
+    {"alias": "STL", "symbol": "xiSteal", "tool": "xicad_plan_stl", "semantics": "digest-bound definition import plan"},
+    {"alias": "COM", "symbol": "xiCommandEdit", "tool": "xicad_plan_com", "semantics": "digest-bound key patch; PGP write blocked"},
+    {"alias": "EXP", "symbol": "xiEXDWG", "tool": "xicad_plan_exp", "semantics": "folder resolution; external process blocked"},
+    {"alias": "OL", "symbol": "xiOpenList", "tool": "xicad_plan_ol", "semantics": "explicit candidate selection; external open blocked"},
+    {"alias": "ON", "symbol": "xiOpenNext", "tool": "xicad_plan_on", "semantics": "casefold-sorted next drawing; external open blocked"},
+    {"alias": "QQ", "symbol": "xiQuickQuit", "tool": "xicad_plan_qq", "semantics": "explicit save/discard policy; external close blocked"},
+    {"alias": "STT", "symbol": "xiStart", "tool": "xicad_plan_stt", "semantics": "DCL scale/layer/reference/frame plan"},
+    {"alias": "BE", "symbol": "xiBE", "tool": "xicad_plan_be", "semantics": "DCL profile/view/layer geometry plan"}
+  ],
+  "truthfulness": {
+    "dialog_required": false,
+    "cad_mutation_tool_exposed": false,
+    "legacy_equivalence_verified_in_cad": false,
+    "production_usable": false,
+    "blocked_operations": [
+      "FLT non-planar curve preservation without curve parameters",
+      "COM direct PGP mutation",
+      "EXP external process launch",
+      "OL/ON external drawing open",
+      "QQ external document close",
+      "BE rounded C-channel/rectangular-tube corners without radius semantics"
+    ]
+  }
+}

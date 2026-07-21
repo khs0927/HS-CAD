@@ -1,16 +1,16 @@
 ﻿alias,symbol,description,category,state,contract_source,dialog_free,cad_mutation_tool_exposed,production_usable,legacy_equivalence_verified_in_cad,next_requirement
-CT,xiCopyconTents,"내용 복사 (문자,원지름,폴리선두께,블럭)",Comm,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
-DTS,xiDATESTAMP,도면 생성 날짜 기록하기,Comm,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
-FLT,xiFlatten,Z값 0으로 변경,Comm,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
-GEE,xiGroupEdit,그룹 수정,Comm,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
-STL,xiSteal,다른 도면에서 훔쳐오기,Comm,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
-COM,xiCommandEdit,명령어 단축키 편집,Open,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
-EXP,xiEXDWG,현재 작업폴더로 탐색기 실행하기,Open,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
-OL,xiOpenList,현재 도면이 있는 폴더에서 파일 열기,Open,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
-ON,xiOpenNext,현재 도면의 다음 순서 파일 열기,Open,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
-QQ,xiQuickQuit,도면 일괄 닫기 (저장 또는 비저장),Open,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
-STT,xiStart,도면 초기설정,Open,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
-BE,xiBE,"H빔,C채널,L형강 그리기",Draw,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+CT,xiCopyconTents,"내용 복사 (문자,원지름,폴리선두께,블럭)",Comm,headless_contract_implemented,headless-core-batch15.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+DTS,xiDATESTAMP,도면 생성 날짜 기록하기,Comm,headless_contract_implemented,headless-core-batch15.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+FLT,xiFlatten,Z값 0으로 변경,Comm,headless_contract_implemented,headless-core-batch15.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+GEE,xiGroupEdit,그룹 수정,Comm,headless_contract_implemented,headless-core-batch15.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+STL,xiSteal,다른 도면에서 훔쳐오기,Comm,headless_contract_implemented,headless-core-batch15.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+COM,xiCommandEdit,명령어 단축키 편집,Open,headless_contract_implemented,headless-core-batch15.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+EXP,xiEXDWG,현재 작업폴더로 탐색기 실행하기,Open,headless_contract_implemented,headless-core-batch15.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+OL,xiOpenList,현재 도면이 있는 폴더에서 파일 열기,Open,headless_contract_implemented,headless-core-batch15.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+ON,xiOpenNext,현재 도면의 다음 순서 파일 열기,Open,headless_contract_implemented,headless-core-batch15.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+QQ,xiQuickQuit,도면 일괄 닫기 (저장 또는 비저장),Open,headless_contract_implemented,headless-core-batch15.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+STT,xiStart,도면 초기설정,Open,headless_contract_implemented,headless-core-batch15.json,True,True,False,False,legacy equivalence verification and ZWCAD 2025 smoke
+BE,xiBE,"H빔,C채널,L형강 그리기",Draw,headless_contract_implemented,headless-core-batch15.json,True,True,False,False,legacy equivalence verification and ZWCAD 2025 smoke
 BLI,xiBeamList,보일람표그리기,Draw,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
 BPT,xiBPatt,블럭 해치 패턴 만들기,Draw,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
 CALENDAR,xiCalendar,달력 그리기,Draw,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
@@ -251,9 +251,9 @@ CMW,xiCloudMarkWidth,구름형 수정 마크 입체화,Shape,headless_contract_i
 CP,xiCP,호를 선택해서 원그리기,Shape,headless_contract_implemented,headless-core-batch1.json,True,True,False,False,legacy equivalence verification and ZWCAD 2025 smoke
 DRL,xiDirectionLine,선 방향 및 반전,Shape,headless_contract_implemented,headless-core-batch13.json,True,True,False,False,legacy equivalence verification and ZWCAD 2025 smoke
 JUL,xiJumpD,교차된 선에 점프선 넣기,Shape,headless_contract_implemented,headless-core-batch13.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
-K,xiK,K 기호그리기,Shape,headless_contract_implemented,headless-core-batch14.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+K,xiK,K 기호그리기,Shape,headless_contract_implemented,headless-core-batch14.json,True,True,False,False,legacy equivalence verification and ZWCAD 2025 smoke
 LEX,xiLTEx,선 모양 내보내기,Shape,headless_contract_implemented,headless-core-batch14.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
-LXP,xiLineXp,선 모양대로 폭파하기,Shape,headless_contract_implemented,headless-core-batch14.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+LXP,xiLineXp,선 모양대로 폭파하기,Shape,headless_contract_implemented,headless-core-batch14.json,True,True,False,False,legacy equivalence verification and ZWCAD 2025 smoke
 MTLT,xiMakeLt,문자포함 선 모양 만들기,Shape,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
 PBB,xiPBoundingBox,객체 경계 박스 그리기,Shape,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
 PC,xiPolyClose,열린 폴리선 닫기,Shape,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
