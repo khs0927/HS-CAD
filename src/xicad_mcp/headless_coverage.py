@@ -123,6 +123,7 @@ CAD_MUTATION_TOOL_EXPOSED = {
     "NUMC",
     "PY",
     "QD",
+    "RC",
     "SPN",
     "TAP",
     "TCT",

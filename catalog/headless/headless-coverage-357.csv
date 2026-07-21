@@ -90,7 +90,7 @@ OI,xiOffsetIntegrate,붙어 있는 선까지 모두 함께 간격띄우기,Multi
 OM,xiOffsetMulti,연속 간격띄우기,Multi,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
 OO,xiofc,현재 layer로 offset하기,Multi,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
 OT,xiOffsetTolerance,허용공차선 띄우기,Multi,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
-RC,xiRC,원본을 남기고 회전,Multi,headless_contract_implemented,headless-core-batch1.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+RC,xiRC,원본을 남기고 회전,Multi,headless_contract_implemented,headless-core-batch1.json,True,True,False,False,legacy equivalence verification and ZWCAD 2025 smoke
 RDC,xiRandomCopy,무작위 복사하기,Multi,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
 RM,xiRotMulti,자기 자리에서 회전,Multi,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
 RR,xiRR,참조 회전,Multi,semantic_rename_legacy_only,,False,False,False,False,capture the current command input/output contract and implement a structured headless core

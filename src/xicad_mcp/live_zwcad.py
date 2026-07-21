@@ -125,6 +125,34 @@ class LiveCpResult(BaseModel):
     postcondition_verified: bool
 
 
+class LiveRcPreviewRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid", frozen=True)
+    document_name: str = Field(min_length=1)
+    source_handles: tuple[str, ...] = Field(min_length=1)
+    base_point: tuple[float, float, float]
+    angle_degrees: float
+    copies: int = Field(ge=1, le=100)
+
+    def fingerprint(self) -> str:
+        canonical = json.dumps(self.model_dump(mode="json"), sort_keys=True, separators=(",", ":"))
+        return "sha256:" + hashlib.sha256(canonical.encode()).hexdigest()
+
+
+class LiveRcExecuteRequest(LiveRcPreviewRequest):
+    approval_fingerprint: str = Field(pattern=r"^sha256:[0-9a-f]{64}$")
+
+    def expected_fingerprint(self) -> str:
+        return LiveRcPreviewRequest(**self.model_dump(exclude={"approval_fingerprint"})).fingerprint()
+
+
+class LiveRcResult(BaseModel):
+    model_config = ConfigDict(extra="forbid", frozen=True)
+    document_name: str
+    source_handles: tuple[str, ...]
+    created_handles: tuple[str, ...]
+    postcondition_verified: bool
+
+
 def _drawing(adapter: ZWCADCOMAdapter, document_name: str) -> Any:
     if adapter.app is None:
         import win32com.client
@@ -210,6 +238,56 @@ def execute_live_cp(request: LiveCpExecuteRequest) -> LiveCpResult:
         source_handle=request.arc_handle,
         created_handle=created_handle,
         source_erased=source_erased,
+        postcondition_verified=True,
+    )
+
+
+def preview_live_rc(request: LiveRcPreviewRequest) -> dict[str, Any]:
+    if len({handle.casefold() for handle in request.source_handles}) != len(request.source_handles):
+        raise ValueError("RC source handles must be unique")
+    adapter = ZWCADCOMAdapter(visible=True, version="2026", start_if_needed=False)
+    doc = _drawing(adapter, request.document_name)
+    objects = _objects_by_handle(doc)
+    missing = [handle for handle in request.source_handles if handle.casefold() not in objects]
+    if missing:
+        raise ValueError(f"RC source handles not found: {missing}")
+    return {**request.model_dump(mode="json"), "approval_fingerprint": request.fingerprint()}
+
+
+def execute_live_rc(request: LiveRcExecuteRequest) -> LiveRcResult:
+    if request.approval_fingerprint != request.expected_fingerprint():
+        raise ValueError("approval fingerprint does not match the exact RC request")
+    adapter = ZWCADCOMAdapter(visible=True, version="2026", start_if_needed=False)
+    doc = _drawing(adapter, request.document_name)
+    objects = _objects_by_handle(doc)
+    sources = []
+    for handle in request.source_handles:
+        obj = objects.get(handle.casefold())
+        if obj is None:
+            raise ValueError(f"RC source handle not found: {handle}")
+        sources.append(obj)
+    import pythoncom
+    import win32com.client
+
+    base = win32com.client.VARIANT(pythoncom.VT_ARRAY | pythoncom.VT_R8, list(request.base_point))
+    created: list[Any] = []
+    doc.StartUndoMark()
+    try:
+        for index in range(1, request.copies + 1):
+            for source in sources:
+                copied = source.Copy()
+                copied.Rotate(base, radians(request.angle_degrees * index))
+                created.append(copied)
+    finally:
+        doc.EndUndoMark()
+    after = _objects_by_handle(doc)
+    handles = tuple(str(obj.Handle) for obj in created)
+    if not handles or not all(handle.casefold() in after for handle in handles):
+        raise RuntimeError("RC postcondition failed")
+    return LiveRcResult(
+        document_name=doc.Name,
+        source_handles=request.source_handles,
+        created_handles=handles,
         postcondition_verified=True,
     )
 
@@ -414,3 +492,25 @@ def register_live_zwcad_tools(mcp: FastMCP) -> None:
             openWorldHint=False,
         ),
     )(execute_live_cp)
+    mcp.tool(
+        name="xicad_preview_live_rc",
+        description="Validate source handles and create an exact fingerprint for dialog-free rotate-copy.",
+        annotations=ToolAnnotations(
+            title="Preview live xiCAD RC",
+            readOnlyHint=True,
+            destructiveHint=False,
+            idempotentHint=True,
+            openWorldHint=False,
+        ),
+    )(preview_live_rc)
+    mcp.tool(
+        name="xicad_execute_live_rc",
+        description="Create approved incremental rotated copies of ZWCAD entities.",
+        annotations=ToolAnnotations(
+            title="Execute live xiCAD RC",
+            readOnlyHint=False,
+            destructiveHint=True,
+            idempotentHint=False,
+            openWorldHint=False,
+        ),
+    )(execute_live_rc)

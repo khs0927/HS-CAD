@@ -74,6 +74,7 @@ def test_verified_live_mutation_tools_are_reported_truthfully():
         "NUMC",
         "PY",
         "QD",
+        "RC",
         "SPN",
         "TAP",
         "TCT",
