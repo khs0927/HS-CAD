@@ -13,16 +13,16 @@ def report():
     return build_headless_coverage(INVENTORY, {row["legacy_alias"] for row in data["wrappers"]})
 
 
-def test_truthful_357_summary_after_batch11():
+def test_truthful_357_summary_after_batch12():
     summary = report().summary
     assert summary.total_commands == 357
-    assert summary.headless_contract_implemented == 111
+    assert summary.headless_contract_implemented == 123
     assert summary.production_usable == 11
     assert summary.platform_excluded == 1
     assert summary.wrapper_only == 8
     assert summary.semantic_rename_only == 3
-    assert summary.legacy_binary_only == 234
-    assert summary.headless_contract_percent == 31.09
+    assert summary.legacy_binary_only == 222
+    assert summary.headless_contract_percent == 34.45
     assert summary.production_usable_percent == 3.08
 
 
@@ -72,9 +72,13 @@ def test_verified_live_mutation_tools_are_reported_truthfully():
         "COI",
         "COR",
         "CP",
+        "CDE",
+        "DCV",
         "CTX",
         "DAT",
         "DTD",
+        "DDT",
+        "DE",
         "DOL",
         "DVD",
         "FAR",
@@ -88,6 +92,8 @@ def test_verified_live_mutation_tools_are_reported_truthfully():
         "INA",
         "LIS",
         "LFD",
+        "DLA",
+        "DLL",
         "LAM",
         "LC",
         "LCC",
@@ -103,6 +109,10 @@ def test_verified_live_mutation_tools_are_reported_truthfully():
         "LOS",
         "LP",
         "LTX",
+        "LT",
+        "LTG",
+        "LU",
+        "LUK",
         "LMA",
         "LNA",
         "LPP",
@@ -229,5 +239,15 @@ def test_batch11_is_headless_and_dialog_free():
         assert rows[alias].state is HeadlessState.IMPLEMENTED
         assert rows[alias].dialog_free
         assert not rows[alias].production_usable
-        assert not rows[alias].cad_mutation_tool_exposed
+        assert rows[alias].cad_mutation_tool_exposed is (alias not in {"DG", "DH"})
         assert rows[alias].contract_source == "headless-core-batch11.json"
+
+
+def test_batch12_is_headless_and_dialog_free():
+    rows = {row.alias: row for row in report().commands}
+    for alias in ("DPL", "DQ", "DSC", "DSE", "DSM", "DTM", "DTO", "DU", "ED", "IL", "LDA", "LSE"):
+        assert rows[alias].state is HeadlessState.IMPLEMENTED
+        assert rows[alias].dialog_free
+        assert not rows[alias].production_usable
+        assert not rows[alias].cad_mutation_tool_exposed
+        assert rows[alias].contract_source == "headless-core-batch12.json"
