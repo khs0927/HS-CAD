@@ -214,9 +214,21 @@ HEADLESS_CONTRACTS: dict[str, str] = {
     "QQ": "headless-core-batch15.json",
     "STT": "headless-core-batch15.json",
     "BE": "headless-core-batch15.json",
+    "BLI": "headless-core-batch16.json",
+    "BPT": "headless-core-batch16.json",
+    "CALENDAR": "headless-core-batch16.json",
+    "CEP": "headless-core-batch16.json",
+    "CLI": "headless-core-batch16.json",
+    "COL": "headless-core-batch16.json",
+    "CW": "headless-core-batch16.json",
+    "D1": "headless-core-batch16.json",
+    "D2": "headless-core-batch16.json",
+    "D3": "headless-core-batch16.json",
+    "DEV": "headless-core-batch16.json",
+    "EED": "headless-core-batch16.json",
 }
 
-PRODUCTION_USABLE = {"%", "-", "*", "/", "=", "00", "ABC", "IL", "LST", "ND", "NP", "NS"}
+PRODUCTION_USABLE = {"%", "-", "*", "/", "=", "00", "ABC", "BPT", "IL", "LST", "ND", "NP", "NS"}
 CAD_MUTATION_TOOL_EXPOSED = {
     "1",
     "2",
@@ -229,8 +241,13 @@ CAD_MUTATION_TOOL_EXPOSED = {
     "APD",
     "BAR",
     "BE",
+    "BLI",
     "BOO",
     "CBJ",
+    "CALENDAR",
+    "CEP",
+    "CLI",
+    "COL",
     "COI",
     "COR",
     "CP",
@@ -241,6 +258,7 @@ CAD_MUTATION_TOOL_EXPOSED = {
     "DTD",
     "DDT",
     "DE",
+    "DEV",
     "DOL",
     "DPL",
     "DRL",
@@ -252,6 +270,7 @@ CAD_MUTATION_TOOL_EXPOSED = {
     "DU",
     "DVD",
     "ED",
+    "EED",
     "FAR",
     "FAM",
     "FTT",
@@ -338,18 +357,18 @@ PLATFORM_EXCLUDED = {"SLD"}
 SEMANTIC_RENAME_ONLY = {"3TP", "LII", "RR"}
 
 NEXT_CAMPAIGN = (
-    "BLI",
-    "BPT",
-    "CALENDAR",
-    "CEP",
-    "CLI",
-    "COL",
-    "CW",
-    "D1",
-    "D2",
-    "D3",
-    "DEV",
-    "EED",
+    "ELV",
+    "EPD",
+    "HB",
+    "HGRID",
+    "HP",
+    "INS",
+    "PK",
+    "PZ",
+    "QRC",
+    "SCB",
+    "STB",
+    "STC",
 )
 
 

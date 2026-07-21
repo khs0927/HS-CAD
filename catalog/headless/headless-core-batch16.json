@@ -1,0 +1,34 @@
+{
+  "schema_version": "1.0",
+  "batch": 16,
+  "contract_kind": "dialog_free_read_only_execution_plan",
+  "source_evidence": [
+    "tests/fixtures/xiShortkey.357.key",
+    "C:/xicad/xiLib/xiShortkey.key (CP949, read-only)",
+    "xiCenterPoly, xiColumnList, xiDrawColumn, xiCWall, xiDoor1, xiDoor2, xiDrawExplodedView, xiEED DCL files"
+  ],
+  "commands": [
+    {"alias": "BLI", "symbol": "xiBeamList", "tool": "xicad_plan_bli", "semantics": "explicit schedule grid and cells"},
+    {"alias": "BPT", "symbol": "xiBPatt", "tool": "xicad_plan_bpt", "semantics": "block pattern definition; installation blocked"},
+    {"alias": "CALENDAR", "symbol": "xiCalendar", "tool": "xicad_plan_calendar", "semantics": "explicit year month week-start layout"},
+    {"alias": "CEP", "symbol": "xiCenterPoly", "tool": "xicad_plan_cep", "semantics": "DCL center half arbitrary division"},
+    {"alias": "CLI", "symbol": "xiColumnList", "tool": "xicad_plan_cli", "semantics": "explicit column schedule grid and cells"},
+    {"alias": "COL", "symbol": "xiDrawColumn", "tool": "xicad_plan_col", "semantics": "DCL RC SC SRC column specification"},
+    {"alias": "CW", "symbol": "xiCWALL", "tool": "xicad_plan_cw", "semantics": "DCL curtain wall specification"},
+    {"alias": "D1", "symbol": "xiDoor1", "tool": "xicad_plan_d1", "semantics": "DCL simple-door specification"},
+    {"alias": "D2", "symbol": "xiDoor2", "tool": "xicad_plan_d2", "semantics": "DCL door variant d2"},
+    {"alias": "D3", "symbol": "xiDoor2", "tool": "xicad_plan_d3", "semantics": "DCL door variant d3"},
+    {"alias": "DEV", "symbol": "xiDrawExplodedView", "tool": "xicad_plan_dev", "semantics": "DCL exploded-view border plan"},
+    {"alias": "EED", "symbol": "xiEED", "tool": "xicad_plan_eed", "semantics": "DCL escalator elevation 30/35 degree calculation"}
+  ],
+  "truthfulness": {
+    "dialog_required": false,
+    "cad_mutation_tool_exposed": false,
+    "legacy_equivalence_verified_in_cad": false,
+    "production_usable": false,
+    "blocked_operations": [
+      "BPT direct PAT/file installation",
+      "CW curved offsets without curve parameterization"
+    ]
+  }
+}
