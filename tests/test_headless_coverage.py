@@ -56,6 +56,13 @@ def test_batch5_is_headless_but_not_yet_production_live():
         assert rows[alias].contract_source == "headless-core-batch5.json"
 
 
+def test_wal_has_a_verified_live_mutation_tool():
+    wal = {row.alias: row for row in report().commands}["WAL"]
+    assert wal.dialog_free
+    assert wal.cad_mutation_tool_exposed
+    assert not wal.production_usable
+
+
 def test_wrapper_is_not_reported_as_headless():
     rows = {row.alias: row for row in report().commands}
     assert rows["Q11"].state is HeadlessState.WRAPPER_ONLY

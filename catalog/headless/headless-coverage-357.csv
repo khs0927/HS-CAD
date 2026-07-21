@@ -42,7 +42,7 @@ TRUSS,xitruss,트러스 그리기,Draw,legacy_binary_only,,False,False,False,Fal
 W1,xiWin1,간단창그리기,Draw,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
 W2,xiWin2,미서기창 그리기,Draw,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
 W3,xiWin3,미서기창 그리기,Draw,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
-WAL,xiDrawWall,벽 그리기,Draw,headless_contract_implemented,first-batch-contracts.json / wall_core.py,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+WAL,xiDrawWall,벽 그리기,Draw,headless_contract_implemented,first-batch-contracts.json / wall_core.py,True,True,False,False,legacy equivalence verification and ZWCAD 2025 smoke
 WO,xiWallOpening,개구부 그리기,Draw,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
 ZIGZAG,xiZIGZAG,지그재그 폴리선 그리기,Draw,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
 C2E,xiCad2Excel,캐드의 일반표를 엑셀로 보내기,Hatch,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core

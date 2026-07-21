@@ -45,11 +45,12 @@ def test_server_registers_all_planning_tool_families() -> None:
     tools = asyncio.run(server.list_tools())
     names = {tool.name for tool in tools}
 
-    assert len(names) == 53
+    assert len(names) == 55
     assert BATCH_5_TOOLS <= names
     assert BATCH_6_TOOLS <= names
     assert "xicad_headless_coverage_summary" in names
-    assert all(tool.annotations and tool.annotations.readOnlyHint for tool in tools)
+    assert "xicad_execute_live_wal" in names
+    assert sum(not tool.annotations.readOnlyHint for tool in tools if tool.annotations) == 1
 
 
 def test_stdio_server_lists_and_calls_structured_tool() -> None:
@@ -66,8 +67,24 @@ def test_stdio_server_lists_and_calls_structured_tool() -> None:
             async with ClientSession(read, write) as session:
                 await session.initialize()
                 listed = await session.list_tools()
-                assert len(listed.tools) == 53
+                assert len(listed.tools) == 55
                 result = await session.call_tool("xicad_headless_coverage_summary", arguments={})
                 assert not result.isError
+                preview = await session.call_tool(
+                    "xicad_preview_live_wal",
+                    arguments={
+                        "request": {
+                            "document_name": "Drawing1.dwg",
+                            "wall": {
+                                "thickness": 200.0,
+                                "p1": [0.0, 0.0],
+                                "p2": [5000.0, 0.0],
+                                "p3": [5000.0, 3000.0],
+                                "p4": [0.0, 3000.0],
+                            },
+                        }
+                    },
+                )
+                assert not preview.isError
 
     asyncio.run(exercise_server())

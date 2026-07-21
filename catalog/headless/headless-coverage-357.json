@@ -580,10 +580,10 @@
       "state": "headless_contract_implemented",
       "contract_source": "first-batch-contracts.json / wall_core.py",
       "dialog_free": true,
-      "cad_mutation_tool_exposed": false,
+      "cad_mutation_tool_exposed": true,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+      "next_requirement": "legacy equivalence verification and ZWCAD 2025 smoke"
     },
     {
       "alias": "WO",

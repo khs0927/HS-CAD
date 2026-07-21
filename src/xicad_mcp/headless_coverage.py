@@ -109,6 +109,7 @@ HEADLESS_CONTRACTS: dict[str, str] = {
 }
 
 PRODUCTION_USABLE = {"%", "-", "/", "=", "00", "ABC"}
+CAD_MUTATION_TOOL_EXPOSED = {"WAL"}
 PLATFORM_EXCLUDED = {"SLD"}
 SEMANTIC_RENAME_ONLY = {"3TP", "LII", "RR"}
 
@@ -179,6 +180,7 @@ def build_headless_coverage(
                 state=state,
                 contract_source=HEADLESS_CONTRACTS[alias],
                 dialog_free=True,
+                cad_mutation_tool_exposed=alias in CAD_MUTATION_TOOL_EXPOSED,
                 production_usable=alias in PRODUCTION_USABLE,
                 next_requirement=next_requirement,
             )
