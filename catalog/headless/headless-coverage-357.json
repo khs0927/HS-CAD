@@ -3,13 +3,13 @@
   "release_scope": "xicad-legacy-357",
   "summary": {
     "total_commands": 357,
-    "headless_contract_implemented": 63,
+    "headless_contract_implemented": 75,
     "production_usable": 10,
     "platform_excluded": 1,
     "wrapper_only": 16,
     "semantic_rename_only": 3,
-    "legacy_binary_only": 274,
-    "headless_contract_percent": 17.65,
+    "legacy_binary_only": 262,
+    "headless_contract_percent": 21.01,
     "production_usable_percent": 2.8
   },
   "commands": [
@@ -2306,39 +2306,39 @@
       "symbol": "xiAtt2Mt",
       "description": "속성문자를 다행문자로 변경",
       "category": "Txt1",
-      "state": "legacy_binary_only",
-      "contract_source": null,
-      "dialog_free": false,
+      "state": "headless_contract_implemented",
+      "contract_source": "headless-core-batch8.json",
+      "dialog_free": true,
       "cad_mutation_tool_exposed": false,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "reverse-analyze prompts/DCL/assets and implement a structured headless core"
+      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
     },
     {
       "alias": "ABE",
       "symbol": "xiAttBlkEdit",
       "description": "속성블럭 문자 수정",
       "category": "Txt1",
-      "state": "legacy_binary_only",
-      "contract_source": null,
-      "dialog_free": false,
+      "state": "headless_contract_implemented",
+      "contract_source": "headless-core-batch8.json",
+      "dialog_free": true,
       "cad_mutation_tool_exposed": false,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "reverse-analyze prompts/DCL/assets and implement a structured headless core"
+      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
     },
     {
       "alias": "CTX",
       "symbol": "xiCTX",
       "description": "문자 수정",
       "category": "Txt1",
-      "state": "legacy_binary_only",
-      "contract_source": null,
-      "dialog_free": false,
+      "state": "headless_contract_implemented",
+      "contract_source": "headless-core-batch8.json",
+      "dialog_free": true,
       "cad_mutation_tool_exposed": false,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "reverse-analyze prompts/DCL/assets and implement a structured headless core"
+      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
     },
     {
       "alias": "FAM",
@@ -2348,10 +2348,10 @@
       "state": "headless_contract_implemented",
       "contract_source": "headless-core-batch7.json",
       "dialog_free": true,
-      "cad_mutation_tool_exposed": false,
+      "cad_mutation_tool_exposed": true,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+      "next_requirement": "legacy equivalence verification and ZWCAD 2025 smoke"
     },
     {
       "alias": "FAR",
@@ -2374,10 +2374,10 @@
       "state": "headless_contract_implemented",
       "contract_source": "headless-core-batch7.json",
       "dialog_free": true,
-      "cad_mutation_tool_exposed": false,
+      "cad_mutation_tool_exposed": true,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+      "next_requirement": "legacy equivalence verification and ZWCAD 2025 smoke"
     },
     {
       "alias": "T2M",
@@ -2387,10 +2387,10 @@
       "state": "headless_contract_implemented",
       "contract_source": "headless-core-batch7.json",
       "dialog_free": true,
-      "cad_mutation_tool_exposed": false,
+      "cad_mutation_tool_exposed": true,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+      "next_requirement": "legacy equivalence verification and ZWCAD 2025 smoke"
     },
     {
       "alias": "TAP",
@@ -2410,13 +2410,13 @@
       "symbol": "xiTextCopy",
       "description": "문자 복사하기 또는 Acad 테이블에 문자 넣기",
       "category": "Txt1",
-      "state": "legacy_binary_only",
-      "contract_source": null,
-      "dialog_free": false,
+      "state": "headless_contract_implemented",
+      "contract_source": "headless-core-batch8.json",
+      "dialog_free": true,
       "cad_mutation_tool_exposed": false,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "reverse-analyze prompts/DCL/assets and implement a structured headless core"
+      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
     },
     {
       "alias": "TD",
@@ -2436,13 +2436,13 @@
       "symbol": "xiTextEdit",
       "description": "문자 종합수정",
       "category": "Txt1",
-      "state": "legacy_binary_only",
-      "contract_source": null,
-      "dialog_free": false,
+      "state": "headless_contract_implemented",
+      "contract_source": "headless-core-batch8.json",
+      "dialog_free": true,
       "cad_mutation_tool_exposed": false,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "reverse-analyze prompts/DCL/assets and implement a structured headless core"
+      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
     },
     {
       "alias": "TEC",
@@ -2462,13 +2462,13 @@
       "symbol": "xiTextFrameFix",
       "description": "다행문자 테두리 맞춤",
       "category": "Txt1",
-      "state": "legacy_binary_only",
-      "contract_source": null,
-      "dialog_free": false,
+      "state": "headless_contract_implemented",
+      "contract_source": "headless-core-batch8.json",
+      "dialog_free": true,
       "cad_mutation_tool_exposed": false,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "reverse-analyze prompts/DCL/assets and implement a structured headless core"
+      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
     },
     {
       "alias": "TJ",
@@ -2478,10 +2478,10 @@
       "state": "headless_contract_implemented",
       "contract_source": "headless-core-batch7.json",
       "dialog_free": true,
-      "cad_mutation_tool_exposed": false,
+      "cad_mutation_tool_exposed": true,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+      "next_requirement": "legacy equivalence verification and ZWCAD 2025 smoke"
     },
     {
       "alias": "TM",
@@ -2501,26 +2501,26 @@
       "symbol": "xiText2Center",
       "description": "문자열을 사각의 중심으로 보내기",
       "category": "Txt1",
-      "state": "legacy_binary_only",
-      "contract_source": null,
-      "dialog_free": false,
+      "state": "headless_contract_implemented",
+      "contract_source": "headless-core-batch8.json",
+      "dialog_free": true,
       "cad_mutation_tool_exposed": false,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "reverse-analyze prompts/DCL/assets and implement a structured headless core"
+      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
     },
     {
       "alias": "TOA",
       "symbol": "xiTextOfAlign",
       "description": "문자열을 도형의 중심에 일괄 정렬",
       "category": "Txt1",
-      "state": "legacy_binary_only",
-      "contract_source": null,
-      "dialog_free": false,
+      "state": "headless_contract_implemented",
+      "contract_source": "headless-core-batch8.json",
+      "dialog_free": true,
       "cad_mutation_tool_exposed": false,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "reverse-analyze prompts/DCL/assets and implement a structured headless core"
+      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
     },
     {
       "alias": "TS",
@@ -2543,10 +2543,10 @@
       "state": "headless_contract_implemented",
       "contract_source": "headless-core-batch7.json",
       "dialog_free": true,
-      "cad_mutation_tool_exposed": false,
+      "cad_mutation_tool_exposed": true,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+      "next_requirement": "legacy equivalence verification and ZWCAD 2025 smoke"
     },
     {
       "alias": "TSE",
@@ -2556,36 +2556,36 @@
       "state": "headless_contract_implemented",
       "contract_source": "headless-core-batch7.json",
       "dialog_free": true,
-      "cad_mutation_tool_exposed": false,
+      "cad_mutation_tool_exposed": true,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+      "next_requirement": "legacy equivalence verification and ZWCAD 2025 smoke"
     },
     {
       "alias": "TSH",
       "symbol": "xiTextShadow",
       "description": "문자에 음영넣기",
       "category": "Txt1",
-      "state": "legacy_binary_only",
-      "contract_source": null,
-      "dialog_free": false,
+      "state": "headless_contract_implemented",
+      "contract_source": "headless-core-batch8.json",
+      "dialog_free": true,
       "cad_mutation_tool_exposed": false,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "reverse-analyze prompts/DCL/assets and implement a structured headless core"
+      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
     },
     {
       "alias": "TSM",
       "symbol": "xiStyleMerge",
       "description": "문자스타일 병합하기",
       "category": "Txt1",
-      "state": "legacy_binary_only",
-      "contract_source": null,
-      "dialog_free": false,
+      "state": "headless_contract_implemented",
+      "contract_source": "headless-core-batch8.json",
+      "dialog_free": true,
       "cad_mutation_tool_exposed": false,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "reverse-analyze prompts/DCL/assets and implement a structured headless core"
+      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
     },
     {
       "alias": "TSO",
@@ -2595,10 +2595,10 @@
       "state": "headless_contract_implemented",
       "contract_source": "headless-core-batch7.json",
       "dialog_free": true,
-      "cad_mutation_tool_exposed": false,
+      "cad_mutation_tool_exposed": true,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+      "next_requirement": "legacy equivalence verification and ZWCAD 2025 smoke"
     },
     {
       "alias": "TST",
@@ -2608,10 +2608,10 @@
       "state": "headless_contract_implemented",
       "contract_source": "headless-core-batch7.json",
       "dialog_free": true,
-      "cad_mutation_tool_exposed": false,
+      "cad_mutation_tool_exposed": true,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+      "next_requirement": "legacy equivalence verification and ZWCAD 2025 smoke"
     },
     {
       "alias": "TSW",
@@ -2621,10 +2621,10 @@
       "state": "headless_contract_implemented",
       "contract_source": "headless-core-batch7.json",
       "dialog_free": true,
-      "cad_mutation_tool_exposed": false,
+      "cad_mutation_tool_exposed": true,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+      "next_requirement": "legacy equivalence verification and ZWCAD 2025 smoke"
     },
     {
       "alias": "TW",
@@ -2634,36 +2634,36 @@
       "state": "headless_contract_implemented",
       "contract_source": "headless-core-batch7.json",
       "dialog_free": true,
-      "cad_mutation_tool_exposed": false,
+      "cad_mutation_tool_exposed": true,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+      "next_requirement": "legacy equivalence verification and ZWCAD 2025 smoke"
     },
     {
       "alias": "DAT",
       "symbol": "xiDyTitle",
       "description": "살아있는 도면 제목 넣기",
       "category": "Txt2",
-      "state": "legacy_binary_only",
-      "contract_source": null,
-      "dialog_free": false,
+      "state": "headless_contract_implemented",
+      "contract_source": "headless-core-batch8.json",
+      "dialog_free": true,
       "cad_mutation_tool_exposed": false,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "reverse-analyze prompts/DCL/assets and implement a structured headless core"
+      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
     },
     {
       "alias": "LTX",
       "symbol": "xiLText",
       "description": "등 간격 문자열 쓰기",
       "category": "Txt2",
-      "state": "legacy_binary_only",
-      "contract_source": null,
-      "dialog_free": false,
+      "state": "headless_contract_implemented",
+      "contract_source": "headless-core-batch8.json",
+      "dialog_free": true,
       "cad_mutation_tool_exposed": false,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "reverse-analyze prompts/DCL/assets and implement a structured headless core"
+      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
     },
     {
       "alias": "NUMC",
@@ -4656,17 +4656,17 @@
     }
   ],
   "next_campaign": [
-    "A2M",
-    "ABE",
-    "CTX",
-    "TC",
-    "TE",
-    "TFF",
-    "TO",
-    "TOA",
-    "TSH",
-    "TSM",
-    "DAT",
-    "LTX"
+    "1",
+    "2",
+    "3",
+    "DOL",
+    "ELY",
+    "EOO",
+    "ESF",
+    "ESO",
+    "EW",
+    "LAM",
+    "LC",
+    "LCC"
   ]
 }
