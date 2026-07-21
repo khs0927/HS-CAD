@@ -53,14 +53,37 @@ def test_batch5_is_headless_but_not_yet_production_live():
         assert rows[alias].dialog_free
         assert not rows[alias].production_usable
         assert rows[alias].cad_mutation_tool_exposed is (
-            alias in {"COI", "COR", "FAR", "NUC", "TAP", "TS"}
+            alias in {"COI", "COR", "FAR", "NUC", "PY", "TAP", "TD", "TM", "TS"}
         )
         assert rows[alias].contract_source == "headless-core-batch5.json"
 
 
 def test_verified_live_mutation_tools_are_reported_truthfully():
     rows = {row.alias: row for row in report().commands}
-    for alias in ("COI", "COR", "FAR", "NUC", "TAP", "TS", "WAL"):
+    for alias in (
+        "COI",
+        "COR",
+        "FAR",
+        "INA",
+        "LIS",
+        "LMA",
+        "LNA",
+        "M2",
+        "NUC",
+        "NUMC",
+        "PY",
+        "QD",
+        "SPN",
+        "TAP",
+        "TD",
+        "TIC",
+        "TIE",
+        "TII",
+        "TIN",
+        "TM",
+        "TS",
+        "WAL",
+    ):
         assert rows[alias].dialog_free
         assert rows[alias].cad_mutation_tool_exposed
         assert not rows[alias].production_usable
@@ -89,7 +112,9 @@ def test_batch6_is_headless_but_not_yet_production_live():
         assert rows[alias].state is HeadlessState.IMPLEMENTED
         assert rows[alias].dialog_free
         assert not rows[alias].production_usable
-        assert not rows[alias].cad_mutation_tool_exposed
+        assert rows[alias].cad_mutation_tool_exposed is (
+            alias in {"INA", "LIS", "LMA", "LNA", "M2", "NUMC", "QD", "SPN", "TIC", "TIE", "TII", "TIN"}
+        )
         assert rows[alias].contract_source == "headless-core-batch6.json"
 
 

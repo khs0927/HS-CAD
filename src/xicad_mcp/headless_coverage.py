@@ -109,7 +109,30 @@ HEADLESS_CONTRACTS: dict[str, str] = {
 }
 
 PRODUCTION_USABLE = {"%", "-", "/", "=", "00", "ABC"}
-CAD_MUTATION_TOOL_EXPOSED = {"COI", "COR", "FAR", "NUC", "TAP", "TS", "WAL"}
+CAD_MUTATION_TOOL_EXPOSED = {
+    "COI",
+    "COR",
+    "FAR",
+    "INA",
+    "LIS",
+    "LMA",
+    "LNA",
+    "M2",
+    "NUC",
+    "NUMC",
+    "PY",
+    "QD",
+    "SPN",
+    "TAP",
+    "TD",
+    "TIC",
+    "TIE",
+    "TII",
+    "TIN",
+    "TM",
+    "TS",
+    "WAL",
+}
 PLATFORM_EXCLUDED = {"SLD"}
 SEMANTIC_RENAME_ONLY = {"3TP", "LII", "RR"}
 

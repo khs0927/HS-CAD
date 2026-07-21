@@ -3,6 +3,7 @@ from __future__ import annotations
 import hashlib
 import json
 from enum import StrEnum
+from math import radians
 from typing import Any
 
 from mcp.server.fastmcp import FastMCP
@@ -12,7 +13,7 @@ from pydantic import BaseModel, ConfigDict, Field
 from src.adapters.zwcad_com_adapter import ZWCADCOMAdapter
 from src.headless_core.wal_core import WALInput, execute_wal
 
-from .headless_core_batch5 import TextChange, TextHeightChange
+from .headless_core_batch5 import TextChange, TextHeightChange, TextWriteSpec
 
 
 class LiveWalPreviewRequest(BaseModel):
@@ -49,6 +50,21 @@ class LiveTextCommand(StrEnum):
     FAR = "FAR"
     TAP = "TAP"
     TS = "TS"
+    TIC = "TIC"
+    TIN = "TIN"
+    TD = "TD"
+    TM = "TM"
+    PY = "PY"
+    M2 = "M2"
+    INA = "INA"
+    SPN = "SPN"
+    LIS = "LIS"
+    LMA = "LMA"
+    LNA = "LNA"
+    QD = "QD"
+    NUMC = "NUMC"
+    TIE = "TIE"
+    TII = "TII"
 
 
 class LiveTextMutationPreviewRequest(BaseModel):
@@ -57,6 +73,7 @@ class LiveTextMutationPreviewRequest(BaseModel):
     command_alias: LiveTextCommand
     changes: tuple[TextChange, ...] = ()
     height_changes: tuple[TextHeightChange, ...] = ()
+    create_specs: tuple[TextWriteSpec, ...] = ()
 
     def fingerprint(self) -> str:
         payload = json.dumps(self.model_dump(mode="json"), sort_keys=True, separators=(",", ":"))
@@ -75,6 +92,7 @@ class LiveTextMutationResult(BaseModel):
     document_name: str
     command_alias: LiveTextCommand
     changed_handles: tuple[str, ...]
+    created_handles: tuple[str, ...]
     postcondition_verified: bool
 
 
@@ -134,7 +152,7 @@ def _validate_text_preconditions(doc: Any, request: LiveTextMutationPreviewReque
 
 
 def preview_live_text_mutation(request: LiveTextMutationPreviewRequest) -> dict[str, Any]:
-    if not request.changes and not request.height_changes:
+    if not request.changes and not request.height_changes and not request.create_specs:
         raise ValueError("live text mutation requires at least one change")
     adapter = ZWCADCOMAdapter(visible=True, version="2026", start_if_needed=False)
     doc = _drawing(adapter, request.document_name)
@@ -142,7 +160,7 @@ def preview_live_text_mutation(request: LiveTextMutationPreviewRequest) -> dict[
     return {
         "document_name": doc.Name,
         "command_alias": request.command_alias,
-        "change_count": len(request.changes) + len(request.height_changes),
+        "change_count": len(request.changes) + len(request.height_changes) + len(request.create_specs),
         "approval_fingerprint": request.fingerprint(),
         "mutation": True,
     }
@@ -161,11 +179,22 @@ def execute_live_text_mutation(
     doc = _drawing(adapter, request.document_name)
     objects = _validate_text_preconditions(doc, request)
     doc.StartUndoMark()
+    created: list[Any] = []
     try:
         for change in request.changes:
             objects[change.handle.casefold()].TextString = change.replacement_text
         for change in request.height_changes:
             objects[change.handle.casefold()].Height = change.replacement_height
+        for spec in request.create_specs:
+            entity = adapter.create_text(
+                spec.text,
+                [spec.insertion_point.x, spec.insertion_point.y, spec.insertion_point.z],
+                height=spec.text_height,
+                layer=spec.layer,
+            )
+            entity.StyleName = spec.text_style
+            entity.Rotation = radians(spec.rotation_degrees)
+            created.append(entity)
     finally:
         doc.EndUndoMark()
     objects = _objects_by_handle(doc)
@@ -176,6 +205,9 @@ def execute_live_text_mutation(
         actual = float(objects[change.handle.casefold()].Height)
         if abs(actual - change.replacement_height) > 1e-9:
             raise RuntimeError(f"height postcondition failed for {change.handle}")
+    for entity, spec in zip(created, request.create_specs, strict=True):
+        if str(entity.TextString) != spec.text or abs(float(entity.Height) - spec.text_height) > 1e-9:
+            raise RuntimeError(f"created text postcondition failed for {entity.Handle}")
     handles = tuple(change.handle for change in request.changes) + tuple(
         change.handle for change in request.height_changes
     )
@@ -183,6 +215,7 @@ def execute_live_text_mutation(
         document_name=doc.Name,
         command_alias=request.command_alias,
         changed_handles=handles,
+        created_handles=tuple(str(entity.Handle) for entity in created),
         postcondition_verified=True,
     )
 

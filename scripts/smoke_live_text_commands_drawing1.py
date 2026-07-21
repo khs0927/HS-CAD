@@ -46,6 +46,8 @@ def main() -> None:
         (LiveTextCommand.FAR, "OLD-WALL", "NEW-WALL", None),
         (LiveTextCommand.TAP, "ROOM", "[ROOM]-A", None),
         (LiveTextCommand.TS, "HEIGHT", None, 250.0),
+        (LiveTextCommand.TIC, "ROOM-009", "ROOM-010", None),
+        (LiveTextCommand.TIN, "LEVEL-19", "LEVEL-20", None),
     ]
     results = []
     doc.StartUndoMark()
