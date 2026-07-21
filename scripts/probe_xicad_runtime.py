@@ -37,14 +37,15 @@ def probe(
     output: Path,
     timeout: float,
     load_runtime: bool,
+    expected_count: int,
 ) -> dict[str, object]:
     import win32com.client
 
     key_file = xicad_root / "xiLib" / "xiShortkey.key"
     runtime = xicad_root / "Lisp" / "xi.zelx"
     aliases = _aliases(key_file)
-    if len(aliases) != 357:
-        raise RuntimeError(f"expected 357 aliases, found {len(aliases)} in {key_file}")
+    if len(aliases) != expected_count:
+        raise RuntimeError(f"expected {expected_count} aliases, found {len(aliases)} in {key_file}")
 
     app = win32com.client.GetActiveObject("ZWCAD.Application.2026")
     matches = [doc for doc in app.Documents if doc.Name.casefold() == document_name.casefold()]
@@ -65,7 +66,9 @@ def probe(
     rows: list[dict[str, object]] = []
     for offset in range(0, len(aliases), 20):
         batch = aliases[offset : offset + 20]
-        checks = " ".join(f'(if (fboundp \'C:{alias}) "1" "0")' for alias in batch)
+        checks = " ".join(
+            f'(if (atoms-family 1 (list "C:{alias}")) "1" "0")' for alias in batch
+        )
         marker = f"HSCAD:{offset}:"
         doc.SetVariable("USERS1", f"WAIT:{offset}")
         doc.SendCommand(f'(setvar "USERS1" (strcat "{marker}" {checks}))(princ)\n')
@@ -116,6 +119,7 @@ def main() -> None:
         default=Path("outputs/xicad-runtime-probe.tsv"),
     )
     parser.add_argument("--timeout", type=float, default=30.0)
+    parser.add_argument("--expected-count", type=int, default=357)
     parser.add_argument(
         "--load-runtime",
         action="store_true",
@@ -128,6 +132,7 @@ def main() -> None:
         output=args.output.resolve(),
         timeout=args.timeout,
         load_runtime=args.load_runtime,
+        expected_count=args.expected_count,
     )
     print(json.dumps(result, ensure_ascii=False, indent=2))
 
