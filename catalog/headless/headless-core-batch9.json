@@ -1,0 +1,29 @@
+{
+  "schema_version": "1.0",
+  "batch": 9,
+  "commands": [
+    {"alias":"1","legacy_symbol":"xiSelOff","contract":"selected_layers_off","evidence":["shortcut: 선택끄기","entity layer is normalized from selected handles; current/xref policies are explicit"]},
+    {"alias":"2","legacy_symbol":"xiSelLayerOn","contract":"selected_layers_isolate","evidence":["shortcut: 선택된 레이어만 보이고 나머지 끔","current and xref layer handling is explicit"]},
+    {"alias":"3","legacy_symbol":"xiLayeron","contract":"all_layers_on","evidence":["shortcut: 모든 레이어 켬","thaw and xref inclusion are separate explicit policies"]},
+    {"alias":"DOL","legacy_symbol":"xiDraworderByLayer","contract":"draw_order_by_layer","evidence":["shortcut: 켜순서로 정렬순서 바꾸기","ordered layers and front/back direction are explicit"]},
+    {"alias":"ELY","legacy_symbol":"xiEraseLayer","contract":"erase_layer_contents","evidence":["shortcut: 선택켜 객체 모두 삭제","exact expected handles, protected-layer rejection and optional layer-record deletion"]},
+    {"alias":"EOO","legacy_symbol":"xiEntOffOn","contract":"all_hidden_entities_on","evidence":["shortcut: 꺼진 객체 켬","entity visibility is modeled separately from layer state"]},
+    {"alias":"ESF","legacy_symbol":"xiEntSelOff","contract":"selected_entities_off","evidence":["shortcut: 선택 객체 끔","recovered DCL: same block option"]},
+    {"alias":"ESO","legacy_symbol":"xiEntSelOn","contract":"isolate_selected_entities","evidence":["shortcut: 선택 객체 제외 끔","selected entity visibility remains on; others are off"]},
+    {"alias":"EW","legacy_symbol":"xiSetCLayer","contract":"set_current_layer_from_entity","evidence":["shortcut: 객체 선택하여 현재 값을 변경","unlock/thaw/turn-on policies are explicit"]},
+    {"alias":"LAM","legacy_symbol":"xiLayerMerge","contract":"layer_merge","evidence":["recovered DCL: multiple sources, one target, nested blocks, preserve color/linetype, remove sources"]},
+    {"alias":"LC","legacy_symbol":"xiChangeLayer","contract":"change_selected_entity_layer","evidence":["shortcut: 선택객체 켜 변경","recovered DCL: existing layer or new name/color; color/linetype entity policy explicit"]},
+    {"alias":"LCC","legacy_symbol":"xiColor2Layer","contract":"color_to_layer","evidence":["shortcut: 선택 색상의 객체를 특정 켜로 변경","recovered DCL: choose existing layer or create with color"]}
+  ],
+  "safety": {
+    "mcp_tools_are_read_only_planners": true,
+    "cad_mutation_tools_exposed": false,
+    "dry_run_default": true,
+    "live_mutation_requires_fingerprinted_approval": true,
+    "protected_current_and_xref_layers_rejected": true,
+    "destructive_expected_handle_set_required": true,
+    "ambiguous_legacy_choices_are_explicit_contract_fields": true,
+    "legacy_equivalence_verified_in_cad": false,
+    "production_live": 0
+  }
+}
