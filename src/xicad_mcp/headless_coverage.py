@@ -382,6 +382,18 @@ HEADLESS_CONTRACTS: dict[str, str] = {
     "VLL": "headless-core-batch29b.json",
     "VMO": "headless-core-batch29b.json",
     "VPP": "headless-core-batch29b.json",
+    "VR": "headless-core-batch30a.json",
+    "VSD": "headless-core-batch30a.json",
+    "VU": "headless-core-batch30a.json",
+    "VUU": "headless-core-batch30a.json",
+    "BAK": "headless-core-batch30a.json",
+    "CER": "headless-core-batch30a.json",
+    "IB": "headless-core-batch30b.json",
+    "MSL": "headless-core-batch30b.json",
+    "PB": "headless-core-batch30b.json",
+    "PBD": "headless-core-batch30b.json",
+    "PBM": "headless-core-batch30b.json",
+    "PPP": "headless-core-batch30b.json",
 }
 
 PRODUCTION_USABLE = {"%", "-", "*", "/", "=", "00", "ABC", "BPT", "IL", "LST", "ND", "NP", "NS"}
@@ -559,23 +571,29 @@ CAD_MUTATION_TOOL_EXPOSED = {
     "V",
     "BBL",
     "BSC",
+    "VL",
+    "VLL",
 }
 PLATFORM_EXCLUDED = {"SLD"}
 SEMANTIC_RENAME_ONLY = {"3TP", "LII", "RR"}
 
 NEXT_CAMPAIGN = (
-    "VR",
-    "VSD",
-    "VU",
-    "VUU",
-    "BAK",
-    "CER",
-    "IB",
-    "MSL",
-    "PB",
-    "PBD",
-    "PBM",
-    "PPP",
+    "PUA",
+    "SVS",
+    "A0",
+    "A1",
+    "CV",
+    "ELM",
+    "HT",
+    "KCI",
+    "KCL",
+    "PLM",
+    "PPB",
+    "RD",
+    "RUB",
+    "SAB",
+    "SSL",
+    "WU",
 )
 
 
