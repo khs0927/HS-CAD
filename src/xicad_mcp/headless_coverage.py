@@ -274,6 +274,18 @@ HEADLESS_CONTRACTS: dict[str, str] = {
     "CNL": "headless-core-batch20b.json",
     "CR": "headless-core-batch20b.json",
     "CTL": "headless-core-batch20b.json",
+    "DAC": "headless-core-batch21a.json",
+    "DVC": "headless-core-batch21a.json",
+    "EXL": "headless-core-batch21a.json",
+    "JL": "headless-core-batch21a.json",
+    "MC": "headless-core-batch21a.json",
+    "MLC": "headless-core-batch21a.json",
+    "MM": "headless-core-batch21b.json",
+    "OA": "headless-core-batch21b.json",
+    "OAA": "headless-core-batch21b.json",
+    "OB": "headless-core-batch21b.json",
+    "OE": "headless-core-batch21b.json",
+    "OI": "headless-core-batch21b.json",
 }
 
 PRODUCTION_USABLE = {"%", "-", "*", "/", "=", "00", "ABC", "BPT", "IL", "LST", "ND", "NP", "NS"}
@@ -406,23 +418,29 @@ CAD_MUTATION_TOOL_EXPOSED = {
     "TW",
     "WAL",
     "ZIGZAG",
+    "ARD",
+    "ARP",
+    "ARV",
+    "CNL",
+    "CR",
+    "CTL",
 }
 PLATFORM_EXCLUDED = {"SLD"}
 SEMANTIC_RENAME_ONLY = {"3TP", "LII", "RR"}
 
 NEXT_CAMPAIGN = (
-    "DAC",
-    "DVC",
-    "EXL",
-    "JL",
-    "MC",
-    "MLC",
-    "MM",
-    "OA",
-    "OAA",
-    "OB",
-    "OE",
-    "OI",
+    "OM",
+    "OO",
+    "OT",
+    "RDC",
+    "RM",
+    "SB",
+    "SM",
+    "SS",
+    "WR",
+    "BMT",
+    "DAS",
+    "DBC",
 )
 
 
