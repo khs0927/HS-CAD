@@ -334,6 +334,18 @@ HEADLESS_CONTRACTS: dict[str, str] = {
     "PBB": "headless-core-batch25b.json",
     "PC": "headless-core-batch25b.json",
     "PEC": "headless-core-batch25b.json",
+    "PJ": "headless-core-batch26a.json",
+    "PV": "headless-core-batch26a.json",
+    "PVL": "headless-core-batch26a.json",
+    "PVR": "headless-core-batch26a.json",
+    "PVV": "headless-core-batch26a.json",
+    "PW": "headless-core-batch26a.json",
+    "PWD": "headless-core-batch26b.json",
+    "R3": "headless-core-batch26b.json",
+    "RND": "headless-core-batch26b.json",
+    "RS": "headless-core-batch26b.json",
+    "UFD": "headless-core-batch26b.json",
+    "V": "headless-core-batch26b.json",
 }
 
 PRODUCTION_USABLE = {"%", "-", "*", "/", "=", "00", "ABC", "BPT", "IL", "LST", "ND", "NP", "NS"}
@@ -494,23 +506,31 @@ CAD_MUTATION_TOOL_EXPOSED = {
     "TN",
     "HV",
     "HW",
+    "SL",
+    "QT",
+    "QW",
+    "TIP",
+    "TOO",
+    "PBB",
+    "PC",
+    "PEC",
 }
 PLATFORM_EXCLUDED = {"SLD"}
 SEMANTIC_RENAME_ONLY = {"3TP", "LII", "RR"}
 
 NEXT_CAMPAIGN = (
-    "PJ",
-    "PV",
-    "PVL",
-    "PVR",
-    "PVV",
-    "PW",
-    "PWD",
-    "R3",
-    "RND",
-    "RS",
-    "UFD",
-    "V",
+    "XZ",
+    "ABX",
+    "B2X",
+    "BAD",
+    "BAM",
+    "BBL",
+    "BCC",
+    "BCH",
+    "BCO",
+    "BEX",
+    "BIN",
+    "BLA",
 )
 
 
