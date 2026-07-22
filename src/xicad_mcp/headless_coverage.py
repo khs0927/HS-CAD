@@ -310,6 +310,18 @@ HEADLESS_CONTRACTS: dict[str, str] = {
     "AHM": "headless-core-batch23b.json",
     "BA": "headless-core-batch23b.json",
     "CDB": "headless-core-batch23b.json",
+    "CDN": "headless-core-batch24a.json",
+    "DAR": "headless-core-batch24a.json",
+    "DEE": "headless-core-batch24a.json",
+    "DM": "headless-core-batch24a.json",
+    "FFO": "headless-core-batch24a.json",
+    "HV": "headless-core-batch24a.json",
+    "HW": "headless-core-batch24b.json",
+    "MAC": "headless-core-batch24b.json",
+    "MRT": "headless-core-batch24b.json",
+    "SAR": "headless-core-batch24b.json",
+    "SCA": "headless-core-batch24b.json",
+    "SE": "headless-core-batch24b.json",
 }
 
 PRODUCTION_USABLE = {"%", "-", "*", "/", "=", "00", "ABC", "BPT", "IL", "LST", "ND", "NP", "NS"}
@@ -466,23 +478,25 @@ CAD_MUTATION_TOOL_EXPOSED = {
     "WR",
     "BMT",
     "DBC",
+    "DBS",
+    "TN",
 }
 PLATFORM_EXCLUDED = {"SLD"}
 SEMANTIC_RENAME_ONLY = {"3TP", "LII", "RR"}
 
 NEXT_CAMPAIGN = (
-    "CDN",
-    "DAR",
-    "DEE",
-    "DM",
-    "FFO",
-    "HV",
-    "HW",
-    "MAC",
-    "MRT",
-    "SAR",
-    "SCA",
-    "SE",
+    "SL",
+    "ZAE",
+    "QT",
+    "QW",
+    "TIP",
+    "TOO",
+    "TTT",
+    "TX",
+    "MTLT",
+    "PBB",
+    "PC",
+    "PEC",
 )
 
 

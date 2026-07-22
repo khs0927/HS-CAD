@@ -1,0 +1,153 @@
+{
+  "schema_version": "1.0",
+  "batch": "24A",
+  "contract_kind": "evidence_led_explicit_snapshot_plan",
+  "commands": [
+    {
+      "alias": "CDN",
+      "exact_symbol": "xiCheckDistNorth",
+      "current_evidence": "C:/xicad/xiLib/xiShortkey.key:171 current shortcut",
+      "frozen_evidence": "tests/fixtures/xiShortkey.357.key:158 same symbol; 북측 일조권 검토",
+      "dcl_path": "C:/xicad/DialogBox/ACAD_xi0517_d.03.dcl:3-57 (ZWCAD counterpart has the same keys)",
+      "config_source_data": [
+        "C:/xicad/xiLib/xiConfig.cfg:97-98 /xiCheckDistNorth opaque persisted record",
+        "DCL keys expose command/dialog-first, 9m/10m, layer/current layer, plan/section, limit, plan 1m/1.5m/3m/user spacing, text display, section north angle and symbol scale"
+      ],
+      "readable_source": null,
+      "original_inputs": [
+        "mode, 9m/10m standard, limit distance and result layer recovered from DCL",
+        "plan spacing or section north angle/symbol scale recovered from DCL",
+        "reviewed result graphics are caller-supplied because the compliance calculation is compiled"
+      ],
+      "output_semantics": "validated exact line/polyline/text creation proposals tied to recovered review settings",
+      "evidence_level": "shortcut_plus_dcl_config_explicit_policy_not_legacy_equivalent",
+      "semantic_gaps": [
+        "compiled north-daylight calculation",
+        "building/terrain discovery",
+        "compliance decision and legacy graphic construction"
+      ]
+    },
+    {
+      "alias": "DAR",
+      "exact_symbol": "xiDyArea",
+      "current_evidence": "C:/xicad/xiLib/xiShortkey.key:174 current shortcut",
+      "frozen_evidence": "tests/fixtures/xiShortkey.357.key:161 same symbol; 살아있는 면적 문자 넣기",
+      "dcl_path": null,
+      "config_source_data": [
+        "C:/xicad/AutoSave/__DupPgp.txt:6 records a separate DAR -> DIMARC alias conflict; this contract follows xiCAD's current/frozen xiDyArea shortcut"
+      ],
+      "readable_source": null,
+      "original_inputs": [
+        "source handle and adapter-verified area snapshot",
+        "exact CAD FIELD expression, insertion point, layer, text height and explicit prefix/suffix"
+      ],
+      "output_semantics": "one source-bound live-area FIELD text creation proposal per explicit target",
+      "evidence_level": "shortcut_only_explicit_snapshot_not_legacy_equivalent",
+      "semantic_gaps": [
+        "accepted source entity types",
+        "legacy FIELD expression and number format",
+        "legacy text placement defaults"
+      ]
+    },
+    {
+      "alias": "DEE",
+      "exact_symbol": "xiDrawEnergyElev",
+      "current_evidence": "C:/xicad/xiLib/xiShortkey.key:175 current shortcut",
+      "frozen_evidence": "tests/fixtures/xiShortkey.357.key:162 same symbol; 효율등급 입면적도 그리기",
+      "dcl_path": null,
+      "config_source_data": [
+        "C:/xicad/xiLib/xiConfig.cfg:19-20 /xiDrawEnergyElev has twelve opaque persisted values"
+      ],
+      "readable_source": null,
+      "original_inputs": [
+        "explicit standard reference and source evidence handles",
+        "reviewed exact line/polyline/text geometry; no energy rule is inferred"
+      ],
+      "output_semantics": "validated pass-through elevation graphics with provenance handles and standard reference",
+      "evidence_level": "shortcut_plus_opaque_config_explicit_geometry_not_legacy_equivalent",
+      "semantic_gaps": [
+        "energy-grade standard interpretation",
+        "compiled elevation geometry construction",
+        "opaque config field meanings"
+      ]
+    },
+    {
+      "alias": "DM",
+      "exact_symbol": "xiDistMemory",
+      "current_evidence": "C:/xicad/xiLib/xiShortkey.key:176 current shortcut",
+      "frozen_evidence": "tests/fixtures/xiShortkey.357.key:163 same symbol; 폴리선 길이를 메모리로",
+      "dcl_path": null,
+      "config_source_data": [],
+      "readable_source": null,
+      "original_inputs": [
+        "polyline handle and adapter-measured length snapshot",
+        "explicit memory slot, unit multiplier and decimal places"
+      ],
+      "output_semantics": "deterministic half-up serialized length proposal for an explicitly named memory slot",
+      "evidence_level": "shortcut_only_explicit_snapshot_not_legacy_equivalent",
+      "semantic_gaps": [
+        "legacy memory location",
+        "legacy serialization/precision",
+        "polyline measurement implementation"
+      ]
+    },
+    {
+      "alias": "FFO",
+      "exact_symbol": "xiFindFieldObj",
+      "current_evidence": "C:/xicad/xiLib/xiShortkey.key:177 current shortcut",
+      "frozen_evidence": "tests/fixtures/xiShortkey.357.key:164 same symbol; 필드 연관 객체 표시",
+      "dcl_path": null,
+      "config_source_data": [],
+      "readable_source": null,
+      "original_inputs": [
+        "field owner handle and exact field expression snapshot",
+        "adapter-resolved related handles and existing-object handle snapshot"
+      ],
+      "output_semantics": "found/missing relation findings and a de-duplicated highlight handle list",
+      "evidence_level": "shortcut_only_explicit_snapshot_not_legacy_equivalent",
+      "semantic_gaps": [
+        "FIELD-code parsing",
+        "object-ID resolution",
+        "legacy highlight style and lifetime"
+      ]
+    },
+    {
+      "alias": "HV",
+      "exact_symbol": "xiHVAREA",
+      "current_evidence": "C:/xicad/xiLib/xiShortkey.key:178 exact uppercase symbol",
+      "frozen_evidence": "tests/fixtures/xiShortkey.357.key:165 same symbol; 사각형 가로X세로 길이와 면적 표기",
+      "dcl_path": "C:/xicad/DialogBox/ZWCAD_xi0243_d.04.dcl:3-92 (dialog identifier xiHVArea)",
+      "config_source_data": [
+        "C:/xicad/xiLib/xiConfig.cfg:9-10 /xiHVArea opaque persisted record",
+        "C:/xicad/xiLib/xiConfig.cfg:103-104 /xiHVAREA second opaque persisted record",
+        "DCL keys expose layer, decimal places, rounding/unit popups, formula result, brackets, new text, unit text, lower text, 3x3 alignment and result placement/table choices"
+      ],
+      "readable_source": null,
+      "original_inputs": [
+        "explicit rectangle width/height snapshots",
+        "explicit dimension multiplier, decimal/rounding/unit and formula rendering policy",
+        "insertion point, 3x3 text anchor, layer and text height"
+      ],
+      "output_semantics": "deterministically formatted width x height and optional area labels",
+      "evidence_level": "shortcut_plus_dcl_config_explicit_policy_not_legacy_equivalent",
+      "semantic_gaps": [
+        "rectangle recognition and width/height orientation",
+        "legacy popup value mappings",
+        "legacy unit conversion and table-placement behavior"
+      ]
+    }
+  ],
+  "truthfulness": {
+    "dialog_required": false,
+    "cad_mutation_tool_exposed": false,
+    "legacy_equivalence_verified_in_cad": false,
+    "production_usable": false,
+    "blocked_operations": [
+      "automatic north-daylight calculation or compliance decision",
+      "inventing CAD FIELD expressions or resolving field object IDs",
+      "automatic energy-grade elevation construction",
+      "automatic rectangle/polyline discovery or measurement"
+    ],
+    "note": "Every exact symbol is preserved from current and frozen shortcut evidence. Recovered DCL controls are modeled for CDN and HV; opaque DEE config is not decoded. All compiled discovery/calculation results are explicit reviewed snapshots, never guessed."
+  }
+}

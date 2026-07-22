@@ -1,0 +1,98 @@
+{
+  "schema_version": "1.0",
+  "batch": "24B",
+  "contract_kind": "dialog_free_read_only_execution_plan",
+  "commands": [
+    {
+      "alias": "HW",
+      "exact_symbol": "xiHWArea",
+      "current_evidence": "C:/xicad/xiLib/xiShortkey.key:179 HW;xiHWArea;삼각형 가로X세로 길이와 면적 표기",
+      "frozen_evidence": "tests/fixtures/xiShortkey.357.key:166 HW;xiHWArea;삼각형 가로X세로 길이와 면적 표기",
+      "dcl_path": "C:/xicad/AutoSave/ZWCAD_xi0244_s.01.dcl:3-33",
+      "config_evidence": "C:/xicad/xiLib/xiConfig.cfg:43-44 /xiHWArea and stored Exist_rdo/m/반올림 values",
+      "data_evidence": null,
+      "readable_source": null,
+      "original_inputs": ["Cal_edt formula", "Result_edt result", "Exist_rdo/Point_rdo output mode", "TextSize_edt", "versioned horizontal/vertical triangle snapshot", "exact annotation payload"],
+      "output_semantics": "compute base-times-height-over-two only from supplied lengths and validate a caller-formatted replacement or new annotation",
+      "evidence_level": "dcl_config_and_shortcut_recovered",
+      "gaps": ["triangle acquisition and horizontal/vertical projection rules are compiled", "formula/result formatting is unavailable", "CAD equivalence unverified"]
+    },
+    {
+      "alias": "MAC",
+      "exact_symbol": "xiMakeAreaCenter",
+      "current_evidence": "C:/xicad/xiLib/xiShortkey.key:185 MAC;xiMakeAreaCenter;중심선을 선택하여 면적선 만들기",
+      "frozen_evidence": "tests/fixtures/xiShortkey.357.key:172 MAC;xiMakeAreaCenter;중심선을 선택하여 면적선 만들기",
+      "dcl_path": "C:/xicad/DialogBox/ZWCAD_xi0389_d.04.dcl:2-42",
+      "config_evidence": "C:/xicad/xiLib/xiConfig.cfg:41-42 /xiMakeAreaCenter stored CEN*, Tb1_rdo and precision values",
+      "data_evidence": null,
+      "readable_source": null,
+      "original_inputs": ["FindLay_edt recognition layer", "LayOff_tgl", "settlay0_edt output layer", "AText_tgl", "MakeTb_tgl", "Tb1_rdo/Tb2_rdo", "text layer", "Decim_edt", "Round_pop", "m_rdo/mm_rdo", "versioned centerline snapshots", "exact proposed boundaries/texts"],
+      "output_semantics": "emit only exact caller-supplied closed boundaries and optional labels after validating their source-handle mapping and recovered DCL choices",
+      "evidence_level": "dcl_config_and_shortcut_recovered",
+      "gaps": ["centerline-to-boundary recognition is compiled", "cuLay toggles and table layout internals are unavailable", "boundary vertices and areas are explicit caller results", "CAD equivalence unverified"]
+    },
+    {
+      "alias": "MRT",
+      "exact_symbol": "xiMakeRoomTable",
+      "current_evidence": "C:/xicad/xiLib/xiShortkey.key:186 MRT;xiMakeRoomTable;폴리선 선택하여 실별면적표 만들기",
+      "frozen_evidence": "tests/fixtures/xiShortkey.357.key:173 MRT;xiMakeRoomTable;폴리선 선택하여 실별면적표 만들기",
+      "dcl_path": "C:/xicad/DialogBox/ACAD_xi0518_d.04.dcl:4-89",
+      "config_evidence": null,
+      "data_evidence": null,
+      "readable_source": null,
+      "original_inputs": ["line/text/exclusion layers", "Tbl0_rdo/Tbl1_rdo", "LiveArea_tgl", "title/layer/number/name/area/parameter/minus fields", "Decim_edt/Round_pop/Comma_tgl", "TblSize_edt", "Num_rdo/Name_rdo", "versioned gross/excluded area snapshots", "exact rows"],
+      "output_semantics": "validate one exact room row per source and its reported net area as gross area minus the explicitly supplied excluded area",
+      "evidence_level": "dcl_and_shortcut_recovered",
+      "gaps": ["room recognition and excluded-layer geometry extraction are compiled", "live field linkage and table geometry are compiled", "caller supplies versioned areas and exact rows", "CAD equivalence unverified"]
+    },
+    {
+      "alias": "SAR",
+      "exact_symbol": "xiSiteArea",
+      "current_evidence": "C:/xicad/xiLib/xiShortkey.key:193 SAR;xiSiteArea;부지 구적표 그리기",
+      "frozen_evidence": "tests/fixtures/xiShortkey.357.key:180 SAR;xiSiteArea;부지 구적표 그리기",
+      "dcl_path": "C:/xicad/DialogBox/ZWCAD_xi0170_d.02.dcl:2-79",
+      "config_evidence": "C:/xicad/xiLib/xiConfig.cfg:151-152 /xiSiteArea with stored Rect_rdo, ordering, tolerance, layers, precision values",
+      "data_evidence": null,
+      "readable_source": null,
+      "original_inputs": ["Tri_rdo/Rect_rdo/Rect1_rdo", "start number/title/unit/decimal", "ordering point/direction/tolerance", "text/circle/perpendicular sizes and color", "geometry/table/text layers", "rectangle tolerance", "DeletePolyFlag/PyongFlag/CommaFlag", "versioned components", "exact calculation rows"],
+      "output_semantics": "validate exact consecutively numbered calculation rows against versioned component-area evidence while preserving recovered survey mode and formatting choices",
+      "evidence_level": "dcl_config_and_shortcut_recovered",
+      "gaps": ["triangulation/rectangle recognition and ordering geometry are compiled", "table geometry and calculation-text formatting are compiled", "caller supplies component areas and exact rows", "CAD equivalence unverified"]
+    },
+    {
+      "alias": "SCA",
+      "exact_symbol": "xiScaleArea",
+      "current_evidence": "C:/xicad/xiLib/xiShortkey.key:194 SCA;xiScaleArea;면적 확대하기",
+      "frozen_evidence": "tests/fixtures/xiShortkey.357.key:181 SCA;xiScaleArea;면적 확대하기",
+      "dcl_path": null,
+      "config_evidence": null,
+      "data_evidence": null,
+      "readable_source": null,
+      "original_inputs": ["versioned source-area snapshots", "caller-owned approved operation identifier", "one exact proposed result geometry per source"],
+      "output_semantics": "carry an explicit one-to-one proposed result set without inferring what legacy area enlargement means",
+      "evidence_level": "shortcut_only_explicit_result_not_legacy_equivalent",
+      "gaps": ["no command-specific DCL/config/data/readable source was found", "scale meaning, anchor, source retention, and geometry algorithm are compiled", "no legacy equivalence claim", "CAD equivalence unverified"]
+    },
+    {
+      "alias": "SE",
+      "exact_symbol": "xiSelectSameEntities",
+      "current_evidence": "C:/xicad/xiLib/xiShortkey.key:195 SE;xiSelectSameEntities;객체 특성으로 동일 객체 선택하기",
+      "frozen_evidence": "tests/fixtures/xiShortkey.357.key:182 SE;xiSelectSameEntities;객체 특성으로 동일 객체 선택하기",
+      "dcl_path": "C:/xicad/DialogBox/ZWCAD_xi0219_d.08.dcl:8-491",
+      "config_evidence": "C:/xicad/xiLib/xiConfig.cfg:117-118 /xiSelectSameEntities with stored tolerances, scope, operation, ordering, and text settings",
+      "data_evidence": null,
+      "readable_source": null,
+      "original_inputs": ["reference entity snapshot", "versioned candidate snapshots", "optional selection-area handles", "entity/layer name/color/linetype", "text exact/contains/style/height", "block/dimension/hatch", "length/area/angle/radius/thickness/elevation tolerances"],
+      "output_semantics": "return candidate handles that deterministically match every explicitly enabled recovered criterion within explicit numeric tolerances",
+      "evidence_level": "dcl_config_and_shortcut_recovered",
+      "gaps": ["forced overrides, field/mirror/scale matching, nested blocks, multi-file operations, and default persistence remain compiled", "planner implements read-only matching and not DCL exchange/delete/change side operations", "CAD equivalence unverified"]
+    }
+  ],
+  "truthfulness": {
+    "dialog_required": false,
+    "cad_mutation_tool_exposed": false,
+    "legacy_equivalence_verified_in_cad": false,
+    "production_usable": false,
+    "note": "Recovered DCL choices are represented explicitly. Every boundary, room/site area, table row, annotation, and scaled geometry dependent on compiled CAD recognition remains versioned caller evidence or an exact proposed result. SCA is deliberately not presented as legacy-equivalent."
+  }
+}

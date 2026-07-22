@@ -13,16 +13,16 @@ def report():
     return build_headless_coverage(INVENTORY, {row["legacy_alias"] for row in data["wrappers"]})
 
 
-def test_truthful_357_summary_after_batch23():
+def test_truthful_357_summary_after_batch24():
     summary = report().summary
     assert summary.total_commands == 357
-    assert summary.headless_contract_implemented == 246
+    assert summary.headless_contract_implemented == 258
     assert summary.production_usable == 13
     assert summary.platform_excluded == 1
     assert summary.wrapper_only == 8
     assert summary.semantic_rename_only == 2
-    assert summary.legacy_binary_only == 100
-    assert summary.headless_contract_percent == 68.91
+    assert summary.legacy_binary_only == 88
+    assert summary.headless_contract_percent == 72.27
     assert summary.production_usable_percent == 3.64
 
 
@@ -213,6 +213,8 @@ def test_verified_live_mutation_tools_are_reported_truthfully():
         "WR",
         "BMT",
         "DBC",
+        "DBS",
+        "TN",
     ):
         assert rows[alias].dialog_free
         assert rows[alias].cad_mutation_tool_exposed
@@ -227,8 +229,8 @@ def test_wrapper_is_not_reported_as_headless():
 
 def test_direct_binary_command_is_not_reported_as_headless():
     rows = {row.alias: row for row in report().commands}
-    assert rows["CDN"].state is HeadlessState.LEGACY_BINARY_ONLY
-    assert not rows["CDN"].dialog_free
+    assert rows["SL"].state is HeadlessState.LEGACY_BINARY_ONLY
+    assert not rows["SL"].dialog_free
 
 
 def test_sld_remains_platform_excluded():
@@ -465,7 +467,7 @@ def test_batch23a_is_headless_and_dialog_free():
         assert rows[alias].state is HeadlessState.IMPLEMENTED
         assert rows[alias].dialog_free
         assert not rows[alias].production_usable
-        assert not rows[alias].cad_mutation_tool_exposed
+        assert rows[alias].cad_mutation_tool_exposed is (alias in {"DBS", "TN"})
         assert rows[alias].contract_source == "headless-core-batch23a.json"
 
 
@@ -477,3 +479,23 @@ def test_batch23b_is_headless_and_dialog_free():
         assert not rows[alias].production_usable
         assert not rows[alias].cad_mutation_tool_exposed
         assert rows[alias].contract_source == "headless-core-batch23b.json"
+
+
+def test_batch24a_is_headless_and_dialog_free():
+    rows = {row.alias: row for row in report().commands}
+    for alias in ("CDN", "DAR", "DEE", "DM", "FFO", "HV"):
+        assert rows[alias].state is HeadlessState.IMPLEMENTED
+        assert rows[alias].dialog_free
+        assert not rows[alias].production_usable
+        assert not rows[alias].cad_mutation_tool_exposed
+        assert rows[alias].contract_source == "headless-core-batch24a.json"
+
+
+def test_batch24b_is_headless_and_dialog_free():
+    rows = {row.alias: row for row in report().commands}
+    for alias in ("HW", "MAC", "MRT", "SAR", "SCA", "SE"):
+        assert rows[alias].state is HeadlessState.IMPLEMENTED
+        assert rows[alias].dialog_free
+        assert not rows[alias].production_usable
+        assert not rows[alias].cad_mutation_tool_exposed
+        assert rows[alias].contract_source == "headless-core-batch24b.json"
