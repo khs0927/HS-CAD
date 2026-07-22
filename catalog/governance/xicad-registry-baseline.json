@@ -1,0 +1,22 @@
+{
+  "schema_version": "1.0",
+  "release_scope": "xicad-legacy-357",
+  "source_head": "599f41c727b98ce1b9b348546c5bcd956019036c",
+  "headless_contracts": 357,
+  "cad_mutation_aliases": 190,
+  "cad_free_production_usable": 13,
+  "mcp_tools": 883,
+  "write_or_destructive_tools": 192,
+  "required_tools": [
+    "xicad_headless_coverage_summary",
+    "xicad_execute_live_ct",
+    "xicad_execute_live_dts",
+    "xicad_execute_live_flt",
+    "xicad_execute_live_sol",
+    "xicad_execute_live_tb",
+    "xicad_execute_live_tbt",
+    "xicad_execute_live_rr"
+  ],
+  "real_cad_smoke_required": false,
+  "status_note": "Real ZWCAD integration remains opt-in and deferred by user instruction."
+}
