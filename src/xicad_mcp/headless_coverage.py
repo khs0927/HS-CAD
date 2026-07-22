@@ -262,6 +262,18 @@ HEADLESS_CONTRACTS: dict[str, str] = {
     "CB": "headless-core-batch19b.json",
     "CUT": "headless-core-batch19b.json",
     "DTP": "headless-core-batch19b.json",
+    "FE": "headless-core-batch20a.json",
+    "FM": "headless-core-batch20a.json",
+    "FR": "headless-core-batch20a.json",
+    "FT": "headless-core-batch20a.json",
+    "FX": "headless-core-batch20a.json",
+    "XT": "headless-core-batch20a.json",
+    "ARD": "headless-core-batch20b.json",
+    "ARP": "headless-core-batch20b.json",
+    "ARV": "headless-core-batch20b.json",
+    "CNL": "headless-core-batch20b.json",
+    "CR": "headless-core-batch20b.json",
+    "CTL": "headless-core-batch20b.json",
 }
 
 PRODUCTION_USABLE = {"%", "-", "*", "/", "=", "00", "ABC", "BPT", "IL", "LST", "ND", "NP", "NS"}
@@ -280,6 +292,7 @@ CAD_MUTATION_TOOL_EXPOSED = {
     "BLI",
     "BOO",
     "CBJ",
+    "CB",
     "CALENDAR",
     "CEP",
     "CLI",
@@ -398,18 +411,18 @@ PLATFORM_EXCLUDED = {"SLD"}
 SEMANTIC_RENAME_ONLY = {"3TP", "LII", "RR"}
 
 NEXT_CAMPAIGN = (
-    "FE",
-    "FM",
-    "FR",
-    "FT",
-    "FX",
-    "XT",
-    "ARD",
-    "ARP",
-    "ARV",
-    "CNL",
-    "CR",
-    "CTL",
+    "DAC",
+    "DVC",
+    "EXL",
+    "JL",
+    "MC",
+    "MLC",
+    "MM",
+    "OA",
+    "OAA",
+    "OB",
+    "OE",
+    "OI",
 )
 
 

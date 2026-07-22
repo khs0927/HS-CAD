@@ -59,22 +59,22 @@ BAT,xiBreakAndText,선자르고 문자넣기,Cut,headless_contract_implemented,h
 BB,xiBreakToCurrent,자르고 현재켜로 넣기,Cut,headless_contract_implemented,headless-core-batch19b.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
 BBB,xiBreakMulti,다중 끊기,Cut,legacy_wrapper_only,,False,False,False,False,capture prompts/DCL decisions and replace the legacy invocation with a structured headless core
 BRO,xiBreakO,객체위의 객체 끊기,Cut,headless_contract_implemented,headless-core-batch19b.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
-CB,xiCircleBreak,원 절단하기,Cut,headless_contract_implemented,headless-core-batch19b.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+CB,xiCircleBreak,원 절단하기,Cut,headless_contract_implemented,headless-core-batch19b.json,True,True,False,False,legacy equivalence verification and ZWCAD 2025 smoke
 CUT,xiCutter,닫힌 객체 안의 모든 객체 삭제,Cut,headless_contract_implemented,headless-core-batch19b.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
 DTP,xiDivideToPoly,곡선을 직선으로 분할,Cut,headless_contract_implemented,headless-core-batch19b.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
-FE,xiFilletExtend,길이 남기고 모따기,Cut,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+FE,xiFilletExtend,길이 남기고 모따기,Cut,headless_contract_implemented,headless-core-batch20a.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
 FF,xiFilletL,L 형태 벽체 정리,Cut,legacy_wrapper_only,,False,False,False,False,capture prompts/DCL decisions and replace the legacy invocation with a structured headless core
-FM,xiFilletMulti,여러 모서리 정리,Cut,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
-FR,xiFilletRadious,곡면 모서리 벽체 정리,Cut,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
-FT,xiFilletT,T 형태 벽체 정리,Cut,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
-FX,xiFilletX,X 형태 벽체 정리,Cut,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
-XT,xiXT,끊기와 연장을 한번에..,Cut,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
-ARD,xiDynamicArr,입체 동적 배열,Multi,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
-ARP,xiArrP,원형 동적 배열,Multi,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
-ARV,xiArrV,직선 동적 배열,Multi,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
-CNL,xiCopyToNewLayer,새 켜로 복사,Multi,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
-CR,xiCopyRotate,복사 후 회전,Multi,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
-CTL,xiCopyToCLayer,현재켜로 복사,Multi,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+FM,xiFilletMulti,여러 모서리 정리,Cut,headless_contract_implemented,headless-core-batch20a.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+FR,xiFilletRadious,곡면 모서리 벽체 정리,Cut,headless_contract_implemented,headless-core-batch20a.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+FT,xiFilletT,T 형태 벽체 정리,Cut,headless_contract_implemented,headless-core-batch20a.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+FX,xiFilletX,X 형태 벽체 정리,Cut,headless_contract_implemented,headless-core-batch20a.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+XT,xiXT,끊기와 연장을 한번에..,Cut,headless_contract_implemented,headless-core-batch20a.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+ARD,xiDynamicArr,입체 동적 배열,Multi,headless_contract_implemented,headless-core-batch20b.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+ARP,xiArrP,원형 동적 배열,Multi,headless_contract_implemented,headless-core-batch20b.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+ARV,xiArrV,직선 동적 배열,Multi,headless_contract_implemented,headless-core-batch20b.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+CNL,xiCopyToNewLayer,새 켜로 복사,Multi,headless_contract_implemented,headless-core-batch20b.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+CR,xiCopyRotate,복사 후 회전,Multi,headless_contract_implemented,headless-core-batch20b.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+CTL,xiCopyToCLayer,현재켜로 복사,Multi,headless_contract_implemented,headless-core-batch20b.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
 DAC,xiDivideArcCopy,각도 등분 기록,Multi,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
 DVC,xiDivideCopy,거리 등분 복사,Multi,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
 EXL,xiExtendLine,선 길이 조정,Multi,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
