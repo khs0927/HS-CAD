@@ -1,8 +1,15 @@
 from __future__ import annotations
 
+import asyncio
+import json
 from dataclasses import dataclass
+from pathlib import Path
+from typing import Any
 
 from scripts.validate_xicad_registry_truth import snapshot_tools, validate_truth
+from xicad_mcp.server import create_server
+
+ROOT = Path(__file__).resolve().parents[1]
 
 
 @dataclass
@@ -16,7 +23,7 @@ class _Tool:
     annotations: _Annotations | None
 
 
-def _coverage() -> dict[str, object]:
+def _coverage() -> dict[str, Any]:
     commands = [
         {
             "alias": "CT",
@@ -41,7 +48,7 @@ def _coverage() -> dict[str, object]:
     }
 
 
-def _baseline() -> dict[str, object]:
+def _baseline() -> dict[str, Any]:
     return {
         "headless_contracts": 2,
         "cad_mutation_aliases": 1,
@@ -75,7 +82,7 @@ def test_validate_truth_accepts_derived_counts_and_unique_tools() -> None:
 
 def test_validate_truth_reports_duplicate_missing_and_stale_claims() -> None:
     coverage = _coverage()
-    coverage["summary"]["production_usable"] = 0  # type: ignore[index]
+    coverage["summary"]["production_usable"] = 0
     registry = snapshot_tools(
         [
             _Tool("duplicate", _Annotations(readOnlyHint=False)),
@@ -102,3 +109,17 @@ def test_validate_truth_reports_registry_count_drift() -> None:
 
     assert not report.valid
     assert "mcp_tools mismatch: observed 1, baseline 2" in report.errors
+
+
+def test_repository_registry_matches_checked_in_truth_baseline() -> None:
+    baseline = json.loads(
+        (ROOT / "catalog/governance/xicad-registry-baseline.json").read_text(encoding="utf-8")
+    )
+    coverage = json.loads(
+        (ROOT / "catalog/headless/headless-coverage-357.json").read_text(encoding="utf-8")
+    )
+    registry = snapshot_tools(asyncio.run(create_server(ROOT).list_tools()))
+
+    report = validate_truth(baseline, coverage, registry)
+
+    assert report.valid, "\n".join(report.errors)
