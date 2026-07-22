@@ -1,10 +1,14 @@
 from __future__ import annotations
 
-from scripts.build_xicad_live_gap_backlog import build_backlog, classify
+import json
+from pathlib import Path
+from typing import Any
+
+from scripts.build_xicad_live_gap_backlog import build_backlog, classify, load_help_index
 
 
-def _command(alias: str, **updates: object) -> dict[str, object]:
-    command: dict[str, object] = {
+def _command(alias: str, **updates: object) -> dict[str, Any]:
+    command: dict[str, Any] = {
         "alias": alias,
         "symbol": f"xi{alias}",
         "description": "일반 변경",
@@ -49,3 +53,24 @@ def test_build_backlog_counts_every_non_live_command_once() -> None:
     ce = next(item for item in backlog["commands"] if item["alias"] == "CE")
     assert ce["official_help_url"] == "https://izzarder.com/201"
     assert all(item["manual_review_required"] for item in backlog["commands"])
+
+
+def test_load_help_index_reads_enriched_command_records(tmp_path: Path) -> None:
+    path = tmp_path / "help.json"
+    path.write_text(
+        json.dumps(
+            {
+                "commands": [
+                    {
+                        "alias": "D1",
+                        "url": "https://izzarder.com/171",
+                        "status": "planner_incomplete",
+                    },
+                    {"alias": "NOURL", "status": "unverified"},
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    assert load_help_index(path) == {"D1": "https://izzarder.com/171"}
