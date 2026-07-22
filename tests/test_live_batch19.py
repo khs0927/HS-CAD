@@ -13,6 +13,8 @@ from xicad_mcp.headless_core_batch19a import (
     TableKind,
     TableMethod,
     TableRequest,
+    TableTextCell,
+    TableTextRequest,
 )
 from xicad_mcp.headless_core_batch19b import (
     BatPlacementMode,
@@ -34,7 +36,7 @@ class Layer:
 
 class Layers:
     def __init__(self) -> None:
-        self.items = {name: Layer(name) for name in ("SRC", "ARC")}
+        self.items = {name: Layer(name) for name in ("SRC", "ARC", "T")}
 
     def Item(self, name: str) -> Layer:
         return self.items[name]
@@ -62,6 +64,45 @@ class Arc:
         self.StartAngle, self.EndAngle, self.Layer = start, end, "0"
 
 
+class Line:
+    ObjectName = "AcDbLine"
+
+    def __init__(self, handle: str, start: Any, end: Any) -> None:
+        self.Handle, self.StartPoint, self.EndPoint, self.Layer = handle, start, end, "0"
+
+
+class Table:
+    ObjectName = "AcDbTable"
+
+    def __init__(self, doc: Doc) -> None:
+        self.doc, self.Handle, self.Rows, self.Columns, self.Layer = doc, "T1", 2, 2, "T"
+        self.values = {(row, column): "" for row in range(2) for column in range(2)}
+
+    def GetText(self, row: int, column: int) -> str:
+        return self.values[(row, column)]
+
+    def SetText(self, row: int, column: int, value: str) -> None:
+        self.values[(row, column)] = value
+
+
+class Hatch:
+    ObjectName, PatternName = "AcDbHatch", "SOLID"
+
+    def __init__(self, doc: Doc, handle: str) -> None:
+        self.doc, self.Handle, self.Layer, self.Color = doc, handle, "0", 256
+        self.boundaries: tuple[Any, ...] = ()
+        self.evaluated = False
+
+    def AppendOuterLoop(self, boundaries: tuple[Any, ...]) -> None:
+        self.boundaries = boundaries
+
+    def Evaluate(self) -> None:
+        self.evaluated = True
+
+    def Delete(self) -> None:
+        self.doc.entities.remove(self)
+
+
 class Space:
     def __init__(self, doc: Doc) -> None:
         self.doc = doc
@@ -70,6 +111,17 @@ class Space:
         arc = Arc("A1", center, radius, start, end)
         self.doc.entities.append(arc)
         return arc
+
+    def AddLine(self, start: Any, end: Any) -> Line:
+        line = Line(f"L{len(self.doc.entities)}", start, end)
+        self.doc.entities.append(line)
+        return line
+
+    def AddHatch(self, pattern_type: int, pattern_name: str, associative: bool) -> Hatch:
+        assert pattern_type == 0 and pattern_name == "SOLID" and associative in {True, False}
+        hatch = Hatch(self.doc, f"H{len(self.doc.entities)}")
+        self.doc.entities.append(hatch)
+        return hatch
 
 
 class Doc:
@@ -95,6 +147,7 @@ def doc(monkeypatch: pytest.MonkeyPatch) -> Doc:
     monkeypatch.setattr(live, "_drawing", lambda _name: drawing)
     monkeypatch.setattr(live, "_entities", lambda _doc: {item.Handle.casefold(): item for item in drawing.entities})
     monkeypatch.setattr(live, "_variant", lambda point: (point.x, point.y, point.z))
+    monkeypatch.setattr(live, "_dispatch_variant", lambda entities: entities)
     return drawing
 
 
@@ -214,7 +267,90 @@ def test_break_text_and_sampled_curve_are_blocked_for_missing_geometry_provenanc
     assert not bat["live_executable"] and not dtp["live_executable"]
 
 
-def test_all_requested_aliases_have_explicit_decision_and_only_cb_executes() -> None:
+def test_tb_general_table_preview_and_execute_creates_exact_grid(doc: Doc) -> None:
+    request = TableRequest(
+        document_id="Drawing1.dwg",
+        insertion_point=Point3D(x=10, y=20),
+        kind=TableKind.GENERAL,
+        method=TableMethod.EXPLICIT_SPACING,
+        row_count=2,
+        column_count=2,
+        row_heights=(3, 4),
+        column_widths=(5, 6),
+        approximate_division=False,
+        layer="T",
+    )
+    preview = live.preview_live_tb(request)
+    wrapped = live.LiveTbExecuteRequest(
+        request=request,
+        expected_target_layer=live.LiveLayerEvidence.model_validate(preview["expected_target_layer"]),
+        approval_fingerprint=preview["approval_fingerprint"],
+    )
+    result = live.execute_live_tb(wrapped)
+    lines = [entity for entity in doc.entities if isinstance(entity, Line)]
+    assert result.command_alias == "TB" and result.postcondition_verified
+    assert len(lines) == 6
+    assert lines[0].StartPoint == (10.0, 20.0, 0.0)
+    assert lines[0].EndPoint == (10.0, 13.0, 0.0)
+    assert lines[-1].StartPoint == (10.0, 13.0, 0.0)
+    assert lines[-1].EndPoint == (21.0, 13.0, 0.0)
+
+
+def test_sol_preview_execute_creates_verified_hatch(doc: Doc) -> None:
+    request = live.SolidHatchRequest(
+        document_id="Drawing1.dwg",
+        boundary_handles=("C1",),
+        layer="T",
+        color=3,
+        associative=True,
+        island_detection="normal",
+    )
+    preview = live.preview_live_sol(request)
+    wrapped = live.LiveSolExecuteRequest(
+        request=request,
+        expected_boundaries=tuple(
+            live.LiveBoundaryEvidence.model_validate(item) for item in preview["expected_boundaries"]
+        ),
+        expected_target_layer=live.LiveLayerEvidence.model_validate(preview["expected_target_layer"]),
+        approval_fingerprint=preview["approval_fingerprint"],
+    )
+    result = live.execute_live_sol(wrapped)
+    hatch = next(entity for entity in doc.entities if isinstance(entity, Hatch))
+    assert result.command_alias == "SOL" and result.created_handles == (hatch.Handle,)
+    assert hatch.Layer == "T" and hatch.Color == 3 and hatch.boundaries == (doc.entities[0],)
+    assert hatch.evaluated
+
+
+def test_tbt_preview_execute_stale_guard_and_explicit_cells(doc: Doc) -> None:
+    table = Table(doc)
+    doc.entities.append(table)
+    request = TableTextRequest(
+        document_id="Drawing1.dwg",
+        table_handle="T1",
+        cells=(TableTextCell(row=0, column=1, text="ROOM"),),
+        overwrite_nonempty=False,
+    )
+    preview = live.preview_live_tbt(request)
+    wrapped = live.LiveTbtExecuteRequest(
+        request=request,
+        expected_table=live.LiveTableEvidence.model_validate(preview["expected_table"]),
+        approval_fingerprint=preview["approval_fingerprint"],
+    )
+    result = live.execute_live_tbt(wrapped)
+    assert result.command_alias == "TBT" and table.GetText(0, 1) == "ROOM"
+
+    stale_preview = live.preview_live_tbt(request.model_copy(update={"overwrite_nonempty": True}))
+    stale = live.LiveTbtExecuteRequest(
+        request=request.model_copy(update={"overwrite_nonempty": True}),
+        expected_table=live.LiveTableEvidence.model_validate(stale_preview["expected_table"]),
+        approval_fingerprint=stale_preview["approval_fingerprint"],
+    )
+    table.SetText(0, 1, "CHANGED")
+    with pytest.raises(ValueError, match="no longer matches"):
+        live.execute_live_tbt(stale)
+
+
+def test_all_requested_aliases_have_explicit_decision_and_sol_tb_tbt_cb_execute() -> None:
     assert set(live.BLOCKED) == {"HM", "HPM", "RDS", "SOL", "TB", "TBT", "BAT", "BB", "BRO", "CUT", "DTP"}
 
     class MCP:
@@ -228,5 +364,10 @@ def test_all_requested_aliases_have_explicit_decision_and_only_cb_executes() -> 
 
     mcp = MCP()
     live.register_live_batch19_tools(mcp)  # type: ignore[arg-type]
-    assert len(mcp.names) == 13
-    assert [name for name in mcp.names if "execute" in name] == ["xicad_execute_live_cb"]
+    assert len(mcp.names) == 16
+    assert [name for name in mcp.names if "execute" in name] == [
+        "xicad_execute_live_sol",
+        "xicad_execute_live_tb",
+        "xicad_execute_live_tbt",
+        "xicad_execute_live_cb",
+    ]

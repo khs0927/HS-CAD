@@ -56,6 +56,7 @@ from .live_annotations import register_live_annotation_tools
 from .live_batch11a import register_live_batch11a_tools
 from .live_batch13a import register_live_batch13a_tools
 from .live_batch14a import register_live_batch14a_tools
+from .live_batch15a import register_live_batch15a_tools
 from .live_batch15b import register_live_batch15b_tools
 from .live_batch16a import register_live_batch16a_tools
 from .live_batch16b import register_live_batch16b_tools
@@ -75,6 +76,7 @@ from .live_batch28 import register_live_batch28_tools
 from .live_batch29 import register_live_batch29_tools
 from .live_batch30 import register_live_batch30_tools
 from .live_batch31 import register_live_batch31_tools
+from .live_batch32 import register_live_batch32_tools
 from .live_batch_remaining import register_live_remaining_tools
 from .live_dimension_batch11b import register_live_dimension_batch11b_tools
 from .live_dimension_batch12a import register_live_dimension_batch12a_tools
@@ -169,6 +171,7 @@ def create_server(root: str | Path | None = None) -> FastMCP:
     register_live_batch11a_tools(mcp)
     register_live_batch13a_tools(mcp)
     register_live_batch14a_tools(mcp)
+    register_live_batch15a_tools(mcp)
     register_live_batch15b_tools(mcp)
     register_live_batch16a_tools(mcp)
     register_live_batch16b_tools(mcp)
@@ -188,6 +191,7 @@ def create_server(root: str | Path | None = None) -> FastMCP:
     register_live_batch29_tools(mcp)
     register_live_batch30_tools(mcp)
     register_live_batch31_tools(mcp)
+    register_live_batch32_tools(mcp)
     register_live_dimension_batch11b_tools(mcp)
     register_live_dimension_batch12a_tools(mcp)
     register_live_dimension_batch12b_tools(mcp)

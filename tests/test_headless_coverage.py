@@ -376,7 +376,7 @@ def test_batch15_is_headless_and_dialog_free():
         assert rows[alias].state is HeadlessState.IMPLEMENTED
         assert rows[alias].dialog_free
         assert not rows[alias].production_usable
-        assert rows[alias].cad_mutation_tool_exposed is (alias in {"STT", "BE"})
+        assert rows[alias].cad_mutation_tool_exposed is (alias in {"CT", "DTS", "FLT", "STT", "BE"})
         assert rows[alias].contract_source == "headless-core-batch15.json"
 
 
@@ -418,7 +418,7 @@ def test_batch19a_is_headless_and_dialog_free():
         assert rows[alias].state is HeadlessState.IMPLEMENTED
         assert rows[alias].dialog_free
         assert not rows[alias].production_usable
-        assert not rows[alias].cad_mutation_tool_exposed
+        assert rows[alias].cad_mutation_tool_exposed is (alias in {"SOL", "TB", "TBT"})
         assert rows[alias].contract_source == "headless-core-batch19a.json"
 
 
@@ -679,5 +679,5 @@ def test_batch32_closes_wrapper_rename_and_platform_contracts():
         assert rows[alias].state is HeadlessState.IMPLEMENTED
         assert rows[alias].dialog_free
         assert not rows[alias].production_usable
-        assert not rows[alias].cad_mutation_tool_exposed
+        assert rows[alias].cad_mutation_tool_exposed is (alias == "RR")
         assert rows[alias].contract_source == "headless-core-batch32.json"
