@@ -17,6 +17,7 @@ from .headless_core_batch16 import (
     plan_escalator_elevation,
     plan_exploded_view,
 )
+from .live_door_d1 import execute_live_d1, preview_live_d1
 
 
 class LiveLayerEvidence(BaseModel):
@@ -145,7 +146,13 @@ def preview_live_eed(request: EscalatorElevationRequest) -> dict[str, Any]:
     }
 
 
-def _execute_lines(alias: str, request: Any, layer: LiveLayerEvidence, fingerprint: str, lines: Any) -> LiveBatch16bResult:
+def _execute_lines(
+    alias: str,
+    request: Any,
+    layer: LiveLayerEvidence,
+    fingerprint: str,
+    lines: Any,
+) -> LiveBatch16bResult:
     if fingerprint != _fingerprint(_payload(alias, request, layer)):
         raise ValueError("approval fingerprint does not match the exact drawing request")
     doc = _drawing(request.document_id)
@@ -224,7 +231,8 @@ def register_live_batch16b_tools(mcp: FastMCP) -> None:
     )
     registrations = (
         ("xicad_preview_live_cw", preview_live_cw, preview),
-        ("xicad_preview_live_d1", preview_live_door, preview),
+        ("xicad_preview_live_d1", preview_live_d1, preview),
+        ("xicad_execute_live_d1", execute_live_d1, execute),
         ("xicad_preview_live_d2", preview_live_door, preview),
         ("xicad_preview_live_d3", preview_live_door, preview),
         ("xicad_preview_live_dev", preview_live_dev, preview),
