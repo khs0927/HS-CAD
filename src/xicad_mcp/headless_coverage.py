@@ -286,6 +286,18 @@ HEADLESS_CONTRACTS: dict[str, str] = {
     "OB": "headless-core-batch21b.json",
     "OE": "headless-core-batch21b.json",
     "OI": "headless-core-batch21b.json",
+    "OM": "headless-core-batch22a.json",
+    "OO": "headless-core-batch22a.json",
+    "OT": "headless-core-batch22a.json",
+    "RDC": "headless-core-batch22a.json",
+    "RM": "headless-core-batch22a.json",
+    "SB": "headless-core-batch22a.json",
+    "SM": "headless-core-batch22b.json",
+    "SS": "headless-core-batch22b.json",
+    "WR": "headless-core-batch22b.json",
+    "BMT": "headless-core-batch22b.json",
+    "DAS": "headless-core-batch22b.json",
+    "DBC": "headless-core-batch22b.json",
 }
 
 PRODUCTION_USABLE = {"%", "-", "*", "/", "=", "00", "ABC", "BPT", "IL", "LST", "ND", "NP", "NS"}
@@ -424,23 +436,32 @@ CAD_MUTATION_TOOL_EXPOSED = {
     "CNL",
     "CR",
     "CTL",
+    "DAC",
+    "DVC",
+    "EXL",
+    "MC",
+    "OA",
+    "OAA",
+    "OB",
+    "OE",
+    "OI",
 }
 PLATFORM_EXCLUDED = {"SLD"}
 SEMANTIC_RENAME_ONLY = {"3TP", "LII", "RR"}
 
 NEXT_CAMPAIGN = (
-    "OM",
-    "OO",
-    "OT",
-    "RDC",
-    "RM",
-    "SB",
-    "SM",
-    "SS",
-    "WR",
-    "BMT",
-    "DAS",
-    "DBC",
+    "DBS",
+    "DFS",
+    "DSB",
+    "MDL",
+    "PBS",
+    "TN",
+    "TOB",
+    "ZR",
+    "AE",
+    "AHM",
+    "BA",
+    "CDB",
 )
 
 
