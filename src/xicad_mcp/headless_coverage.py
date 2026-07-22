@@ -370,6 +370,18 @@ HEADLESS_CONTRACTS: dict[str, str] = {
     "MFX": "headless-core-batch28b.json",
     "MX": "headless-core-batch28b.json",
     "QWB": "headless-core-batch28b.json",
+    "RBP": "headless-core-batch29a.json",
+    "WSL": "headless-core-batch29a.json",
+    "XCX": "headless-core-batch29a.json",
+    "XRC": "headless-core-batch29a.json",
+    "XRR": "headless-core-batch29a.json",
+    "P2M": "headless-core-batch29a.json",
+    "VA": "headless-core-batch29b.json",
+    "VGL": "headless-core-batch29b.json",
+    "VL": "headless-core-batch29b.json",
+    "VLL": "headless-core-batch29b.json",
+    "VMO": "headless-core-batch29b.json",
+    "VPP": "headless-core-batch29b.json",
 }
 
 PRODUCTION_USABLE = {"%", "-", "*", "/", "=", "00", "ABC", "BPT", "IL", "LST", "ND", "NP", "NS"}
@@ -546,23 +558,24 @@ CAD_MUTATION_TOOL_EXPOSED = {
     "RS",
     "V",
     "BBL",
+    "BSC",
 }
 PLATFORM_EXCLUDED = {"SLD"}
 SEMANTIC_RENAME_ONLY = {"3TP", "LII", "RR"}
 
 NEXT_CAMPAIGN = (
-    "RBP",
-    "WSL",
-    "XCX",
-    "XRC",
-    "XRR",
-    "P2M",
-    "VA",
-    "VGL",
-    "VL",
-    "VLL",
-    "VMO",
-    "VPP",
+    "VR",
+    "VSD",
+    "VU",
+    "VUU",
+    "BAK",
+    "CER",
+    "IB",
+    "MSL",
+    "PB",
+    "PBD",
+    "PBM",
+    "PPP",
 )
 
 
