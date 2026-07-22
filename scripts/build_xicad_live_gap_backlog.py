@@ -113,7 +113,10 @@ def classify(command: dict[str, Any]) -> tuple[str, str]:
     )
 
 
-def build_backlog(coverage: dict[str, Any], help_index: dict[str, str] | None = None) -> dict[str, Any]:
+def build_backlog(
+    coverage: dict[str, Any],
+    help_index: dict[str, str] | None = None,
+) -> dict[str, Any]:
     commands = coverage["commands"]
     gaps = [command for command in commands if not command.get("cad_mutation_tool_exposed", False)]
     expected = int(coverage["summary"]["total_commands"]) - sum(
@@ -172,31 +175,44 @@ def load_help_index(path: Path | None) -> dict[str, str]:
     raise ValueError("help index must be an object or contain a commands array")
 
 
+def _resolve(root: Path, value: Path) -> Path:
+    return value if value.is_absolute() else root / value
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
+    parser.add_argument("--root", type=Path, default=Path(__file__).resolve().parents[1])
     parser.add_argument(
         "--coverage",
         type=Path,
         default=Path("catalog/headless/headless-coverage-357.json"),
     )
-    parser.add_argument("--help-index", type=Path)
+    parser.add_argument(
+        "--help-index",
+        type=Path,
+        default=Path("catalog/headless/official-help-index.json"),
+    )
     parser.add_argument(
         "--output",
         type=Path,
         default=Path("catalog/headless/live-gap-backlog.json"),
     )
     args = parser.parse_args()
+    root = args.root.resolve()
+    coverage_path = _resolve(root, args.coverage)
+    help_index_path = _resolve(root, args.help_index)
+    output_path = _resolve(root, args.output)
 
-    coverage = json.loads(args.coverage.read_text(encoding="utf-8"))
-    backlog = build_backlog(coverage, load_help_index(args.help_index))
-    args.output.parent.mkdir(parents=True, exist_ok=True)
-    args.output.write_text(
+    coverage = json.loads(coverage_path.read_text(encoding="utf-8"))
+    backlog = build_backlog(coverage, load_help_index(help_index_path))
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_path.write_text(
         json.dumps(backlog, ensure_ascii=False, indent=2) + "\n",
         encoding="utf-8",
     )
     print(
         f"wrote {backlog['summary']['non_live_total']} non-live commands "
-        f"to {args.output}"
+        f"to {output_path}"
     )
 
 
