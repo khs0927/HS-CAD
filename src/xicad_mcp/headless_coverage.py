@@ -410,6 +410,17 @@ HEADLESS_CONTRACTS: dict[str, str] = {
     "SAB": "headless-core-batch31b.json",
     "SSL": "headless-core-batch31b.json",
     "WU": "headless-core-batch31b.json",
+    "CE": "headless-core-batch32.json",
+    "BBB": "headless-core-batch32.json",
+    "FF": "headless-core-batch32.json",
+    "WQ": "headless-core-batch32.json",
+    "WE": "headless-core-batch32.json",
+    "XX": "headless-core-batch32.json",
+    "Q11": "headless-core-batch32.json",
+    "MK": "headless-core-batch32.json",
+    "RR": "headless-core-batch32.json",
+    "LII": "headless-core-batch32.json",
+    "SLD": "headless-core-batch32.json",
 }
 
 PRODUCTION_USABLE = {"%", "-", "*", "/", "=", "00", "ABC", "BPT", "IL", "LST", "ND", "NP", "NS"}
@@ -592,23 +603,13 @@ CAD_MUTATION_TOOL_EXPOSED = {
     "VU",
     "VUU",
     "PBD",
+    "A0",
+    "A1",
 }
 PLATFORM_EXCLUDED = {"SLD"}
 SEMANTIC_RENAME_ONLY = {"3TP", "LII", "RR"}
 
-NEXT_CAMPAIGN = (
-    "CE",
-    "BBB",
-    "FF",
-    "WQ",
-    "WE",
-    "XX",
-    "Q11",
-    "MK",
-    "RR",
-    "LII",
-    "SLD",
-)
+NEXT_CAMPAIGN = ()
 
 
 def _parse_inventory(path: str | Path) -> list[dict[str, str]]:

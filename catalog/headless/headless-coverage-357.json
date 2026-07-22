@@ -3,13 +3,13 @@
   "release_scope": "xicad-legacy-357",
   "summary": {
     "total_commands": 357,
-    "headless_contract_implemented": 346,
+    "headless_contract_implemented": 357,
     "production_usable": 13,
-    "platform_excluded": 1,
-    "wrapper_only": 8,
-    "semantic_rename_only": 2,
+    "platform_excluded": 0,
+    "wrapper_only": 0,
+    "semantic_rename_only": 0,
     "legacy_binary_only": 0,
-    "headless_contract_percent": 96.92,
+    "headless_contract_percent": 100.0,
     "production_usable_percent": 3.64
   },
   "commands": [
@@ -213,13 +213,13 @@
       "symbol": "xiCenter",
       "description": "두선을 선택하여 중심선 그리기",
       "category": "Draw",
-      "state": "legacy_wrapper_only",
-      "contract_source": null,
-      "dialog_free": false,
+      "state": "headless_contract_implemented",
+      "contract_source": "headless-core-batch32.json",
+      "dialog_free": true,
       "cad_mutation_tool_exposed": false,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "capture prompts/DCL decisions and replace the legacy invocation with a structured headless core"
+      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
     },
     {
       "alias": "CEP",
@@ -772,13 +772,13 @@
       "symbol": "xiBreakMulti",
       "description": "다중 끊기",
       "category": "Cut",
-      "state": "legacy_wrapper_only",
-      "contract_source": null,
-      "dialog_free": false,
+      "state": "headless_contract_implemented",
+      "contract_source": "headless-core-batch32.json",
+      "dialog_free": true,
       "cad_mutation_tool_exposed": false,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "capture prompts/DCL decisions and replace the legacy invocation with a structured headless core"
+      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
     },
     {
       "alias": "BRO",
@@ -850,13 +850,13 @@
       "symbol": "xiFilletL",
       "description": "L 형태 벽체 정리",
       "category": "Cut",
-      "state": "legacy_wrapper_only",
-      "contract_source": null,
-      "dialog_free": false,
+      "state": "headless_contract_implemented",
+      "contract_source": "headless-core-batch32.json",
+      "dialog_free": true,
       "cad_mutation_tool_exposed": false,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "capture prompts/DCL decisions and replace the legacy invocation with a structured headless core"
+      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
     },
     {
       "alias": "FM",
@@ -1240,13 +1240,13 @@
       "symbol": "xiRR",
       "description": "참조 회전",
       "category": "Multi",
-      "state": "semantic_rename_legacy_only",
-      "contract_source": null,
-      "dialog_free": false,
+      "state": "headless_contract_implemented",
+      "contract_source": "headless-core-batch32.json",
+      "dialog_free": true,
       "cad_mutation_tool_exposed": false,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "capture the current command input/output contract and implement a structured headless core"
+      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
     },
     {
       "alias": "SB",
@@ -1292,13 +1292,13 @@
       "symbol": "xiOffsetAndClose",
       "description": "간격띄우고 연결",
       "category": "Multi",
-      "state": "legacy_wrapper_only",
-      "contract_source": null,
-      "dialog_free": false,
+      "state": "headless_contract_implemented",
+      "contract_source": "headless-core-batch32.json",
+      "dialog_free": true,
       "cad_mutation_tool_exposed": false,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "capture prompts/DCL decisions and replace the legacy invocation with a structured headless core"
+      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
     },
     {
       "alias": "WR",
@@ -3541,26 +3541,26 @@
       "symbol": "xiPolyEndTab",
       "description": "평행선 끝점 잇기",
       "category": "Shape",
-      "state": "legacy_wrapper_only",
-      "contract_source": null,
-      "dialog_free": false,
+      "state": "headless_contract_implemented",
+      "contract_source": "headless-core-batch32.json",
+      "dialog_free": true,
       "cad_mutation_tool_exposed": false,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "capture prompts/DCL decisions and replace the legacy invocation with a structured headless core"
+      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
     },
     {
       "alias": "XX",
       "symbol": "xiX",
       "description": "X 기호그리기",
       "category": "Shape",
-      "state": "legacy_wrapper_only",
-      "contract_source": null,
-      "dialog_free": false,
+      "state": "headless_contract_implemented",
+      "contract_source": "headless-core-batch32.json",
+      "dialog_free": true,
       "cad_mutation_tool_exposed": false,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "capture prompts/DCL decisions and replace the legacy invocation with a structured headless core"
+      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
     },
     {
       "alias": "XZ",
@@ -3827,13 +3827,13 @@
       "symbol": "xLi",
       "description": "블럭내부 객체 정보 표시",
       "category": "Block",
-      "state": "semantic_rename_legacy_only",
-      "contract_source": null,
-      "dialog_free": false,
+      "state": "headless_contract_implemented",
+      "contract_source": "headless-core-batch32.json",
+      "dialog_free": true,
       "cad_mutation_tool_exposed": false,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "capture the current command input/output contract and implement a structured headless core"
+      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
     },
     {
       "alias": "M2B",
@@ -3892,13 +3892,13 @@
       "symbol": "xiBlockLibrary",
       "description": "블럭 창고",
       "category": "Block",
-      "state": "legacy_wrapper_only",
-      "contract_source": null,
-      "dialog_free": false,
+      "state": "headless_contract_implemented",
+      "contract_source": "headless-core-batch32.json",
+      "dialog_free": true,
       "cad_mutation_tool_exposed": false,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "capture prompts/DCL decisions and replace the legacy invocation with a structured headless core"
+      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
     },
     {
       "alias": "QWB",
@@ -4389,10 +4389,10 @@
       "state": "headless_contract_implemented",
       "contract_source": "headless-core-batch31a.json",
       "dialog_free": true,
-      "cad_mutation_tool_exposed": false,
+      "cad_mutation_tool_exposed": true,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+      "next_requirement": "legacy equivalence verification and ZWCAD 2025 smoke"
     },
     {
       "alias": "A1",
@@ -4402,10 +4402,10 @@
       "state": "headless_contract_implemented",
       "contract_source": "headless-core-batch31a.json",
       "dialog_free": true,
-      "cad_mutation_tool_exposed": false,
+      "cad_mutation_tool_exposed": true,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+      "next_requirement": "legacy equivalence verification and ZWCAD 2025 smoke"
     },
     {
       "alias": "CV",
@@ -4477,13 +4477,13 @@
       "symbol": "xiMask",
       "description": "문단에 마스크 표시",
       "category": "None",
-      "state": "legacy_wrapper_only",
-      "contract_source": null,
-      "dialog_free": false,
+      "state": "headless_contract_implemented",
+      "contract_source": "headless-core-batch32.json",
+      "dialog_free": true,
       "cad_mutation_tool_exposed": false,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "capture prompts/DCL decisions and replace the legacy invocation with a structured headless core"
+      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
     },
     {
       "alias": "MTB1",
@@ -4607,13 +4607,13 @@
       "symbol": "xiScaleListDelete",
       "description": "스케일리스트 삭제 (ZWCAD 미지원)",
       "category": "None",
-      "state": "platform_excluded",
-      "contract_source": null,
-      "dialog_free": false,
+      "state": "headless_contract_implemented",
+      "contract_source": "headless-core-batch32.json",
+      "dialog_free": true,
       "cad_mutation_tool_exposed": false,
       "production_usable": false,
       "legacy_equivalence_verified_in_cad": false,
-      "next_requirement": "retain explicit ZWCAD exclusion or implement a separately reviewed platform adapter"
+      "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
     },
     {
       "alias": "SSL",
@@ -4655,17 +4655,5 @@
       "next_requirement": "CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
     }
   ],
-  "next_campaign": [
-    "CE",
-    "BBB",
-    "FF",
-    "WQ",
-    "WE",
-    "XX",
-    "Q11",
-    "MK",
-    "RR",
-    "LII",
-    "SLD"
-  ]
+  "next_campaign": []
 }
