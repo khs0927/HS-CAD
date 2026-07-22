@@ -358,6 +358,18 @@ HEADLESS_CONTRACTS: dict[str, str] = {
     "BEX": "headless-core-batch27b.json",
     "BIN": "headless-core-batch27b.json",
     "BLA": "headless-core-batch27b.json",
+    "BLX": "headless-core-batch28a.json",
+    "BQT": "headless-core-batch28a.json",
+    "BRM": "headless-core-batch28a.json",
+    "BRN": "headless-core-batch28a.json",
+    "BSC": "headless-core-batch28a.json",
+    "CX": "headless-core-batch28a.json",
+    "EAR": "headless-core-batch28b.json",
+    "M2B": "headless-core-batch28b.json",
+    "MFB": "headless-core-batch28b.json",
+    "MFX": "headless-core-batch28b.json",
+    "MX": "headless-core-batch28b.json",
+    "QWB": "headless-core-batch28b.json",
 }
 
 PRODUCTION_USABLE = {"%", "-", "*", "/", "=", "00", "ABC", "BPT", "IL", "LST", "ND", "NP", "NS"}
@@ -533,23 +545,24 @@ CAD_MUTATION_TOOL_EXPOSED = {
     "R3",
     "RS",
     "V",
+    "BBL",
 }
 PLATFORM_EXCLUDED = {"SLD"}
 SEMANTIC_RENAME_ONLY = {"3TP", "LII", "RR"}
 
 NEXT_CAMPAIGN = (
-    "BLX",
-    "BQT",
-    "BRM",
-    "BRN",
-    "BSC",
-    "CX",
-    "EAR",
-    "M2B",
-    "MFB",
-    "MFX",
-    "MX",
-    "QWB",
+    "RBP",
+    "WSL",
+    "XCX",
+    "XRC",
+    "XRR",
+    "P2M",
+    "VA",
+    "VGL",
+    "VL",
+    "VLL",
+    "VMO",
+    "VPP",
 )
 
 
