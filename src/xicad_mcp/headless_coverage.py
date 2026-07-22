@@ -394,6 +394,22 @@ HEADLESS_CONTRACTS: dict[str, str] = {
     "PBD": "headless-core-batch30b.json",
     "PBM": "headless-core-batch30b.json",
     "PPP": "headless-core-batch30b.json",
+    "PUA": "headless-core-batch31a.json",
+    "SVS": "headless-core-batch31a.json",
+    "A0": "headless-core-batch31a.json",
+    "A1": "headless-core-batch31a.json",
+    "CV": "headless-core-batch31a.json",
+    "ELM": "headless-core-batch31a.json",
+    "HT": "headless-core-batch31a.json",
+    "KCI": "headless-core-batch31a.json",
+    "KCL": "headless-core-batch31b.json",
+    "PLM": "headless-core-batch31b.json",
+    "PPB": "headless-core-batch31b.json",
+    "RD": "headless-core-batch31b.json",
+    "RUB": "headless-core-batch31b.json",
+    "SAB": "headless-core-batch31b.json",
+    "SSL": "headless-core-batch31b.json",
+    "WU": "headless-core-batch31b.json",
 }
 
 PRODUCTION_USABLE = {"%", "-", "*", "/", "=", "00", "ABC", "BPT", "IL", "LST", "ND", "NP", "NS"}
@@ -573,27 +589,25 @@ CAD_MUTATION_TOOL_EXPOSED = {
     "BSC",
     "VL",
     "VLL",
+    "VU",
+    "VUU",
+    "PBD",
 }
 PLATFORM_EXCLUDED = {"SLD"}
 SEMANTIC_RENAME_ONLY = {"3TP", "LII", "RR"}
 
 NEXT_CAMPAIGN = (
-    "PUA",
-    "SVS",
-    "A0",
-    "A1",
-    "CV",
-    "ELM",
-    "HT",
-    "KCI",
-    "KCL",
-    "PLM",
-    "PPB",
-    "RD",
-    "RUB",
-    "SAB",
-    "SSL",
-    "WU",
+    "CE",
+    "BBB",
+    "FF",
+    "WQ",
+    "WE",
+    "XX",
+    "Q11",
+    "MK",
+    "RR",
+    "LII",
+    "SLD",
 )
 
 
