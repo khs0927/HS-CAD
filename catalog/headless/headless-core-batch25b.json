@@ -1,0 +1,98 @@
+{
+  "schema_version": "1.0",
+  "batch": "25B",
+  "contract_kind": "dialog_free_read_only_execution_plan",
+  "commands": [
+    {
+      "alias": "TTT",
+      "exact_symbol": "xiTextsToTable",
+      "current_evidence": "C:/xicad/xiLib/xiShortkey.key:241 TTT;xiTextsToTable;문자를 표로 모으기",
+      "frozen_evidence": "tests/fixtures/xiShortkey.357.key:226 TTT;xiTextsToTable;문자를 표로 모으기",
+      "dcl_path": "C:/xicad/DialogBox/ACAD_xi0471_d.01.dcl:4-222",
+      "config_evidence": "C:/xicad/xiLib/xiConfig.cfg:109-110 /xiTextsToTable with ordering, workspace, coordinate, table, layer, and text-size values",
+      "data_evidence": null,
+      "readable_source": null,
+      "original_inputs": ["Table_rdo/Excel_rdo", "Absolute_rdo/Relative_rdo", "WorkModel_rdo/WorkPaper_rdo/WorkBoth_rdo", "frame and text selection", "OrderPnt1-4_img", "Order1-4_img", "OrderPntTor_edt", "SelFirstOrder_tgl", "line/text layers", "TextHt_edt", "optional multi-file list"],
+      "output_semantics": "validate a one-to-one caller-supplied table-cell mapping for versioned text snapshots while preserving every recovered current-file DCL choice",
+      "evidence_level": "dcl_config_and_shortcut_recovered",
+      "gaps": ["frame recognition, coordinate grouping, row/column clustering, and table geometry are compiled", "multi-file open/write behavior is not exposed", "caller supplies the exact cell mapping", "CAD equivalence unverified"]
+    },
+    {
+      "alias": "TX",
+      "exact_symbol": "xiTextBox",
+      "current_evidence": "C:/xicad/xiLib/xiShortkey.key:242 TX;xiTextBox;글씨에 테두리 그리기",
+      "frozen_evidence": "tests/fixtures/xiShortkey.357.key:227 TX;xiTextBox;글씨에 테두리 그리기",
+      "dcl_path": "C:/xicad/DialogBox/ZWCAD_xi0355_d.07.dcl:3-125",
+      "config_evidence": "C:/xicad/xiLib/xiConfig.cfg:143-144 /xiTextBox with shape, sizes, gaps, layers, style, masking, grouping, and recurrence values",
+      "data_evidence": null,
+      "readable_source": null,
+      "original_inputs": ["ten shape radio buttons", "InputText_edt", "UpCase_tgl", "PolygonNum_edt", "ExistTxt_tgl", "Group_tgl", "None_rdo/WipeOut_rdo/Solid_rdo", "Solid_edt", "style/text/boundary layers", "TextHt_edt", "fixed width/height", "width/height gaps", "corner radius", "versioned text bounds", "exact boundary geometry"],
+      "output_semantics": "validate one exact caller-supplied boundary per versioned text snapshot and preserve recovered shape, mask, group, layer, size, gap, and radius controls",
+      "evidence_level": "dcl_config_and_shortcut_recovered",
+      "gaps": ["text-extents acquisition and all boundary curve construction are compiled", "associative text linkage, masking draw order, and group implementation are compiled", "caller supplies exact result vertices", "CAD equivalence unverified"]
+    },
+    {
+      "alias": "MTLT",
+      "exact_symbol": "xiMakeLt",
+      "current_evidence": "C:/xicad/xiLib/xiShortkey.key:286 MTLT;xiMakeLt;문자포함 선 모양 만들기",
+      "frozen_evidence": "tests/fixtures/xiShortkey.357.key:269 MTLT;xiMakeLt;문자포함 선 모양 만들기",
+      "dcl_path": null,
+      "config_evidence": null,
+      "data_evidence": null,
+      "readable_source": null,
+      "original_inputs": ["caller-approved linetype name and description", "exact dash pattern", "exact text/style/scale/rotation/offset elements", "optional approved LIN target", "overwrite policy"],
+      "output_semantics": "carry a complete explicit proposed text-containing linetype definition without deriving or serializing a legacy pattern",
+      "evidence_level": "shortcut_only_explicit_result_not_legacy_equivalent",
+      "gaps": ["no command-specific DCL/config/data/readable source was found", "selection, pattern derivation, LIN serialization/loading, and replacement behavior are compiled", "no legacy equivalence claim", "CAD equivalence unverified"]
+    },
+    {
+      "alias": "PBB",
+      "exact_symbol": "xiPBoundingBox",
+      "current_evidence": "C:/xicad/xiLib/xiShortkey.key:287 PBB;xiPBoundingBox;객체 경계 박스 그리기",
+      "frozen_evidence": "tests/fixtures/xiShortkey.357.key:270 PBB;xiPBoundingBox;객체 경계 박스 그리기",
+      "dcl_path": null,
+      "config_evidence": null,
+      "data_evidence": null,
+      "readable_source": null,
+      "original_inputs": ["unique versioned entity extents", "one explicit coordinate-system identifier", "output layer", "closed-polyline policy"],
+      "output_semantics": "compute the XY union rectangle deterministically from explicit ordered extents already expressed in one coordinate system",
+      "evidence_level": "shortcut_only_explicit_policy_not_legacy_equivalent",
+      "gaps": ["no command-specific DCL/config/data/readable source was found", "legacy selection, UCS projection, padding, output layer, and source treatment are compiled", "explicit union policy is not a legacy equivalence claim", "CAD equivalence unverified"]
+    },
+    {
+      "alias": "PC",
+      "exact_symbol": "xiPolyClose",
+      "current_evidence": "C:/xicad/xiLib/xiShortkey.key:288 PC;xiPolyClose;열린 폴리선 닫기",
+      "frozen_evidence": "tests/fixtures/xiShortkey.357.key:271 PC;xiPolyClose;열린 폴리선 닫기",
+      "dcl_path": null,
+      "config_evidence": null,
+      "data_evidence": null,
+      "readable_source": null,
+      "original_inputs": ["unique versioned open LWPOLYLINE/POLYLINE snapshots", "explicit set_closed_flag policy"],
+      "output_semantics": "preserve every supplied vertex and plan only setting the closed flag on explicitly open polyline snapshots",
+      "evidence_level": "shortcut_only_explicit_policy_not_legacy_equivalent",
+      "gaps": ["no command-specific DCL/config/data/readable source was found", "legacy eligibility, tolerance, 3D behavior, and flag-versus-added-vertex implementation are compiled", "explicit closed-flag policy is not a legacy equivalence claim", "CAD equivalence unverified"]
+    },
+    {
+      "alias": "PEC",
+      "exact_symbol": "xiPerCurve",
+      "current_evidence": "C:/xicad/xiLib/xiShortkey.key:289 PEC;xiPerCurve;자기 자리에서 수직선 그리기",
+      "frozen_evidence": "tests/fixtures/xiShortkey.357.key:272 PEC;xiPerCurve;자기 자리에서 수직선 그리기",
+      "dcl_path": null,
+      "config_evidence": null,
+      "data_evidence": null,
+      "readable_source": null,
+      "original_inputs": ["unique versioned base-point/tangent snapshots", "explicit negative and positive lengths", "output layer"],
+      "output_semantics": "normalize each supplied XY tangent, rotate it ninety degrees, and calculate an explicit two-sided perpendicular segment through the supplied base point",
+      "evidence_level": "shortcut_only_explicit_policy_not_legacy_equivalent",
+      "gaps": ["no command-specific DCL/config/data/readable source was found", "legacy curve sampling, side, length, count, and layer behavior are compiled", "explicit tangent/length policy is not a legacy equivalence claim", "CAD equivalence unverified"]
+    }
+  ],
+  "truthfulness": {
+    "dialog_required": false,
+    "cad_mutation_tool_exposed": false,
+    "legacy_equivalence_verified_in_cad": false,
+    "production_usable": false,
+    "note": "TTT and TX preserve recovered DCL/config controls but require exact caller mappings or geometry wherever compiled CAD logic is unavailable. MTLT, PBB, PC, and PEC expose narrowly explicit results or policies and deliberately make no legacy-equivalence claim. All six tools are read-only planners."
+  }
+}
