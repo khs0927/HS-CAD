@@ -226,6 +226,18 @@ HEADLESS_CONTRACTS: dict[str, str] = {
     "D3": "headless-core-batch16.json",
     "DEV": "headless-core-batch16.json",
     "EED": "headless-core-batch16.json",
+    "ELV": "headless-core-batch17.json",
+    "EPD": "headless-core-batch17.json",
+    "HB": "headless-core-batch17.json",
+    "HGRID": "headless-core-batch17.json",
+    "HP": "headless-core-batch17.json",
+    "INS": "headless-core-batch17.json",
+    "PK": "headless-core-batch17.json",
+    "PZ": "headless-core-batch17.json",
+    "QRC": "headless-core-batch17.json",
+    "SCB": "headless-core-batch17.json",
+    "STB": "headless-core-batch17.json",
+    "STC": "headless-core-batch17.json",
 }
 
 PRODUCTION_USABLE = {"%", "-", "*", "/", "=", "00", "ABC", "BPT", "IL", "LST", "ND", "NP", "NS"}
@@ -357,18 +369,18 @@ PLATFORM_EXCLUDED = {"SLD"}
 SEMANTIC_RENAME_ONLY = {"3TP", "LII", "RR"}
 
 NEXT_CAMPAIGN = (
-    "ELV",
-    "EPD",
-    "HB",
-    "HGRID",
-    "HP",
-    "INS",
-    "PK",
-    "PZ",
-    "QRC",
-    "SCB",
-    "STB",
-    "STC",
+    "STP",
+    "TAJ",
+    "TRUSS",
+    "W1",
+    "W2",
+    "W3",
+    "WO",
+    "ZIGZAG",
+    "C2E",
+    "E2C",
+    "HC",
+    "HEX",
 )
 
 
