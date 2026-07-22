@@ -346,6 +346,18 @@ HEADLESS_CONTRACTS: dict[str, str] = {
     "RS": "headless-core-batch26b.json",
     "UFD": "headless-core-batch26b.json",
     "V": "headless-core-batch26b.json",
+    "XZ": "headless-core-batch27a.json",
+    "ABX": "headless-core-batch27a.json",
+    "B2X": "headless-core-batch27a.json",
+    "BAD": "headless-core-batch27a.json",
+    "BAM": "headless-core-batch27a.json",
+    "BBL": "headless-core-batch27a.json",
+    "BCC": "headless-core-batch27b.json",
+    "BCH": "headless-core-batch27b.json",
+    "BCO": "headless-core-batch27b.json",
+    "BEX": "headless-core-batch27b.json",
+    "BIN": "headless-core-batch27b.json",
+    "BLA": "headless-core-batch27b.json",
 }
 
 PRODUCTION_USABLE = {"%", "-", "*", "/", "=", "00", "ABC", "BPT", "IL", "LST", "ND", "NP", "NS"}
@@ -514,23 +526,30 @@ CAD_MUTATION_TOOL_EXPOSED = {
     "PBB",
     "PC",
     "PEC",
+    "PV",
+    "PVR",
+    "PVV",
+    "PW",
+    "R3",
+    "RS",
+    "V",
 }
 PLATFORM_EXCLUDED = {"SLD"}
 SEMANTIC_RENAME_ONLY = {"3TP", "LII", "RR"}
 
 NEXT_CAMPAIGN = (
-    "XZ",
-    "ABX",
-    "B2X",
-    "BAD",
-    "BAM",
-    "BBL",
-    "BCC",
-    "BCH",
-    "BCO",
-    "BEX",
-    "BIN",
-    "BLA",
+    "BLX",
+    "BQT",
+    "BRM",
+    "BRN",
+    "BSC",
+    "CX",
+    "EAR",
+    "M2B",
+    "MFB",
+    "MFX",
+    "MX",
+    "QWB",
 )
 
 
