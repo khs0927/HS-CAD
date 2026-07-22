@@ -250,6 +250,18 @@ HEADLESS_CONTRACTS: dict[str, str] = {
     "E2C": "headless-core-batch18.json",
     "HC": "headless-core-batch18.json",
     "HEX": "headless-core-batch18.json",
+    "HM": "headless-core-batch19a.json",
+    "HPM": "headless-core-batch19a.json",
+    "RDS": "headless-core-batch19a.json",
+    "SOL": "headless-core-batch19a.json",
+    "TB": "headless-core-batch19a.json",
+    "TBT": "headless-core-batch19a.json",
+    "BAT": "headless-core-batch19b.json",
+    "BB": "headless-core-batch19b.json",
+    "BRO": "headless-core-batch19b.json",
+    "CB": "headless-core-batch19b.json",
+    "CUT": "headless-core-batch19b.json",
+    "DTP": "headless-core-batch19b.json",
 }
 
 PRODUCTION_USABLE = {"%", "-", "*", "/", "=", "00", "ABC", "BPT", "IL", "LST", "ND", "NP", "NS"}
@@ -377,25 +389,27 @@ CAD_MUTATION_TOOL_EXPOSED = {
     "TSH",
     "TSM",
     "TSW",
+    "TRUSS",
     "TW",
     "WAL",
+    "ZIGZAG",
 }
 PLATFORM_EXCLUDED = {"SLD"}
 SEMANTIC_RENAME_ONLY = {"3TP", "LII", "RR"}
 
 NEXT_CAMPAIGN = (
-    "HM",
-    "HPM",
-    "RDS",
-    "SOL",
-    "TB",
-    "TBT",
-    "BAT",
-    "BB",
-    "BRO",
-    "CB",
-    "CUT",
-    "DTP",
+    "FE",
+    "FM",
+    "FR",
+    "FT",
+    "FX",
+    "XT",
+    "ARD",
+    "ARP",
+    "ARV",
+    "CNL",
+    "CR",
+    "CTL",
 )
 
 

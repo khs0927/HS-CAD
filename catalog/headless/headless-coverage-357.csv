@@ -38,30 +38,30 @@ STB,xiSTB,철골보 평면 그리기,Draw,headless_contract_implemented,headless
 STC,xiSTC,계단 입면,Draw,headless_contract_implemented,headless-core-batch17.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
 STP,xiSTP,계단 평면 그리기,Draw,headless_contract_implemented,headless-core-batch18.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
 TAJ,xiTableWidAj,캐드 테이블 문자에 맞추어 폭 자동 변경,Draw,headless_contract_implemented,headless-core-batch18.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
-TRUSS,xitruss,트러스 그리기,Draw,headless_contract_implemented,headless-core-batch18.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+TRUSS,xitruss,트러스 그리기,Draw,headless_contract_implemented,headless-core-batch18.json,True,True,False,False,legacy equivalence verification and ZWCAD 2025 smoke
 W1,xiWin1,간단창그리기,Draw,headless_contract_implemented,headless-core-batch18.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
 W2,xiWin2,미서기창 그리기,Draw,headless_contract_implemented,headless-core-batch18.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
 W3,xiWin3,미서기창 그리기,Draw,headless_contract_implemented,headless-core-batch18.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
 WAL,xiDrawWall,벽 그리기,Draw,headless_contract_implemented,first-batch-contracts.json / wall_core.py,True,True,False,False,legacy equivalence verification and ZWCAD 2025 smoke
 WO,xiWallOpening,개구부 그리기,Draw,headless_contract_implemented,headless-core-batch18.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
-ZIGZAG,xiZIGZAG,지그재그 폴리선 그리기,Draw,headless_contract_implemented,headless-core-batch18.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+ZIGZAG,xiZIGZAG,지그재그 폴리선 그리기,Draw,headless_contract_implemented,headless-core-batch18.json,True,True,False,False,legacy equivalence verification and ZWCAD 2025 smoke
 C2E,xiCad2Excel,캐드의 일반표를 엑셀로 보내기,Hatch,headless_contract_implemented,headless-core-batch18.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
 E2C,xiExcel2Cad,엑셀표를 캐드 일반표로 보내기,Hatch,headless_contract_implemented,headless-core-batch18.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
 HC,xiHatchClone,해치 복제,Hatch,headless_contract_implemented,headless-core-batch18.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
 HEX,xiHatchExport,해치 내보내기,Hatch,headless_contract_implemented,headless-core-batch18.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
-HM,xiHatchMerge,해치 합치기,Hatch,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
-HPM,xiMakeHatchPtn,해치 문양 그리기,Hatch,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
-RDS,xiRandomSolid,무작위 솔리드해치,Hatch,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
-SOL,xiSOLID,솔리드 해치하기,Hatch,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
-TB,xiTable,XiCAD 테이블그리기,Hatch,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
-TBT,xiTableText,ACAD 테이블에 문자 넣기,Hatch,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
-BAT,xiBreakAndText,선자르고 문자넣기,Cut,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
-BB,xiBreakToCurrent,자르고 현재켜로 넣기,Cut,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+HM,xiHatchMerge,해치 합치기,Hatch,headless_contract_implemented,headless-core-batch19a.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+HPM,xiMakeHatchPtn,해치 문양 그리기,Hatch,headless_contract_implemented,headless-core-batch19a.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+RDS,xiRandomSolid,무작위 솔리드해치,Hatch,headless_contract_implemented,headless-core-batch19a.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+SOL,xiSOLID,솔리드 해치하기,Hatch,headless_contract_implemented,headless-core-batch19a.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+TB,xiTable,XiCAD 테이블그리기,Hatch,headless_contract_implemented,headless-core-batch19a.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+TBT,xiTableText,ACAD 테이블에 문자 넣기,Hatch,headless_contract_implemented,headless-core-batch19a.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+BAT,xiBreakAndText,선자르고 문자넣기,Cut,headless_contract_implemented,headless-core-batch19b.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+BB,xiBreakToCurrent,자르고 현재켜로 넣기,Cut,headless_contract_implemented,headless-core-batch19b.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
 BBB,xiBreakMulti,다중 끊기,Cut,legacy_wrapper_only,,False,False,False,False,capture prompts/DCL decisions and replace the legacy invocation with a structured headless core
-BRO,xiBreakO,객체위의 객체 끊기,Cut,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
-CB,xiCircleBreak,원 절단하기,Cut,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
-CUT,xiCutter,닫힌 객체 안의 모든 객체 삭제,Cut,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
-DTP,xiDivideToPoly,곡선을 직선으로 분할,Cut,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
+BRO,xiBreakO,객체위의 객체 끊기,Cut,headless_contract_implemented,headless-core-batch19b.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+CB,xiCircleBreak,원 절단하기,Cut,headless_contract_implemented,headless-core-batch19b.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+CUT,xiCutter,닫힌 객체 안의 모든 객체 삭제,Cut,headless_contract_implemented,headless-core-batch19b.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+DTP,xiDivideToPoly,곡선을 직선으로 분할,Cut,headless_contract_implemented,headless-core-batch19b.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
 FE,xiFilletExtend,길이 남기고 모따기,Cut,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
 FF,xiFilletL,L 형태 벽체 정리,Cut,legacy_wrapper_only,,False,False,False,False,capture prompts/DCL decisions and replace the legacy invocation with a structured headless core
 FM,xiFilletMulti,여러 모서리 정리,Cut,legacy_binary_only,,False,False,False,False,reverse-analyze prompts/DCL/assets and implement a structured headless core
