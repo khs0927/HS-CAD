@@ -7,7 +7,6 @@ import json
 import re
 from enum import StrEnum
 from pathlib import PureWindowsPath
-from typing import Any
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
@@ -46,8 +45,8 @@ class FileSnapshot(BaseModel):
         canonical_windows_path(self.path)
         if not self.exists and (self.size_bytes is not None or self.digest is not None):
             raise ValueError("missing file snapshots cannot include size or digest")
-        if self.exists and self.size_bytes is None:
-            raise ValueError("existing file snapshots require size_bytes")
+        if self.exists and (self.size_bytes is None or self.digest is None):
+            raise ValueError("existing file snapshots require size_bytes and digest")
         return self
 
 
@@ -102,6 +101,7 @@ class FileTransactionRequest(BaseModel):
             FileOperationKind.WRITE_TEXT,
         }
         drawing_required = self.operation in {
+            FileOperationKind.OPEN_DRAWING,
             FileOperationKind.CLOSE_DRAWING,
             FileOperationKind.SAVE_AS,
             FileOperationKind.EXPORT,
@@ -110,10 +110,18 @@ class FileTransactionRequest(BaseModel):
 
         if source_required and self.source_path is None:
             raise ValueError(f"{self.operation} requires source_path")
+        if source_required and self.expected_source is None:
+            raise ValueError(f"{self.operation} requires expected_source")
         if destination_required and self.destination_path is None:
             raise ValueError(f"{self.operation} requires destination_path")
+        if destination_required and self.expected_destination is None:
+            raise ValueError(f"{self.operation} requires expected_destination")
         if drawing_required and self.expected_drawing is None:
             raise ValueError(f"{self.operation} requires expected_drawing")
+        if drawing_required and self.expected_drawing is not None:
+            if self.expected_drawing.active_command_count != 0:
+                raise ValueError("file transactions require active_command_count=0")
+
         if self.operation is FileOperationKind.CLOSE_DRAWING and self.close_save_changes is None:
             raise ValueError("close_drawing requires an explicit close_save_changes decision")
         if self.operation is not FileOperationKind.CLOSE_DRAWING and self.close_save_changes is not None:
@@ -126,6 +134,8 @@ class FileTransactionRequest(BaseModel):
         if self.expected_source is not None:
             if self.source_path is None:
                 raise ValueError("expected_source requires source_path")
+            if not self.expected_source.exists:
+                raise ValueError("expected_source must describe an existing file")
             if canonical_windows_path(self.expected_source.path) != canonical_windows_path(self.source_path):
                 raise ValueError("expected_source path must match source_path")
         if self.expected_destination is not None:
@@ -144,11 +154,7 @@ class FileTransactionRequest(BaseModel):
             if self.expected_destination is not None and self.expected_destination.exists:
                 raise ValueError("overwrite_policy=forbid requires a missing destination snapshot")
         elif self.overwrite_policy is OverwritePolicy.REQUIRE_MATCH:
-            if (
-                self.expected_destination is None
-                or not self.expected_destination.exists
-                or self.expected_destination.digest is None
-            ):
+            if self.expected_destination is None or not self.expected_destination.exists:
                 raise ValueError("require_match needs an existing destination snapshot with digest")
 
         if not self.dry_run and (
@@ -210,9 +216,6 @@ def plan_file_transaction(request: FileTransactionRequest) -> FileTransactionPla
     source = canonical_windows_path(request.source_path) if request.source_path else None
     destination = canonical_windows_path(request.destination_path) if request.destination_path else None
     fingerprint = request.fingerprint()
-    temporary = None
-    commit_steps: tuple[str, ...]
-    rollback_steps: tuple[str, ...]
 
     if destination is not None:
         temporary = _temporary_path(destination, fingerprint)
@@ -229,8 +232,9 @@ def plan_file_transaction(request: FileTransactionRequest) -> FileTransactionPla
             "verify destination matches expected_destination",
         )
     elif request.operation is FileOperationKind.CLOSE_DRAWING:
+        temporary = None
         commit_steps = (
-            "verify exact drawing state and active command count",
+            "verify exact drawing state and active_command_count=0",
             "close the named drawing with the explicit save decision",
             "verify the drawing is absent and all other open drawings are unchanged",
         )
@@ -239,8 +243,9 @@ def plan_file_transaction(request: FileTransactionRequest) -> FileTransactionPla
             "report close failure without changing truthful state",
         )
     else:
+        temporary = None
         commit_steps = (
-            "verify source snapshot and exact open-document set",
+            "verify source digest and exact open-document set",
             "perform the bounded open operation",
             "verify exactly one expected document was added",
         )
@@ -249,19 +254,18 @@ def plan_file_transaction(request: FileTransactionRequest) -> FileTransactionPla
             "verify the original open-document set is restored",
         )
 
-    preconditions = [
-        "every path is canonical and inside allowed_roots",
-        "source and destination snapshots match size/digest expectations",
-        "drawing dirty state and active command count match the approved snapshot",
-        "no unapproved overwrite or save decision is inferred",
-    ]
     return FileTransactionPlan(
         operation=request.operation,
         canonical_source_path=source,
         canonical_destination_path=destination,
         temporary_path=temporary,
         request_fingerprint=fingerprint,
-        required_preconditions=tuple(preconditions),
+        required_preconditions=(
+            "every path is canonical and inside allowed_roots",
+            "required source and destination snapshots match size/digest expectations",
+            "drawing state matches and active_command_count is zero",
+            "no unapproved overwrite or save decision is inferred",
+        ),
         commit_steps=commit_steps,
         rollback_steps=rollback_steps,
     )
