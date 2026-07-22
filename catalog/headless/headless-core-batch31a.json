@@ -79,7 +79,7 @@
       "frozen_evidence": "tests/fixtures/xiShortkey.357.key:356 CV;xiCopyValue;객체 참조 현재값 변경",
       "menu_evidence": "C:/xicad/_ZWCad/xicad_ZWCAD.mns:96 객체참조, 현재값 반영 CV; ^C^C_xiCopyValue (decoded legacy encoding)",
       "help_url": "https://izzarder.com/307",
-      "help_evidence": "Official help maps Text/MText to TextStyle, TextSize, Layer; Dimension to DimStyle, TextStyle, Layer; Circle/Arc to FilletRad and Layer; Polyline to Thickness and Layer; Hatch to HPName, HPScale, and Layer.",
+      "help_evidence": "Official help maps Text/MText to TextStyle, TextSize, Layer; Dimension to DimStyle, TextStyle, Layer; Circle/Arc to FilletRad and Layer; Polyline to Thickness and Layer; Hatch to HPName and HPScale (the article does not list Layer for hatch).",
       "dcl_path": null,
       "config_evidence": null,
       "data_evidence": null,

@@ -43,7 +43,8 @@ from .headless_core_batch26b import (
 )
 
 ExecutableRequest = (
-    VertexAddRequest
+    PolylineJoinRequest
+    | VertexAddRequest
     | VertexRemoveCleanRequest
     | VertexDeleteRequest
     | PolylineWidthRequest
@@ -88,13 +89,13 @@ class LiveBatch26Result(BaseModel):
     command_alias: str
     created_handles: tuple[str, ...]
     changed_handles: tuple[str, ...]
+    erased_handles: tuple[str, ...] = ()
     undo_mark_opened: bool
     undo_mark_closed: bool
     postcondition_verified: bool
 
 
 BLOCKED = {
-    "PJ": "compiled join ordering, endpoint tolerance, conversion, and source-retention behavior are unrecovered",
     "PVL": "compiled table columns, formatting, ordering, coordinate system, and table geometry are unrecovered",
     "PWD": "compiled offset joins/caps, outline topology, and source treatment are unrecovered",
     "RND": "compiled curve construction, view convention, primitive properties, and component count are unrecovered",
@@ -231,12 +232,16 @@ def _plan(request: Any) -> Any:
 
 
 def _source_snapshots(request: ExecutableRequest) -> tuple[PolylineSnapshot26A, ...]:
+    if isinstance(request, PolylineJoinRequest):
+        return request.sources
     if isinstance(request, (VertexAddRequest, VertexRemoveCleanRequest, VertexDeleteRequest, PolylineWidthRequest)):
         return (request.source,)
     return ()
 
 
 def _target_layers(request: ExecutableRequest) -> tuple[str, ...]:
+    if isinstance(request, PolylineJoinRequest):
+        return (request.exact_result.layer,)
     if isinstance(request, (VertexAddRequest, VertexRemoveCleanRequest, VertexDeleteRequest, PolylineWidthRequest)):
         return (request.exact_result.layer,)
     if isinstance(request, ThreePointRectangleRequest):
@@ -317,7 +322,7 @@ def _preview_blocked(request: Any) -> dict[str, Any]:
 
 
 def preview_live_pj(request: PolylineJoinRequest) -> dict[str, Any]:
-    return _preview_blocked(request)
+    return _preview_executable(request, "PJ")
 
 
 def preview_live_pv(request: VertexAddRequest) -> dict[str, Any]:
@@ -411,11 +416,35 @@ def execute_live_batch26(request: LiveBatch26ExecuteRequest) -> LiveBatch26Resul
 
     created: list[Any] = []
     changed: list[Any] = []
+    erased_handles: list[str] = []
     expected_polyline: tuple[Any, tuple[Point3D, ...], str, bool] | None = None
     expected_solid: tuple[Any, tuple[Point3D, ...], str, int | None] | None = None
     doc.StartUndoMark()
     try:
-        if plan.command_alias in {"PV", "PVR", "PVV", "PW"}:
+        if plan.command_alias == "PJ":
+            exact = request.request.exact_result
+            entity = _add_polyline(
+                doc,
+                tuple(vertex.point for vertex in exact.vertices),
+                exact.layer,
+                exact.closed,
+            )
+            for index, vertex in enumerate(exact.vertices):
+                entity.SetBulge(index, vertex.bulge)
+                entity.SetWidth(index, vertex.start_width, vertex.end_width)
+            created.append(entity)
+            expected_polyline = (
+                entity,
+                tuple(vertex.point for vertex in exact.vertices),
+                exact.layer,
+                exact.closed,
+            )
+            delete_set = {handle.casefold() for handle in plan.delete_source_handles}
+            for evidence, source in current_pairs:
+                if evidence.handle.casefold() in delete_set:
+                    erased_handles.append(str(source.Handle))
+                    source.Delete()
+        elif plan.command_alias in {"PV", "PVR", "PVV", "PW"}:
             entity = current_pairs[0][1]
             _apply_polyline(entity, request.request.exact_result)
             changed.append(entity)
@@ -443,6 +472,8 @@ def execute_live_batch26(request: LiveBatch26ExecuteRequest) -> LiveBatch26Resul
     available = _entities(doc)
     if any(str(item.Handle).casefold() not in available for item in created + changed):
         raise RuntimeError(f"{plan.command_alias} postcondition failed: output entity is missing")
+    if any(handle.casefold() in available for handle in erased_handles):
+        raise RuntimeError(f"{plan.command_alias} postcondition failed: source entity was not erased")
     if changed:
         expected = request.request.exact_result
         entity = changed[0]
@@ -489,6 +520,7 @@ def execute_live_batch26(request: LiveBatch26ExecuteRequest) -> LiveBatch26Resul
         command_alias=plan.command_alias,
         created_handles=tuple(str(item.Handle) for item in created),
         changed_handles=tuple(str(item.Handle) for item in changed),
+        erased_handles=tuple(erased_handles),
         undo_mark_opened=True,
         undo_mark_closed=True,
         postcondition_verified=True,

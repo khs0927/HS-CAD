@@ -6,7 +6,7 @@ import pytest
 
 from xicad_mcp import live_batch21 as live
 from xicad_mcp.headless_core_batch1 import Point3D
-from xicad_mcp.headless_core_batch21a import ExtendLineRequest, LineAnchor, MultiCopyRequest
+from xicad_mcp.headless_core_batch21a import ExtendLineRequest, JoinLineRequest, LineAnchor, MultiCopyRequest
 from xicad_mcp.headless_core_batch21b import BothSidesOffsetRequest, OffsetOutput
 
 
@@ -39,12 +39,26 @@ class Line:
         self.doc.entities.remove(self)
 
 
+class Polyline:
+    ObjectName = "AcDbPolyline"
+
+    def __init__(self, doc: Doc, handle: str, coordinates: Any) -> None:
+        self.doc, self.Handle = doc, handle
+        self.Coordinates, self.Layer = tuple(coordinates), "0"
+        self.Elevation, self.Closed = 0.0, False
+
+
 class Space:
     def __init__(self, doc: Doc) -> None:
         self.doc = doc
 
     def AddLine(self, start: Any, end: Any) -> Line:
         result = Line(self.doc, f"N{len(self.doc.entities)}", start, end, "0")
+        self.doc.entities.append(result)
+        return result
+
+    def AddLightWeightPolyline(self, coordinates: Any) -> Polyline:
+        result = Polyline(self.doc, f"N{len(self.doc.entities)}", coordinates)
         self.doc.entities.append(result)
         return result
 
@@ -70,6 +84,7 @@ def doc(monkeypatch: pytest.MonkeyPatch) -> Doc:
     monkeypatch.setattr(live, "_drawing", lambda _name: drawing)
     monkeypatch.setattr(live, "_entities", lambda _doc: {item.Handle.casefold(): item for item in drawing.entities})
     monkeypatch.setattr(live, "_variant", lambda point: (point.x, point.y, point.z))
+    monkeypatch.setattr(live, "_xy_variant", lambda points: tuple(value for point in points for value in (point.x, point.y)))
     return drawing
 
 
@@ -127,7 +142,58 @@ def test_ob_creates_explicit_linework_on_target_layer(doc: Doc) -> None:
     assert all(item.Layer == "OUT" for item in doc.entities[1:])
 
 
-def test_registers_twelve_previews_and_nine_execute_tools() -> None:
+def test_jl_creates_one_exact_polyline_and_deletes_sources(doc: Doc) -> None:
+    doc.entities.append(Line(doc, "B", (10.0, 0.0, 0.0), (20.0, 5.0, 0.0)))
+    request = JoinLineRequest(
+        document_id=doc.Name,
+        ordered_handles=("A", "B"),
+        tolerance=0.001,
+        target_layer="OUT",
+        delete_sources=True,
+    )
+    preview = live.preview_live_jl(request)
+    result = live.execute_live_batch21(approved(preview, request))
+    assert result.created_handles == ("N2",)
+    assert result.erased_handles == ("A", "B")
+    assert len(doc.entities) == 1
+    assert doc.entities[0].Coordinates == (0.0, 0.0, 10.0, 0.0, 20.0, 5.0)
+    assert doc.entities[0].Layer == "OUT"
+    assert doc.marks == ["start", "end"]
+
+
+def test_jl_rejects_stale_locked_and_nonplanar_inputs(doc: Doc) -> None:
+    doc.entities.append(Line(doc, "B", (10.0, 0.0, 0.0), (20.0, 0.0, 0.0)))
+    request = JoinLineRequest(
+        document_id=doc.Name,
+        ordered_handles=("A", "B"),
+        tolerance=0.001,
+        target_layer="OUT",
+        delete_sources=False,
+    )
+    preview = live.preview_live_jl(request)
+    wrapped = approved(preview, request)
+    with pytest.raises(ValueError, match="fingerprint"):
+        live.execute_live_batch21(wrapped.model_copy(update={"approval_fingerprint": "sha256:" + "0" * 64}))
+    doc.entities[1].EndPoint = (21.0, 0.0, 0.0)
+    with pytest.raises(ValueError, match="no longer matches"):
+        live.execute_live_batch21(wrapped)
+    doc.entities[1].EndPoint = (20.0, 0.0, 0.0)
+    doc.Layers.Item("OUT").Lock = True
+    with pytest.raises(ValueError, match="target layer"):
+        live.preview_live_jl(request)
+    doc.Layers.Item("OUT").Lock = False
+    doc.Layers.items["X|OUT"] = Layer("X|OUT")
+    xref_request = request.model_copy(update={"target_layer": "X|OUT"})
+    with pytest.raises(ValueError, match="xref-dependent"):
+        live.preview_live_jl(xref_request)
+    doc.entities[1].StartPoint = (10.0, 0.0, 1.0)
+    doc.entities[1].EndPoint = (20.0, 0.0, 1.0)
+    nonplanar = live.preview_live_jl(request)
+    with pytest.raises(ValueError, match="one elevation"):
+        live.execute_live_batch21(approved(nonplanar, request))
+
+
+def test_registers_twelve_previews_and_ten_execute_tools() -> None:
     class MCP:
         def __init__(self) -> None:
             self.names: list[str] = []
@@ -139,6 +205,7 @@ def test_registers_twelve_previews_and_nine_execute_tools() -> None:
 
     mcp = MCP()
     live.register_live_batch21_tools(mcp)  # type: ignore[arg-type]
-    assert len(mcp.names) == 21
-    assert len([name for name in mcp.names if "execute" in name]) == 9
-    assert not any(f"execute_live_{alias}" in " ".join(mcp.names) for alias in ("mm", "jl", "mlc"))
+    assert len(mcp.names) == 22
+    assert len([name for name in mcp.names if "execute" in name]) == 10
+    assert "xicad_execute_live_jl" in mcp.names
+    assert not any(f"execute_live_{alias}" in " ".join(mcp.names) for alias in ("mm", "mlc"))

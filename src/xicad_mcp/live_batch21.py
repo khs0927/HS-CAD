@@ -45,7 +45,7 @@ TransformRequest = (
     DivideArcCopyRequest | DivideCopyRequest | MultiCopyRequest | ObjectAlignRequest | ObjectAlignAngleRequest
 )
 OffsetRequest = BothSidesOffsetRequest | OffsetEraseRequest | IntegratedOffsetRequest
-ExecutableRequest = TransformRequest | ExtendLineRequest | OffsetRequest
+ExecutableRequest = TransformRequest | ExtendLineRequest | OffsetRequest | JoinLineRequest
 
 
 class LiveLineEvidence(BaseModel):
@@ -83,7 +83,6 @@ class LiveBatch21Result(BaseModel):
 
 BLOCKED = {
     "MM": "placement entity type and legacy marker/block policy are unrecovered",
-    "JL": "output entity type and property inheritance policy are unrecovered",
     "MLC": "MLINE style decomposition and component provenance cannot be verified through the recovered contract",
 }
 
@@ -125,6 +124,14 @@ def _variant(point: Point3D) -> Any:
     return win32com.client.VARIANT(pythoncom.VT_ARRAY | pythoncom.VT_R8, [point.x, point.y, point.z])
 
 
+def _xy_variant(points: tuple[Point3D, ...]) -> Any:
+    import pythoncom
+    import win32com.client
+
+    coordinates = [coordinate for point in points for coordinate in (point.x, point.y)]
+    return win32com.client.VARIANT(pythoncom.VT_ARRAY | pythoncom.VT_R8, coordinates)
+
+
 def _line(doc: Any, handle: str) -> tuple[LiveLineEvidence, Any]:
     entity = _entities(doc).get(handle.casefold())
     if entity is None or str(entity.ObjectName).casefold() != "acdbline":
@@ -154,6 +161,8 @@ def _handles(request: ExecutableRequest) -> tuple[str, ...]:
         return tuple(item.handle for item in request.items)
     if isinstance(request, ExtendLineRequest):
         return request.target_handles
+    if isinstance(request, JoinLineRequest):
+        return request.ordered_handles
     if isinstance(request, BothSidesOffsetRequest | OffsetEraseRequest):
         return (request.source_handle,)
     return request.connected_source_handles
@@ -181,6 +190,8 @@ def _plan(request: ExecutableRequest, states: tuple[LiveLineEvidence, ...]) -> A
         return plan_object_align_angle(request)
     if isinstance(request, ExtendLineRequest):
         return plan_extend_line(request, _line_snapshots(states))
+    if isinstance(request, JoinLineRequest):
+        return plan_join_line(request, _line_snapshots(states))
     if isinstance(request, BothSidesOffsetRequest):
         return plan_both_sides_offset(request)
     if isinstance(request, OffsetEraseRequest):
@@ -218,6 +229,10 @@ def _preview_executable(request: ExecutableRequest) -> dict[str, Any]:
     if not request.dry_run:
         raise ValueError("live preview requires dry_run=true")
     doc = _drawing(request.document_id)
+    if isinstance(request, JoinLineRequest):
+        target = doc.Layers.Item(request.target_layer)
+        if bool(target.Lock) or "|" in str(target.Name):
+            raise ValueError("JL target layer is locked or xref-dependent")
     states = tuple(_line(doc, handle)[0] for handle in _handles(request))
     plan = _plan(request, states)
     alias = _alias(request)
@@ -283,8 +298,8 @@ def preview_live_mm(request: MeasureRequest) -> dict[str, Any]:
     return _preview_blocked(request, plan_measure(request))
 
 
-def preview_live_jl(request: JoinLineRequest, snapshots: tuple[LineSnapshot, ...]) -> dict[str, Any]:
-    return _preview_blocked(request, plan_join_line(request, snapshots))
+def preview_live_jl(request: JoinLineRequest) -> dict[str, Any]:
+    return _preview_executable(request)
 
 
 def preview_live_mlc(request: MlineConvertRequest, snapshots: tuple[MlineSnapshot, ...]) -> dict[str, Any]:
@@ -326,6 +341,7 @@ def execute_live_batch21(request: LiveBatch21ExecuteRequest) -> LiveBatch21Resul
     changed: list[Any] = []
     erased: list[str] = []
     expected_geometry: list[tuple[Any, Point3D, Point3D, str]] = []
+    expected_polylines: list[tuple[Any, tuple[Point3D, ...], str]] = []
     doc.StartUndoMark()
     try:
         if alias in {"DAC", "DVC", "MC", "OA", "OAA"}:
@@ -350,6 +366,22 @@ def execute_live_batch21(request: LiveBatch21ExecuteRequest) -> LiveBatch21Resul
                 entity.StartPoint, entity.EndPoint = _variant(endpoints[0]), _variant(endpoints[1])
                 changed.append(entity)
                 expected_geometry.append((entity, endpoints[0], endpoints[1], str(entity.Layer)))
+        elif alias == "JL":
+            elevations = {round(point.z, 9) for point in plan.vertices}
+            if len(elevations) != 1:
+                raise ValueError("JL live AcDbPolyline output requires all vertices on one elevation")
+            layer = doc.Layers.Item(plan.target_layer)
+            if bool(layer.Lock) or "|" in str(layer.Name):
+                raise ValueError("JL target layer is locked or xref-dependent")
+            entity = doc.ModelSpace.AddLightWeightPolyline(_xy_variant(plan.vertices))
+            entity.Layer = plan.target_layer
+            entity.Elevation = plan.vertices[0].z
+            entity.Closed = False
+            created.append(entity)
+            expected_polylines.append((entity, plan.vertices, plan.target_layer))
+            for handle in plan.delete_handles:
+                objects[handle.casefold()].Delete()
+                erased.append(handle)
         else:
             for output in plan.creates:
                 for start, end in zip(output.vertices, output.vertices[1:], strict=False):
@@ -377,6 +409,15 @@ def execute_live_batch21(request: LiveBatch21ExecuteRequest) -> LiveBatch21Resul
         for entity, start, end, layer in expected_geometry
     ):
         raise RuntimeError(f"{alias} postcondition failed: output geometry or layer mismatch")
+    if any(
+        tuple(float(value) for value in entity.Coordinates)
+        != tuple(coordinate for point in vertices for coordinate in (point.x, point.y))
+        or float(entity.Elevation) != vertices[0].z
+        or bool(entity.Closed)
+        or str(entity.Layer).casefold() != layer.casefold()
+        for entity, vertices, layer in expected_polylines
+    ):
+        raise RuntimeError(f"{alias} postcondition failed: polyline geometry or layer mismatch")
     if any(handle.casefold() in available for handle in erased):
         raise RuntimeError(f"{alias} postcondition failed: source was not erased")
     return LiveBatch21Result(

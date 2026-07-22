@@ -241,6 +241,9 @@ def test_verified_live_mutation_tools_are_reported_truthfully():
         "PBD",
         "A0",
         "A1",
+        "JL",
+        "PJ",
+        "CV",
     ):
         assert rows[alias].dialog_free
         assert rows[alias].cad_mutation_tool_exposed
@@ -455,7 +458,7 @@ def test_batch21a_is_headless_and_dialog_free():
         assert rows[alias].state is HeadlessState.IMPLEMENTED
         assert rows[alias].dialog_free
         assert not rows[alias].production_usable
-        assert rows[alias].cad_mutation_tool_exposed is (alias in {"DAC", "DVC", "EXL", "MC"})
+        assert rows[alias].cad_mutation_tool_exposed is (alias in {"DAC", "DVC", "EXL", "JL", "MC"})
         assert rows[alias].contract_source == "headless-core-batch21a.json"
 
 
@@ -555,7 +558,7 @@ def test_batch26a_is_headless_and_dialog_free():
         assert rows[alias].state is HeadlessState.IMPLEMENTED
         assert rows[alias].dialog_free
         assert not rows[alias].production_usable
-        assert rows[alias].cad_mutation_tool_exposed is (alias in {"PV", "PVR", "PVV", "PW"})
+        assert rows[alias].cad_mutation_tool_exposed is (alias in {"PJ", "PV", "PVR", "PVV", "PW"})
         assert rows[alias].contract_source == "headless-core-batch26a.json"
 
 
@@ -655,7 +658,7 @@ def test_batch31a_is_headless_and_dialog_free():
         assert rows[alias].state is HeadlessState.IMPLEMENTED
         assert rows[alias].dialog_free
         assert not rows[alias].production_usable
-        assert rows[alias].cad_mutation_tool_exposed is (alias in {"A0", "A1"})
+        assert rows[alias].cad_mutation_tool_exposed is (alias in {"A0", "A1", "CV"})
         assert rows[alias].contract_source == "headless-core-batch31a.json"
 
 

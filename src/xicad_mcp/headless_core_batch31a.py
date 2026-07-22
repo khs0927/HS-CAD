@@ -335,7 +335,7 @@ class CopyValueRequest(ContractRequest):
             "circle": {"filletrad", "layer"},
             "arc": {"filletrad", "layer"},
             "polyline": {"thickness", "layer"},
-            "hatch": {"hpname", "hpscale", "layer"},
+            "hatch": {"hpname", "hpscale"},
         }
         kind = self.source.entity_type.casefold()
         if kind not in allowed or set(names) != allowed[kind]:

@@ -54,6 +54,10 @@ class Polyline:
         count = len(coordinates) // 2
         self.bulges = [0.0] * count
         self.widths = [(0.0, 0.0)] * count
+        self.deleted = False
+
+    def Delete(self) -> None:
+        self.deleted = True
 
     def GetBulge(self, index: int) -> float:
         return self.bulges[index]
@@ -149,7 +153,13 @@ def result(vertices: tuple[PolylineVertex, ...], *, layer: str = "OUTPUT") -> Pr
 def doc(monkeypatch: pytest.MonkeyPatch) -> Doc:
     drawing = Doc()
     monkeypatch.setattr(live, "_drawing", lambda _name: drawing)
-    monkeypatch.setattr(live, "_entities", lambda _doc: {item.Handle.casefold(): item for item in drawing.entities})
+    monkeypatch.setattr(
+        live,
+        "_entities",
+        lambda _doc: {
+            item.Handle.casefold(): item for item in drawing.entities if not getattr(item, "deleted", False)
+        },
+    )
     monkeypatch.setattr(
         live, "_variant_points", lambda points: tuple(value for point in points for value in (point.x, point.y))
     )
@@ -267,13 +277,14 @@ def test_bad_fingerprint_and_locked_target_are_rejected(doc: Doc) -> None:
         live.preview_live_pw(request)
 
 
-def test_pj_is_preview_only_with_unrecovered_join_semantics() -> None:
+def test_pj_creates_exact_join_and_erases_only_approved_sources(doc: Doc) -> None:
     first = snapshot()
+    doc.entities.append(Polyline("P2", (4, 3, 8, 3)))
     second = first.model_copy(
         update={
             "handle": "P2",
             "geometry_revision": "r2",
-            "vertices": tuple(item.model_copy(update={"vertex_id": f"p2-{item.vertex_id}"}) for item in first.vertices),
+            "vertices": (vertex("p2-a", 4, 3), vertex("p2-b", 8, 3)),
         }
     )
     joined = ProposedPolylineResult(
@@ -282,7 +293,7 @@ def test_pj_is_preview_only_with_unrecovered_join_semantics() -> None:
         entity_type="LWPOLYLINE",
         layer="OUTPUT",
         closed=False,
-        vertices=first.vertices + second.vertices,
+        vertices=first.vertices + (second.vertices[-1],),
     )
     request = PolylineJoinRequest(
         document_id="Drawing1.dwg",
@@ -291,11 +302,15 @@ def test_pj_is_preview_only_with_unrecovered_join_semantics() -> None:
         delete_source_handles=("P1", "P2"),
     )
     preview = live.preview_live_pj(request)
-    assert not preview["mutation"] and not preview["live_executable"]
-    assert "join ordering" in preview["blocked_reason"]
+    execution = live.execute_live_batch26(approved(preview, request))
+    assert execution.command_alias == "PJ"
+    assert execution.created_handles == ("N2",)
+    assert execution.erased_handles == ("P1", "P2")
+    assert [item.Handle for item in doc.entities if not getattr(item, "deleted", False)] == ["N2"]
+    assert doc.marks == ["start", "end"]
 
 
-def test_registers_twelve_previews_and_seven_execute_tools() -> None:
+def test_registers_twelve_previews_and_eight_execute_tools() -> None:
     class MCP:
         def __init__(self) -> None:
             self.names: list[str] = []
@@ -309,6 +324,7 @@ def test_registers_twelve_previews_and_seven_execute_tools() -> None:
     live.register_live_batch26_tools(mcp)  # type: ignore[arg-type]
     assert len([name for name in mcp.names if "preview" in name]) == 12
     assert [name for name in mcp.names if "execute" in name] == [
+        "xicad_execute_live_pj",
         "xicad_execute_live_pv",
         "xicad_execute_live_pvr",
         "xicad_execute_live_pvv",

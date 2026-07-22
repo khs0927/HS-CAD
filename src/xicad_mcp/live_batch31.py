@@ -15,6 +15,7 @@ from .headless_core_batch31a import (
     AxisChangeRequest,
     AxisResetRequest,
     CopyValueRequest,
+    CurrentSetting,
     ElevationMarkRequest,
     HatchThicknessRequest,
     KitchenInlineRequest,
@@ -62,7 +63,6 @@ HELP_URLS = {
 BLOCKED = {
     "PUA": "purge eligibility/order, SB integration, dependency cleanup, and failure rollback are unrecovered",
     "SVS": "frame discovery, filename policy, WBLOCK serialization, xref binding, and file rollback are unrecovered",
-    "CV": "resource lookup, typed system-variable conversion, annotative behavior, and atomic rollback are unrecovered",
     "ELM": "level-mark geometry, scale, formatting/increment, and entity composition are unrecovered",
     "HT": "boundary side, hatch origin/angle, associativity, and exact entity properties are unrecovered",
     "KCI": "three-point semantics, cabinet modules, blocks, dimensions, and refrigerator geometry are unrecovered",
@@ -74,6 +74,23 @@ BLOCKED = {
     "SAB": "whole-file normalization, dependency cleanup, three-pass purge, save version, and file rollback are unrecovered",
     "SSL": "section-marker geometry, direction, labels, sizes, colors, and text properties are unrecovered",
     "WU": "exact linetype resource/name, vertices, widths, scale, and property assignment are unrecovered",
+}
+
+_CV_OBJECT_KINDS = {
+    "acdbtext": "text",
+    "acdbmtext": "mtext",
+    "acdbcircle": "circle",
+    "acdbarc": "arc",
+    "acdbpolyline": "polyline",
+    "acdb2dpolyline": "polyline",
+    "acdb3dpolyline": "polyline",
+    "acdbhatch": "hatch",
+}
+_CV_FLOAT_VARIABLES = {"TEXTSIZE", "FILLETRAD", "THICKNESS", "HPSCALE"}
+_CV_VARIABLES = {
+    "textstyle": "TEXTSTYLE", "textsize": "TEXTSIZE", "layer": "CLAYER",
+    "dimstyle": "DIMSTYLE", "filletrad": "FILLETRAD", "thickness": "THICKNESS",
+    "hpname": "HPNAME", "hpscale": "HPSCALE",
 }
 
 
@@ -104,6 +121,35 @@ class LiveBatch31Result(BaseModel):
     command_alias: str
     before_snap_angle_radians: float
     after_snap_angle_radians: float
+    undo_mark_opened: bool
+    undo_mark_closed: bool
+    postcondition_verified: bool
+
+
+class LiveCVSourceEvidence(BaseModel):
+    model_config = ConfigDict(frozen=True, extra="forbid")
+    document_name: str
+    handle: str
+    object_name: str
+    entity_type: str
+    source_settings: tuple[CurrentSetting, ...]
+    current_settings: tuple[CurrentSetting, ...]
+    state_fingerprint: str = Field(pattern=r"^sha256:[0-9a-f]{64}$")
+
+
+class LiveCVExecuteRequest(BaseModel):
+    model_config = ConfigDict(frozen=True, extra="forbid")
+    request: CopyValueRequest
+    expected_source: LiveCVSourceEvidence
+    approval_fingerprint: str = Field(pattern=r"^sha256:[0-9a-f]{64}$")
+
+
+class LiveCVResult(BaseModel):
+    model_config = ConfigDict(frozen=True, extra="forbid")
+    document_name: str
+    command_alias: str = "CV"
+    source_handle: str
+    changed_variables: tuple[str, ...]
     undo_mark_opened: bool
     undo_mark_closed: bool
     postcondition_verified: bool
@@ -156,6 +202,178 @@ def _axis_payload(request: Any, plan: Any, source: LiveAxisEvidence) -> dict[str
         "plan": plan.model_dump(mode="json"),
         "expected_source": source.model_dump(mode="json"),
     }
+
+
+def _cv_entity(doc: Any, handle: str) -> Any:
+    try:
+        return doc.HandleToObject(handle)
+    except Exception as error:
+        raise ValueError(f"CV source handle {handle!r} is not present in the active document") from error
+
+
+def _cv_kind(entity: Any) -> str:
+    object_name = str(entity.ObjectName).casefold()
+    if "dimension" in object_name:
+        return "dimension"
+    try:
+        return _CV_OBJECT_KINDS[object_name]
+    except KeyError as error:
+        raise ValueError(f"CV does not document live settings for {entity.ObjectName!r}") from error
+
+
+def _cv_value(value: Any, *, numeric: bool) -> str:
+    if numeric:
+        return format(float(value), ".15g")
+    return str(value)
+
+
+def _cv_variable(setting_name: str) -> str:
+    return _CV_VARIABLES[setting_name.casefold()]
+
+
+def _cv_source_settings(entity: Any, kind: str) -> tuple[CurrentSetting, ...]:
+    if kind in {"text", "mtext"}:
+        values = (("TextStyle", entity.StyleName), ("TextSize", entity.Height), ("Layer", entity.Layer))
+    elif kind == "dimension":
+        values = (("DimStyle", entity.StyleName), ("TextStyle", entity.TextStyle), ("Layer", entity.Layer))
+    elif kind in {"circle", "arc"}:
+        values = (("FilletRad", entity.Radius), ("Layer", entity.Layer))
+    elif kind == "polyline":
+        values = (("Thickness", entity.Thickness), ("Layer", entity.Layer))
+    elif kind == "hatch":
+        values = (("HPName", entity.PatternName), ("HPScale", entity.PatternScale))
+    else:  # pragma: no cover - _cv_kind owns the closed set
+        raise AssertionError(kind)
+    return tuple(
+        CurrentSetting(name=name, exact_value=_cv_value(value, numeric=_cv_variable(name) in _CV_FLOAT_VARIABLES))
+        for name, value in values
+    )
+
+
+def _cv_get_variable(doc: Any, name: str) -> Any:
+    if name == "DIMSTYLE":
+        return doc.ActiveDimStyle.Name
+    return doc.GetVariable(name)
+
+
+def _cv_set_variable(doc: Any, name: str, value: str) -> None:
+    if name == "DIMSTYLE":
+        doc.ActiveDimStyle = doc.DimStyles.Item(value)
+    else:
+        doc.SetVariable(name, float(value) if name in _CV_FLOAT_VARIABLES else value)
+
+
+def _cv_current_settings(doc: Any, settings: tuple[CurrentSetting, ...]) -> tuple[CurrentSetting, ...]:
+    return tuple(
+        CurrentSetting(
+            name=item.name,
+            exact_value=_cv_value(
+                _cv_get_variable(doc, _cv_variable(item.name)),
+                numeric=_cv_variable(item.name) in _CV_FLOAT_VARIABLES,
+            ),
+        )
+        for item in settings
+    )
+
+
+def _cv_evidence(doc: Any, request: CopyValueRequest) -> LiveCVSourceEvidence:
+    entity = _cv_entity(doc, request.source.handle)
+    kind = _cv_kind(entity)
+    if kind != request.source.entity_type.casefold():
+        raise ValueError("CV live entity type does not match the approved source snapshot")
+    source_settings = _cv_source_settings(entity, kind)
+    expected = {item.name.casefold(): item.exact_value for item in request.exact_settings}
+    actual = {item.name.casefold(): item.exact_value for item in source_settings}
+    if expected != actual:
+        raise ValueError("CV requested settings are not the exact values of the selected source entity")
+    current_settings = _cv_current_settings(doc, source_settings)
+    state = {
+        "document_name": str(doc.Name),
+        "handle": str(entity.Handle),
+        "object_name": str(entity.ObjectName),
+        "entity_type": kind,
+        "source_settings": [item.model_dump(mode="json") for item in source_settings],
+        "current_settings": [item.model_dump(mode="json") for item in current_settings],
+    }
+    return LiveCVSourceEvidence(**state, state_fingerprint=_fingerprint(state))
+
+
+def _cv_payload(request: CopyValueRequest, plan: Any, source: LiveCVSourceEvidence) -> dict[str, Any]:
+    return {
+        "command_alias": "CV",
+        "document_name": request.document_id,
+        "request": request.model_dump(mode="json"),
+        "plan": plan.model_dump(mode="json"),
+        "expected_source": source.model_dump(mode="json"),
+    }
+
+
+def _validate_cv_resources(doc: Any, settings: tuple[CurrentSetting, ...]) -> None:
+    by_name = {item.name.casefold(): item.exact_value for item in settings}
+    if "layer" in by_name:
+        layer_name = by_name["layer"]
+        if "|" in layer_name or bool(doc.Layers.Item(layer_name).Lock):
+            raise ValueError("CV target layer is locked or xref-dependent")
+    if "textstyle" in by_name:
+        doc.TextStyles.Item(by_name["textstyle"])
+    if "dimstyle" in by_name:
+        doc.DimStyles.Item(by_name["dimstyle"])
+
+
+def preview_live_cv(request: CopyValueRequest) -> dict[str, Any]:
+    if not request.dry_run:
+        raise ValueError("live preview requires dry_run=true")
+    plan = plan_copy_value(request)
+    doc = _drawing(request.document_id)
+    source = _cv_evidence(doc, request)
+    _validate_cv_resources(doc, source.source_settings)
+    payload = _cv_payload(request, plan, source)
+    return {
+        **payload,
+        "approval_fingerprint": _fingerprint(payload),
+        "mutation": True,
+        "live_executable": True,
+        "official_help_url": HELP_URLS["CV"],
+        "scope_note": "exact atomic CV mapping from the official article: text, mtext, dimension, circle, arc, polyline, and hatch current settings",
+    }
+
+
+def execute_live_cv(request: LiveCVExecuteRequest) -> LiveCVResult:
+    plan = plan_copy_value(request.request)
+    payload = _cv_payload(request.request, plan, request.expected_source)
+    if request.approval_fingerprint != _fingerprint(payload):
+        raise ValueError("approval fingerprint does not match the exact Batch 31 CV preview")
+    doc = _drawing(request.request.document_id)
+    current = _cv_evidence(doc, request.request)
+    if current != request.expected_source:
+        raise ValueError("Batch 31 CV source or current-setting state no longer matches the approved preview")
+    _validate_cv_resources(doc, current.source_settings)
+    before = {_cv_variable(item.name): item.exact_value for item in current.current_settings}
+    targets = {_cv_variable(item.name): item.exact_value for item in current.source_settings}
+    doc.StartUndoMark()
+    closed = False
+    try:
+        try:
+            for name, value in targets.items():
+                _cv_set_variable(doc, name, value)
+            after = {
+                _cv_variable(item.name): item.exact_value
+                for item in _cv_current_settings(doc, current.source_settings)
+            }
+            if after != targets:
+                raise RuntimeError("CV current-setting postcondition failed")
+        except Exception:
+            for name, value in before.items():
+                _cv_set_variable(doc, name, value)
+            raise
+    finally:
+        doc.EndUndoMark()
+        closed = True
+    return LiveCVResult(
+        document_name=str(doc.Name), source_handle=request.request.source.handle,
+        changed_variables=tuple(targets), undo_mark_opened=True,
+        undo_mark_closed=closed, postcondition_verified=True,
+    )
 
 
 def _preview_axis(request: AxisResetRequest | AxisChangeRequest) -> dict[str, Any]:
@@ -239,7 +457,6 @@ def execute_live_a1(request: LiveA1ExecuteRequest) -> LiveBatch31Result:
 
 def preview_live_pua(request: PurgeAllRequest) -> dict[str, Any]: return _preview_blocked(request)
 def preview_live_svs(request: SaveSeparateRequest) -> dict[str, Any]: return _preview_blocked(request)
-def preview_live_cv(request: CopyValueRequest) -> dict[str, Any]: return _preview_blocked(request)
 def preview_live_elm(request: ElevationMarkRequest) -> dict[str, Any]: return _preview_blocked(request)
 def preview_live_ht(request: HatchThicknessRequest) -> dict[str, Any]: return _preview_blocked(request)
 def preview_live_kci(request: KitchenInlineRequest) -> dict[str, Any]: return _preview_blocked(request)
@@ -268,3 +485,4 @@ def register_live_batch31_tools(mcp: FastMCP) -> None:
         mcp.tool(name=f"xicad_preview_live_{alias}", annotations=preview)(function)
     mcp.tool(name="xicad_execute_live_a0", annotations=execute)(execute_live_a0)
     mcp.tool(name="xicad_execute_live_a1", annotations=execute)(execute_live_a1)
+    mcp.tool(name="xicad_execute_live_cv", annotations=execute)(execute_live_cv)

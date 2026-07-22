@@ -605,6 +605,9 @@ CAD_MUTATION_TOOL_EXPOSED = {
     "PBD",
     "A0",
     "A1",
+    "JL",
+    "PJ",
+    "CV",
 }
 PLATFORM_EXCLUDED = {"SLD"}
 SEMANTIC_RENAME_ONLY = {"3TP", "LII", "RR"}

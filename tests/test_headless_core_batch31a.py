@@ -151,12 +151,12 @@ def test_cv_enforces_official_entity_to_current_value_mapping() -> None:
     )
     settings = tuple(
         CurrentSetting(name=name, exact_value=value)
-        for name, value in (("HPName", "EARTH"), ("HPScale", "25"), ("Layer", "A-HATCH"))
+        for name, value in (("HPName", "EARTH"), ("HPScale", "25"))
     )
     request = CopyValueRequest(
         document_id="D", source=source, exact_settings=settings, result_state_digest=DIGEST_B
     )
-    assert len(plan_copy_value(request).settings) == 3
+    assert len(plan_copy_value(request).settings) == 2
     with pytest.raises(ValueError, match="documented entity-type mapping"):
         CopyValueRequest.model_validate(
             {**request.model_dump(), "exact_settings": settings[:-1]}
