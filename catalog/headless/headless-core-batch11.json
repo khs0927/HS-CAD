@@ -1,0 +1,29 @@
+{
+  "schema_version": "1.0",
+  "batch": 11,
+  "commands": [
+    {"alias":"LT","legacy_symbol":"xiLayerThaw","contract":"all_layers_thaw","evidence":["shortcut: 모든 레이어 녹임","xref inclusion is explicit and on/off state is preserved"]},
+    {"alias":"LTG","legacy_symbol":"xiLayerOnOffToggle","contract":"layer_on_off_toggle","evidence":["shortcut: 켜진 것 끄고 꺼진 것 켜기","current and xref policies are explicit"]},
+    {"alias":"LU","legacy_symbol":"xiSelUnLock","contract":"selected_layers_unlock","evidence":["shortcut: 선택 켜 풀림","selected entity handles normalize to exact layers"]},
+    {"alias":"LUK","legacy_symbol":"xiLayerUnlock","contract":"all_layers_unlock","evidence":["shortcut: 전체 풀림","xref inclusion is explicit"]},
+    {"alias":"CDE","legacy_symbol":"xiDedit","contract":"dimension_text_edit","evidence":["shortcut: 치수 문자 변경","set/prefix/suffix/reset policies and measurement token are explicit"]},
+    {"alias":"DCV","legacy_symbol":"xiDimConvert","contract":"dimension_to_linear_conversion","evidence":["shortcut: 선형치수로 변환","aligned/rotated, angle, source disposition, style/text preservation are explicit"]},
+    {"alias":"DDT","legacy_symbol":"xiDimDTogle","contract":"dimension_extension_suppression","evidence":["shortcut: 치수보조선 감추기","first/second/both and hide/show/toggle are explicit"]},
+    {"alias":"DE","legacy_symbol":"xiConDim","contract":"continue_dimension","evidence":["recovered DCL: style setting, screen distance or explicit dimscale factor; repeat option"]},
+    {"alias":"DG","legacy_symbol":"xiDimGap","contract":"dimension_gap","evidence":["recovered DCL: line/dimension/object scale basis, inside/outside baseline, repeat option"]},
+    {"alias":"DH","legacy_symbol":"xiDimTextHome","contract":"dimension_text_home","evidence":["shortcut: 치수문자 원위치시키기","default position is supplied as normalized geometry"]},
+    {"alias":"DLA","legacy_symbol":"xiDimsExLineArrange","contract":"extension_line_arrange","evidence":["shortcut: 치수 보조선 정렬","first/second alignment points are explicit"]},
+    {"alias":"DLL","legacy_symbol":"xiDimsExLineLength","contract":"extension_line_length","evidence":["shortcut: 치수 보조선 길이","side, factor and scale basis are explicit"]}
+  ],
+  "safety": {
+    "mcp_tools_are_read_only_planners": true,
+    "cad_mutation_tools_exposed": false,
+    "dry_run_default": true,
+    "live_mutation_requires_fingerprinted_approval": true,
+    "xref_and_locked_dimension_rejected": true,
+    "expected_current_values_in_plans": true,
+    "ambiguous_legacy_choices_are_explicit_contract_fields": true,
+    "legacy_equivalence_verified_in_cad": false,
+    "production_live": 0
+  }
+}

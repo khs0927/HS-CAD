@@ -31,7 +31,8 @@ dependencies = [
   "duckdb>=1.1,<2",
   "shapely>=2.0,<3",
   "requests>=2.32,<3",
-  "mss>=9,<11"
+  "mss>=9,<11",
+  "mcp==1.28.1"
 ]
 
 [project.optional-dependencies]
@@ -53,10 +54,11 @@ ocr = [
 [project.scripts]
 hscad = "src.main:main"
 hs-cad = "src.main:main"
+xicad-mcp = "xicad_mcp.server:main"
 
 [tool.setuptools.packages.find]
 where = [".", "src"]
-include = ["src*", "neuro_seq_cad*"]
+include = ["src*", "neuro_seq_cad*", "xicad_mcp*"]
 namespaces = true
 
 [tool.pytest.ini_options]

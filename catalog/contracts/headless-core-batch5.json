@@ -1,0 +1,27 @@
+{
+  "schema_version": "1.0",
+  "batch": 5,
+  "commands": [
+    {"alias":"COI","legacy_symbol":"xiCommaIns","contract":"numeric_text_format","evidence":["description: 숫자에 천단위 콤마 넣기","xiText FAS4 entrypoint C:XICOMMAINS"]},
+    {"alias":"COR","legacy_symbol":"xiCommaRem","contract":"numeric_text_format","evidence":["description: 숫자에 천단위 콤마 빼기","xiText FAS4 entrypoint C:XICOMMAREM"]},
+    {"alias":"ND","legacy_symbol":"xiNumDivide","contract":"group_numeric_operation","evidence":["xiNumDivide dialog: 숫자합/숫자합","first group sum divided by second group sum"]},
+    {"alias":"NP","legacy_symbol":"xiNumBunyangPro","contract":"group_numeric_operation","evidence":["description indicates pairwise products","DCL label indicates 숫자합x숫자합","contract requires explicit distribution_mode"]},
+    {"alias":"NS","legacy_symbol":"xiNumSubtract","contract":"group_numeric_operation","evidence":["xiNumSubtract dialog: 숫자합-숫자합"]},
+    {"alias":"NUC","legacy_symbol":"xiNumberCalulate","contract":"bulk_number_calculation","evidence":["DCL operations + - x /","rounding, decimal, comma and parenthesized-negative options"]},
+    {"alias":"PY","legacy_symbol":"xiPy","contract":"square_metre_to_pyeong","evidence":["FAS4 literal conversion factor 0.3025","replace/existing/create output prompts","rounding, unit and parentheses options"]},
+    {"alias":"FAR","legacy_symbol":"xiFindReplace","contract":"find_replace","evidence":["FAR DCL search target and condition options","whole/case/layer/height/block/type/space filters"]},
+    {"alias":"TAP","legacy_symbol":"xiTextAp","contract":"text_affix","evidence":["description: 문자에 접두어 접미어 넣기"]},
+    {"alias":"TD","legacy_symbol":"xiTextDivide","contract":"text_divide","evidence":["DCL preserve original, trim, separator and line-gap options"]},
+    {"alias":"TM","legacy_symbol":"xiTextMerge","contract":"text_merge","evidence":["DCL order, separator, block text and new-text options"]},
+    {"alias":"TS","legacy_symbol":"xiTsize","contract":"text_size","evidence":["command prompts support absolute, ratio and reference height"]}
+  ],
+  "safety": {
+    "cad_mutation_tools_exposed": false,
+    "mcp_tools_are_read_only_planners": true,
+    "dry_run_default": true,
+    "live_mutation_requires_fingerprinted_approval": true,
+    "xref_and_locked_layer_mutation_rejected": true,
+    "legacy_equivalence_verified_in_cad": false,
+    "production_live": 0
+  }
+}

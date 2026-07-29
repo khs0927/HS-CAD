@@ -1,0 +1,21 @@
+{
+  "schema_version":"1.0",
+  "batch":12,
+  "commands":[
+    {"alias":"DPL","legacy_symbol":"xiDimPL","contract":"polyline_auto_dimension","evidence":["shortcut: 폴리선 도형에 자동 치수 기입","vertex policy and dimension geometry are explicit"]},
+    {"alias":"DQ","legacy_symbol":"xiQuickDim","contract":"bulk_quick_dimension","evidence":["shortcut: 일괄 치수","chain/baseline, orientation and normalized feature points are explicit"]},
+    {"alias":"DSC","legacy_symbol":"xiDimScale","contract":"dimension_scale","evidence":["shortcut: 치수 축척","current-style versus selected-dimension scope is explicit"]},
+    {"alias":"DSE","legacy_symbol":"xiDimStyleEdit","contract":"dimension_style_edit","evidence":["shortcut: 치수 모양 수정","style property patch is explicit"]},
+    {"alias":"DSM","legacy_symbol":"xiDimStyleMerge","contract":"dimension_style_merge","evidence":["recovered DCL: multiple sources, one target, nested dimensions, optional source removal"]},
+    {"alias":"DTM","legacy_symbol":"xiDimTextMove","contract":"dimension_text_collision_move","evidence":["shortcut: 겹친 치수문자를 아래나 옆으로 이동","collision groups, direction and scaled offset are explicit"]},
+    {"alias":"DTO","legacy_symbol":"xiDimTxOverRide","contract":"dimension_supplement_text","evidence":["shortcut: 치수 보조 설명글 넣기","prefix/suffix/above/below and existing override policy are explicit"]},
+    {"alias":"DU","legacy_symbol":"xiDimUpdate","contract":"dimension_update","evidence":["shortcut: 치수 업데이트","target style and text preservation policies are explicit"]},
+    {"alias":"ED","legacy_symbol":"xiEditDimScale","contract":"edit_dimension_scale","evidence":["recovered DCL: fixed scale, multiplier, match object or DSC value"]},
+    {"alias":"IL","legacy_symbol":"xiIntLen","contract":"intersection_length","evidence":["shortcut: 교차점을 찾아 길이 넣기","intersection points are supplied as normalized evidence; output kind explicit"]},
+    {"alias":"LDA","legacy_symbol":"xiLeaderAlign","contract":"leader_endpoint_align","evidence":["shortcut: 지시선 끝점 정렬","axis/coordinate or explicit line and endpoint are explicit"]},
+    {"alias":"LSE","legacy_symbol":"xiLeaderStyleEdit","contract":"leader_style_edit","evidence":["recovered DCL: leader/mleader, scale, style action, arrow, text position, sizes and colors"]}
+  ],
+  "safety":{"mcp_tools_are_read_only_planners":true,"cad_mutation_tools_exposed":false,"dry_run_default":true,
+    "live_mutation_requires_fingerprinted_approval":true,"xref_and_locked_entities_rejected":true,
+    "ambiguous_legacy_choices_are_explicit_contract_fields":true,"legacy_equivalence_verified_in_cad":false,"production_live":0}
+}

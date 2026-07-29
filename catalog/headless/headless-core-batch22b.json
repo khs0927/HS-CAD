@@ -1,0 +1,86 @@
+{
+  "schema_version": "1.0",
+  "batch": "22B",
+  "contract_kind": "dialog_free_read_only_execution_plan",
+  "commands": [
+    {
+      "alias": "SM",
+      "exact_symbol": "xiScaleMulti",
+      "current_evidence": "C:/xicad/xiLib/xiShortkey.key:113 SM;xiScaleMulti;자기 자리에서 크기변경",
+      "frozen_evidence": "tests/fixtures/xiShortkey.357.key:103 SM;xiScaleMulti;자기 자리에서 크기변경",
+      "dcl_path": "C:/xicad/DialogBox/ACAD_xi0419_d.02.dcl:3-24",
+      "config_evidence": "C:/xicad/xiLib/xiConfig.cfg:69-70 /xiScaleMulti = Center|1",
+      "original_inputs": ["entities", "scale factor", "one of ten recovered anchor keys", "entity extents/insertion-or-start point"],
+      "output_semantics": "per-entity scale matrices about the selected recovered anchor",
+      "evidence_level": "dcl_and_config_recovered",
+      "gaps": ["compiled entity extents rules unavailable", "second persisted config value meaning unavailable", "CAD equivalence unverified"]
+    },
+    {
+      "alias": "SS",
+      "exact_symbol": "xiSCALE",
+      "current_evidence": "C:/xicad/xiLib/xiShortkey.key:114 SS;xiSCALE;배율값을 기억하여 연속 크기변경",
+      "frozen_evidence": "tests/fixtures/xiShortkey.357.key:104 SS;xiSCALE;배율값을 기억하여 연속 크기변경",
+      "dcl_path": null,
+      "config_evidence": null,
+      "original_inputs": ["ordered entities", "remembered positive non-unit factor", "explicit base point per entity"],
+      "output_semantics": "apply one explicit remembered factor to each caller-supplied base point",
+      "evidence_level": "shortcut_only_explicit_policy_not_legacy_equivalent",
+      "gaps": ["no command-specific DCL/config/readable source", "legacy base-point prompt/default unavailable", "CAD equivalence unverified"]
+    },
+    {
+      "alias": "WR",
+      "exact_symbol": "xiWallRecover",
+      "current_evidence": "C:/xicad/xiLib/xiShortkey.key:116 WR;xiWallRecover;선 복구하기 (중간객체는 모두 삭제)",
+      "frozen_evidence": "tests/fixtures/xiShortkey.357.key:106 WR;xiWallRecover;선 복구하기 (중간객체는 모두 삭제)",
+      "dcl_path": null,
+      "config_evidence": null,
+      "original_inputs": ["explicit boundary line handles", "explicit intermediate delete handles", "caller-supplied recovered line geometry"],
+      "output_semantics": "preserve boundary evidence, create exact proposed lines, and delete only explicit intermediate targets",
+      "evidence_level": "shortcut_only_explicit_policy_not_legacy_equivalent",
+      "gaps": ["wall/intersection recognition algorithm compiled", "tolerance and extension policy unavailable", "planner never derives recovered geometry", "CAD equivalence unverified"]
+    },
+    {
+      "alias": "BMT",
+      "exact_symbol": "xiBoxMoveTool",
+      "current_evidence": "C:/xicad/xiLib/xiShortkey.key:152 BMT;xiBoxMoveTool;평면간 복사이동",
+      "frozen_evidence": "tests/fixtures/xiShortkey.357.key:140 BMT;xiBoxMoveTool;평면간 복사이동",
+      "dcl_path": null,
+      "config_evidence": null,
+      "original_inputs": ["source handles", "source reference", "target reference", "copy or move disposition"],
+      "output_semantics": "uniform explicit translation of a selected floor-plan set with caller-selected copy/move policy",
+      "evidence_level": "shortcut_only_explicit_policy_not_legacy_equivalent",
+      "gaps": ["no command-specific DCL/config/readable source", "floor-plan recognition and selection defaults unavailable", "CAD equivalence unverified"]
+    },
+    {
+      "alias": "DAS",
+      "exact_symbol": "xiDyScale",
+      "current_evidence": "C:/xicad/xiLib/xiShortkey.key:153 DAS;xiDyScale;살아있는 도면 축척 넣기",
+      "frozen_evidence": "tests/fixtures/xiShortkey.357.key:141 DAS;xiDyScale;살아있는 도면 축척 넣기",
+      "dcl_path": null,
+      "config_evidence": "C:/xicad/xiLib/xiConfig.cfg:131-132 /xiDyScale persisted opaque fields including DisA3_rdo and 150.0",
+      "original_inputs": ["positive scale denominator", "exact caller-supplied text, mtext, or block annotation payloads"],
+      "output_semantics": "validated creation plan for exact supplied scale annotations; no dynamic entity is synthesized",
+      "evidence_level": "config_and_shortcut_only_explicit_result",
+      "gaps": ["config field meanings are undocumented", "dynamic linkage/entity construction is compiled", "CAD equivalence unverified"]
+    },
+    {
+      "alias": "DBC",
+      "exact_symbol": "xiDboxAutoCopy",
+      "current_evidence": "C:/xicad/xiLib/xiShortkey.key:154 DBC;xiDboxAutoCopy;도곽 자동인식 복사",
+      "frozen_evidence": "tests/fixtures/xiShortkey.357.key:142 DBC;xiDboxAutoCopy;도곽 자동인식 복사",
+      "dcl_path": null,
+      "config_evidence": null,
+      "original_inputs": ["explicit recognized frame handle and bounds", "source entity set including frame", "source reference", "target reference points"],
+      "output_semantics": "copy the explicit frame-bound source set to each explicit target translation",
+      "evidence_level": "shortcut_only_explicit_policy_not_legacy_equivalent",
+      "gaps": ["border recognition algorithm compiled", "copy-set and placement prompt defaults unavailable", "caller must supply recognition evidence", "CAD equivalence unverified"]
+    }
+  ],
+  "truthfulness": {
+    "dialog_required": false,
+    "cad_mutation_tool_exposed": false,
+    "legacy_equivalence_verified_in_cad": false,
+    "production_usable": false,
+    "note": "SM restores only choices visible in its DCL/config. All hidden selection, topology, recognition, and dynamic-entity decisions remain explicit caller evidence instead of guessed legacy behavior."
+  }
+}

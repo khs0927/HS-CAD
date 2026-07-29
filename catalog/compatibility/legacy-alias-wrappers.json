@@ -1,0 +1,293 @@
+{
+  "schema_version": "1.0",
+  "release_scope": "xicad-legacy-357",
+  "generated_from": {
+    "implementation_queue": "command-implementation-queue.json#sha256=48809ff628b30e784f46510745e0e5e419c4a63f37801bad68002c475434a76c",
+    "current_shortcuts": "xicad_commands_all.json#sha256=573bfb2e97c9998058527ebe3aecb61c7db7ff781a198fb9b16cee1f5d495aa3",
+    "compiled_manifest": "xicad_550_compiled_manifest.json#sha256=c3e2d48c463da4c6d4301df84cba142472d11ca18ca80210aadae7360a3d9d83"
+  },
+  "summary": {
+    "total": 16,
+    "default_profile": 15,
+    "explicit_override_profile": 1,
+    "static_validated": 16,
+    "production_usable": 0,
+    "all_static_validated": true,
+    "all_production_usable": false
+  },
+  "wrappers": [
+    {
+      "legacy_alias": "1",
+      "legacy_symbol": "xiSelOff",
+      "current_alias": "LL",
+      "current_symbol": "xiSelOff",
+      "compiled_entrypoint": "C:XISELOFF",
+      "module": "xiLayer",
+      "load_policy": "default",
+      "alias_collision": false,
+      "output_file": "cad/XICAD_LegacyAliases.lsp",
+      "state": "generated_static_validated",
+      "production_usable": false,
+      "blockers": [
+        "wrapper is statically generated but not CAD-smoke-evidenced",
+        "fixture and dual-version CAD smoke evidence are missing"
+      ]
+    },
+    {
+      "legacy_alias": "2",
+      "legacy_symbol": "xiSelLayerOn",
+      "current_alias": "LF",
+      "current_symbol": "xiSelLayerOn",
+      "compiled_entrypoint": "C:XISELLAYERON",
+      "module": "xiLayer",
+      "load_policy": "default",
+      "alias_collision": false,
+      "output_file": "cad/XICAD_LegacyAliases.lsp",
+      "state": "generated_static_validated",
+      "production_usable": false,
+      "blockers": [
+        "wrapper is statically generated but not CAD-smoke-evidenced",
+        "fixture and dual-version CAD smoke evidence are missing"
+      ]
+    },
+    {
+      "legacy_alias": "3",
+      "legacy_symbol": "xiLayeron",
+      "current_alias": "LO",
+      "current_symbol": "xiLayeron",
+      "compiled_entrypoint": "C:XILAYERON",
+      "module": "xiLayer",
+      "load_policy": "default",
+      "alias_collision": false,
+      "output_file": "cad/XICAD_LegacyAliases.lsp",
+      "state": "generated_static_validated",
+      "production_usable": false,
+      "blockers": [
+        "wrapper is statically generated but not CAD-smoke-evidenced",
+        "fixture and dual-version CAD smoke evidence are missing"
+      ]
+    },
+    {
+      "legacy_alias": "BBB",
+      "legacy_symbol": "xiBreakMulti",
+      "current_alias": "B",
+      "current_symbol": "xiBreakMulti",
+      "compiled_entrypoint": "C:XIBREAKMULTI",
+      "module": "xiUtil0",
+      "load_policy": "default",
+      "alias_collision": false,
+      "output_file": "cad/XICAD_LegacyAliases.lsp",
+      "state": "generated_static_validated",
+      "production_usable": false,
+      "blockers": [
+        "wrapper is statically generated but not CAD-smoke-evidenced",
+        "fixture and dual-version CAD smoke evidence are missing"
+      ]
+    },
+    {
+      "legacy_alias": "CE",
+      "legacy_symbol": "xiCenter",
+      "current_alias": "CEN",
+      "current_symbol": "xiCenter",
+      "compiled_entrypoint": "C:XICENTER",
+      "module": "xiUtil7",
+      "load_policy": "default",
+      "alias_collision": false,
+      "output_file": "cad/XICAD_LegacyAliases.lsp",
+      "state": "generated_static_validated",
+      "production_usable": false,
+      "blockers": [
+        "wrapper is statically generated but not CAD-smoke-evidenced",
+        "fixture and dual-version CAD smoke evidence are missing"
+      ]
+    },
+    {
+      "legacy_alias": "DE",
+      "legacy_symbol": "xiConDim",
+      "current_alias": "CC",
+      "current_symbol": "xiConDim",
+      "compiled_entrypoint": "C:XICONDIM",
+      "module": "xiUtil3",
+      "load_policy": "default",
+      "alias_collision": false,
+      "output_file": "cad/XICAD_LegacyAliases.lsp",
+      "state": "generated_static_validated",
+      "production_usable": false,
+      "blockers": [
+        "wrapper is statically generated but not CAD-smoke-evidenced",
+        "fixture and dual-version CAD smoke evidence are missing"
+      ]
+    },
+    {
+      "legacy_alias": "EW",
+      "legacy_symbol": "xiSetCLayer",
+      "current_alias": "LE",
+      "current_symbol": "xiSetCLayer",
+      "compiled_entrypoint": "C:XISETCLAYER",
+      "module": "xiLayer",
+      "load_policy": "default",
+      "alias_collision": false,
+      "output_file": "cad/XICAD_LegacyAliases.lsp",
+      "state": "generated_static_validated",
+      "production_usable": false,
+      "blockers": [
+        "wrapper is statically generated but not CAD-smoke-evidenced",
+        "fixture and dual-version CAD smoke evidence are missing"
+      ]
+    },
+    {
+      "legacy_alias": "FF",
+      "legacy_symbol": "xiFilletL",
+      "current_alias": "FL",
+      "current_symbol": "xiFilletL",
+      "compiled_entrypoint": "C:XIFILLETL",
+      "module": "xiUtil0",
+      "load_policy": "default",
+      "alias_collision": false,
+      "output_file": "cad/XICAD_LegacyAliases.lsp",
+      "state": "generated_static_validated",
+      "production_usable": false,
+      "blockers": [
+        "wrapper is statically generated but not CAD-smoke-evidenced",
+        "fixture and dual-version CAD smoke evidence are missing"
+      ]
+    },
+    {
+      "legacy_alias": "LF",
+      "legacy_symbol": "xiSelFreeze",
+      "current_alias": "LLL",
+      "current_symbol": "xiSelFreeze",
+      "compiled_entrypoint": "C:XISELFREEZE",
+      "module": "xiLayer",
+      "load_policy": "explicit_override",
+      "alias_collision": true,
+      "output_file": "cad/XICAD_LegacyAliases_LF_Profile.lsp",
+      "state": "generated_static_validated",
+      "production_usable": false,
+      "blockers": [
+        "current xiCAD reuses the legacy alias for a different function",
+        "the explicit profile must be loaded deliberately",
+        "fixture and dual-version CAD smoke evidence are missing"
+      ]
+    },
+    {
+      "legacy_alias": "LOC",
+      "legacy_symbol": "xiLayerOnColor",
+      "current_alias": "LFC",
+      "current_symbol": "xiLayerOnColor",
+      "compiled_entrypoint": "C:XILAYERONCOLOR",
+      "module": "xiLayer",
+      "load_policy": "default",
+      "alias_collision": false,
+      "output_file": "cad/XICAD_LegacyAliases.lsp",
+      "state": "generated_static_validated",
+      "production_usable": false,
+      "blockers": [
+        "wrapper is statically generated but not CAD-smoke-evidenced",
+        "fixture and dual-version CAD smoke evidence are missing"
+      ]
+    },
+    {
+      "legacy_alias": "LT",
+      "legacy_symbol": "xiLayerThaw",
+      "current_alias": "LOO",
+      "current_symbol": "xiLayerThaw",
+      "compiled_entrypoint": "C:XILAYERTHAW",
+      "module": "xiLayer",
+      "load_policy": "default",
+      "alias_collision": false,
+      "output_file": "cad/XICAD_LegacyAliases.lsp",
+      "state": "generated_static_validated",
+      "production_usable": false,
+      "blockers": [
+        "wrapper is statically generated but not CAD-smoke-evidenced",
+        "fixture and dual-version CAD smoke evidence are missing"
+      ]
+    },
+    {
+      "legacy_alias": "MK",
+      "legacy_symbol": "xiMask",
+      "current_alias": "MSK",
+      "current_symbol": "xiMask",
+      "compiled_entrypoint": "C:XIMASK",
+      "module": "xiUtil3",
+      "load_policy": "default",
+      "alias_collision": false,
+      "output_file": "cad/XICAD_LegacyAliases.lsp",
+      "state": "generated_static_validated",
+      "production_usable": false,
+      "blockers": [
+        "wrapper is statically generated but not CAD-smoke-evidenced",
+        "fixture and dual-version CAD smoke evidence are missing"
+      ]
+    },
+    {
+      "legacy_alias": "Q11",
+      "legacy_symbol": "xiBlockLibrary",
+      "current_alias": "Q1",
+      "current_symbol": "xiBlockLibrary",
+      "compiled_entrypoint": "C:XIBLOCKLIBRARY",
+      "module": "xiSym2",
+      "load_policy": "default",
+      "alias_collision": false,
+      "output_file": "cad/XICAD_LegacyAliases.lsp",
+      "state": "generated_static_validated",
+      "production_usable": false,
+      "blockers": [
+        "wrapper is statically generated but not CAD-smoke-evidenced",
+        "fixture and dual-version CAD smoke evidence are missing"
+      ]
+    },
+    {
+      "legacy_alias": "WE",
+      "legacy_symbol": "xiPolyEndTab",
+      "current_alias": "PET",
+      "current_symbol": "xiPolyEndTab",
+      "compiled_entrypoint": "C:XIPOLYENDTAB",
+      "module": "xiUtil4",
+      "load_policy": "default",
+      "alias_collision": false,
+      "output_file": "cad/XICAD_LegacyAliases.lsp",
+      "state": "generated_static_validated",
+      "production_usable": false,
+      "blockers": [
+        "wrapper is statically generated but not CAD-smoke-evidenced",
+        "fixture and dual-version CAD smoke evidence are missing"
+      ]
+    },
+    {
+      "legacy_alias": "WQ",
+      "legacy_symbol": "xiOffsetAndClose",
+      "current_alias": "OC",
+      "current_symbol": "xiOffsetAndClose",
+      "compiled_entrypoint": "C:XIOFFSETANDCLOSE",
+      "module": "xiUtil5",
+      "load_policy": "default",
+      "alias_collision": false,
+      "output_file": "cad/XICAD_LegacyAliases.lsp",
+      "state": "generated_static_validated",
+      "production_usable": false,
+      "blockers": [
+        "wrapper is statically generated but not CAD-smoke-evidenced",
+        "fixture and dual-version CAD smoke evidence are missing"
+      ]
+    },
+    {
+      "legacy_alias": "XX",
+      "legacy_symbol": "xiX",
+      "current_alias": "X",
+      "current_symbol": "xiX",
+      "compiled_entrypoint": "C:XIX",
+      "module": "xiUtil0",
+      "load_policy": "default",
+      "alias_collision": false,
+      "output_file": "cad/XICAD_LegacyAliases.lsp",
+      "state": "generated_static_validated",
+      "production_usable": false,
+      "blockers": [
+        "wrapper is statically generated but not CAD-smoke-evidenced",
+        "fixture and dual-version CAD smoke evidence are missing"
+      ]
+    }
+  ]
+}

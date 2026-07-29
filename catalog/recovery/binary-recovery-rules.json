@@ -1,0 +1,63 @@
+{
+  "schema_version": "1.0",
+  "commands": [
+    {
+      "alias": "ABD",
+      "legacy_symbol": "xiAllNullBlockDelete",
+      "description": "유령블럭 모두 삭제",
+      "decision": "cleanup_helper_review_required",
+      "target_lane": "source_reimplementation",
+      "helper_terms": ["DelGhostBlk_t", "유령 블럭 삭제"]
+    },
+    {
+      "alias": "AGD",
+      "legacy_symbol": "xiAllGhostDelete",
+      "description": "유령객체 모두 삭제",
+      "decision": "cleanup_helper_review_required",
+      "target_lane": "source_reimplementation",
+      "helper_terms": ["DelGhost_t", "유령 문자 삭제"]
+    },
+    {
+      "alias": "APD",
+      "legacy_symbol": "xiAllPointDelete",
+      "description": "포인트 객체 모두 삭제",
+      "decision": "deterministic_core_candidate",
+      "target_lane": "source_reimplementation",
+      "entity_filter": "POINT"
+    },
+    {
+      "alias": "LFD",
+      "legacy_symbol": "xiLayerFiltersDelete",
+      "description": "레이어필터삭제",
+      "decision": "shared_core_candidate",
+      "target_lane": "consolidated_core",
+      "core_key": "layer_filters_delete",
+      "helper_terms": ["ACAD_LAYERFILTERS", "XIS:LAYERFILTERLIST", "XIS:GETGROUPLAYERFILTERS"]
+    },
+    {
+      "alias": "LPD",
+      "legacy_symbol": "xiLayerFiltersDelete",
+      "description": "레이어 필터 삭제하기",
+      "decision": "shared_core_candidate",
+      "target_lane": "consolidated_core",
+      "core_key": "layer_filters_delete",
+      "helper_terms": ["ACAD_LAYERFILTERS", "XIS:LAYERFILTERLIST", "XIS:GETGROUPLAYERFILTERS"]
+    },
+    {
+      "alias": "LPU",
+      "legacy_symbol": "xiDGNLineTypePurge",
+      "description": "DGN 선종류 삭제",
+      "decision": "cleanup_helper_review_required",
+      "target_lane": "source_reimplementation",
+      "helper_terms": ["XIS:DELDGN", "ACAD_DGNLINESTYLECOMP", "DGN 선종류 삭제"]
+    },
+    {
+      "alias": "SLD",
+      "legacy_symbol": "xiScaleListDelete",
+      "description": "스케일리스트 삭제 (ZWCAD 미지원)",
+      "decision": "platform_unsupported",
+      "target_lane": "platform_exclusion",
+      "unsupported_platforms": ["zwcad"]
+    }
+  ]
+}

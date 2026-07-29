@@ -1,0 +1,80 @@
+{
+  "schema_version": "1.0",
+  "batch": "19B",
+  "contract_kind": "dialog_free_read_only_execution_plan",
+  "commands": [
+    {
+      "alias": "BAT",
+      "exact_symbol": "xiBreakAndText",
+      "current_evidence": "C:/xicad/xiLib/xiShortkey.key:71 — 선자르고 문자넣기; C:/xicad/xiLib/xiConfig.cfg /xiBreakAndText",
+      "frozen_evidence": "tests/fixtures/xiShortkey.357.key:62 — BAT;xiBreakAndText;선자르고 문자넣기",
+      "dcl_path": "C:/xicad/DialogBox/ZWCAD_xi0487_d.01.dcl",
+      "original_inputs": ["position/repeat/middle/user/existing-text mode", "first text at half spacing", "text distance", "break gap", "0/parallel/perpendicular text angle", "text", "text height", "text layer/current-layer toggle"],
+      "output_semantics": "caller-bound break-gap specifications plus text creation specifications",
+      "evidence_level": "dcl_and_config_recovered",
+      "gaps": ["compiled placement/intersection algorithm unavailable", "caller must supply exact break and text points", "CAD equivalence unverified"]
+    },
+    {
+      "alias": "BB",
+      "exact_symbol": "xiBreakToCurrent",
+      "current_evidence": "C:/xicad/xiLib/xiShortkey.key:72 — 자르고 현재켜로 넣기",
+      "frozen_evidence": "tests/fixtures/xiShortkey.357.key:63 — BB;xiBreakToCurrent;자르고 현재켜로 넣기",
+      "dcl_path": null,
+      "original_inputs": ["source object", "two break points", "current layer (explicit contract input)"],
+      "output_semantics": "isolate the caller-selected segment and assign it to the explicit current layer",
+      "evidence_level": "shortcut_only_explicit_policy_not_legacy_equivalent",
+      "gaps": ["legacy prompts unavailable", "meaning of retained side/segment not recoverable", "CAD equivalence unverified"]
+    },
+    {
+      "alias": "BRO",
+      "exact_symbol": "xiBreakO",
+      "current_evidence": "C:/xicad/xiLib/xiShortkey.key:74 — 객체위의 객체 끊기",
+      "frozen_evidence": "tests/fixtures/xiShortkey.357.key:65 — BRO;xiBreakO;객체위의 객체 끊기",
+      "dcl_path": null,
+      "original_inputs": ["target object", "objects over target", "explicit intersection points", "gap policy"],
+      "output_semantics": "break target at caller-supplied intersections",
+      "evidence_level": "shortcut_only_explicit_policy_not_legacy_equivalent",
+      "gaps": ["legacy intersection tolerance and selection order unavailable", "caller supplies intersections", "CAD equivalence unverified"]
+    },
+    {
+      "alias": "CB",
+      "exact_symbol": "xiCircleBreak",
+      "current_evidence": "C:/xicad/xiLib/xiShortkey.key:75 — 원 절단하기",
+      "frozen_evidence": "tests/fixtures/xiShortkey.357.key:66 — CB;xiCircleBreak;원 절단하기",
+      "dcl_path": null,
+      "original_inputs": ["circle handle", "center/radius snapshot", "two break angles", "explicit kept-arc side", "target layer"],
+      "output_semantics": "replace the source circle with one explicitly selected arc",
+      "evidence_level": "shortcut_only_explicit_policy_not_legacy_equivalent",
+      "gaps": ["legacy point ordering and retained arc unavailable", "caller selects kept arc", "CAD equivalence unverified"]
+    },
+    {
+      "alias": "CUT",
+      "exact_symbol": "xiCutter",
+      "current_evidence": "C:/xicad/xiLib/xiShortkey.key:76 — 닫힌 객체 안의 모든 객체 삭제; C:/xicad/xiLib/xiConfig.cfg /xiCutter",
+      "frozen_evidence": "tests/fixtures/xiShortkey.357.key:67 — CUT;xiCutter;닫힌 객체 안의 모든 객체 삭제",
+      "dcl_path": "C:/xicad/AutoSave/ACAD_xi0413_d.01.dcl",
+      "original_inputs": ["include locked objects", "delete all objects in selected region", "explode blocks", "explode hatches", "convert solids to another hatch", "hatch pattern", "hatch scale", "hatch angle"],
+      "output_semantics": "destructive action lists over caller-preclassified entirely-inside candidates",
+      "evidence_level": "dcl_and_config_recovered",
+      "gaps": ["compiled containment/boundary algorithm unavailable", "caller must preclassify containment", "xref candidates always protected", "CAD mutation not exposed"]
+    },
+    {
+      "alias": "DTP",
+      "exact_symbol": "xiDivideToPoly",
+      "current_evidence": "C:/xicad/xiLib/xiShortkey.key:77 — 곡선을 직선으로 분할",
+      "frozen_evidence": "tests/fixtures/xiShortkey.357.key:68 — DTP;xiDivideToPoly;곡선을 직선으로 분할",
+      "dcl_path": null,
+      "original_inputs": ["source curves", "explicit sampled vertices", "maximum chord-error provenance", "preserve/replace source"],
+      "output_semantics": "line-segment creation plan from caller-supplied curve samples",
+      "evidence_level": "shortcut_only_explicit_policy_not_legacy_equivalent",
+      "gaps": ["legacy sampling density/tolerance unavailable", "planner does not interpolate curves", "CAD equivalence unverified"]
+    }
+  ],
+  "truthfulness": {
+    "dialog_required": false,
+    "cad_mutation_tool_exposed": false,
+    "legacy_equivalence_verified_in_cad": false,
+    "production_usable": false,
+    "note": "Only recovered choices are represented. Shortcut-only geometry decisions are explicit caller inputs, not inferred legacy behavior."
+  }
+}

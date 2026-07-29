@@ -1,0 +1,80 @@
+{
+  "schema_version": "1.0",
+  "batch": "20B",
+  "contract_kind": "dialog_free_read_only_execution_plan",
+  "commands": [
+    {
+      "alias": "ARD",
+      "exact_symbol": "xiDynamicArr",
+      "current_evidence": "C:/xicad/xiLib/xiShortkey.key:87 — 입체 동적 배열",
+      "frozen_evidence": "tests/fixtures/xiShortkey.357.key:77 — ARD;xiDynamicArr;입체 동적 배열",
+      "dcl_path": null,
+      "original_inputs": ["source objects", "caller-supplied affine 3D instance matrices"],
+      "output_semantics": "copy specifications bound to explicit 4x4 affine transforms",
+      "evidence_level": "shortcut_only_explicit_policy_not_legacy_equivalent",
+      "gaps": ["legacy grips/prompts and dynamic spacing rules unavailable", "no DCL/config section found", "CAD equivalence unverified"]
+    },
+    {
+      "alias": "ARP",
+      "exact_symbol": "xiArrP",
+      "current_evidence": "C:/xicad/xiLib/xiShortkey.key:88 — 원형 동적 배열",
+      "frozen_evidence": "tests/fixtures/xiShortkey.357.key:78 — ARP;xiArrP;원형 동적 배열",
+      "dcl_path": null,
+      "original_inputs": ["source objects", "center", "reference point", "X/Y/Z axis", "item count", "total angle", "rotate-items policy", "source-is-first policy"],
+      "output_semantics": "polar copy transforms calculated from explicit array policy",
+      "evidence_level": "shortcut_only_explicit_policy_not_legacy_equivalent",
+      "gaps": ["legacy angular fill/count convention unavailable", "contract convention is explicit", "CAD equivalence unverified"]
+    },
+    {
+      "alias": "ARV",
+      "exact_symbol": "xiArrV",
+      "current_evidence": "C:/xicad/xiLib/xiShortkey.key:89 — 직선 동적 배열",
+      "frozen_evidence": "tests/fixtures/xiShortkey.357.key:79 — ARV;xiArrV;직선 동적 배열",
+      "dcl_path": null,
+      "original_inputs": ["source objects", "3D direction", "item count", "spacing", "source-is-first policy"],
+      "output_semantics": "normalized-direction linear copy transforms",
+      "evidence_level": "shortcut_only_explicit_policy_not_legacy_equivalent",
+      "gaps": ["legacy cursor/dynamic input behavior unavailable", "no DCL/config section found", "CAD equivalence unverified"]
+    },
+    {
+      "alias": "CNL",
+      "exact_symbol": "xiCopyToNewLayer",
+      "current_evidence": "C:/xicad/xiLib/xiShortkey.key:90 — 새 켜로 복사",
+      "frozen_evidence": "tests/fixtures/xiShortkey.357.key:80 — CNL;xiCopyToNewLayer;새 켜로 복사",
+      "dcl_path": null,
+      "original_inputs": ["source objects", "copy displacement", "new layer name/color/linetype/lineweight"],
+      "output_semantics": "new-layer definition plus translated copies assigned to it",
+      "evidence_level": "shortcut_only_explicit_policy_not_legacy_equivalent",
+      "gaps": ["legacy layer defaults and collision policy unavailable", "new-layer properties explicit", "CAD equivalence unverified"]
+    },
+    {
+      "alias": "CR",
+      "exact_symbol": "xiCopyRotate",
+      "current_evidence": "C:/xicad/xiLib/xiShortkey.key:91 — 복사 후 회전",
+      "frozen_evidence": "tests/fixtures/xiShortkey.357.key:81 — CR;xiCopyRotate;복사 후 회전",
+      "dcl_path": null,
+      "original_inputs": ["source objects", "base point", "destination point", "Z rotation angle"],
+      "output_semantics": "copy transform that maps the base point to destination then rotates about Z",
+      "evidence_level": "shortcut_only_explicit_policy_not_legacy_equivalent",
+      "gaps": ["legacy prompt order/pivot convention unavailable", "contract convention explicit", "CAD equivalence unverified"]
+    },
+    {
+      "alias": "CTL",
+      "exact_symbol": "xiCopyToCLayer",
+      "current_evidence": "C:/xicad/xiLib/xiShortkey.key:92 — 현재켜로 복사",
+      "frozen_evidence": "tests/fixtures/xiShortkey.357.key:82 — CTL;xiCopyToCLayer;현재켜로 복사",
+      "dcl_path": null,
+      "original_inputs": ["source objects", "copy displacement", "captured current layer"],
+      "output_semantics": "translated copies assigned to the explicit current layer",
+      "evidence_level": "shortcut_only_explicit_policy_not_legacy_equivalent",
+      "gaps": ["legacy base/destination prompts unavailable", "current layer must be captured by caller", "CAD equivalence unverified"]
+    }
+  ],
+  "truthfulness": {
+    "dialog_required": false,
+    "cad_mutation_tool_exposed": false,
+    "legacy_equivalence_verified_in_cad": false,
+    "production_usable": false,
+    "note": "No command-specific DCL or config section was found. All transformation choices are explicit contract policy and are not claimed as recovered legacy behavior."
+  }
+}

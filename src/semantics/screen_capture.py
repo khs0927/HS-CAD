@@ -79,6 +79,119 @@ def capture_screen(path: str | Path = 'outputs/screen_capture.png', region: tupl
         return ScreenCaptureResult(False, warning=metadata['error'], metadata=metadata)
 
 
+def _find_visible_windows(title_contains: str) -> list[tuple[int, str, tuple[int, int, int, int]]]:
+    if platform.system() != 'Windows':
+        return []
+    import win32gui  # type: ignore
+
+    matches: list[tuple[int, str, tuple[int, int, int, int]]] = []
+
+    def collect(hwnd: int, _extra: object) -> None:
+        title = win32gui.GetWindowText(hwnd)
+        if win32gui.IsWindowVisible(hwnd) and title_contains.casefold() in title.casefold():
+            matches.append((hwnd, title, tuple(int(value) for value in win32gui.GetWindowRect(hwnd))))
+
+    win32gui.EnumWindows(collect, None)
+    return matches
+
+
+def _capture_native_window(
+    hwnd: int,
+    path: str | Path,
+    width: int,
+    height: int,
+) -> ScreenCaptureResult | None:
+    """Use Win32 PrintWindow when another app overlaps the target window."""
+    if platform.system() != 'Windows':
+        return None
+    try:
+        import ctypes
+
+        import win32gui  # type: ignore
+        import win32ui  # type: ignore
+        from PIL import Image  # type: ignore
+
+        window_dc = win32gui.GetWindowDC(hwnd)
+        source_dc = win32ui.CreateDCFromHandle(window_dc)
+        target_dc = source_dc.CreateCompatibleDC()
+        bitmap = win32ui.CreateBitmap()
+        bitmap.CreateCompatibleBitmap(source_dc, width, height)
+        target_dc.SelectObject(bitmap)
+        try:
+            if not ctypes.windll.user32.PrintWindow(hwnd, target_dc.GetSafeHdc(), 3):
+                return None
+            info = bitmap.GetInfo()
+            bits = bitmap.GetBitmapBits(True)
+            image = Image.frombuffer(
+                'RGB',
+                (info['bmWidth'], info['bmHeight']),
+                bits,
+                'raw',
+                'BGRX',
+                0,
+                1,
+            )
+            if image.getbbox() is None:
+                return None
+            out = Path(path)
+            out.parent.mkdir(parents=True, exist_ok=True)
+            image.save(out)
+            return ScreenCaptureResult(
+                True,
+                path=str(out),
+                metadata={
+                    'timestamp': datetime.now().isoformat(timespec='seconds'),
+                    'platform': platform.platform(),
+                    'method': 'Win32.PrintWindow',
+                    'success': True,
+                    'size': [width, height],
+                },
+            )
+        finally:
+            win32gui.DeleteObject(bitmap.GetHandle())
+            target_dc.DeleteDC()
+            source_dc.DeleteDC()
+            win32gui.ReleaseDC(hwnd, window_dc)
+    except Exception:
+        return None
+
+
+def capture_window(
+    path: str | Path = 'outputs/window_capture.png',
+    *,
+    title_contains: str = 'ZWCAD',
+) -> ScreenCaptureResult:
+    """Capture a visible window without Windows.Graphics.Capture."""
+    matches = _find_visible_windows(title_contains)
+    if not matches:
+        return ScreenCaptureResult(
+            False,
+            warning=f'no visible window contains {title_contains!r}',
+            metadata={'title_contains': title_contains, 'match_count': 0},
+        )
+    hwnd, title, (left, top, right, bottom) = max(
+        matches,
+        key=lambda item: max(0, item[2][2] - item[2][0]) * max(0, item[2][3] - item[2][1]),
+    )
+    width, height = right - left, bottom - top
+    if width <= 0 or height <= 0:
+        return ScreenCaptureResult(False, warning=f'invalid window bounds for {title!r}')
+    result = _capture_native_window(hwnd, path, width, height)
+    if result is None:
+        result = capture_screen(path, region=(left, top, width, height))
+    if result.metadata is not None:
+        result.metadata.update(
+            {
+                'window_handle': hwnd,
+                'window_title': title,
+                'window_rect': [left, top, right, bottom],
+                'native_capture_compatibility': 'PrintWindow/ImageGrab path; does not require IsBorderRequired',
+            }
+        )
+        _write_meta(Path(path), result.metadata)
+    return result
+
+
 def _write_meta(path: Path, metadata: dict[str, Any]) -> None:
     meta_path = path.with_suffix('.meta.json')
     meta_path.parent.mkdir(parents=True, exist_ok=True)

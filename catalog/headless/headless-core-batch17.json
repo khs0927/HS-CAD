@@ -1,0 +1,34 @@
+{
+  "schema_version": "1.0",
+  "batch": 17,
+  "contract_kind": "dialog_free_read_only_execution_plan",
+  "source_evidence": [
+    "tests/fixtures/xiShortkey.357.key",
+    "C:/xicad/xiLib/xiShortkey.key (CP949, read-only)",
+    "xiInsul, xiPartialZoom, xiSTB, xiSTC DCL files"
+  ],
+  "commands": [
+    {"alias":"ELV","symbol":"xiElevator","tool":"xicad_plan_elv","semantics":"explicit shaft/car/door geometry"},
+    {"alias":"EPD","symbol":"xiEPD","tool":"xicad_plan_epd","semantics":"explicit escalator plan geometry"},
+    {"alias":"HB","symbol":"xiHatBDraw","tool":"xicad_plan_hb","semantics":"snapshot hatch-loop boundary plan"},
+    {"alias":"HGRID","symbol":"xiHeatGrid","tool":"xicad_plan_hgrid","semantics":"rectangular serpentine pipe plan"},
+    {"alias":"HP","symbol":"xiHatchPoint","tool":"xicad_plan_hp","semantics":"explicit hatch-origin change"},
+    {"alias":"INS","symbol":"xiINSUL","tool":"xicad_plan_ins","semantics":"DCL insulation thresholds and cut policy"},
+    {"alias":"PK","symbol":"xipk","tool":"xicad_plan_pk","semantics":"explicit parking stall geometry"},
+    {"alias":"PZ","symbol":"xiPartialZoom","tool":"xicad_plan_pz","semantics":"DCL boundary mode and affine zoom"},
+    {"alias":"QRC","symbol":"xiQRcode","tool":"xicad_plan_qrc","semantics":"digest-bound explicit QR matrix"},
+    {"alias":"SCB","symbol":"xiScaleBar","tool":"xicad_plan_scb","semantics":"explicit scale ticks and labels"},
+    {"alias":"STB","symbol":"xiSTB","tool":"xicad_plan_stb","semantics":"DCL architectural/structural steel beam"},
+    {"alias":"STC","symbol":"xiSTC","tool":"xicad_plan_stc","semantics":"DCL stair section/elevation geometry"}
+  ],
+  "truthfulness": {
+    "dialog_required": false,
+    "cad_mutation_tool_exposed": false,
+    "legacy_equivalence_verified_in_cad": false,
+    "production_usable": false,
+    "blocked_operations": [
+      "QRC implicit encoding without a digest-bound module matrix",
+      "PK arbitrary parking angles outside explicit policy"
+    ]
+  }
+}

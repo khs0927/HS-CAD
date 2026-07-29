@@ -1,0 +1,87 @@
+{
+  "schema_version": "1.0",
+  "batch": "headless_core_batch2",
+  "commands": [
+    {
+      "aliases": ["DTD"],
+      "legacy_symbols": ["xiDimTxOverRideSep"],
+      "core_key": "dimension_override_detach",
+      "dialog_free": true,
+      "inputs_explicit": [
+        "dimension_handle",
+        "expected_current_override",
+        "replacement_override",
+        "detached_text",
+        "insertion_point",
+        "rotation_degrees",
+        "layer",
+        "text_style",
+        "text_height"
+      ],
+      "legacy_equivalence_verified_in_cad": false,
+      "production_usable": false
+    },
+    {
+      "aliases": ["DVD", "JD"],
+      "legacy_symbols": ["xiDivideDim", "xiJDims"],
+      "core_key": "linear_dimension_segments",
+      "dialog_free": true,
+      "inputs_explicit": [
+        "source_handles",
+        "source_policy",
+        "division_count_or_join_tolerance",
+        "gap_policy",
+        "text_override_policy"
+      ],
+      "legacy_equivalence_verified_in_cad": false,
+      "production_usable": false
+    },
+    {
+      "aliases": ["SCC", "SCD"],
+      "legacy_symbols": ["xiSC", "xiSCD"],
+      "core_key": "section_mark",
+      "dialog_free": true,
+      "inputs_explicit": [
+        "cut_start",
+        "cut_end",
+        "normal_side",
+        "labels",
+        "tail_length",
+        "double_line_gap",
+        "text_offset",
+        "layer",
+        "text_style",
+        "text_height"
+      ],
+      "legacy_equivalence_verified_in_cad": false,
+      "production_usable": false
+    },
+    {
+      "aliases": ["TBM"],
+      "legacy_symbols": ["xiTBstyleMK"],
+      "core_key": "table_style_contract",
+      "dialog_free": true,
+      "inputs_explicit": [
+        "style_name",
+        "title_text_style",
+        "header_text_style",
+        "data_text_style",
+        "title_text_height",
+        "header_text_height",
+        "data_text_height",
+        "cell_margins",
+        "flow_direction",
+        "existing_policy"
+      ],
+      "legacy_equivalence_verified_in_cad": false,
+      "production_usable": false
+    }
+  ],
+  "safety": {
+    "dry_run_default": true,
+    "approval_required_for_mutation": true,
+    "active_document_match_required": true,
+    "single_undo_mark": true,
+    "cad_mutation_mcp_tools_exposed": false
+  }
+}
