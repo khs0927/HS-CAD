@@ -2,7 +2,7 @@
 CT,xiCopyconTents,"내용 복사 (문자,원지름,폴리선두께,블럭)",Comm,headless_contract_implemented,headless-core-batch15.json,True,True,False,False,legacy equivalence verification and ZWCAD 2025 smoke
 DTS,xiDATESTAMP,도면 생성 날짜 기록하기,Comm,headless_contract_implemented,headless-core-batch15.json,True,True,False,False,legacy equivalence verification and ZWCAD 2025 smoke
 FLT,xiFlatten,Z값 0으로 변경,Comm,headless_contract_implemented,headless-core-batch15.json,True,True,False,False,legacy equivalence verification and ZWCAD 2025 smoke
-GEE,xiGroupEdit,그룹 수정,Comm,headless_contract_implemented,headless-core-batch15.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+GEE,xiGroupEdit,그룹 수정,Comm,headless_contract_implemented,headless-core-batch15.json,True,True,False,False,legacy equivalence verification and ZWCAD 2025 smoke
 STL,xiSteal,다른 도면에서 훔쳐오기,Comm,headless_contract_implemented,headless-core-batch15.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
 COM,xiCommandEdit,명령어 단축키 편집,Open,headless_contract_implemented,headless-core-batch15.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
 EXP,xiEXDWG,현재 작업폴더로 탐색기 실행하기,Open,headless_contract_implemented,headless-core-batch15.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
@@ -55,10 +55,10 @@ RDS,xiRandomSolid,무작위 솔리드해치,Hatch,headless_contract_implemented,
 SOL,xiSOLID,솔리드 해치하기,Hatch,headless_contract_implemented,headless-core-batch19a.json,True,True,False,False,legacy equivalence verification and ZWCAD 2025 smoke
 TB,xiTable,XiCAD 테이블그리기,Hatch,headless_contract_implemented,headless-core-batch19a.json,True,True,False,False,legacy equivalence verification and ZWCAD 2025 smoke
 TBT,xiTableText,ACAD 테이블에 문자 넣기,Hatch,headless_contract_implemented,headless-core-batch19a.json,True,True,False,False,legacy equivalence verification and ZWCAD 2025 smoke
-BAT,xiBreakAndText,선자르고 문자넣기,Cut,headless_contract_implemented,headless-core-batch19b.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
-BB,xiBreakToCurrent,자르고 현재켜로 넣기,Cut,headless_contract_implemented,headless-core-batch19b.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+BAT,xiBreakAndText,선자르고 문자넣기,Cut,headless_contract_implemented,headless-core-batch19b.json,True,True,False,False,legacy equivalence verification and ZWCAD 2025 smoke
+BB,xiBreakToCurrent,자르고 현재켜로 넣기,Cut,headless_contract_implemented,headless-core-batch19b.json,True,True,False,False,legacy equivalence verification and ZWCAD 2025 smoke
 BBB,xiBreakMulti,다중 끊기,Cut,headless_contract_implemented,headless-core-batch32.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
-BRO,xiBreakO,객체위의 객체 끊기,Cut,headless_contract_implemented,headless-core-batch19b.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
+BRO,xiBreakO,객체위의 객체 끊기,Cut,headless_contract_implemented,headless-core-batch19b.json,True,True,False,False,legacy equivalence verification and ZWCAD 2025 smoke
 CB,xiCircleBreak,원 절단하기,Cut,headless_contract_implemented,headless-core-batch19b.json,True,True,False,False,legacy equivalence verification and ZWCAD 2025 smoke
 CUT,xiCutter,닫힌 객체 안의 모든 객체 삭제,Cut,headless_contract_implemented,headless-core-batch19b.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
 DTP,xiDivideToPoly,곡선을 직선으로 분할,Cut,headless_contract_implemented,headless-core-batch19b.json,True,False,False,False,"CAD adapter, fixture postconditions, Undo restoration, and ZWCAD 2025/2026 smoke"
