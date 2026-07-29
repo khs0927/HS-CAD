@@ -305,7 +305,7 @@ def test_incomplete_architectural_geometry_is_blocked_with_plan_visible() -> Non
     assert "disagree" in live.preview_live_window(window)["blocked_reason"]
 
 
-def test_registers_fourteen_tools_with_two_executors() -> None:
+def test_registers_thirteen_tools_with_two_executors() -> None:
     class MCP:
         def __init__(self) -> None:
             self.names: list[str] = []
@@ -317,7 +317,7 @@ def test_registers_fourteen_tools_with_two_executors() -> None:
 
     mcp = MCP()
     live.register_live_batch18_tools(mcp)  # type: ignore[arg-type]
-    assert len(mcp.names) == 14
+    assert len(mcp.names) == 13
     assert [name for name in mcp.names if "execute" in name] == [
         "xicad_execute_live_truss",
         "xicad_execute_live_zigzag",

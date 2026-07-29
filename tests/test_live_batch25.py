@@ -41,7 +41,12 @@ class Layers:
 class Entity:
     ObjectName = "AcDbLine"
 
-    def __init__(self, handle: str, minimum: tuple[float, float, float] = (0, 0, 0), maximum: tuple[float, float, float] = (4, 3, 0)) -> None:
+    def __init__(
+        self,
+        handle: str,
+        minimum: tuple[float, float, float] = (0, 0, 0),
+        maximum: tuple[float, float, float] = (4, 3, 0),
+    ) -> None:
         self.Handle, self.Layer = handle, "SOURCE"
         self.StartPoint, self.EndPoint = minimum, maximum
         self._bounds = (minimum, maximum)
@@ -61,7 +66,9 @@ class Polyline(Entity):
 class Text(Entity):
     ObjectName = "AcDbText"
 
-    def __init__(self, handle: str, text: str, point: tuple[float, float, float] = (0, 0, 0), height: float = 2.5) -> None:
+    def __init__(
+        self, handle: str, text: str, point: tuple[float, float, float] = (0, 0, 0), height: float = 2.5
+    ) -> None:
         super().__init__(handle)
         self.TextString, self.InsertionPoint, self.Height = text, point, height
         self.Rotation = 0.0
@@ -93,13 +100,18 @@ class Doc:
     def __init__(self) -> None:
         self.Layers = Layers()
         self.entities: list[Any] = [
-            Text("T1", "A009"), Polyline("P1"), Entity("E1", (1, 2, 0), (5, 7, 0)),
+            Text("T1", "A009"),
+            Polyline("P1"),
+            Entity("E1", (1, 2, 0), (5, 7, 0)),
         ]
         self.ModelSpace = ModelSpace(self)
         self.marks: list[str] = []
 
-    def StartUndoMark(self) -> None: self.marks.append("start")
-    def EndUndoMark(self) -> None: self.marks.append("end")
+    def StartUndoMark(self) -> None:
+        self.marks.append("start")
+
+    def EndUndoMark(self) -> None:
+        self.marks.append("end")
 
 
 @pytest.fixture
@@ -108,7 +120,9 @@ def doc(monkeypatch: pytest.MonkeyPatch) -> Doc:
     monkeypatch.setattr(live, "_drawing", lambda _name: drawing)
     monkeypatch.setattr(live, "_entities", lambda _doc: {item.Handle.casefold(): item for item in drawing.entities})
     monkeypatch.setattr(live, "_variant", lambda point: (point.x, point.y, point.z))
-    monkeypatch.setattr(live, "_coordinates", lambda points: tuple(value for point in points for value in (point.x, point.y)))
+    monkeypatch.setattr(
+        live, "_coordinates", lambda points: tuple(value for point in points for value in (point.x, point.y))
+    )
     return drawing
 
 
@@ -116,15 +130,23 @@ def approved(preview: dict[str, Any], request: Any) -> live.LiveBatch25ExecuteRe
     return live.LiveBatch25ExecuteRequest(
         request=request,
         expected_sources=tuple(live.LiveEntityEvidence.model_validate(item) for item in preview["expected_sources"]),
-        expected_target_layers=tuple(live.LiveLayerEvidence.model_validate(item) for item in preview["expected_target_layers"]),
+        expected_target_layers=tuple(
+            live.LiveLayerEvidence.model_validate(item) for item in preview["expected_target_layers"]
+        ),
         approval_fingerprint=preview["approval_fingerprint"],
     )
 
 
 def test_qt_creates_exact_text_with_undo_and_postcondition(doc: Doc) -> None:
     request = CommonTextRequest(
-        document_id=doc.Name, catalog_group=2, catalog_index=4, catalog_text="ROOM",
-        insertion_point=Point3D(x=10, y=20), layer="ANNO", text_height=5, rotation_degrees=30,
+        document_id=doc.Name,
+        catalog_group=2,
+        catalog_index=4,
+        catalog_text="ROOM",
+        insertion_point=Point3D(x=10, y=20),
+        layer="ANNO",
+        text_height=5,
+        rotation_degrees=30,
     )
     preview = live.preview_live_qt(request)
     result = live.execute_live_batch25(approved(preview, request))
@@ -159,7 +181,15 @@ def test_tip_stale_checks_numeric_source_and_creates_sequence(doc: Doc) -> None:
 def test_pbb_creates_exact_closed_polyline_and_rejects_wrong_extents(doc: Doc) -> None:
     request = BoundingBoxRequest(
         document_id=doc.Name,
-        entities=(EntityExtentsSnapshot(handle="E1", minimum=Point3D(x=1, y=2), maximum=Point3D(x=5, y=7), coordinate_system_id="WCS", geometry_revision="r1"),),
+        entities=(
+            EntityExtentsSnapshot(
+                handle="E1",
+                minimum=Point3D(x=1, y=2),
+                maximum=Point3D(x=5, y=7),
+                coordinate_system_id="WCS",
+                geometry_revision="r1",
+            ),
+        ),
         output_layer="ANNO",
     )
     preview = live.preview_live_pbb(request)
@@ -167,7 +197,9 @@ def test_pbb_creates_exact_closed_polyline_and_rejects_wrong_extents(doc: Doc) -
     output = doc.entities[-1]
     assert result.command_alias == "PBB" and output.Closed
     assert output.Coordinates == (1, 2, 5, 2, 5, 7, 1, 7) and output.Layer == "ANNO"
-    wrong = request.model_copy(update={"entities": (request.entities[0].model_copy(update={"maximum": Point3D(x=6, y=7)}),)})
+    wrong = request.model_copy(
+        update={"entities": (request.entities[0].model_copy(update={"maximum": Point3D(x=6, y=7)}),)}
+    )
     with pytest.raises(ValueError, match="extents do not match"):
         live.preview_live_pbb(wrong)
 
@@ -175,7 +207,14 @@ def test_pbb_creates_exact_closed_polyline_and_rejects_wrong_extents(doc: Doc) -
 def test_pc_closes_only_approved_open_polyline(doc: Doc) -> None:
     request = PolylineCloseRequest(
         document_id=doc.Name,
-        polylines=(OpenPolylineSnapshot(handle="P1", entity_type="POLYLINE", vertices=(Point3D(x=0, y=0), Point3D(x=4, y=0), Point3D(x=4, y=3)), geometry_revision="r1"),),
+        polylines=(
+            OpenPolylineSnapshot(
+                handle="P1",
+                entity_type="POLYLINE",
+                vertices=(Point3D(x=0, y=0), Point3D(x=4, y=0), Point3D(x=4, y=3)),
+                geometry_revision="r1",
+            ),
+        ),
     )
     preview = live.preview_live_pc(request)
     result = live.execute_live_batch25(approved(preview, request))
@@ -186,8 +225,14 @@ def test_pc_closes_only_approved_open_polyline(doc: Doc) -> None:
 def test_pec_creates_exact_perpendicular_line(doc: Doc) -> None:
     request = PerpendicularCurveRequest(
         document_id=doc.Name,
-        curves=(CurveTangentSnapshot(handle="E1", base_point=Point3D(x=3, y=4), tangent_x=1, tangent_y=0, geometry_revision="r1"),),
-        negative_length=2, positive_length=5, output_layer="ANNO",
+        curves=(
+            CurveTangentSnapshot(
+                handle="E1", base_point=Point3D(x=3, y=4), tangent_x=1, tangent_y=0, geometry_revision="r1"
+            ),
+        ),
+        negative_length=2,
+        positive_length=5,
+        output_layer="ANNO",
     )
     preview = live.preview_live_pec(request)
     result = live.execute_live_batch25(approved(preview, request))
@@ -197,7 +242,15 @@ def test_pec_creates_exact_perpendicular_line(doc: Doc) -> None:
 
 
 def test_bad_fingerprint_and_locked_layer_are_rejected(doc: Doc) -> None:
-    request = CommonTextRequest(document_id=doc.Name, catalog_group=1, catalog_index=0, catalog_text="X", insertion_point=Point3D(x=0, y=0), layer="ANNO", text_height=2)
+    request = CommonTextRequest(
+        document_id=doc.Name,
+        catalog_group=1,
+        catalog_index=0,
+        catalog_text="X",
+        insertion_point=Point3D(x=0, y=0),
+        layer="ANNO",
+        text_height=2,
+    )
     wrapped = approved(live.preview_live_qt(request), request)
     bad = wrapped.model_copy(update={"approval_fingerprint": "sha256:" + "0" * 64})
     with pytest.raises(ValueError, match="fingerprint"):
@@ -209,18 +262,26 @@ def test_bad_fingerprint_and_locked_layer_are_rejected(doc: Doc) -> None:
 
 def test_zae_is_preview_only_with_compiled_area_blocker() -> None:
     request = EnergyAreaTableRequest(
-        document_id="Drawing1.dwg", source_handles=("E1",), result_with_legend=True,
-        unit_placement="table", elevation_table_scale=100, plan_table_scale=100,
-        exact_graphics=(ExactGraphic(kind=ExactGraphicKind.LINE, layer="ANNO", points=(Point3D(x=0, y=0), Point3D(x=1, y=0))),),
+        document_id="Drawing1.dwg",
+        source_handles=("E1",),
+        result_with_legend=True,
+        unit_placement="table",
+        elevation_table_scale=100,
+        plan_table_scale=100,
+        exact_graphics=(
+            ExactGraphic(kind=ExactGraphicKind.LINE, layer="ANNO", points=(Point3D(x=0, y=0), Point3D(x=1, y=0))),
+        ),
     )
     preview = live.preview_live_zae(request)
     assert not preview["mutation"] and not preview["live_executable"]
     assert "area classification" in preview["blocked_reason"]
 
 
-def test_registers_twelve_previews_and_eight_execute_tools() -> None:
+def test_registers_eleven_previews_and_eight_execute_tools() -> None:
     class MCP:
-        def __init__(self) -> None: self.names: list[str] = []
+        def __init__(self) -> None:
+            self.names: list[str] = []
+
         def tool(self, *, name: str, annotations: Any) -> Any:
             del annotations
             self.names.append(name)
@@ -230,9 +291,14 @@ def test_registers_twelve_previews_and_eight_execute_tools() -> None:
     live.register_live_batch25_tools(mcp)  # type: ignore[arg-type]
     previews = [name for name in mcp.names if "preview" in name]
     executes = [name for name in mcp.names if "execute" in name]
-    assert len(previews) == 12 and len(executes) == 8
+    assert len(previews) == 11 and len(executes) == 8
     assert executes == [
-        "xicad_execute_live_sl", "xicad_execute_live_qt", "xicad_execute_live_qw",
-        "xicad_execute_live_tip", "xicad_execute_live_too", "xicad_execute_live_pbb",
-        "xicad_execute_live_pc", "xicad_execute_live_pec",
+        "xicad_execute_live_sl",
+        "xicad_execute_live_qt",
+        "xicad_execute_live_qw",
+        "xicad_execute_live_tip",
+        "xicad_execute_live_too",
+        "xicad_execute_live_pbb",
+        "xicad_execute_live_pc",
+        "xicad_execute_live_pec",
     ]

@@ -82,6 +82,8 @@ from .live_dimension_batch11b import register_live_dimension_batch11b_tools
 from .live_dimension_batch12a import register_live_dimension_batch12a_tools
 from .live_dimension_batch12b import register_live_dimension_batch12b_tools
 from .live_dimensions import register_live_dimension_tools
+from .live_gap_17_24 import register_live_gap_17_24_tools
+from .live_gap_25_32 import register_live_gap_25_32_tools
 from .live_geometry_batch13b import register_live_geometry_batch13b_tools
 from .live_layer_batch9a import register_live_layer_batch9a_tools
 from .live_layer_batch9b import register_live_layer_batch9b_tools
@@ -196,6 +198,8 @@ def create_server(root: str | Path | None = None) -> FastMCP:
     register_live_dimension_batch12a_tools(mcp)
     register_live_dimension_batch12b_tools(mcp)
     register_live_geometry_batch13b_tools(mcp)
+    register_live_gap_17_24_tools(mcp)
+    register_live_gap_25_32_tools(mcp)
     register_live_text_batch7a_tools(mcp)
     register_live_text_batch7b_tools(mcp)
     register_live_text_batch8a_tools(mcp)

@@ -164,7 +164,7 @@ def test_multi_file_export_xclip_and_compiled_block_operations_remain_preview_on
     assert "atomic export" in live.BLOCKED["QWB"]
 
 
-def test_registers_twelve_previews_and_only_bsc_execute() -> None:
+def test_registers_eleven_previews_and_only_bsc_execute() -> None:
     class MCP:
         def __init__(self) -> None:
             self.names: list[str] = []
@@ -176,5 +176,5 @@ def test_registers_twelve_previews_and_only_bsc_execute() -> None:
 
     mcp = MCP()
     live.register_live_batch28_tools(mcp)  # type: ignore[arg-type]
-    assert len([name for name in mcp.names if "preview" in name]) == 12
+    assert len([name for name in mcp.names if "preview" in name]) == 11
     assert [name for name in mcp.names if "execute" in name] == ["xicad_execute_live_bsc"]

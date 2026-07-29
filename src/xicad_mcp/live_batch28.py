@@ -200,7 +200,9 @@ def _preview_blocked(request: Any) -> dict[str, Any]:
     }
 
 
-def _bsc_payload(request: ChangeBlockScaleRequest, plan: Any, sources: tuple[LiveBlockReferenceEvidence, ...]) -> dict[str, Any]:
+def _bsc_payload(
+    request: ChangeBlockScaleRequest, plan: Any, sources: tuple[LiveBlockReferenceEvidence, ...]
+) -> dict[str, Any]:
     return {
         "command_alias": "BSC",
         "document_name": request.document_id,
@@ -307,27 +309,77 @@ def execute_live_bsc(request: LiveBSCExecuteRequest) -> LiveBatch28Result:
     )
 
 
-def preview_live_blx(request: MakeBlockInPlaceRequest) -> dict[str, Any]: return _preview_blocked(request)
-def preview_live_bqt(request: BlockQuantityRequest) -> dict[str, Any]: return _preview_blocked(request)
-def preview_live_brm(request: RemoveBlockMembersRequest) -> dict[str, Any]: return _preview_blocked(request)
-def preview_live_brn(request: RenameBlocksRequest) -> dict[str, Any]: return _preview_blocked(request)
-def preview_live_cx(request: CopyObjectsToXrefRequest) -> dict[str, Any]: return _preview_blocked(request)
-def preview_live_ear(request: ExplodeAttributesRetainingTextRequest) -> dict[str, Any]: return _preview_blocked(request)
-def preview_live_m2b(request: MultiInsertToBlocksRequest) -> dict[str, Any]: return _preview_blocked(request)
-def preview_live_mfb(request: MultiFileBlockChangeRequest) -> dict[str, Any]: return _preview_blocked(request)
-def preview_live_mfx(request: MultiFileXrefChangeRequest) -> dict[str, Any]: return _preview_blocked(request)
-def preview_live_mx(request: MultiXclipRequest) -> dict[str, Any]: return _preview_blocked(request)
-def preview_live_qwb(request: WblockExportRequest) -> dict[str, Any]: return _preview_blocked(request)
+def preview_live_blx(request: MakeBlockInPlaceRequest) -> dict[str, Any]:
+    return _preview_blocked(request)
+
+
+def preview_live_bqt(request: BlockQuantityRequest) -> dict[str, Any]:
+    return _preview_blocked(request)
+
+
+def preview_live_brm(request: RemoveBlockMembersRequest) -> dict[str, Any]:
+    return _preview_blocked(request)
+
+
+def preview_live_brn(request: RenameBlocksRequest) -> dict[str, Any]:
+    return _preview_blocked(request)
+
+
+def preview_live_cx(request: CopyObjectsToXrefRequest) -> dict[str, Any]:
+    return _preview_blocked(request)
+
+
+def preview_live_ear(request: ExplodeAttributesRetainingTextRequest) -> dict[str, Any]:
+    return _preview_blocked(request)
+
+
+def preview_live_m2b(request: MultiInsertToBlocksRequest) -> dict[str, Any]:
+    return _preview_blocked(request)
+
+
+def preview_live_mfb(request: MultiFileBlockChangeRequest) -> dict[str, Any]:
+    return _preview_blocked(request)
+
+
+def preview_live_mfx(request: MultiFileXrefChangeRequest) -> dict[str, Any]:
+    return _preview_blocked(request)
+
+
+def preview_live_mx(request: MultiXclipRequest) -> dict[str, Any]:
+    return _preview_blocked(request)
+
+
+def preview_live_qwb(request: WblockExportRequest) -> dict[str, Any]:
+    return _preview_blocked(request)
 
 
 def register_live_batch28_tools(mcp: FastMCP) -> None:
-    preview = ToolAnnotations(title="Preview live xiCAD Batch 28 operation", readOnlyHint=True, destructiveHint=False, idempotentHint=True, openWorldHint=False)
-    execute = ToolAnnotations(title="Execute live xiCAD Batch 28 operation", readOnlyHint=False, destructiveHint=True, idempotentHint=False, openWorldHint=False)
+    preview = ToolAnnotations(
+        title="Preview live xiCAD Batch 28 operation",
+        readOnlyHint=True,
+        destructiveHint=False,
+        idempotentHint=True,
+        openWorldHint=False,
+    )
+    execute = ToolAnnotations(
+        title="Execute live xiCAD Batch 28 operation",
+        readOnlyHint=False,
+        destructiveHint=True,
+        idempotentHint=False,
+        openWorldHint=False,
+    )
     functions = {
-        "blx": preview_live_blx, "bqt": preview_live_bqt, "brm": preview_live_brm,
-        "brn": preview_live_brn, "bsc": preview_live_bsc, "cx": preview_live_cx,
-        "ear": preview_live_ear, "m2b": preview_live_m2b, "mfb": preview_live_mfb,
-        "mfx": preview_live_mfx, "mx": preview_live_mx, "qwb": preview_live_qwb,
+        "blx": preview_live_blx,
+        "bqt": preview_live_bqt,
+        "brm": preview_live_brm,
+        "bsc": preview_live_bsc,
+        "cx": preview_live_cx,
+        "ear": preview_live_ear,
+        "m2b": preview_live_m2b,
+        "mfb": preview_live_mfb,
+        "mfx": preview_live_mfx,
+        "mx": preview_live_mx,
+        "qwb": preview_live_qwb,
     }
     for alias, function in functions.items():
         mcp.tool(name=f"xicad_preview_live_{alias}", annotations=preview)(function)

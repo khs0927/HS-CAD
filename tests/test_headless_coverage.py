@@ -408,7 +408,7 @@ def test_batch18_is_headless_and_dialog_free():
         assert rows[alias].state is HeadlessState.IMPLEMENTED
         assert rows[alias].dialog_free
         assert not rows[alias].production_usable
-        assert rows[alias].cad_mutation_tool_exposed is (alias in {"TRUSS", "ZIGZAG"})
+        assert rows[alias].cad_mutation_tool_exposed is (alias in {"TAJ", "TRUSS", "ZIGZAG"})
         assert rows[alias].contract_source == "headless-core-batch18.json"
 
 
@@ -548,7 +548,7 @@ def test_batch25b_is_headless_and_dialog_free():
         assert rows[alias].state is HeadlessState.IMPLEMENTED
         assert rows[alias].dialog_free
         assert not rows[alias].production_usable
-        assert rows[alias].cad_mutation_tool_exposed is (alias in {"PBB", "PC", "PEC"})
+        assert rows[alias].cad_mutation_tool_exposed is (alias in {"TX", "PBB", "PC", "PEC"})
         assert rows[alias].contract_source == "headless-core-batch25b.json"
 
 
@@ -598,7 +598,7 @@ def test_batch28a_is_headless_and_dialog_free():
         assert rows[alias].state is HeadlessState.IMPLEMENTED
         assert rows[alias].dialog_free
         assert not rows[alias].production_usable
-        assert rows[alias].cad_mutation_tool_exposed is (alias == "BSC")
+        assert rows[alias].cad_mutation_tool_exposed is (alias in {"BRN", "BSC"})
         assert rows[alias].contract_source == "headless-core-batch28a.json"
 
 

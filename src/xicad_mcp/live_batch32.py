@@ -178,6 +178,17 @@ def _rotate(point: Point3D, base: Point3D, angle: float) -> Point3D:
     )
 
 
+def _rotation_base(entity: Any, base: Point3D) -> Any:
+    """Return the typed SAFEARRAY required by real ZWCAD COM objects."""
+    coordinates = (base.x, base.y, base.z)
+    if not hasattr(entity, "_oleobj_"):
+        return coordinates
+    import pythoncom
+    import win32com.client
+
+    return win32com.client.VARIANT(pythoncom.VT_ARRAY | pythoncom.VT_R8, coordinates)
+
+
 def _same_angle(first: float, second: float, tolerance: float = 1e-9) -> bool:
     return abs(math.atan2(math.sin(first - second), math.cos(first - second))) <= tolerance
 
@@ -198,7 +209,10 @@ def _validate_exact_changes(request: ReferenceRotateRequest, evidence: tuple[Liv
         raise ValueError("RR exact changes require one updated result per source handle")
     for item in evidence:
         result = results[item.handle.casefold()]
-        if not _entity_type_matches(result.entity_type, item.object_name) or result.layer.casefold() != item.layer.casefold():
+        if (
+            not _entity_type_matches(result.entity_type, item.object_name)
+            or result.layer.casefold() != item.layer.casefold()
+        ):
             raise ValueError("RR exact rotation cannot change entity type or layer")
 
 
@@ -256,7 +270,7 @@ def execute_live_rr(request: LiveRRExecuteRequest) -> LiveRRResult:
     try:
         try:
             for entity, before in zip(entities, current, strict=True):
-                entity.Rotate((base.x, base.y, base.z), angle)
+                entity.Rotate(_rotation_base(entity, base), angle)
                 changed.append((entity, before))
             for entity, before in changed:
                 expected_point = _rotate(before.insertion_point, base, angle)
@@ -266,7 +280,7 @@ def execute_live_rr(request: LiveRRExecuteRequest) -> LiveRRResult:
                     raise RuntimeError("RR rotation postcondition failed")
         except Exception:
             for entity, _before in reversed(changed):
-                entity.Rotate((base.x, base.y, base.z), -angle)
+                entity.Rotate(_rotation_base(entity, base), -angle)
             raise
     finally:
         doc.EndUndoMark()
@@ -315,16 +329,44 @@ def _preview_blocked(request: Any) -> dict[str, Any]:
     }
 
 
-def preview_live_ce(request: CenterlineRequest) -> dict[str, Any]: return _preview_blocked(request)
-def preview_live_bbb(request: BreakMultiRequest) -> dict[str, Any]: return _preview_blocked(request)
-def preview_live_ff(request: FilletLRequest) -> dict[str, Any]: return _preview_blocked(request)
-def preview_live_wq(request: OffsetCloseRequest) -> dict[str, Any]: return _preview_blocked(request)
-def preview_live_we(request: EndConnectRequest) -> dict[str, Any]: return _preview_blocked(request)
-def preview_live_xx(request: XSymbolRequest) -> dict[str, Any]: return _preview_blocked(request)
-def preview_live_q11(request: BlockLibraryRequest) -> dict[str, Any]: return _preview_blocked(request)
-def preview_live_mk(request: MaskRequest) -> dict[str, Any]: return _preview_blocked(request)
-def preview_live_lii(request: ObjectInfoRequest) -> dict[str, Any]: return _preview_blocked(request)
-def preview_live_sld(request: ScaleListDeleteRequest) -> dict[str, Any]: return _preview_blocked(request)
+def preview_live_ce(request: CenterlineRequest) -> dict[str, Any]:
+    return _preview_blocked(request)
+
+
+def preview_live_bbb(request: BreakMultiRequest) -> dict[str, Any]:
+    return _preview_blocked(request)
+
+
+def preview_live_ff(request: FilletLRequest) -> dict[str, Any]:
+    return _preview_blocked(request)
+
+
+def preview_live_wq(request: OffsetCloseRequest) -> dict[str, Any]:
+    return _preview_blocked(request)
+
+
+def preview_live_we(request: EndConnectRequest) -> dict[str, Any]:
+    return _preview_blocked(request)
+
+
+def preview_live_xx(request: XSymbolRequest) -> dict[str, Any]:
+    return _preview_blocked(request)
+
+
+def preview_live_q11(request: BlockLibraryRequest) -> dict[str, Any]:
+    return _preview_blocked(request)
+
+
+def preview_live_mk(request: MaskRequest) -> dict[str, Any]:
+    return _preview_blocked(request)
+
+
+def preview_live_lii(request: ObjectInfoRequest) -> dict[str, Any]:
+    return _preview_blocked(request)
+
+
+def preview_live_sld(request: ScaleListDeleteRequest) -> dict[str, Any]:
+    return _preview_blocked(request)
 
 
 def register_live_batch32_tools(mcp: FastMCP) -> None:
@@ -343,10 +385,17 @@ def register_live_batch32_tools(mcp: FastMCP) -> None:
         openWorldHint=False,
     )
     functions = {
-        "ce": preview_live_ce, "bbb": preview_live_bbb, "ff": preview_live_ff,
-        "wq": preview_live_wq, "we": preview_live_we, "xx": preview_live_xx,
-        "q11": preview_live_q11, "mk": preview_live_mk, "rr": preview_live_rr,
-        "lii": preview_live_lii, "sld": preview_live_sld,
+        "ce": preview_live_ce,
+        "bbb": preview_live_bbb,
+        "ff": preview_live_ff,
+        "wq": preview_live_wq,
+        "we": preview_live_we,
+        "xx": preview_live_xx,
+        "q11": preview_live_q11,
+        "mk": preview_live_mk,
+        "rr": preview_live_rr,
+        "lii": preview_live_lii,
+        "sld": preview_live_sld,
     }
     for alias, function in functions.items():
         mcp.tool(name=f"xicad_preview_live_{alias}", annotations=preview)(function)

@@ -77,6 +77,16 @@ def render() -> dict[str, Any]:
         folded = name.casefold()
         if folded == "acdbline":
             draw.line((*screen(entity.StartPoint), *screen(entity.EndPoint)), fill=color, width=3)
+        elif folded in {"acdbpolyline", "acdb2dpolyline"}:
+            coords = tuple(float(value) for value in entity.Coordinates)
+            points = [
+                screen((coords[index], coords[index + 1], float(getattr(entity, "Elevation", 0.0))))
+                for index in range(0, len(coords), 2)
+            ]
+            if bool(getattr(entity, "Closed", False)) and points:
+                points.append(points[0])
+            if len(points) >= 2:
+                draw.line(points, fill=color, width=3)
         elif folded == "acdbarc":
             center = _point(entity.Center)
             radius = float(entity.Radius)
@@ -85,7 +95,13 @@ def render() -> dict[str, Any]:
             if end < start:
                 end += math.tau
             points = [
-                screen((center[0] + radius * math.cos(start + (end - start) * i / 40), center[1] + radius * math.sin(start + (end - start) * i / 40), 0))
+                screen(
+                    (
+                        center[0] + radius * math.cos(start + (end - start) * i / 40),
+                        center[1] + radius * math.sin(start + (end - start) * i / 40),
+                        0,
+                    )
+                )
                 for i in range(41)
             ]
             draw.line(points, fill=color, width=3)
@@ -103,6 +119,10 @@ def render() -> dict[str, Any]:
                 ]
                 draw.polygon(arrow, fill=color)
         elif folded == "acdbmtext":
+            insertion = screen(entity.InsertionPoint)
+            font_size = int(float(entity.Height) * scale)
+            draw.text(insertion, str(entity.TextString), fill=color, font=_font(font_size), anchor="ls")
+        elif folded == "acdbtext":
             insertion = screen(entity.InsertionPoint)
             font_size = int(float(entity.Height) * scale)
             draw.text(insertion, str(entity.TextString), fill=color, font=_font(font_size), anchor="ls")

@@ -321,7 +321,6 @@ def register_live_batch18_tools(mcp: FastMCP) -> None:
     execute = ToolAnnotations(title="Execute live xiCAD Batch 18 operation", readOnlyHint=False, destructiveHint=True, idempotentHint=False, openWorldHint=False)
     registrations = (
         ("xicad_preview_live_stp", preview_live_stp, preview),
-        ("xicad_preview_live_taj", preview_live_taj, preview),
         ("xicad_preview_live_truss", preview_live_truss, preview),
         ("xicad_execute_live_truss", execute_live_truss, execute),
         ("xicad_preview_live_w1", preview_live_window, preview),

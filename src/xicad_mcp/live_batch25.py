@@ -132,9 +132,20 @@ def _json_value(value: Any) -> Any:
 def _geometry_fingerprint(entity: Any) -> str:
     payload: dict[str, Any] = {}
     for name in (
-        "Coordinates", "StartPoint", "EndPoint", "Center", "Radius", "StartAngle",
-        "EndAngle", "Closed", "TextString", "InsertionPoint", "Height", "Rotation",
-        "Area", "Length",
+        "Coordinates",
+        "StartPoint",
+        "EndPoint",
+        "Center",
+        "Radius",
+        "StartAngle",
+        "EndAngle",
+        "Closed",
+        "TextString",
+        "InsertionPoint",
+        "Height",
+        "Rotation",
+        "Area",
+        "Length",
     ):
         try:
             payload[name] = _json_value(getattr(entity, name))
@@ -158,8 +169,12 @@ def _entity(doc: Any, handle: str) -> tuple[LiveEntityEvidence, Any]:
     if locked or is_xref:
         raise ValueError(f"Batch 25 entity is locked or xref-dependent: {handle}")
     return LiveEntityEvidence(
-        handle=str(entity.Handle), object_name=str(entity.ObjectName), layer=layer,
-        geometry_fingerprint=_geometry_fingerprint(entity), locked_layer=locked, is_xref=is_xref,
+        handle=str(entity.Handle),
+        object_name=str(entity.ObjectName),
+        layer=layer,
+        geometry_fingerprint=_geometry_fingerprint(entity),
+        locked_layer=locked,
+        is_xref=is_xref,
     ), entity
 
 
@@ -197,12 +212,18 @@ def _coordinates(points: tuple[Point3D, ...]) -> Any:
 
 def _plan(request: Any) -> Any:
     planners = {
-        SlopeRequest: plan_slope, EnergyAreaTableRequest: plan_energy_area_table,
-        CommonTextRequest: plan_common_text, SpecialCharacterRequest: plan_special_character,
-        TextPointIncrementRequest: plan_text_point_increment, TextOnObjectRequest: plan_text_on_object,
-        TextsToTableRequest: plan_texts_to_table, TextBoxRequest: plan_text_box,
-        MakeTextLinetypeRequest: plan_make_text_linetype, BoundingBoxRequest: plan_bounding_box,
-        PolylineCloseRequest: plan_polyline_close, PerpendicularCurveRequest: plan_perpendicular_curve,
+        SlopeRequest: plan_slope,
+        EnergyAreaTableRequest: plan_energy_area_table,
+        CommonTextRequest: plan_common_text,
+        SpecialCharacterRequest: plan_special_character,
+        TextPointIncrementRequest: plan_text_point_increment,
+        TextOnObjectRequest: plan_text_on_object,
+        TextsToTableRequest: plan_texts_to_table,
+        TextBoxRequest: plan_text_box,
+        MakeTextLinetypeRequest: plan_make_text_linetype,
+        BoundingBoxRequest: plan_bounding_box,
+        PolylineCloseRequest: plan_polyline_close,
+        PerpendicularCurveRequest: plan_perpendicular_curve,
     }
     for request_type, planner in planners.items():
         if isinstance(request, request_type):
@@ -240,7 +261,12 @@ def _target_layer_names(request: ExecutableRequest) -> tuple[str, ...]:
 
 def _validate_request_sources(request: ExecutableRequest, objects: tuple[Any, ...]) -> None:
     if isinstance(request, TextPointIncrementRequest):
-        expected = request.source.prefix + ("-" if request.source.value < 0 else "") + str(abs(request.source.value)).zfill(request.source.minimum_digits) + request.source.suffix
+        expected = (
+            request.source.prefix
+            + ("-" if request.source.value < 0 else "")
+            + str(abs(request.source.value)).zfill(request.source.minimum_digits)
+            + request.source.suffix
+        )
         if str(objects[0].TextString) != expected:
             raise ValueError("TIP source text does not match its explicit numeric snapshot")
     elif isinstance(request, PolylineCloseRequest):
@@ -249,7 +275,9 @@ def _validate_request_sources(request: ExecutableRequest, objects: tuple[Any, ..
                 raise ValueError(f"PC requires an open polyline: {snapshot.handle}")
             coordinates = tuple(float(value) for value in entity.Coordinates)
             expected = tuple(coordinate for point in snapshot.vertices for coordinate in (point.x, point.y))
-            if len(coordinates) != len(expected) or any(abs(a - b) > 1e-9 for a, b in zip(coordinates, expected, strict=True)):
+            if len(coordinates) != len(expected) or any(
+                abs(a - b) > 1e-9 for a, b in zip(coordinates, expected, strict=True)
+            ):
                 raise ValueError(f"PC vertices do not match the live polyline: {snapshot.handle}")
     elif isinstance(request, BoundingBoxRequest):
         for snapshot, entity in zip(request.entities, objects, strict=True):
@@ -261,10 +289,17 @@ def _validate_request_sources(request: ExecutableRequest, objects: tuple[Any, ..
                 raise ValueError(f"PBB extents do not match the live entity: {snapshot.handle}")
 
 
-def _payload(request: ExecutableRequest, plan: Any, sources: tuple[LiveEntityEvidence, ...], layers: tuple[LiveLayerEvidence, ...]) -> dict[str, Any]:
+def _payload(
+    request: ExecutableRequest,
+    plan: Any,
+    sources: tuple[LiveEntityEvidence, ...],
+    layers: tuple[LiveLayerEvidence, ...],
+) -> dict[str, Any]:
     return {
-        "command_alias": plan.command_alias, "document_name": request.document_id,
-        "request": request.model_dump(mode="json"), "plan": plan.model_dump(mode="json"),
+        "command_alias": plan.command_alias,
+        "document_name": request.document_id,
+        "request": request.model_dump(mode="json"),
+        "plan": plan.model_dump(mode="json"),
         "expected_sources": [item.model_dump(mode="json") for item in sources],
         "expected_target_layers": [item.model_dump(mode="json") for item in layers],
     }
@@ -283,7 +318,9 @@ def _preview_executable(request: ExecutableRequest, expected_alias: str) -> dict
     layers = tuple(_layer(doc, name) for name in _target_layer_names(request))
     payload = _payload(request, plan, sources, layers)
     return {
-        **payload, "approval_fingerprint": _fingerprint(payload), "mutation": True,
+        **payload,
+        "approval_fingerprint": _fingerprint(payload),
+        "mutation": True,
         "live_executable": True,
         "scope_note": "exact handles/layers and caller-approved primitive results are stale-checked around one Undo group; legacy equivalence is not claimed",
     }
@@ -291,22 +328,67 @@ def _preview_executable(request: ExecutableRequest, expected_alias: str) -> dict
 
 def _preview_blocked(request: Any) -> dict[str, Any]:
     plan = _plan(request)
-    payload = {"command_alias": plan.command_alias, "document_name": request.document_id, "request": request.model_dump(mode="json"), "plan": plan.model_dump(mode="json")}
-    return {**payload, "approval_fingerprint": _fingerprint(payload), "mutation": False, "live_executable": False, "blocked_reason": BLOCKED[plan.command_alias]}
+    payload = {
+        "command_alias": plan.command_alias,
+        "document_name": request.document_id,
+        "request": request.model_dump(mode="json"),
+        "plan": plan.model_dump(mode="json"),
+    }
+    return {
+        **payload,
+        "approval_fingerprint": _fingerprint(payload),
+        "mutation": False,
+        "live_executable": False,
+        "blocked_reason": BLOCKED[plan.command_alias],
+    }
 
 
-def preview_live_sl(request: SlopeRequest) -> dict[str, Any]: return _preview_executable(request, "SL")
-def preview_live_zae(request: EnergyAreaTableRequest) -> dict[str, Any]: return _preview_blocked(request)
-def preview_live_qt(request: CommonTextRequest) -> dict[str, Any]: return _preview_executable(request, "QT")
-def preview_live_qw(request: SpecialCharacterRequest) -> dict[str, Any]: return _preview_executable(request, "QW")
-def preview_live_tip(request: TextPointIncrementRequest) -> dict[str, Any]: return _preview_executable(request, "TIP")
-def preview_live_too(request: TextOnObjectRequest) -> dict[str, Any]: return _preview_executable(request, "TOO")
-def preview_live_ttt(request: TextsToTableRequest) -> dict[str, Any]: return _preview_blocked(request)
-def preview_live_tx(request: TextBoxRequest) -> dict[str, Any]: return _preview_blocked(request)
-def preview_live_mtlt(request: MakeTextLinetypeRequest) -> dict[str, Any]: return _preview_blocked(request)
-def preview_live_pbb(request: BoundingBoxRequest) -> dict[str, Any]: return _preview_executable(request, "PBB")
-def preview_live_pc(request: PolylineCloseRequest) -> dict[str, Any]: return _preview_executable(request, "PC")
-def preview_live_pec(request: PerpendicularCurveRequest) -> dict[str, Any]: return _preview_executable(request, "PEC")
+def preview_live_sl(request: SlopeRequest) -> dict[str, Any]:
+    return _preview_executable(request, "SL")
+
+
+def preview_live_zae(request: EnergyAreaTableRequest) -> dict[str, Any]:
+    return _preview_blocked(request)
+
+
+def preview_live_qt(request: CommonTextRequest) -> dict[str, Any]:
+    return _preview_executable(request, "QT")
+
+
+def preview_live_qw(request: SpecialCharacterRequest) -> dict[str, Any]:
+    return _preview_executable(request, "QW")
+
+
+def preview_live_tip(request: TextPointIncrementRequest) -> dict[str, Any]:
+    return _preview_executable(request, "TIP")
+
+
+def preview_live_too(request: TextOnObjectRequest) -> dict[str, Any]:
+    return _preview_executable(request, "TOO")
+
+
+def preview_live_ttt(request: TextsToTableRequest) -> dict[str, Any]:
+    return _preview_blocked(request)
+
+
+def preview_live_tx(request: TextBoxRequest) -> dict[str, Any]:
+    return _preview_blocked(request)
+
+
+def preview_live_mtlt(request: MakeTextLinetypeRequest) -> dict[str, Any]:
+    return _preview_blocked(request)
+
+
+def preview_live_pbb(request: BoundingBoxRequest) -> dict[str, Any]:
+    return _preview_executable(request, "PBB")
+
+
+def preview_live_pc(request: PolylineCloseRequest) -> dict[str, Any]:
+    return _preview_executable(request, "PC")
+
+
+def preview_live_pec(request: PerpendicularCurveRequest) -> dict[str, Any]:
+    return _preview_executable(request, "PEC")
 
 
 def _add_text(doc: Any, spec: Any) -> Any:
@@ -383,32 +465,70 @@ def execute_live_batch25(request: LiveBatch25ExecuteRequest) -> LiveBatch25Resul
     if any(str(item.Handle).casefold() not in available for item in created + changed):
         raise RuntimeError(f"{plan.command_alias} postcondition failed: output entity is missing")
     for entity, spec in expected_texts:
-        if str(entity.TextString) != spec.text or _point(entity.InsertionPoint) != spec.insertion_point or abs(float(entity.Height) - spec.text_height) > 1e-9 or abs(float(entity.Rotation) - math.radians(spec.rotation_degrees)) > 1e-9 or str(entity.Layer).casefold() != spec.layer.casefold():
+        if (
+            str(entity.TextString) != spec.text
+            or _point(entity.InsertionPoint) != spec.insertion_point
+            or abs(float(entity.Height) - spec.text_height) > 1e-9
+            or abs(float(entity.Rotation) - math.radians(spec.rotation_degrees)) > 1e-9
+            or str(entity.Layer).casefold() != spec.layer.casefold()
+        ):
             raise RuntimeError(f"{plan.command_alias} postcondition failed: text properties differ")
     for entity, points, layer, closed in expected_polylines:
         coordinates = tuple(float(value) for value in entity.Coordinates)
         expected = tuple(value for point in points for value in (point.x, point.y))
-        if coordinates != expected or bool(entity.Closed) is not closed or str(entity.Layer).casefold() != layer.casefold():
+        if (
+            coordinates != expected
+            or bool(entity.Closed) is not closed
+            or str(entity.Layer).casefold() != layer.casefold()
+        ):
             raise RuntimeError(f"{plan.command_alias} postcondition failed: polyline properties differ")
     for entity, start, end, layer in expected_lines:
-        if _point(entity.StartPoint) != start or _point(entity.EndPoint) != end or str(entity.Layer).casefold() != layer.casefold():
+        if (
+            _point(entity.StartPoint) != start
+            or _point(entity.EndPoint) != end
+            or str(entity.Layer).casefold() != layer.casefold()
+        ):
             raise RuntimeError("PEC postcondition failed: line properties differ")
     if plan.command_alias == "PC" and any(not bool(item.Closed) for item in changed):
         raise RuntimeError("PC postcondition failed: polyline remains open")
     return LiveBatch25Result(
-        document_name=str(doc.Name), command_alias=plan.command_alias,
-        created_handles=tuple(str(item.Handle) for item in created), changed_handles=tuple(str(item.Handle) for item in changed),
-        undo_mark_opened=True, undo_mark_closed=True, postcondition_verified=True,
+        document_name=str(doc.Name),
+        command_alias=plan.command_alias,
+        created_handles=tuple(str(item.Handle) for item in created),
+        changed_handles=tuple(str(item.Handle) for item in changed),
+        undo_mark_opened=True,
+        undo_mark_closed=True,
+        postcondition_verified=True,
     )
 
 
 def register_live_batch25_tools(mcp: FastMCP) -> None:
-    preview = ToolAnnotations(title="Preview live xiCAD Batch 25 operation", readOnlyHint=True, destructiveHint=False, idempotentHint=True, openWorldHint=False)
-    execute = ToolAnnotations(title="Execute live xiCAD Batch 25 operation", readOnlyHint=False, destructiveHint=True, idempotentHint=False, openWorldHint=False)
+    preview = ToolAnnotations(
+        title="Preview live xiCAD Batch 25 operation",
+        readOnlyHint=True,
+        destructiveHint=False,
+        idempotentHint=True,
+        openWorldHint=False,
+    )
+    execute = ToolAnnotations(
+        title="Execute live xiCAD Batch 25 operation",
+        readOnlyHint=False,
+        destructiveHint=True,
+        idempotentHint=False,
+        openWorldHint=False,
+    )
     functions = {
-        "sl": preview_live_sl, "zae": preview_live_zae, "qt": preview_live_qt, "qw": preview_live_qw,
-        "tip": preview_live_tip, "too": preview_live_too, "ttt": preview_live_ttt, "tx": preview_live_tx,
-        "mtlt": preview_live_mtlt, "pbb": preview_live_pbb, "pc": preview_live_pc, "pec": preview_live_pec,
+        "sl": preview_live_sl,
+        "zae": preview_live_zae,
+        "qt": preview_live_qt,
+        "qw": preview_live_qw,
+        "tip": preview_live_tip,
+        "too": preview_live_too,
+        "ttt": preview_live_ttt,
+        "mtlt": preview_live_mtlt,
+        "pbb": preview_live_pbb,
+        "pc": preview_live_pc,
+        "pec": preview_live_pec,
     }
     for alias, function in functions.items():
         mcp.tool(name=f"xicad_preview_live_{alias}", annotations=preview)(function)
