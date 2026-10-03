@@ -74,3 +74,10 @@ def test_sample_style_near_handle_with_mocked_active_doc(monkeypatch):
     assert ["ZIUM_sheet_architect", 1] in result["block_effective_names"]
     assert result["recommended_generation_style"]["line_layer"] in {"A-WALL", "A-TEXT", "A-FORM"}
     assert result["recommended_generation_style"]["leader_style"] == "qleader_l_route"
+    contract = result["grammar_contract"]
+    assert contract["schema"] == "cad-drawing-grammar/1"
+    assert contract["anchor"]["handle"] == "A1"
+    assert contract["evidence"]["nearby_entity_count"] == 3
+    assert len(contract["contract_digest"]) == 64
+    assert contract["execution_authorized"] is False
+    assert contract["may_execute_mutation"] is False
