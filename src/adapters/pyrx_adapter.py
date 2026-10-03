@@ -13,7 +13,28 @@ class PyRxAdapter(CADAdapter):
     def __init__(self):
         self.pyrx: Any = None
 
+    def capabilities(self) -> dict[str, bool]:
+        """Report implemented operations without importing or contacting a host."""
+        return {name: False for name in (
+            'open_document', 'get_active_document', 'save_as', 'scan_modelspace',
+            'move_entity', 'move_layer', 'replace_text', 'list_layers', 'list_blocks',
+        )}
+
+    def health(self) -> dict[str, Any]:
+        """Import success is dependency evidence, never native readiness."""
+        return {
+            'adapter': 'pyrx',
+            'status': 'NOT_IMPLEMENTED',
+            'dependency_loaded': self.pyrx is not None,
+            'host_verified': False,
+            'read_ready': False,
+            'write_ready': False,
+            'execution_allowed': False,
+            'reason': 'Native CAD operations are adapter placeholders.',
+        }
+
     def connect(self) -> None:
+        self.pyrx = None
         try:
             import pyrx  # type: ignore
             self.pyrx = pyrx
@@ -48,4 +69,4 @@ class PyRxAdapter(CADAdapter):
         raise NotImplementedError('Implement BlockTable iteration.')
 
     def close(self) -> None:
-        pass
+        self.pyrx = None
