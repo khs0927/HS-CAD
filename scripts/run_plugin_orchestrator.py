@@ -64,15 +64,16 @@ def _digest(value: str) -> str:
 
 
 def _sanitize_text(value: str, fixture_root: str | None) -> str:
-    replacements = {
-        str(ROOT): "<repo-root>",
-        str(Path.home()): "<home>",
-        sys.executable: "<python>",
-    }
+    replacements = [
+        (str(ROOT), "<repo-root>"),
+        (str(Path.home()), "<home>"),
+        (sys.executable, "<python>"),
+    ]
     if fixture_root:
-        replacements[fixture_root] = "<fixture-root>"
+        replacements.append((fixture_root, "<fixture-root>"))
+
     sanitized = value
-    for source, replacement in replacements.items():
+    for source, replacement in sorted(replacements, key=lambda item: len(item[0]), reverse=True):
         if source:
             sanitized = sanitized.replace(source, replacement)
     return sanitized
