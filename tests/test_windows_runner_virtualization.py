@@ -209,4 +209,6 @@ def test_windows_profile_selects_strict_fixture_script(tmp_path: Path):
     assert len(checks) == 1
     assert checks[0].name == "windows-zwcad-fixture-matrix"
     assert checks[0].platforms == ("Windows",)
-    assert "run_windows_drawing_index_fixture_matrix.ps1" in checks[0].command
+    assert any(
+        "run_windows_drawing_index_fixture_matrix.ps1" in part for part in checks[0].command
+    )
