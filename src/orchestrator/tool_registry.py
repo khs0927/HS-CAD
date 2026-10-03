@@ -87,6 +87,7 @@ def build_default_registry() -> ToolRegistry:
     add(ToolCapability("XiCAD manifest", "xicad-manifest", "standards", "Write XiCAD file manifest.", 21, keywords=("xicad", "manifest")))
     add(ToolCapability("XiCAD catalog", "xicad-catalog", "standards", "List architecture-related XiCAD aliases.", 22, keywords=("xicad", "alias", "catalog")))
     add(ToolCapability("XiCAD safe catalog", "xicad-safe-catalog", "standards", "List safe XiCAD bridge aliases and risk levels.", 23, keywords=("xicad", "safe", "bridge")))
+    add(ToolCapability("Local drawing grammar sample", "python tools/sample_style_near_handle.py", "standards", "Sample nearby CAD style and emit cad-drawing-grammar/1 for reuse by other CAD runtimes.", 24, requires_active_zwcad=True, keywords=("grammar", "style", "layer", "text", "dimension"), outputs=("local_style_sample.json", "local_style_sample.md")))
 
     # 3. Image/PDF to CAD.
     add(ToolCapability("Floorplan image analyze", "floorplan-analyze", "floorplan", "Run neuro_seq_cad image/PDF-to-DXF pipeline in dry-run by default.", 30, keywords=("image", "pdf", "scan", "floorplan", "dxf", "vectorize", "도면", "이미지"), outputs=("*.dxf", "*_qa_report.html", "*_overlay_qa.png")))
