@@ -8,6 +8,8 @@ from collections import Counter
 from pathlib import Path
 from typing import Any
 
+from src.drawing_grammar_contract import build_drawing_grammar_contract
+
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_OUT = PROJECT_ROOT / "outputs" / "style_sample_current"
@@ -169,7 +171,7 @@ def sample_style_near_handle(handle: str | None, active_selection: bool, radius:
     dimstyles = Counter(row.get("dimstyle") for row in nearby if row.get("dimstyle"))
     effective_names = Counter((row.get("effective_name") or row.get("block_name")) for row in nearby if row.get("effective_name") or row.get("block_name"))
 
-    return {
+    result = {
         "doc_name": safe_get(doc, "Name"),
         "full_name": safe_get(doc, "FullName"),
         "source_handle": safe_get(source, "Handle"),
@@ -188,6 +190,8 @@ def sample_style_near_handle(handle: str | None, active_selection: bool, radius:
         "nearby_sample": nearby[:120],
         "recommended_generation_style": recommended_style(nearby),
     }
+    result["grammar_contract"] = build_drawing_grammar_contract(result)
+    return result
 
 
 def write_markdown(path: Path, data: dict[str, Any]) -> None:
