@@ -11,7 +11,6 @@ from importlib.metadata import PackageNotFoundError, version as distribution_ver
 from pathlib import Path
 from typing import Any
 
-
 COMMON_PROGIDS = ["ZWCAD.Application", "ZwCAD.Application"]
 PROGIDS_2025 = ["ZWCAD.Application.2025", "ZwCAD.Application.2025"]
 PROGIDS_2026 = ["ZWCAD.Application.2026", "ZwCAD.Application.2026"]
