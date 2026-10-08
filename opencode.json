@@ -6,7 +6,7 @@
       "name": "Google AI Studio",
       "options": {
         "baseURL": "https://generativelanguage.googleapis.com/v1beta/openai",
-        "apiKey": "AIzaSyBXqikJfQdIDQJuy7CNlmH0HrKYbJZxbEk"
+        "apiKey": "{env:GOOGLE_GENERATIVE_AI_API_KEY}"
       },
       "models": {
 "gemini-3.5-flash": {
