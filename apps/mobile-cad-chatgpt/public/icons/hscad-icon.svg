@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title description">
+  <title id="title">HS-CAD Mobile</title>
+  <desc id="description">HS letters over an architectural plan and gable roof.</desc>
+  <rect width="512" height="512" rx="112" fill="#0f456b"/>
+  <path d="M96 225 256 96l160 129v188H96Z" fill="#f7fafc"/>
+  <path d="m96 225 160-129 160 129M150 413V248h212v165" fill="none" stroke="#62b4e4" stroke-width="28" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M186 248v165M326 248v165M150 330h212" fill="none" stroke="#0f456b" stroke-width="18"/>
+  <text x="256" y="306" fill="#0f456b" font-family="Arial, sans-serif" font-size="86" font-weight="800" text-anchor="middle">HS</text>
+</svg>
