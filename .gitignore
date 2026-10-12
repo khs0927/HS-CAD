@@ -17,3 +17,4 @@ generated/**/*.log
 .env
 .DS_Store
 output/
+*.dwl
