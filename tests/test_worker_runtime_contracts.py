@@ -32,7 +32,7 @@ def test_worker_input_round_trips_from_json_file(tmp_path: Path):
 
 
 def test_worker_output_error_shape_is_json_serializable():
-    output = WorkerOutput.error(
+    output = WorkerOutput.failure(
         worker_name="missing_worker",
         backend="worker_registry",
         message="not registered",
@@ -68,3 +68,12 @@ def test_worker_registry_and_runner_dry_run(tmp_path: Path):
 
     assert planned["status"] == "planned"
     assert missing["status"] == "unavailable"
+
+
+def test_worker_output_error_field_defaults_to_none():
+    """Regression: the `error` field must not be shadowed by a classmethod."""
+    output = WorkerOutput(worker_name="w", backend="b", status="ok")
+    assert output.error is None
+    payload = json.loads(output.to_json())
+    assert payload["error"] is None
+    assert not callable(getattr(WorkerOutput, "error", None))

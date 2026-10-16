@@ -29,7 +29,7 @@ def run_worker(worker_input: WorkerInput) -> WorkerOutput:
         result['provenance'] = provenance
         json_path.write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding='utf-8')
     except Exception as exc:
-        return WorkerOutput.error(
+        return WorkerOutput.failure(
             worker_name=WORKER_NAME,
             backend=BACKEND,
             message=str(exc),
@@ -37,7 +37,7 @@ def run_worker(worker_input: WorkerInput) -> WorkerOutput:
         )
     status = str(result.get('status') or 'ok')
     if status == 'unavailable':
-        return WorkerOutput.error(
+        return WorkerOutput.failure(
             worker_name=WORKER_NAME,
             backend=BACKEND,
             message=str(result.get('reason') or 'networkx unavailable'),
@@ -97,7 +97,7 @@ def _score_from_result(result: dict) -> float:
 def main(argv: list[str] | None = None) -> int:
     args = argv or sys.argv[1:]
     if not args:
-        output = WorkerOutput.error(
+        output = WorkerOutput.failure(
             worker_name=WORKER_NAME,
             backend=BACKEND,
             message='missing WorkerInput path argument',

@@ -24,7 +24,7 @@ def run_worker(worker_input: WorkerInput) -> WorkerOutput:
     try:
         result = write_duckdb_export(workspace)
     except Exception as exc:
-        return WorkerOutput.error(
+        return WorkerOutput.failure(
             worker_name=WORKER_NAME,
             backend=BACKEND,
             message=str(exc),
@@ -33,7 +33,7 @@ def run_worker(worker_input: WorkerInput) -> WorkerOutput:
     provenance = result.get('provenance') or fallback_provenance
     status = str(result.get('status') or 'ok')
     if status == 'unavailable':
-        return WorkerOutput.error(
+        return WorkerOutput.failure(
             worker_name=WORKER_NAME,
             backend=BACKEND,
             message=str(result.get('reason') or 'duckdb unavailable'),
@@ -78,7 +78,7 @@ def run_worker(worker_input: WorkerInput) -> WorkerOutput:
 def main(argv: list[str] | None = None) -> int:
     args = argv or sys.argv[1:]
     if not args:
-        output = WorkerOutput.error(
+        output = WorkerOutput.failure(
             worker_name=WORKER_NAME,
             backend=BACKEND,
             message='missing WorkerInput path argument',
