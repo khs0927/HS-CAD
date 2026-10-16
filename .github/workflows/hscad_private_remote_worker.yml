@@ -65,16 +65,21 @@ jobs:
 
       - name: Patch Drive input into job when provided
         if: ${{ github.event_name == 'workflow_dispatch' && inputs.drive_file_id != '' }}
+        env:
+          JOB_JSON_PATH: ${{ inputs.job_json_path }}
+          DRIVE_FILE_ID: ${{ inputs.drive_file_id }}
+          DRIVE_FILE_NAME: ${{ inputs.drive_file_name }}
         run: |
           python - <<'PY'
           import json
+          import os
           from pathlib import Path
-          path = Path("${{ inputs.job_json_path }}")
+          path = Path(os.environ["JOB_JSON_PATH"])
           data = json.loads(path.read_text(encoding="utf-8"))
           data["source"] = {
               "type": "google_drive",
-              "file_id": "${{ inputs.drive_file_id }}",
-              "file_name": "${{ inputs.drive_file_name }}",
+              "file_id": os.environ["DRIVE_FILE_ID"],
+              "file_name": os.environ["DRIVE_FILE_NAME"],
               "allow_blank": False,
           }
           patched = Path("outputs/runtime_job.json")
