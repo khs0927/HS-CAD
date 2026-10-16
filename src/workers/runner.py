@@ -40,7 +40,7 @@ class WorkerRunner:
         try:
             module = importlib.import_module(spec.path)
         except Exception as exc:
-            return WorkerOutput.error(
+            return WorkerOutput.failure(
                 worker_name=worker_name,
                 backend=spec.path,
                 message=f"failed to import worker module: {exc}",
@@ -48,7 +48,7 @@ class WorkerRunner:
 
         run_worker = getattr(module, "run_worker", None)
         if run_worker is None:
-            return WorkerOutput.error(
+            return WorkerOutput.failure(
                 worker_name=worker_name,
                 backend=spec.path,
                 message="worker module does not expose run_worker",
@@ -66,7 +66,7 @@ class WorkerRunner:
                 warnings=[str(item) for item in output.get("warnings") or []],
                 metrics=dict(output.get("metrics") or {}),
             )
-        return WorkerOutput.error(
+        return WorkerOutput.failure(
             worker_name=worker_name,
             backend=spec.path,
             message=f"worker returned unsupported output type: {type(output).__name__}",

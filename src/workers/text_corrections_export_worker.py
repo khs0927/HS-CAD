@@ -24,7 +24,7 @@ def run_worker(worker_input: WorkerInput) -> WorkerOutput:
     try:
         result = write_text_corrections_export(workspace)
     except Exception as exc:
-        return WorkerOutput.error(worker_name=WORKER_NAME, backend=BACKEND, message=str(exc), provenance=fallback_provenance)
+        return WorkerOutput.failure(worker_name=WORKER_NAME, backend=BACKEND, message=str(exc), provenance=fallback_provenance)
     provenance = result.get('provenance') or fallback_provenance
     queue_count = int(result.get('queue_count') or 0)
     status = str(result.get('status') or 'warning')
@@ -51,7 +51,7 @@ def run_worker(worker_input: WorkerInput) -> WorkerOutput:
 def main(argv: list[str] | None = None) -> int:
     args = argv or sys.argv[1:]
     if not args:
-        output = WorkerOutput.error(worker_name=WORKER_NAME, backend=BACKEND, message='missing WorkerInput path argument')
+        output = WorkerOutput.failure(worker_name=WORKER_NAME, backend=BACKEND, message='missing WorkerInput path argument')
         print(output.to_json())
         return 2
     worker_input = WorkerInput.from_json_file(args[0])

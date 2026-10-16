@@ -51,7 +51,7 @@ class WorkerOutput:
         return json.dumps(self.to_dict(), ensure_ascii=False, indent=2)
 
     @classmethod
-    def error(
+    def failure(
         cls,
         *,
         worker_name: str,

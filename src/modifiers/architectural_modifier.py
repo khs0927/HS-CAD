@@ -359,14 +359,14 @@ def execute_planned_actions(adapter: Any, actions: list[dict[str, Any]]) -> dict
                 color = action.get('color')
                 if color is not None:
                     try: ent.Color = color
-                    except: pass
+                    except Exception: pass
                 created += 1
             elif kind == 'create_polyline':
                 ent = adapter.create_polyline(action['points'], action.get('layer', '0'), action.get('closed', True))
                 color = action.get('color')
                 if color is not None:
                     try: ent.Color = color
-                    except: pass
+                    except Exception: pass
                 created += 1
             elif kind == 'insert_block':
                 adapter.insert_block(action['block_name'], action['insert'], action.get('layer', '0'), action.get('rotation', 0), action.get('scale', [1,1,1]))

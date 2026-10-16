@@ -25,7 +25,7 @@ def run_worker(worker_input: WorkerInput) -> WorkerOutput:
     try:
         result = write_ocr_vector_text_matches(workspace, min_score=min_score)
     except Exception as exc:
-        return WorkerOutput.error(
+        return WorkerOutput.failure(
             worker_name=WORKER_NAME,
             backend=BACKEND,
             message=str(exc),
@@ -62,7 +62,7 @@ def run_worker(worker_input: WorkerInput) -> WorkerOutput:
 def main(argv: list[str] | None = None) -> int:
     args = argv or sys.argv[1:]
     if not args:
-        output = WorkerOutput.error(worker_name=WORKER_NAME, backend=BACKEND, message='missing WorkerInput path argument')
+        output = WorkerOutput.failure(worker_name=WORKER_NAME, backend=BACKEND, message='missing WorkerInput path argument')
         print(output.to_json())
         return 2
     worker_input = WorkerInput.from_json_file(args[0])
