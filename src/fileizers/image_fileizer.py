@@ -35,10 +35,18 @@ class ImageMetadataFileizer(DrawingFileizer):
                 'handle': 'image-1',
                 'entity_type': 'IMAGE',
                 'layer': 'IMAGE',
+                'layout': 'Image',
+                'space': 'raster',
                 'width': width,
                 'height': height,
                 'mode': mode,
                 'format': fmt,
+                'requires_ocr': True,
+                'source_kind': 'standalone_raster_image',
+            }
+            warning = {
+                'type': 'image_requires_ocr',
+                'reason': 'Image metadata was indexed, but raster text has not been OCR-indexed.',
             }
             return FileizedDrawingRecord(
                 file_id=file_id,
@@ -47,10 +55,28 @@ class ImageMetadataFileizer(DrawingFileizer):
                 extension=src.suffix.lower(),
                 status='ok',
                 engine=self.engine_name,
-                layers=[{'name': 'IMAGE', 'entity_count': 1}],
+                layers=[{'layout': 'Image', 'name': 'IMAGE', 'entity_count': 1}],
+                layouts=[{'name': 'Image', 'space': 'raster', 'available': True, 'entity_count': 1}],
                 entities=[entity],
-                metadata={'width': width, 'height': height, 'mode': mode, 'format': fmt, 'object_count': 1},
-                warnings=[{'type': 'metadata_only'}],
+                extraction_report={
+                    'schema_version': 2,
+                    'scanner': self.engine_name,
+                    'entity_count': 1,
+                    'text_occurrence_count': 0,
+                    'layout_count': 1,
+                    'requires_ocr_count': 1,
+                    'warning_count': 1,
+                    'complete': False,
+                    'coverage': {'embedded_raster_ocr': False},
+                },
+                metadata={
+                    'width': width,
+                    'height': height,
+                    'mode': mode,
+                    'format': fmt,
+                    'object_count': 1,
+                },
+                warnings=[warning],
             )
         except Exception as exc:
             return FileizedDrawingRecord.failed(
