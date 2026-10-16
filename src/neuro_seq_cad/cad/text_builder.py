@@ -8,6 +8,9 @@ OCR 또는 Raster2Seq 에서 검출된 텍스트를 CAD MTEXT 로 변환한다.
 from __future__ import annotations
 
 from typing import Any, Protocol
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class CoordinateTransformer(Protocol):
@@ -72,9 +75,6 @@ def add_text_entities(
             attribs["rotation"] = rotation
 
         try:
-            mtext = msp.add_mtext(text, dxfattribs=attribs)
-            # 메타데이터를 xdata 대신 entity 자체에 첨부 (ezdxf 호환)
-            if hasattr(mtext, "dxf"):
-                mtext.dxf.handle  # ensure handle exists
-        except Exception:
-            pass  # 텍스트 추가 실패 시 무시
+            msp.add_mtext(text, dxfattribs=attribs)
+        except Exception as exc:  # 텍스트 추가 실패는 기록 후 계속 진행
+            logger.warning("MTEXT 추가 실패 (%r): %s", text[:40], exc)
