@@ -49,6 +49,10 @@ ocr = [
   "paddleocr>=2.9,<4",
   "easyocr>=1.7,<2"
 ]
+semantic-ml = [
+  "transformers>=4.48,<5",
+  "torch>=2.4,<3"
+]
 
 [project.scripts]
 hscad = "src.main:main"
