@@ -1,0 +1,5 @@
+record,group
+outputs/corpus_workspace/fileized/project_a_plan_01.json,project_a_plan
+outputs/corpus_workspace/fileized/project_a_plan_02.json,project_a_plan
+outputs/corpus_workspace/fileized/project_b_plan_01.json,project_b_plan
+outputs/corpus_workspace/fileized/project_b_plan_02.json,project_b_plan

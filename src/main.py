@@ -27,6 +27,7 @@ import src.app.converters_cli  # noqa: F401,E402
 import src.app.run_summary_cli  # noqa: F401,E402
 import src.app.reviewcontext_dxf_cli  # noqa: F401,E402
 import src.app.doctor_cli  # noqa: F401,E402
+import src.app.semantic_index_cli  # noqa: F401,E402
 
 # Analysis Megapack integrations
 import src.app.analysis_shortcut_cli  # noqa: F401,E402
