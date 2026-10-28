@@ -503,3 +503,11 @@ class ZWCADCOMAdapter(CADAdapter):
             if name:
                 blocks.add(str(name))
         return sorted(blocks)
+
+    def list_texts(self) -> list[str]:
+        """Return model-space TEXT and MTEXT values in scan order."""
+        return [
+            str(item['text'])
+            for item in self.scan_modelspace()
+            if item.get('type') in {'TEXT', 'MTEXT'} and item.get('text') is not None
+        ]
