@@ -1,0 +1,80 @@
+{
+  "schema_version": "1.0",
+  "batch": "21B",
+  "contract_kind": "dialog_free_read_only_execution_plan",
+  "commands": [
+    {
+      "alias": "MM",
+      "exact_symbol": "xiMeasure",
+      "current_evidence": "C:/xicad/xiLib/xiShortkey.key:99 — 시작점에서의 길이 지정 Measure",
+      "frozen_evidence": "tests/fixtures/xiShortkey.357.key:89 — MM;xiMeasure;시작점에서의 길이 지정 Measure",
+      "dcl_path": null,
+      "original_inputs": ["source curve", "start point", "interval", "caller-supplied placement points"],
+      "output_semantics": "Measure placement-point plan bound to source/start/interval",
+      "evidence_level": "shortcut_only_explicit_policy_not_legacy_equivalent",
+      "gaps": ["legacy curve traversal/start-direction prompts unavailable", "planner does not derive curve stations", "CAD equivalence unverified"]
+    },
+    {
+      "alias": "OA",
+      "exact_symbol": "xiObjectsAlign",
+      "current_evidence": "C:/xicad/xiLib/xiShortkey.key:100 — 객체 정렬하기; C:/xicad/xiLib/xiConfig.cfg:85 /xiObjectsAlign",
+      "frozen_evidence": "tests/fixtures/xiShortkey.357.key:90 — OA;xiObjectsAlign;객체 정렬하기",
+      "dcl_path": "C:/xicad/AutoSave/ACAD_xi0451_d.01.dcl",
+      "original_inputs": ["target point/object", "rotate to object angle", "horizontal/vertical movement", "nine anchor positions", "copy toggle"],
+      "output_semantics": "explicit-anchor alignment transforms using recovered mode choices",
+      "evidence_level": "dcl_and_config_recovered",
+      "gaps": ["compiled bounding-box/selection algorithm unavailable", "caller supplies source anchors and target angle", "CAD equivalence unverified"]
+    },
+    {
+      "alias": "OAA",
+      "exact_symbol": "xiObjectsAlignAngle",
+      "current_evidence": "C:/xicad/xiLib/xiShortkey.key:101 — 객체를 객체각도에 정렬",
+      "frozen_evidence": "tests/fixtures/xiShortkey.357.key:91 — OAA;xiObjectsAlignAngle;객체를 객체각도에 정렬",
+      "dcl_path": null,
+      "original_inputs": ["items and explicit anchors", "target object", "target point", "target angle", "copy/move policy"],
+      "output_semantics": "transform each item from its explicit anchor/angle to target object angle",
+      "evidence_level": "shortcut_only_explicit_policy_not_legacy_equivalent",
+      "gaps": ["no command-specific DCL/config found", "object angle extraction and anchor selection delegated to caller", "CAD equivalence unverified"]
+    },
+    {
+      "alias": "OB",
+      "exact_symbol": "xiofbs",
+      "current_evidence": "C:/xicad/xiLib/xiShortkey.key:102 — 양쪽으로 등간격 옵셋하기",
+      "frozen_evidence": "tests/fixtures/xiShortkey.357.key:92 — OB;xiofbs;양쪽으로 등간격 옵셋하기",
+      "dcl_path": null,
+      "original_inputs": ["source", "offset distance", "explicit positive-side result vertices", "explicit negative-side result vertices"],
+      "output_semantics": "create two caller-provided equidistant offset results and preserve source",
+      "evidence_level": "shortcut_only_explicit_policy_not_legacy_equivalent",
+      "gaps": ["legacy side/corner/curve offset algorithm unavailable", "planner never derives offset geometry", "CAD equivalence unverified"]
+    },
+    {
+      "alias": "OE",
+      "exact_symbol": "xiofe",
+      "current_evidence": "C:/xicad/xiLib/xiShortkey.key:103 — 옵셋 후 원본삭제",
+      "frozen_evidence": "tests/fixtures/xiShortkey.357.key:93 — OE;xiofe;옵셋 후 원본삭제",
+      "dcl_path": null,
+      "original_inputs": ["source", "offset distance", "explicit result vertices"],
+      "output_semantics": "create caller-provided offset result then delete source",
+      "evidence_level": "shortcut_only_explicit_policy_not_legacy_equivalent",
+      "gaps": ["legacy side selection and offset geometry unavailable", "result geometry caller-supplied", "CAD equivalence unverified"]
+    },
+    {
+      "alias": "OI",
+      "exact_symbol": "xiOffsetIntegrate",
+      "current_evidence": "C:/xicad/xiLib/xiShortkey.key:104 — 붙어 있는 선까지 모두 함께 간격띄우기",
+      "frozen_evidence": "tests/fixtures/xiShortkey.357.key:94 — OI;xiOffsetIntegrate;붙어 있는 선까지 모두 함께 간격띄우기",
+      "dcl_path": null,
+      "original_inputs": ["explicit connected source handles", "offset distance", "caller-supplied result vertices", "preserve/replace policy"],
+      "output_semantics": "integrated offset creation plan bound to an explicit connected source set",
+      "evidence_level": "shortcut_only_explicit_policy_not_legacy_equivalent",
+      "gaps": ["legacy connectivity/tolerance/join algorithm unavailable", "caller supplies connectivity and results", "CAD equivalence unverified"]
+    }
+  ],
+  "truthfulness": {
+    "dialog_required": false,
+    "cad_mutation_tool_exposed": false,
+    "legacy_equivalence_verified_in_cad": false,
+    "production_usable": false,
+    "note": "Only OA has recovered DCL/config choices. Offset and Measure geometry is never invented; exact result points are explicit caller inputs."
+  }
+}

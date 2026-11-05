@@ -1,0 +1,75 @@
+{
+  "schema_version": "1.0",
+  "source": "official xiCAD help at izzarder.com",
+  "commands": [
+    {
+      "alias": "D1",
+      "url": "https://izzarder.com/171",
+      "status": "planner_incomplete",
+      "note": "Official help requires door width plus three acquisition points; single-line output is default and double-door output depends on a configured threshold. Current DoorRequest does not recover those semantics."
+    },
+    {
+      "alias": "D2",
+      "url": "https://izzarder.com/172",
+      "status": "planner_incomplete",
+      "note": "Detailed door geometry shares settings with D1/D3 and remains preview-only."
+    },
+    {
+      "alias": "D3",
+      "url": "https://izzarder.com/172",
+      "status": "planner_incomplete",
+      "note": "Detailed door geometry shares settings with D1/D2 and remains preview-only."
+    },
+    {
+      "alias": "CW",
+      "url": "https://izzarder.com/?page=271",
+      "status": "topology_recovery_required"
+    },
+    {
+      "alias": "CE",
+      "url": "https://izzarder.com/201",
+      "status": "topology_recovery_required"
+    },
+    {
+      "alias": "BBB",
+      "url": "https://izzarder.com/411",
+      "status": "topology_recovery_required"
+    },
+    {
+      "alias": "FF",
+      "url": "https://izzarder.com/363",
+      "status": "topology_recovery_required"
+    },
+    {
+      "alias": "WQ",
+      "url": "https://izzarder.com/417",
+      "status": "topology_recovery_required"
+    },
+    {
+      "alias": "WE",
+      "url": "https://izzarder.com/526",
+      "status": "topology_recovery_required"
+    },
+    {
+      "alias": "XX",
+      "url": "https://izzarder.com/185",
+      "status": "help_insufficient",
+      "note": "The article identifies a void X symbol and configurable layer but does not define acquisition or exact geometry."
+    },
+    {
+      "alias": "Q11",
+      "url": "https://izzarder.com/166",
+      "status": "file_or_resource_transaction"
+    },
+    {
+      "alias": "MK",
+      "url": "https://izzarder.com/585",
+      "status": "property_recovery_required"
+    },
+    {
+      "alias": "LII",
+      "url": "https://izzarder.com/246",
+      "status": "read_only_candidate"
+    }
+  ]
+}

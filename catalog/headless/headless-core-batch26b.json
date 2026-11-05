@@ -1,0 +1,98 @@
+{
+  "schema_version": "1.0",
+  "batch": "26B",
+  "contract_kind": "dialog_free_read_only_execution_plan",
+  "commands": [
+    {
+      "alias": "PWD",
+      "exact_symbol": "xiPlineWidth",
+      "current_evidence": "C:/xicad/xiLib/xiShortkey.key:296 PWD;xiPlineWidth;Pline 두께주고 외곽선 그리기",
+      "frozen_evidence": "tests/fixtures/xiShortkey.357.key:279 PWD;xiPlineWidth;Pline 두께주고 외곽선 그리기",
+      "dcl_path": null,
+      "config_evidence": null,
+      "data_evidence": null,
+      "readable_source": null,
+      "original_inputs": ["unique versioned polyline snapshots", "positive width per source", "exact wide polyline result", "one or more exact closed outline loops"],
+      "output_semantics": "validate a one-to-one caller-supplied wide-polyline and closed-outline result for every versioned source polyline",
+      "evidence_level": "shortcut_only_explicit_result_not_legacy_equivalent",
+      "gaps": ["eligible types, joins, caps, offsets, output entity types, and source treatment are compiled", "caller supplies all exact result topology", "no command-specific DCL/config/data/readable source was found", "CAD equivalence unverified"]
+    },
+    {
+      "alias": "R3",
+      "exact_symbol": "xiR3P",
+      "current_evidence": "C:/xicad/xiLib/xiShortkey.key:297 R3;xiR3P;3점으로 사각형 그리기",
+      "frozen_evidence": "tests/fixtures/xiShortkey.357.key:280 R3;xiR3P;3점으로 사각형 그리기",
+      "dcl_path": null,
+      "config_evidence": null,
+      "data_evidence": null,
+      "readable_source": null,
+      "original_inputs": ["three distinct picked points", "exact four-vertex closed result polyline", "explicit output layer"],
+      "output_semantics": "carry an exact caller-supplied four-vertex closed rectangle result associated with the three input points",
+      "evidence_level": "shortcut_only_explicit_result_not_legacy_equivalent",
+      "gaps": ["point order, orthogonal projection, elevation, and entity type are compiled", "the three points are not assigned guessed geometric roles", "no command-specific DCL/config/data/readable source was found", "CAD equivalence unverified"]
+    },
+    {
+      "alias": "RND",
+      "exact_symbol": "xiRound",
+      "current_evidence": "C:/xicad/xiLib/xiShortkey.key:298 RND;xiRound;곡면 표현하기",
+      "frozen_evidence": "tests/fixtures/xiShortkey.357.key:281 RND;xiRound;곡면 표현하기",
+      "dcl_path": null,
+      "config_evidence": null,
+      "data_evidence": null,
+      "readable_source": null,
+      "original_inputs": ["two or more anchor points", "typed exact line/arc/polyline/spline components", "exact component control points and layers"],
+      "output_semantics": "carry caller-supplied typed curve components as the complete explicit curved-surface depiction",
+      "evidence_level": "shortcut_only_explicit_result_not_legacy_equivalent",
+      "gaps": ["the description does not define construction, view convention, or component count", "all curve topology is explicit caller input", "no command-specific DCL/config/data/readable source was found", "CAD equivalence unverified"]
+    },
+    {
+      "alias": "RS",
+      "exact_symbol": "xiSolidBox",
+      "current_evidence": "C:/xicad/xiLib/xiShortkey.key:299 RS;xiSolidBox;사각형 솔리드 박스 그리기",
+      "frozen_evidence": "tests/fixtures/xiShortkey.357.key:282 RS;xiSolidBox;사각형 솔리드 박스 그리기",
+      "dcl_path": null,
+      "config_evidence": null,
+      "data_evidence": null,
+      "readable_source": null,
+      "original_inputs": ["two or more picked points", "exact four SOLID vertices", "output layer", "optional color index"],
+      "output_semantics": "validate and carry four distinct exact vertices for a rectangular SOLID entity with explicit properties",
+      "evidence_level": "shortcut_only_explicit_result_not_legacy_equivalent",
+      "gaps": ["point acquisition, vertex order, SOLID versus hatch implementation, color, and layer defaults are compiled", "caller supplies exact result topology and properties", "no command-specific DCL/config/data/readable source was found", "CAD equivalence unverified"]
+    },
+    {
+      "alias": "UFD",
+      "exact_symbol": "xiUnfoldPoly",
+      "current_evidence": "C:/xicad/xiLib/xiShortkey.key:300 UFD;xiUnfoldPoly;폴리선 펼치기",
+      "frozen_evidence": "tests/fixtures/xiShortkey.357.key:283 UFD;xiUnfoldPoly;폴리선 펼치기",
+      "dcl_path": null,
+      "config_evidence": null,
+      "data_evidence": null,
+      "readable_source": null,
+      "original_inputs": ["unique versioned polyline snapshots", "one exact result vertex sequence per source", "output layer", "nonnegative length tolerance"],
+      "output_semantics": "validate caller-supplied unfolded vertices using an explicit one-to-one, same-vertex-count, per-segment-length-preserving policy",
+      "evidence_level": "shortcut_only_explicit_policy_not_legacy_equivalent",
+      "gaps": ["direction, base point, arc/bulge treatment, closed seam, and source treatment are compiled", "the segment-preservation rule is an explicit contract policy", "no command-specific DCL/config/data/readable source was found", "CAD equivalence unverified"]
+    },
+    {
+      "alias": "V",
+      "exact_symbol": "xiV",
+      "current_evidence": "C:/xicad/xiLib/xiShortkey.key:301 V;xiV;V 기호그리기",
+      "frozen_evidence": "tests/fixtures/xiShortkey.357.key:284 V;xiV;V 기호그리기",
+      "dcl_path": null,
+      "config_evidence": null,
+      "data_evidence": null,
+      "readable_source": null,
+      "original_inputs": ["exact left-tip-right vertices", "output layer"],
+      "output_semantics": "validate three distinct non-collinear exact vertices and carry them as the explicit two-leg V symbol",
+      "evidence_level": "shortcut_only_explicit_result_not_legacy_equivalent",
+      "gaps": ["insertion convention, size, angle, orientation, entity type, and layer defaults are compiled", "caller supplies exact result geometry", "no command-specific DCL/config/data/readable source was found", "CAD equivalence unverified"]
+    }
+  ],
+  "truthfulness": {
+    "dialog_required": false,
+    "cad_mutation_tool_exposed": false,
+    "legacy_equivalence_verified_in_cad": false,
+    "production_usable": false,
+    "note": "All six exact current/frozen symbols are recovered, but only shortcut descriptions are readable. The planners validate versioned inputs and exact caller-supplied shape topology or a narrowly explicit length-preserving policy; they make no legacy-equivalence claim and expose no CAD mutation."
+  }
+}

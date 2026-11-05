@@ -1,0 +1,70 @@
+{
+  "schema_version": "1.0",
+  "batch": "headless-core-batch1",
+  "production_live": 0,
+  "commands": [
+    {
+      "alias": "*",
+      "legacy_symbol": "xiMultiplication",
+      "core": "multiply_numbers",
+      "dialog_free": true,
+      "cad_adapter_required": false,
+      "evidence": "legacy shortcut description: 숫자 곱하기",
+      "legacy_equivalence_verified_in_cad": false
+    },
+    {
+      "alias": "CP",
+      "legacy_symbol": "xiCP",
+      "core": "arc_to_circle",
+      "dialog_free": true,
+      "cad_adapter_required": true,
+      "semantic_candidate": {"alias": "ATC", "symbol": "xiArcToCircle"},
+      "required_inputs": ["document_id", "arc_handle", "source_policy"],
+      "legacy_equivalence_verified_in_cad": false
+    },
+    {
+      "alias": "RC",
+      "legacy_symbol": "xiRC",
+      "core": "rotate_copy",
+      "dialog_free": true,
+      "cad_adapter_required": true,
+      "semantic_candidate": {"alias": "CR", "symbol": "xiCopyRotate"},
+      "required_inputs": ["document_id", "source_handles", "base_point", "angle_degrees", "copies"],
+      "legacy_equivalence_verified_in_cad": false
+    },
+    {
+      "alias": "LPP",
+      "legacy_symbol": "xiLayerPrefix",
+      "core": "layer_name_affix",
+      "mode": "prefix",
+      "dialog_free": true,
+      "cad_adapter_required": true,
+      "legacy_equivalence_verified_in_cad": false
+    },
+    {
+      "alias": "LPS",
+      "legacy_symbol": "xiLayerSuffix",
+      "core": "layer_name_affix",
+      "mode": "suffix",
+      "dialog_free": true,
+      "cad_adapter_required": true,
+      "legacy_equivalence_verified_in_cad": false
+    },
+    {
+      "alias": "TCT",
+      "legacy_symbol": "xiTextCount",
+      "core": "text_count",
+      "dialog_free": true,
+      "cad_adapter_required": true,
+      "write_mode_requires_approval": true,
+      "legacy_equivalence_verified_in_cad": false
+    }
+  ],
+  "safety": {
+    "dry_run_default": true,
+    "document_identity_required": true,
+    "approval_fingerprint_for_mutation": true,
+    "single_undo_mark_per_execution": true,
+    "dialogs_removed_from_contract": true
+  }
+}

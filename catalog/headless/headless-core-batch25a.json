@@ -1,0 +1,105 @@
+{
+  "schema_version": "1.0",
+  "batch": "25A",
+  "contract_kind": "evidence_led_explicit_snapshot_plan",
+  "commands": [
+    {
+      "alias": "SL",
+      "exact_symbol": "xiSLOPE",
+      "current_evidence": "C:/xicad/xiLib/xiShortkey.key:196 exact uppercase symbol; 경사도 표시",
+      "frozen_evidence": "tests/fixtures/xiShortkey.357.key:183 same exact uppercase symbol and description",
+      "dcl_path": "C:/xicad/DialogBox/ZWCAD_xi0320_d.02.dcl:2-40",
+      "config_source_data": [
+        "DCL exposes result layer/current-layer, prefix, text height, optional triangle, triangle text, 2x4 text, slope-aligned/horizontal text, and percent/1:vertical/10:vertical/reciprocal formats",
+        "C:/xicad/Lisp/xiShortkey_origin.key:215 and some platform PGP files use xiSlope case; the current/frozen contract deliberately preserves xiSLOPE"
+      ],
+      "readable_source": null,
+      "original_inputs": ["two explicit points", "recovered format/prefix/text alignment settings", "optional exact triangle vertices"],
+      "output_semantics": "deterministically rounded slope label and optional caller-supplied triangle proposal",
+      "evidence_level": "shortcut_plus_dcl_explicit_policy_not_legacy_equivalent",
+      "semantic_gaps": ["legacy point acquisition and triangle construction", "2x4 text behavior", "legacy numeric precision"]
+    },
+    {
+      "alias": "ZAE",
+      "exact_symbol": "xiZareaElev",
+      "current_evidence": "C:/xicad/xiLib/xiShortkey.key:198 current shortcut; 에너지효율등급용 입면적 면적표 작성",
+      "frozen_evidence": "tests/fixtures/xiShortkey.357.key:185 same symbol and description",
+      "dcl_path": "C:/xicad/DialogBox/ACAD_xi0388_d.03.dcl:3-91",
+      "config_source_data": [
+        "C:/xicad/xiLib/xiConfig.cfg:21-22 /xiZareaElev opaque persisted record",
+        "DCL exposes table/text layers, object-layer text, hatch, forced colors, legend, unit placement, elevation/plan scale, settings file, excluded layers, eight layer/hatch categories, and repeat"
+      ],
+      "readable_source": null,
+      "original_inputs": ["source handles and recovered table policies", "explicit excluded layers", "reviewed exact table/text/hatch graphics"],
+      "output_semantics": "validated pass-through table and hatch creation proposals with source provenance",
+      "evidence_level": "shortcut_plus_dcl_config_explicit_geometry_not_legacy_equivalent",
+      "semantic_gaps": ["compiled area classification and summation", "layer-category hatch mapping", "legacy table geometry"]
+    },
+    {
+      "alias": "QT",
+      "exact_symbol": "xiCommonTxt",
+      "current_evidence": "C:/xicad/xiLib/xiShortkey.key:232 current shortcut; 자주 사용하는 문장 골라쓰기",
+      "frozen_evidence": "tests/fixtures/xiShortkey.357.key:217 same symbol and description",
+      "dcl_path": null,
+      "config_source_data": [
+        "C:/xicad/xiLib/xiCommonText.txt:1-42 contains twelve marked groups and their actual editable text entries",
+        "C:/xicad/xiLib/xiConfig.cfg:111-112 /xiCommonTxt opaque record includes Group01_rdo and text-related values"
+      ],
+      "readable_source": "xiCommonText.txt is readable CP949 user data; protected xiText.fas/zelx implementation is not readable source",
+      "original_inputs": ["explicit group/index and exact selected catalog text", "insertion point/layer/height/rotation"],
+      "output_semantics": "one exact selected common-text creation proposal; the catalog is never mutated",
+      "evidence_level": "shortcut_plus_data_config_explicit_selection_not_legacy_equivalent",
+      "semantic_gaps": ["legacy generated dialog/edit workflow", "opaque style and width defaults", "catalog persistence rules"]
+    },
+    {
+      "alias": "QW",
+      "exact_symbol": "xiQickSpecialChar",
+      "current_evidence": "C:/xicad/xiLib/xiShortkey.key:233 current shortcut; 특수문자입력기",
+      "frozen_evidence": "tests/fixtures/xiShortkey.357.key:218 same misspelled symbol and description",
+      "dcl_path": null,
+      "config_source_data": [
+        "C:/xicad/SpecialChar.exe exists as a 590851-byte external executable",
+        "C:/xicad/SpecialChar.ini contains only [Position] Top/Left values"
+      ],
+      "readable_source": null,
+      "original_inputs": ["explicit Unicode character string", "insertion point/layer/text height"],
+      "output_semantics": "one exact Unicode text creation proposal without launching an external dialog",
+      "evidence_level": "shortcut_plus_external_program_explicit_text_not_legacy_equivalent",
+      "semantic_gaps": ["external-program IPC and palette", "font/encoding conversion", "legacy insertion handshake"]
+    },
+    {
+      "alias": "TIP",
+      "exact_symbol": "xiTextPointInc",
+      "current_evidence": "C:/xicad/xiLib/xiShortkey.key:239 current shortcut; 숫자 증가 복사 (위치지정)",
+      "frozen_evidence": "tests/fixtures/xiShortkey.357.key:224 same symbol and description",
+      "dcl_path": null,
+      "config_source_data": [],
+      "readable_source": null,
+      "original_inputs": ["explicitly parsed source prefix/integer/suffix/minimum digits", "increment and ordered placement targets"],
+      "output_semantics": "position-ordered incremented text creation proposals preserving explicit zero-padding",
+      "evidence_level": "shortcut_only_explicit_snapshot_not_legacy_equivalent",
+      "semantic_gaps": ["legacy numeric-token discovery", "entity type/style inheritance", "legacy increment start and zero-padding defaults"]
+    },
+    {
+      "alias": "TOO",
+      "exact_symbol": "xiTextOnObj",
+      "current_evidence": "C:/xicad/xiLib/xiShortkey.key:240 current shortcut; 객체에 붙는 문자 넣기",
+      "frozen_evidence": "tests/fixtures/xiShortkey.357.key:225 same symbol and description",
+      "dcl_path": null,
+      "config_source_data": [],
+      "readable_source": null,
+      "original_inputs": ["exact text and target object handles", "adapter-supplied anchor/tangent snapshots", "explicit normal offset/alignment/layer/height"],
+      "output_semantics": "one tangent-aligned and normally offset text creation proposal per target object snapshot",
+      "evidence_level": "shortcut_only_explicit_snapshot_not_legacy_equivalent",
+      "semantic_gaps": ["supported object types and closest-point selection", "legacy attachment/reactor behavior", "legacy offset and orientation defaults"]
+    }
+  ],
+  "truthfulness": {
+    "dialog_required": false,
+    "cad_mutation_tool_exposed": false,
+    "legacy_equivalence_verified_in_cad": false,
+    "production_usable": false,
+    "blocked_operations": ["automatic ZAE area classification/table construction", "launching or emulating opaque SpecialChar.exe IPC", "inventing TIP numeric token discovery or TOO object anchors"],
+    "note": "Exact current/frozen command symbols are preserved. DCL and readable data controls are modeled where available; compiled geometry, discovery, and external-program behavior remain explicit semantic gaps rather than guessed equivalence."
+  }
+}

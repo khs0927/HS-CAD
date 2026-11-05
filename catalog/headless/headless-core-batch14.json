@@ -1,0 +1,27 @@
+{
+  "schema_version": "1.0",
+  "batch": 14,
+  "contract_kind": "dialog_free_read_only_execution_plan",
+  "commands": [
+    {"alias": "K", "symbol": "xiK", "tool": "xicad_plan_k", "semantics": "recovered_alias_explicit_geometry"},
+    {"alias": "LEX", "symbol": "xiLTEx", "tool": "xicad_plan_lex", "semantics": "recovered_alias_data_export_no_file_io"},
+    {"alias": "LXP", "symbol": "xiLineXp", "tool": "xicad_plan_lxp", "semantics": "recovered_alias_line_segments_only"},
+    {"alias": "ME", "symbol": "unresolved:ME", "tool": "xicad_plan_me", "semantics": "explicit_endpoint_operation"},
+    {"alias": "P2C", "symbol": "unresolved:P2C", "tool": "xicad_plan_p2c", "semantics": "explicit_three_point_circumcircle"},
+    {"alias": "PE", "symbol": "unresolved:PE", "tool": "xicad_plan_pe", "semantics": "explicit_polyline_edit_mode"},
+    {"alias": "PLB", "symbol": "unresolved:PLB", "tool": "xicad_plan_plb", "semantics": "explicit_vertex_split_open"},
+    {"alias": "PLBC", "symbol": "unresolved:PLBC", "tool": "xicad_plan_plbc", "semantics": "explicit_vertex_split_closed"},
+    {"alias": "PLE", "symbol": "unresolved:PLE", "tool": "xicad_plan_ple", "semantics": "explicit_side_extension"},
+    {"alias": "PLR", "symbol": "unresolved:PLR", "tool": "xicad_plan_plr", "semantics": "deterministic_vertex_reversal"},
+    {"alias": "PR", "symbol": "unresolved:PR", "tool": "xicad_plan_pr", "semantics": "explicit_orthogonal_projection_plane"},
+    {"alias": "REC", "symbol": "unresolved:REC", "tool": "xicad_plan_rec", "semantics": "explicit_center_size_rotation_rectangle"}
+  ],
+  "truthfulness": {
+    "dialog_required": false,
+    "cad_mutation_tool_exposed": false,
+    "legacy_equivalence_verified_in_cad": false,
+    "production_usable": false,
+    "undocumented_aliases": ["ME", "P2C", "PE", "PLB", "PLBC", "PLE", "PLR", "PR", "REC"],
+    "blocked_modes": ["LXP preserve_arcs without bulge semantics"]
+  }
+}

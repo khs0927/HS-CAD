@@ -1,0 +1,39 @@
+schema_version: 1
+policy:
+  default_mode: offline_geometry_only
+  auto_download: false
+  bundle_external_weights: false
+  require_license_acknowledgement: true
+models:
+  - id: geometry-v1
+    kind: deterministic_geometry
+    enabled_by_default: true
+    license: HS-CAD project license
+    purpose: Text-independent CAD similarity search
+    runtime: numpy
+  - id: facebook/dinov2-small
+    kind: visual_embedding
+    enabled_by_default: false
+    license: Apache-2.0
+    source: Hugging Face
+    purpose: Optional whole-drawing and tile image embeddings
+    install_extra: semantic-ml
+  - id: Voxel51/FloorPlanCAD
+    kind: research_dataset
+    enabled_by_default: false
+    license: CC-BY-SA-4.0
+    source: Hugging Face
+    purpose: Noncommercial evaluation and symbol-class research
+    bundled: false
+  - id: CubiCasa5K
+    kind: research_dataset
+    enabled_by_default: false
+    license: CC-BY-NC-4.0
+    purpose: Noncommercial room, wall, door, and window research
+    bundled: false
+  - id: SymPoint
+    kind: research_adapter
+    enabled_by_default: false
+    license: verify_upstream_before_use
+    purpose: CAD primitive symbol spotting experiments
+    bundled: false

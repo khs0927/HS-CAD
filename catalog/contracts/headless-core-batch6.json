@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.0",
+  "batch": 6,
+  "commands": [
+    {"alias":"M2","legacy_symbol":"xiM2","contract":"pyeong_to_square_metre","evidence":["xiUtil1 FAS4 entrypoint C:XIM2","DCL label: m2 으로 변환","PY reciprocal factor recovered as 0.3025"]},
+    {"alias":"INA","legacy_symbol":"xiIndexNumAdd","contract":"symbol_number_aggregate","evidence":["DCL target: text or attribute block","one-text/two-text layout","separator, decimals, layer-follow and recalculation metadata options"]},
+    {"alias":"LIS","legacy_symbol":"xiLineSum","contract":"curve_length_sum","evidence":["curve types LINE/POLYLINE/ARC/CIRCLE/ELLIPSE/SPLINE","unit, decimals, formula, live field, per-layer and per-object options"]},
+    {"alias":"LMA","legacy_symbol":"xiLevelMoveAdd","contract":"level_move_add","evidence":["DCL move/copy mode","level numeric auto adjustment for strings such as EL: +35.32"]},
+    {"alias":"LNA","legacy_symbol":"xiLevelNumAdd","contract":"level_number_add","evidence":["prompt: 더하거나 뺄 숫자입력","numeric-token-only adjustment in level strings"]},
+    {"alias":"QD","legacy_symbol":"xiQuickDist","contract":"quick_distance","evidence":["point sequence with skip option","individual length text/dimension/none","unit, formula, equal-sign and one/two-line output options"]},
+    {"alias":"SPN","legacy_symbol":"xiSumPairNum","contract":"symbol_number_aggregate","evidence":["DCL label: 문자/숫자 쌍 합산","real-number and decimal-place options"]},
+    {"alias":"NUMC","legacy_symbol":"xiNumInc","contract":"number_sequence_placement","evidence":["protected xiNumInc resource recovered","sequence step, object kind, placement, rotation, layer/style/height, block attribute and mask options"]},
+    {"alias":"TIC","legacy_symbol":"xiAutoNumbering","contract":"existing_text_auto_numbering","evidence":["octal/decimal/hex base","step, prefix/suffix, zero suppression, existing-number addition and target ordering options"]},
+    {"alias":"TIE","legacy_symbol":"xiPickNumInc","contract":"preserved_source_numbered_copy","evidence":["front/back number placement","spacing, reverse and single/multiple selection options","legacy description says source preserved"]},
+    {"alias":"TII","legacy_symbol":"xiTextIncInput","contract":"text_increment_input","evidence":["one-by-one/equal-spacing input","prefix/start/suffix/count, angle, alignment, layer and text-height options"]},
+    {"alias":"TIN","legacy_symbol":"xiTextInEttsInc","contract":"embedded_number_increment","evidence":["DCL label: 여러 객체 속의 숫자 증가시키기","text/mtext/block/attribute carrier options"]}
+  ],
+  "safety": {
+    "mcp_tools_are_read_only_planners": true,
+    "cad_mutation_tools_exposed": false,
+    "dry_run_default": true,
+    "live_mutation_requires_fingerprinted_approval": true,
+    "xref_and_locked_layer_mutation_rejected": true,
+    "ambiguous_legacy_choices_are_explicit_contract_fields": true,
+    "legacy_equivalence_verified_in_cad": false,
+    "production_live": 0
+  }
+}

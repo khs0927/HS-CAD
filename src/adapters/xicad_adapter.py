@@ -4,8 +4,8 @@ from pathlib import Path
 from typing import Any
 
 from src.adapters.lisp_adapter import LispAdapter
-from src.app.logger import warn, success
-from src.integrations.xicad_paths import detect_xicad_profile, XiCADPathProfile
+from src.app.logger import success, warn
+from src.integrations.xicad_paths import XiCADPathProfile, detect_xicad_profile
 
 
 class XiCADAdapter:

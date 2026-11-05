@@ -1,0 +1,297 @@
+{
+  "schema_version": "1.0",
+  "source": {
+    "rules": "binary-recovery-rules.json#sha256=fc68e1950350a326713230c7dbecdfcc264f1f5eb7f50b1e5321df20e4a887e6",
+    "backup_shortcuts": "xiShortkey_003.bak.bin#sha256=e2a2986362d089abf5f72fd1e9036d0afa9e91634d24209be39e147efffdd300",
+    "current_shortcuts": "xicad_commands_all.json#sha256=573bfb2e97c9998058527ebe3aecb61c7db7ff781a198fb9b16cee1f5d495aa3",
+    "compiled_manifest": "xicad_550_compiled_manifest.json#sha256=c3e2d48c463da4c6d4301df84cba142472d11ca18ca80210aadae7360a3d9d83",
+    "lisp_modules": "Lisp#module_count=26"
+  },
+  "summary": {
+    "total_aliases": 7,
+    "unique_legacy_symbols": 6,
+    "compiled_callable": 0,
+    "upgrade_registration_strings": 6,
+    "deterministic_core_candidates": 1,
+    "shared_core_candidates": 2,
+    "cleanup_helper_review_required": 3,
+    "platform_unsupported": 1,
+    "production_usable": 0
+  },
+  "commands": [
+    {
+      "alias": "ABD",
+      "legacy_symbol": "xiAllNullBlockDelete",
+      "description": "유령블럭 모두 삭제",
+      "decision": "cleanup_helper_review_required",
+      "target_lane": "source_reimplementation",
+      "compiled_entrypoint": "C:XIALLNULLBLOCKDELETE",
+      "compiled_status": "compiled_entrypoint_unresolved",
+      "compiled_callable": false,
+      "backup_declaration_present": true,
+      "current_declaration_present": true,
+      "upgrade_registration_string_present": true,
+      "helper_evidence": [
+        "xiUtil4:string:DelGhostBlk_t",
+        "xiUtil4:string:유령 블럭 삭제"
+      ],
+      "core_key": null,
+      "entity_filter": null,
+      "unsupported_platforms": [],
+      "production_usable": false,
+      "rationale": [
+        "legacy shortcut declaration is present in the 2023 backup",
+        "current shortcut declaration is present in the 5.50 inventory",
+        "no compiled C: command entrypoint was resolved for the legacy function",
+        "the function name appears only as an upgrade registration string",
+        "related cleanup helper evidence exists but behavior equivalence is not proven"
+      ],
+      "blockers": [
+        "compiled registration or helper strings are not callable entrypoint evidence",
+        "a reviewed deterministic core or platform policy is still required",
+        "fixture and dual-version CAD smoke evidence are missing"
+      ]
+    },
+    {
+      "alias": "AGD",
+      "legacy_symbol": "xiAllGhostDelete",
+      "description": "유령객체 모두 삭제",
+      "decision": "cleanup_helper_review_required",
+      "target_lane": "source_reimplementation",
+      "compiled_entrypoint": "C:XIALLGHOSTDELETE",
+      "compiled_status": "compiled_entrypoint_unresolved",
+      "compiled_callable": false,
+      "backup_declaration_present": true,
+      "current_declaration_present": true,
+      "upgrade_registration_string_present": true,
+      "helper_evidence": [
+        "xiUtil4:string:DelGhost_t",
+        "xiUtil4:string:유령 문자 삭제"
+      ],
+      "core_key": null,
+      "entity_filter": null,
+      "unsupported_platforms": [],
+      "production_usable": false,
+      "rationale": [
+        "legacy shortcut declaration is present in the 2023 backup",
+        "current shortcut declaration is present in the 5.50 inventory",
+        "no compiled C: command entrypoint was resolved for the legacy function",
+        "the function name appears only as an upgrade registration string",
+        "related cleanup helper evidence exists but behavior equivalence is not proven"
+      ],
+      "blockers": [
+        "compiled registration or helper strings are not callable entrypoint evidence",
+        "a reviewed deterministic core or platform policy is still required",
+        "fixture and dual-version CAD smoke evidence are missing"
+      ]
+    },
+    {
+      "alias": "APD",
+      "legacy_symbol": "xiAllPointDelete",
+      "description": "포인트 객체 모두 삭제",
+      "decision": "deterministic_core_candidate",
+      "target_lane": "source_reimplementation",
+      "compiled_entrypoint": "C:XIALLPOINTDELETE",
+      "compiled_status": "compiled_entrypoint_unresolved",
+      "compiled_callable": false,
+      "backup_declaration_present": true,
+      "current_declaration_present": true,
+      "upgrade_registration_string_present": true,
+      "helper_evidence": [],
+      "core_key": null,
+      "entity_filter": "POINT",
+      "unsupported_platforms": [],
+      "production_usable": false,
+      "rationale": [
+        "legacy shortcut declaration is present in the 2023 backup",
+        "current shortcut declaration is present in the 5.50 inventory",
+        "no compiled C: command entrypoint was resolved for the legacy function",
+        "the function name appears only as an upgrade registration string",
+        "the legacy description identifies a bounded entity-type deletion operation"
+      ],
+      "blockers": [
+        "compiled registration or helper strings are not callable entrypoint evidence",
+        "a reviewed deterministic core or platform policy is still required",
+        "fixture and dual-version CAD smoke evidence are missing"
+      ]
+    },
+    {
+      "alias": "LFD",
+      "legacy_symbol": "xiLayerFiltersDelete",
+      "description": "레이어필터삭제",
+      "decision": "shared_core_candidate",
+      "target_lane": "consolidated_core",
+      "compiled_entrypoint": "C:XILAYERFILTERSDELETE",
+      "compiled_status": "compiled_entrypoint_unresolved",
+      "compiled_callable": false,
+      "backup_declaration_present": true,
+      "current_declaration_present": true,
+      "upgrade_registration_string_present": true,
+      "helper_evidence": [
+        "xi:string:ACAD_LAYERFILTERS",
+        "xiCad:string:ACAD_LAYERFILTERS",
+        "xiLayer:string:ACAD_LAYERFILTERS",
+        "xiLayer:symbol:XIS:GETGROUPLAYERFILTERS",
+        "xiLayer:symbol:XIS:LAYERFILTERLIST",
+        "xiScrFunc:string:ACAD_LAYERFILTERS",
+        "xiUtil4:string:ACAD_LAYERFILTERS",
+        "xiUtil5:symbol:XIS:GETGROUPLAYERFILTERS"
+      ],
+      "core_key": "layer_filters_delete",
+      "entity_filter": null,
+      "unsupported_platforms": [],
+      "production_usable": false,
+      "rationale": [
+        "legacy shortcut declaration is present in the 2023 backup",
+        "current shortcut declaration is present in the 5.50 inventory",
+        "no compiled C: command entrypoint was resolved for the legacy function",
+        "the function name appears only as an upgrade registration string",
+        "multiple aliases share the same legacy symbol and should use one reviewed core"
+      ],
+      "blockers": [
+        "compiled registration or helper strings are not callable entrypoint evidence",
+        "a reviewed deterministic core or platform policy is still required",
+        "fixture and dual-version CAD smoke evidence are missing"
+      ]
+    },
+    {
+      "alias": "LPD",
+      "legacy_symbol": "xiLayerFiltersDelete",
+      "description": "레이어 필터 삭제하기",
+      "decision": "shared_core_candidate",
+      "target_lane": "consolidated_core",
+      "compiled_entrypoint": "C:XILAYERFILTERSDELETE",
+      "compiled_status": "compiled_entrypoint_unresolved",
+      "compiled_callable": false,
+      "backup_declaration_present": true,
+      "current_declaration_present": true,
+      "upgrade_registration_string_present": true,
+      "helper_evidence": [
+        "xi:string:ACAD_LAYERFILTERS",
+        "xiCad:string:ACAD_LAYERFILTERS",
+        "xiLayer:string:ACAD_LAYERFILTERS",
+        "xiLayer:symbol:XIS:GETGROUPLAYERFILTERS",
+        "xiLayer:symbol:XIS:LAYERFILTERLIST",
+        "xiScrFunc:string:ACAD_LAYERFILTERS",
+        "xiUtil4:string:ACAD_LAYERFILTERS",
+        "xiUtil5:symbol:XIS:GETGROUPLAYERFILTERS"
+      ],
+      "core_key": "layer_filters_delete",
+      "entity_filter": null,
+      "unsupported_platforms": [],
+      "production_usable": false,
+      "rationale": [
+        "legacy shortcut declaration is present in the 2023 backup",
+        "current shortcut declaration is present in the 5.50 inventory",
+        "no compiled C: command entrypoint was resolved for the legacy function",
+        "the function name appears only as an upgrade registration string",
+        "multiple aliases share the same legacy symbol and should use one reviewed core"
+      ],
+      "blockers": [
+        "compiled registration or helper strings are not callable entrypoint evidence",
+        "a reviewed deterministic core or platform policy is still required",
+        "fixture and dual-version CAD smoke evidence are missing"
+      ]
+    },
+    {
+      "alias": "LPU",
+      "legacy_symbol": "xiDGNLineTypePurge",
+      "description": "DGN 선종류 삭제",
+      "decision": "cleanup_helper_review_required",
+      "target_lane": "source_reimplementation",
+      "compiled_entrypoint": "C:XIDGNLINETYPEPURGE",
+      "compiled_status": "compiled_entrypoint_unresolved",
+      "compiled_callable": false,
+      "backup_declaration_present": true,
+      "current_declaration_present": true,
+      "upgrade_registration_string_present": true,
+      "helper_evidence": [
+        "xiCad:string:ACAD_DGNLINESTYLECOMP",
+        "xiCad:string:DGN 선종류 삭제",
+        "xiCad:symbol:XIS:DELDGN",
+        "xiScrFunc:string:ACAD_DGNLINESTYLECOMP",
+        "xiScrFunc:string:DGN 선종류 삭제",
+        "xiScrFunc:symbol:XIS:DELDGN",
+        "xiUtil4:string:ACAD_DGNLINESTYLECOMP",
+        "xiUtil4:string:DGN 선종류 삭제",
+        "xiUtil4:symbol:XIS:DELDGN"
+      ],
+      "core_key": null,
+      "entity_filter": null,
+      "unsupported_platforms": [],
+      "production_usable": false,
+      "rationale": [
+        "legacy shortcut declaration is present in the 2023 backup",
+        "current shortcut declaration is present in the 5.50 inventory",
+        "no compiled C: command entrypoint was resolved for the legacy function",
+        "the function name appears only as an upgrade registration string",
+        "related cleanup helper evidence exists but behavior equivalence is not proven"
+      ],
+      "blockers": [
+        "compiled registration or helper strings are not callable entrypoint evidence",
+        "a reviewed deterministic core or platform policy is still required",
+        "fixture and dual-version CAD smoke evidence are missing"
+      ]
+    },
+    {
+      "alias": "SLD",
+      "legacy_symbol": "xiScaleListDelete",
+      "description": "스케일리스트 삭제 (ZWCAD 미지원)",
+      "decision": "platform_unsupported",
+      "target_lane": "platform_exclusion",
+      "compiled_entrypoint": "C:XISCALELISTDELETE",
+      "compiled_status": "compiled_symbol_unresolved",
+      "compiled_callable": false,
+      "backup_declaration_present": true,
+      "current_declaration_present": true,
+      "upgrade_registration_string_present": false,
+      "helper_evidence": [],
+      "core_key": null,
+      "entity_filter": null,
+      "unsupported_platforms": [
+        "zwcad"
+      ],
+      "production_usable": false,
+      "rationale": [
+        "legacy shortcut declaration is present in the 2023 backup",
+        "current shortcut declaration is present in the 5.50 inventory",
+        "no compiled C: command entrypoint was resolved for the legacy function",
+        "the frozen shortcut explicitly marks the command unsupported on ZWCAD"
+      ],
+      "blockers": [
+        "ZWCAD support is explicitly absent in the frozen shortcut description",
+        "an AutoCAD-only implementation must be isolated by platform policy"
+      ]
+    }
+  ],
+  "next_queue": {
+    "completed_static": {
+      "compatibility_wrapper": 16,
+      "semantic_reconciliation": 4,
+      "binary_recovery": 7
+    },
+    "remaining_action_commands": 22,
+    "remaining_code_commands": 21,
+    "lanes": {
+      "consolidated_core": 4,
+      "source_reimplementation": 17,
+      "platform_exclusion": 1,
+      "binary_recovery": 0
+    },
+    "platform_exclusions": [
+      "SLD"
+    ],
+    "consolidated_core_commands": [
+      "MTB1",
+      "MTB2",
+      "LFD",
+      "LPD"
+    ],
+    "new_source_reimplementation_commands": [
+      "ABD",
+      "AGD",
+      "APD",
+      "LPU"
+    ]
+  }
+}
