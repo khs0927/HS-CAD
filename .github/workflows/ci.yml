@@ -49,6 +49,9 @@ jobs:
       - name: Run tests
         run: python -m pytest -q --disable-warnings --maxfail=1 --junitxml=test-results/junit.xml
 
+      - name: xiCAD MCP stdio smoke (headless, no ZWCAD)
+        run: python scripts/smoke_xicad_mcp_stdio.py
+
       - name: Upload test report
         if: always()
         uses: actions/upload-artifact@v4
@@ -57,3 +60,29 @@ jobs:
           path: test-results/junit.xml
           if-no-files-found: warn
           retention-days: 7
+
+  mobile-app:
+    name: Mobile ChatGPT CAD app (Node 22)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/mobile-cad-chatgpt
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: apps/mobile-cad-chatgpt/package-lock.json
+
+      - name: Install
+        run: npm ci
+
+      - name: Audit (high and above)
+        run: npm audit --audit-level=high
+
+      - name: Validate (typecheck, vitest, bootstrap tests, build, bundle check)
+        run: npm run validate
