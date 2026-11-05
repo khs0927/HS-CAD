@@ -138,7 +138,7 @@ VARIANT 인자, `scan`/`analyze-architecture` CLI를 실제 pywin32로 통과시
 
 **남은 일**
 - 실제 ZWCAD로 `scan`/`analyze-architecture`와 `tests/integration/*`를 돌리는 일은 하지 않았습니다. 이 PC에는 ZWCAD 2026(26.5.0.18164)이
-  `E:\Program files\ZWCAD 2026\`에 설치되어 있고, 이번 작업과 무관한 `ZWCAD.exe`가 실행 중인 것이 보였습니다. `get_adapter()`는 실행 중인
+  `E:\Program files\ZWCAD 2026\`에 설치되어 있고, 다른 COM 클라이언트가 띄운 `ZWCAD.exe /Automation -Embedding`이 작업 중 간헐적으로 보였습니다(이 저장소 테스트를 감사했을 때 ZWCAD spawn 호출은 0건, `GetActiveObject` 시도만 있었습니다). `get_adapter()`는 실행 중인
   인스턴스에 붙고 `--dwg <파일>`은 그 세션에서 도면을 열기 때문에, 사용자 확인 없이 실행하지 않았습니다.
 - `doctor`는 이 경로를 찾지 못해 `ZWCAD installation: ERROR`로 표시합니다. 메시지대로 `ZWCAD_EXE`를 지정해야 합니다.
 - `ruff check src tests scripts`: 이 브랜치 901건, main 888건. Windows 문제가 아니고 기존 부채이며, `ci.yml`에는 ruff 단계가 없습니다. 고치지 않았습니다.
