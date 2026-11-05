@@ -9,7 +9,6 @@ from typing import Any
 from src.drawing_index.application.contracts import RunSummarySink
 from src.drawing_index.domain.models import FileIndexSummary, IndexRunSummary
 
-
 _SCHEMA = """
 CREATE TABLE IF NOT EXISTS drawing_index_runs (
   run_id TEXT PRIMARY KEY,

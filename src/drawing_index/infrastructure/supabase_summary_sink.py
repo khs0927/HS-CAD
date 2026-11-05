@@ -151,5 +151,5 @@ class SupabaseRunSummarySink(RunSummarySink):
 
     @staticmethod
     def _hash_token(namespace: str, value: str) -> str:
-        digest = hashlib.sha256(f"{namespace}:{value}".encode("utf-8")).hexdigest()
+        digest = hashlib.sha256(f"{namespace}:{value}".encode()).hexdigest()
         return f"sha256:{digest}"

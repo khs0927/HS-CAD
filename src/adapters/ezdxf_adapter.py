@@ -1,6 +1,8 @@
 from __future__ import annotations
+
 from pathlib import Path
 from typing import Any
+
 
 class EzDxfAdapter:
     def read_dxf_entities(self, path: str | Path) -> list[dict[str, Any]]:
