@@ -17,3 +17,5 @@ generated/**/*.log
 .env
 .DS_Store
 output/
+hs_cad.egg-info/
+*.egg-info/

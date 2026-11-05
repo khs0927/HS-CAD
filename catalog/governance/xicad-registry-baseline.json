@@ -1,12 +1,12 @@
 {
   "schema_version": "1.0",
   "release_scope": "xicad-legacy-357",
-  "source_head": "599f41c727b98ce1b9b348546c5bcd956019036c",
+  "source_head": "4c4123fbd084b46b9d72f057b94eba432219ad8a",
   "headless_contracts": 357,
-  "cad_mutation_aliases": 190,
+  "cad_mutation_aliases": 197,
   "cad_free_production_usable": 13,
-  "mcp_tools": 883,
-  "write_or_destructive_tools": 192,
+  "mcp_tools": 894,
+  "write_or_destructive_tools": 199,
   "required_tools": [
     "xicad_headless_coverage_summary",
     "xicad_execute_live_ct",
