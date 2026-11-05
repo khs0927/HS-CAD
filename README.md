@@ -1,5 +1,7 @@
 # ZWCAD AI Architectural Modifier
 
+> **비활성화됨 (2026-11-05)** — 이 저장소는 더 이상 사용하지 않습니다. GitHub Actions 워크플로는 `.github/workflows-disabled/`로 옮겨 실행되지 않습니다. 코드는 기록용으로 남겨 둡니다.
+
 Windows + ZWCAD 환경에서 기존 DWG 도면을 열고, 객체를 스캔하고, 좌표/레이어/블록/문자 정보를 JSON으로 추출한 뒤, 안전하게 검증된 JSON 명령으로 도면을 수정하는 Python 프레임워크입니다.
 
 ## 목표

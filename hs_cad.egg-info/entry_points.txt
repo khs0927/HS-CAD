@@ -1,0 +1,3 @@
+[console_scripts]
+hs-cad = src.main:main
+hscad = src.main:main
