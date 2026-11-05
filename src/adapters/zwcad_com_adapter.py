@@ -10,13 +10,27 @@ from typing import Any
 from src.app import logger
 from src.cad_core.base import CADAdapter
 
-try:
+try:  # Windows-only; resolved lazily again in _load_com() so tests can inject fakes.
     import pythoncom
     import win32com.client
 
     COM_AVAILABLE = True
 except ImportError:
+    pythoncom = None  # type: ignore[assignment]
     COM_AVAILABLE = False
+
+
+def _load_com() -> tuple[Any, Any]:
+    """Return (win32com.client, pythoncom|None), importing lazily at call time."""
+    try:
+        import win32com.client as client
+    except ImportError as exc:
+        raise RuntimeError("COM support requires Windows OS with win32com / pythoncom.") from exc
+    try:
+        import pythoncom as pcom
+    except ImportError:
+        pcom = None
+    return client, pcom
 
 
 class ZWCADCOMAdapter(CADAdapter):
@@ -76,17 +90,17 @@ class ZWCADCOMAdapter(CADAdapter):
 
     def connect(self) -> bool:
         """Connect to active ZWCAD application via COM (multiCAD-MCP pattern)."""
-        if not COM_AVAILABLE:
-            raise RuntimeError("COM support requires Windows OS with win32com / pythoncom.")
+        client, pcom = _load_com()
 
-        try:
-            pythoncom.CoInitialize()
-        except Exception:
-            pass
+        if pcom is not None:
+            try:
+                pcom.CoInitialize()
+            except Exception:
+                pass
 
         for progid in self._candidate_progids():
             try:
-                self.app = win32com.client.GetActiveObject(progid)
+                self.app = client.GetActiveObject(progid)
                 try:
                     self.app.Visible = True
                     self.app.Update()
@@ -102,7 +116,7 @@ class ZWCADCOMAdapter(CADAdapter):
         if self.start_if_needed:
             for progid in self._candidate_progids():
                 try:
-                    self.app = win32com.client.Dispatch(progid)
+                    self.app = client.Dispatch(progid)
                     try:
                         self.app.Visible = self.visible
                         self.app.Update()
@@ -115,6 +129,10 @@ class ZWCADCOMAdapter(CADAdapter):
                 except Exception:
                     continue
 
+        if not self.start_if_needed:
+            raise RuntimeError(
+                "No running ZWCAD instance found and start_if_needed=False; refusing to spawn a new instance."
+            )
         raise RuntimeError("Could not connect to ZWCAD COM interface.")
 
     def _bind_active_document(self) -> Any:
@@ -361,10 +379,12 @@ class ZWCADCOMAdapter(CADAdapter):
         return [blk.Name for blk in doc.Blocks]
 
     def vt_pt(self, x: float, y: float, z: float = 0.0) -> Any:
-        return win32com.client.VARIANT(pythoncom.VT_ARRAY | pythoncom.VT_R8, [float(x), float(y), float(z)])
+        client, pcom = _load_com()
+        return client.VARIANT(pcom.VT_ARRAY | pcom.VT_R8, [float(x), float(y), float(z)])
 
     def vt_flat(self, coords: list[float]) -> Any:
-        return win32com.client.VARIANT(pythoncom.VT_ARRAY | pythoncom.VT_R8, [float(c) for c in coords])
+        client, pcom = _load_com()
+        return client.VARIANT(pcom.VT_ARRAY | pcom.VT_R8, [float(c) for c in coords])
 
     def ensure_layer(self, layer_name: str, color: int = 7) -> Any:
         doc = self.get_active_document()

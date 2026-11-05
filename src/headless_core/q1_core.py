@@ -1,8 +1,6 @@
 # Headless Core implementation for XiCAD command: Q1 (xiQ1)
 from typing import Any
 
-import pythoncom
-import win32com.client
 from pydantic import BaseModel, Field
 
 
@@ -12,6 +10,10 @@ class Q1Input(BaseModel):
 
 
 def _point3d(x: float, y: float):
+    # Windows-only COM modules are imported lazily so the module stays importable headless.
+    import pythoncom
+    import win32com.client
+
     return win32com.client.VARIANT(
         pythoncom.VT_ARRAY | pythoncom.VT_R8,
         [float(x), float(y), 0.0],
