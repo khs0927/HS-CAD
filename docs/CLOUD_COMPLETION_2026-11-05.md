@@ -110,3 +110,36 @@
 - Supabase 요약 백엔드(#126, 선택 기능)에는 `HSCAD_SUPABASE_URL`/`HSCAD_SUPABASE_SERVICE_ROLE_KEY`가 필요합니다.
 - main에 실수로 커밋된 `hs_cad.egg-info/`(#161)는 이번에 건드리지 않았습니다. `.gitignore`에는 `*.egg-info/`를 추가했습니다.
 - 저장소 비활성화(#161)를 유지할지, 이 브랜치를 PR로 열지는 사용자가 결정해야 합니다.
+
+## Local Windows run (2026-11-05)
+
+환경: Windows 10 Pro 19045, Python 3.12.9, `uv pip install -e ".[dev]"`(pywin32, comtypes 포함). 실제 ZWCAD에는 연결하지 않았습니다.
+
+**PR #162에 CI가 없는 이유:** Actions는 저장소에서 켜져 있습니다(`enabled: true`, `allowed_actions: all`). 다만 #161이 워크플로 5개를
+`.github/workflows-disabled/`로 옮겨서, main과 이 브랜치 모두 `.github/workflows/`가 없습니다. 그래서 이 커밋의 run과 check가 0건입니다.
+API에 `active`로 나오는 5개 워크플로는 예전 등록 기록이고 파일은 없습니다. 저장소 설정은 바꾸지 않았습니다.
+
+| 명령 | 결과 |
+|---|---|
+| `python -m pytest -q --disable-warnings` (새 테스트 추가 전) | 1415 passed, 24 skipped |
+| `python -m pytest -q --disable-warnings --maxfail=1 -m "not windows and not zwcad and not integration"` (새 테스트 포함) | 1420 passed, 3 skipped, 21 deselected |
+| `pytest tests/test_zwcad_com_pywin32_inproc.py` | 5 passed |
+| `python scripts/smoke_xicad_mcp_stdio.py <xicad-mcp.exe>` | 894 tools, 계산기 126.440, 코드 주입과 승인 없는 live 호출 거부 |
+| `python scripts/validate_xicad_registry_truth.py` | `valid: true` (357 / 197 / 13 / 894 / 199) |
+| `python scripts/build_xicad_live_gap_backlog.py` | 160건 생성 |
+| `corpus-run complete`, `corpus-run query "거실"`, `semantic-index build/query` (DXF 3장) | exit 0, `network_used: false`, house_a 기준 1위 house_b 1.0000, 2위 office_c 0.9700 |
+| `scripts/windows-runner-preflight.ps1 -RunVirtualWindows` | 러너 계약 PASS, 가상 Windows 14 passed |
+| `scripts/run_plugin_orchestrator.py --profile core --continue-on-error` | compile, portable-tests, wheel-build 통과. ruff는 실패 |
+
+**COM 어댑터:** Windows 전용 실패는 없었고 어댑터 코드는 고치지 않았습니다. `tests/test_zwcad_com_pywin32_inproc.py`를 추가했습니다.
+가짜 도면을 `win32com.server.util.wrap`으로 IDispatch로 감싸서, 지연 import, ModelSpace 열거, SAFEARRAY 좌표, 블록 속성, COM 오류 허용,
+VARIANT 인자, `scan`/`analyze-architecture` CLI를 실제 pywin32로 통과시킵니다. 레지스트리 등록과 CAD 프로세스는 쓰지 않습니다.
+없는 ProgID로는 실제 `com_error` 뒤에 `refusing to spawn`으로 거부되는 것도 확인했습니다. 실제 ZWCAD 동작을 대신하는 검증은 아닙니다.
+
+**남은 일**
+- 실제 ZWCAD로 `scan`/`analyze-architecture`와 `tests/integration/*`를 돌리는 일은 하지 않았습니다. 이 PC에는 ZWCAD 2026(26.5.0.18164)이
+  `E:\Program files\ZWCAD 2026\`에 설치되어 있고, 이번 작업과 무관한 `ZWCAD.exe`가 실행 중인 것이 보였습니다. `get_adapter()`는 실행 중인
+  인스턴스에 붙고 `--dwg <파일>`은 그 세션에서 도면을 열기 때문에, 사용자 확인 없이 실행하지 않았습니다.
+- `doctor`는 이 경로를 찾지 못해 `ZWCAD installation: ERROR`로 표시합니다. 메시지대로 `ZWCAD_EXE`를 지정해야 합니다.
+- `ruff check src tests scripts`: 이 브랜치 901건, main 888건. Windows 문제가 아니고 기존 부채이며, `ci.yml`에는 ruff 단계가 없습니다. 고치지 않았습니다.
+- 위 6장의 나머지 항목(live-gap 160건, 모바일 배포, Supabase, 저장소 비활성화 유지 여부)은 그대로입니다.
