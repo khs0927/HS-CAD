@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import importlib.util
 import math
 import os
 import threading
@@ -9,15 +10,11 @@ from typing import Any
 
 from src.app import logger
 from src.cad_core.base import CADAdapter
+from src.utils.geometry import chunk_points
 
-try:  # Windows-only; resolved lazily again in _load_com() so tests can inject fakes.
-    import pythoncom
-    import win32com.client
-
-    COM_AVAILABLE = True
-except ImportError:
-    pythoncom = None  # type: ignore[assignment]
-    COM_AVAILABLE = False
+# Windows-only COM modules are resolved lazily in _load_com() so tests can inject fakes
+# and the module stays importable on Linux CI.
+COM_AVAILABLE = importlib.util.find_spec("win32com") is not None
 
 
 def _load_com() -> tuple[Any, Any]:
@@ -173,30 +170,140 @@ class ZWCADCOMAdapter(CADAdapter):
             except Exception:
                 pass
 
+    @staticmethod
+    def _safe_get(obj: Any, attr: str, default: Any = None) -> Any:
+        try:
+            value = getattr(obj, attr)
+            if isinstance(value, tuple):
+                return list(value)
+            return value
+        except Exception:
+            return default
+
+    @staticmethod
+    def _to_list(value: Any) -> list[Any]:
+        if value is None:
+            return []
+        if isinstance(value, list):
+            return value
+        if isinstance(value, tuple):
+            return list(value)
+        try:
+            return list(value)
+        except Exception:
+            return []
+
+    @staticmethod
+    def _entity_type(object_name: str) -> str:
+        low = object_name.lower()
+        if "lwpolyline" in low or "polyline" in low:
+            return "POLYLINE"
+        if "line" in low and "poly" not in low:
+            return "LINE"
+        if "mtext" in low:
+            return "MTEXT"
+        if "text" in low:
+            return "TEXT"
+        if "block" in low or "insert" in low:
+            return "INSERT"
+        if "circle" in low:
+            return "CIRCLE"
+        if "arc" in low:
+            return "ARC"
+        if "dim" in low:
+            return "DIMENSION"
+        return object_name.upper() if object_name else "UNKNOWN"
+
+    def _read_attributes(self, obj: Any) -> list[dict[str, Any]]:
+        try:
+            if not bool(self._safe_get(obj, "HasAttributes", False)):
+                return []
+            attrs = obj.GetAttributes()
+            rows: list[dict[str, Any]] = []
+            for att in attrs:
+                rows.append(
+                    {
+                        "tag": self._safe_get(att, "TagString"),
+                        "text": self._safe_get(att, "TextString"),
+                        "insert": self._to_list(self._safe_get(att, "InsertionPoint")),
+                    }
+                )
+            return rows
+        except Exception as exc:
+            self.warnings.append({"type": "attribute_read_failed", "error": str(exc)})
+            return []
+
+    def _entity_to_dict(self, obj: Any) -> dict[str, Any]:
+        object_name = str(self._safe_get(obj, "ObjectName", "") or "")
+        entity_type = self._entity_type(object_name)
+        item: dict[str, Any] = {
+            "handle": self._safe_get(obj, "Handle"),
+            "object_name": object_name,
+            "entity_type": entity_type,
+            "layer": self._safe_get(obj, "Layer"),
+            "color": self._safe_get(obj, "Color"),
+            "linetype": self._safe_get(obj, "Linetype"),
+            "lineweight": self._safe_get(obj, "Lineweight"),
+            "visible": self._safe_get(obj, "Visible"),
+            "raw": {},
+        }
+        if entity_type == "LINE":
+            item["start"] = self._to_list(self._safe_get(obj, "StartPoint"))
+            item["end"] = self._to_list(self._safe_get(obj, "EndPoint"))
+            item["length"] = self._safe_get(obj, "Length")
+        elif entity_type == "POLYLINE":
+            coords = self._to_list(self._safe_get(obj, "Coordinates"))
+            item["coordinates"] = coords
+            item["points"] = chunk_points(coords, 2)
+            item["closed"] = self._safe_get(obj, "Closed")
+            item["elevation"] = self._safe_get(obj, "Elevation")
+        elif entity_type in {"TEXT", "MTEXT"}:
+            item["insert"] = self._to_list(self._safe_get(obj, "InsertionPoint"))
+            item["text"] = self._safe_get(obj, "TextString")
+            item["height"] = self._safe_get(obj, "Height")
+            item["rotation"] = self._safe_get(obj, "Rotation")
+            item["style_name"] = self._safe_get(obj, "StyleName")
+        elif entity_type == "INSERT":
+            item["name"] = self._safe_get(obj, "Name")
+            item["effective_name"] = self._safe_get(obj, "EffectiveName")
+            item["insert"] = self._to_list(self._safe_get(obj, "InsertionPoint"))
+            item["rotation"] = self._safe_get(obj, "Rotation")
+            item["x_scale"] = self._safe_get(obj, "XScaleFactor")
+            item["y_scale"] = self._safe_get(obj, "YScaleFactor")
+            item["z_scale"] = self._safe_get(obj, "ZScaleFactor")
+            item["attributes"] = self._read_attributes(obj)
+        elif entity_type == "CIRCLE":
+            item["center"] = self._to_list(self._safe_get(obj, "Center"))
+            item["radius"] = self._safe_get(obj, "Radius")
+        elif entity_type == "ARC":
+            item["center"] = self._to_list(self._safe_get(obj, "Center"))
+            item["radius"] = self._safe_get(obj, "Radius")
+            item["start_angle"] = self._safe_get(obj, "StartAngle")
+            item["end_angle"] = self._safe_get(obj, "EndAngle")
+        elif entity_type == "DIMENSION":
+            item["text_override"] = self._safe_get(obj, "TextOverride")
+            item["measurement"] = self._safe_get(obj, "Measurement")
+            item["text_position"] = self._to_list(self._safe_get(obj, "TextPosition"))
+        return item
+
     def scan_modelspace(self) -> list[dict[str, Any]]:
         doc = self.get_active_document()
-        results = []
+        self.warnings.clear()
+        results: list[dict[str, Any]] = []
         if not doc:
             return results
         for obj in doc.ModelSpace:
             try:
-                results.append(
-                    {
-                        "handle": getattr(obj, "Handle", None),
-                        "object_name": getattr(obj, "ObjectName", None),
-                        "layer": getattr(obj, "Layer", None),
-                    }
-                )
-            except Exception:
-                continue
+                results.append(self._entity_to_dict(obj))
+            except Exception as exc:
+                warning = {
+                    "object_name": self._safe_get(obj, "ObjectName"),
+                    "handle": self._safe_get(obj, "Handle"),
+                    "error": str(exc),
+                }
+                self.warnings.append(warning)
+                results.append({"object_name": "ERROR", "entity_type": "ERROR", **warning})
         return results
-
-    @staticmethod
-    def _safe_get(obj: Any, attr: str, default: Any = None) -> Any:
-        try:
-            return getattr(obj, attr)
-        except Exception:
-            return default
 
     def _iter_modelspace(self) -> Iterable[Any]:
         doc = self.get_active_document()
@@ -501,3 +608,11 @@ class ZWCADCOMAdapter(CADAdapter):
                 self.app.Update()
         except Exception:
             pass
+
+    def list_texts(self) -> list[str]:
+        """Return model-space TEXT and MTEXT values in scan order."""
+        return [
+            str(item["text"])
+            for item in self.scan_modelspace()
+            if (item.get("entity_type") or item.get("type")) in {"TEXT", "MTEXT"} and item.get("text") is not None
+        ]

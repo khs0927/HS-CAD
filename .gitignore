@@ -19,3 +19,4 @@ generated/**/*.log
 output/
 hs_cad.egg-info/
 *.egg-info/
+*.dwl
