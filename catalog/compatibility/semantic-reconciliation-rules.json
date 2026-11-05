@@ -1,0 +1,57 @@
+{
+  "schema_version": "1.0",
+  "rules": [
+    {
+      "alias": "3TP",
+      "legacy_symbol": "xi3dPolyToLwPoly",
+      "current_symbol": "xi3dPolyToLwp",
+      "decision": "alias_preserved_rename_candidate",
+      "legacy_description": "3D폴리->LwPoly",
+      "current_description": "3D폴리->LW폴리",
+      "rationale": [
+        "same frozen and current alias",
+        "descriptions identify the same 3D-polyline to lightweight-polyline operation",
+        "current function has a resolved compiled entrypoint"
+      ]
+    },
+    {
+      "alias": "LII",
+      "legacy_symbol": "xLi",
+      "current_symbol": "xiListInBlk",
+      "decision": "alias_preserved_rename_candidate",
+      "legacy_description": "블럭내부 객체 정보 표시",
+      "current_description": "블럭내 객체 정보",
+      "rationale": [
+        "same frozen and current alias",
+        "both descriptions identify block-contained object information",
+        "current function has a resolved compiled entrypoint"
+      ]
+    },
+    {
+      "alias": "RR",
+      "legacy_symbol": "xiRR",
+      "current_symbol": "xiRefRotate",
+      "decision": "alias_preserved_rename_candidate",
+      "legacy_description": "참조 회전",
+      "current_description": "참조 회전",
+      "rationale": [
+        "same frozen and current alias",
+        "legacy and current descriptions are identical",
+        "current function has a resolved compiled entrypoint"
+      ]
+    },
+    {
+      "alias": "TBM",
+      "legacy_symbol": "xiTBstyleMK",
+      "current_symbol": "xiTableMerge",
+      "decision": "semantic_conflict",
+      "legacy_description": "XI_TB_N 스타일 만들기",
+      "current_description": "캐드표 셀합치기",
+      "rationale": [
+        "same alias now points to a different operation",
+        "legacy title-block style creation and current table-cell merge are not equivalent",
+        "automatic alias forwarding is prohibited"
+      ]
+    }
+  ]
+}

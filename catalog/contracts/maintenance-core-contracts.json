@@ -1,0 +1,243 @@
+{
+  "schema_version": "1.0",
+  "contracts": {
+    "APD": {
+      "stage": "deterministic_core_implemented_local",
+      "aliases": [
+        "APD"
+      ],
+      "request_schema": {
+        "$defs": {
+          "Approval": {
+            "additionalProperties": false,
+            "properties": {
+              "approved": {
+                "default": false,
+                "title": "Approved",
+                "type": "boolean"
+              },
+              "fingerprint": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Fingerprint"
+              }
+            },
+            "title": "Approval",
+            "type": "object"
+          },
+          "DrawingSpace": {
+            "enum": [
+              "model",
+              "paper"
+            ],
+            "title": "DrawingSpace",
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "properties": {
+          "document_id": {
+            "minLength": 1,
+            "title": "Document Id",
+            "type": "string"
+          },
+          "spaces": {
+            "default": [
+              "model",
+              "paper"
+            ],
+            "items": {
+              "$ref": "#/$defs/DrawingSpace"
+            },
+            "title": "Spaces",
+            "type": "array"
+          },
+          "dry_run": {
+            "default": true,
+            "title": "Dry Run",
+            "type": "boolean"
+          },
+          "approval": {
+            "$ref": "#/$defs/Approval",
+            "default": {
+              "approved": false,
+              "fingerprint": null
+            }
+          }
+        },
+        "required": [
+          "document_id"
+        ],
+        "title": "AllPointDeleteRequest",
+        "type": "object"
+      },
+      "cad_adapter_required": true,
+      "production_usable": false
+    },
+    "layer_filters_delete": {
+      "stage": "shared_core_implemented_local",
+      "aliases": [
+        "LFD",
+        "LPD"
+      ],
+      "request_schema": {
+        "$defs": {
+          "Approval": {
+            "additionalProperties": false,
+            "properties": {
+              "approved": {
+                "default": false,
+                "title": "Approved",
+                "type": "boolean"
+              },
+              "fingerprint": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Fingerprint"
+              }
+            },
+            "title": "Approval",
+            "type": "object"
+          }
+        },
+        "additionalProperties": false,
+        "properties": {
+          "document_id": {
+            "minLength": 1,
+            "title": "Document Id",
+            "type": "string"
+          },
+          "aliases": {
+            "default": [
+              "LFD",
+              "LPD"
+            ],
+            "items": {
+              "type": "string"
+            },
+            "title": "Aliases",
+            "type": "array"
+          },
+          "delete_all_user_filters": {
+            "default": true,
+            "title": "Delete All User Filters",
+            "type": "boolean"
+          },
+          "include_names": {
+            "default": [],
+            "items": {
+              "type": "string"
+            },
+            "title": "Include Names",
+            "type": "array"
+          },
+          "preserve_names": {
+            "default": [],
+            "items": {
+              "type": "string"
+            },
+            "title": "Preserve Names",
+            "type": "array"
+          },
+          "dry_run": {
+            "default": true,
+            "title": "Dry Run",
+            "type": "boolean"
+          },
+          "approval": {
+            "$ref": "#/$defs/Approval",
+            "default": {
+              "approved": false,
+              "fingerprint": null
+            }
+          }
+        },
+        "required": [
+          "document_id"
+        ],
+        "title": "LayerFilterDeleteRequest",
+        "type": "object"
+      },
+      "cad_adapter_required": true,
+      "production_usable": false
+    },
+    "SLD": {
+      "stage": "platform_policy_implemented",
+      "aliases": [
+        "SLD"
+      ],
+      "support_schema": {
+        "$defs": {
+          "CadPlatform": {
+            "enum": [
+              "zwcad",
+              "autocad",
+              "bricscad",
+              "gstarcad"
+            ],
+            "title": "CadPlatform",
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "properties": {
+          "alias": {
+            "title": "Alias",
+            "type": "string"
+          },
+          "platform": {
+            "$ref": "#/$defs/CadPlatform"
+          },
+          "supported": {
+            "title": "Supported",
+            "type": "boolean"
+          },
+          "implementation_state": {
+            "title": "Implementation State",
+            "type": "string"
+          },
+          "reason": {
+            "title": "Reason",
+            "type": "string"
+          },
+          "production_usable": {
+            "default": false,
+            "title": "Production Usable",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "alias",
+          "platform",
+          "supported",
+          "implementation_state",
+          "reason"
+        ],
+        "title": "PlatformSupport",
+        "type": "object"
+      },
+      "zwcad_supported": false,
+      "production_usable": false
+    }
+  },
+  "next_nodes": [
+    "apd_cad_adapter",
+    "layer_filter_cad_adapter",
+    "autocad_scale_list_adapter_optional"
+  ],
+  "production_live": 0
+}

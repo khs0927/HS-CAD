@@ -1,0 +1,18 @@
+{
+ "schema_version":"1.0","batch":13,
+ "commands":[
+  {"alias":"LX","legacy_symbol":"xiAutoLeader","contract":"auto_leader","evidence":["recovered DCL: drawing/XiCAD source, text kind, end shape, text location, fixed angle, sizes, scale, layer and block-name text"]},
+  {"alias":"SD","legacy_symbol":"xiSplitDim","contract":"split_dimension","evidence":["shortcut: 치수선 나누기","split points and source disposition explicit"]},
+  {"alias":"TL","legacy_symbol":"xiText2Leader","contract":"text_to_leader","evidence":["recovered DCL: leader/mleader, style, scale, text matching, fixed angle, selection order, layer and line gap"]},
+  {"alias":"2DP","legacy_symbol":"xi2dPro","contract":"shape_projection","evidence":["shortcut: project objects between shapes","affine or normalized-boundary policy explicit"]},
+  {"alias":"3TP","legacy_symbol":"xi3dPolyToLwPoly","contract":"3dpoly_to_lwpoly","evidence":["shortcut description","flatten policy and source disposition explicit"]},
+  {"alias":"BOO","legacy_symbol":"xiBoo","contract":"join_polylines","evidence":["shortcut: 폴리도형 합치기","order, reversal and tolerance explicit"]},
+  {"alias":"BS","legacy_symbol":"xiBrkSymDCL","contract":"break_symbol","evidence":["shortcut: 절단선 기호 그리기","kind and dimensions explicit"]},
+  {"alias":"CBJ","legacy_symbol":"xiContourBoxJoin","contract":"contour_boundary_join","evidence":["shortcut description","ends and normalized boundary points explicit"]},
+  {"alias":"CM","legacy_symbol":"xiCM","contract":"revision_cloud","evidence":["shortcut: 구름형 수정 마크","arc range, style and boundary explicit"]},
+  {"alias":"CMW","legacy_symbol":"xiCloudMarkWidth","contract":"cloud_width","evidence":["shortcut: cloud solidification","width side and caps explicit"]},
+  {"alias":"DRL","legacy_symbol":"xiDirectionLine","contract":"direction_line","evidence":["shortcut: line direction/reverse","reverse versus annotate explicit"]},
+  {"alias":"JUL","legacy_symbol":"xiJumpD","contract":"jump_line","evidence":["shortcut: crossing jump line","crossings, radius, side and representation explicit"]}
+ ],
+ "safety":{"mcp_tools_are_read_only_planners":true,"cad_mutation_tools_exposed":false,"dry_run_default":true,"live_mutation_requires_fingerprinted_approval":true,"xref_and_locked_sources_rejected":true,"ambiguous_geometry_is_explicit":true,"legacy_equivalence_verified_in_cad":false,"production_live":0}
+}

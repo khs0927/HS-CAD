@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.0",
+  "batch": 8,
+  "commands": [
+    {"alias":"A2M","legacy_symbol":"xiAtt2Mt","contract":"attribute_to_text","evidence":["shortcut: 속성문자를 다행문자로 변경","recovered DCL: single-line conversion or block attributes to mtext, optional tag display"]},
+    {"alias":"ABE","legacy_symbol":"xiAttBlkEdit","contract":"attribute_block_edit","evidence":["shortcut: 속성블럭 문자 수정","recovered DCL: spaces, locked/nested filters, block/tag/value, numeric operation or scale"]},
+    {"alias":"CTX","legacy_symbol":"xiCTX","contract":"context_text_edit","evidence":["shortcut: 문자 수정","recovered DCL: range/object precedence, old/new text, first/all, whole-string and whole-entity policies"]},
+    {"alias":"TC","legacy_symbol":"xiTextCopy","contract":"text_copy","evidence":["shortcut explicitly says text copy OR Acad table insertion","destination is a required enum"]},
+    {"alias":"TE","legacy_symbol":"xiTextEdit","contract":"comprehensive_text_edit","evidence":["shortcut: 문자 종합수정","all property changes are explicit patches"]},
+    {"alias":"TFF","legacy_symbol":"xiTextFrameFix","contract":"mtext_frame_fit","evidence":["shortcut: 다행문자 테두리 맞춤","measured content width is supplied; tight/padded policy is explicit"]},
+    {"alias":"TO","legacy_symbol":"xiText2Center","contract":"text_to_rectangle_center","evidence":["shortcut: 문자열을 사각의 중심으로 보내기","normalized container geometry is supplied"]},
+    {"alias":"TOA","legacy_symbol":"xiTextOfAlign","contract":"text_to_shape_align","evidence":["shortcut: 문자열을 도형의 중심에 일괄 정렬","recovered DCL: horizontal distance and line-gap factors"]},
+    {"alias":"TSH","legacy_symbol":"xiTextShadow","contract":"text_shadow","evidence":["shortcut: 문자에 음영넣기","shadow representation, offset, layer and color are explicit"]},
+    {"alias":"TSM","legacy_symbol":"xiStyleMerge","contract":"text_style_merge","evidence":["recovered DCL: multiple source styles, one target, optional source removal"]},
+    {"alias":"DAT","legacy_symbol":"xiDyTitle","contract":"dynamic_title","evidence":["shortcut: 살아있는 도면 제목 넣기","CAD field expression must be supplied explicitly"]},
+    {"alias":"LTX","legacy_symbol":"xiLText","contract":"equal_spacing_text","evidence":["shortcut: 등 간격 문자열 쓰기","text sequence, start point and step vector are explicit"]}
+  ],
+  "safety": {
+    "mcp_tools_are_read_only_planners": true,
+    "cad_mutation_tools_exposed": false,
+    "dry_run_default": true,
+    "live_mutation_requires_fingerprinted_approval": true,
+    "xref_and_locked_layer_mutation_rejected": true,
+    "ambiguous_legacy_choices_are_explicit_contract_fields": true,
+    "legacy_equivalence_verified_in_cad": false,
+    "production_live": 0
+  }
+}

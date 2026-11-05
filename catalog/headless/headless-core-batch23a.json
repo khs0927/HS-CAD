@@ -1,0 +1,123 @@
+{
+  "schema_version": "1.0",
+  "batch": "23A",
+  "contract_kind": "evidence_led_explicit_policy_plan",
+  "commands": [
+    {
+      "alias": "DBS",
+      "exact_symbol": "xiDboxSort",
+      "current_evidence": "C:/xicad/xiLib/xiShortkey.key:155 도곽 정렬",
+      "frozen_evidence": "tests/fixtures/xiShortkey.357.key:143 same symbol/description",
+      "dcl_path": null,
+      "config_source_data": [],
+      "readable_source": null,
+      "original_inputs": ["not recovered; unique block handles and source/target anchors are explicit"],
+      "output_semantics": "one caller-defined displacement per frame block reference",
+      "evidence_level": "shortcut_only_explicit_placement_policy_not_legacy_equivalent",
+      "semantic_gaps": ["legacy spatial order", "spacing derivation", "frame detection", "rotation policy"]
+    },
+    {
+      "alias": "DFS",
+      "exact_symbol": "xiDboxFindScale",
+      "current_evidence": "C:/xicad/xiLib/xiShortkey.key:156 도곽축척 확인",
+      "frozen_evidence": "tests/fixtures/xiShortkey.357.key:144 same symbol/description",
+      "dcl_path": "C:/xicad/DialogBox/ACAD_xi0321_d.02.dcl:3-55",
+      "config_source_data": [
+        "C:/xicad/xiLib/xiConfig.cfg:113-114 stores frame choice, A3, popup, displayed 1/100, and mm mode"
+      ],
+      "readable_source": null,
+      "original_inputs": [
+        "DCL: optional frame-block selection",
+        "DCL: A0 1189x841, A1 841x594, A2 594x420, A3 420x297, A4 297x210",
+        "DCL: mm/m unit, command-line/popup display, optional LTSCALE/DIMSCALE proposals and confirmation"
+      ],
+      "output_semantics": "scale findings derived from explicit extents plus optional system-variable proposals",
+      "evidence_level": "shortcut_plus_dcl_and_opaque_config_explicit_formula_not_legacy_equivalent",
+      "semantic_gaps": ["legacy frame extent extraction", "legacy rounding/display format", "text-output creation"]
+    },
+    {
+      "alias": "DSB",
+      "exact_symbol": "xiDimScaleBlock",
+      "current_evidence": "C:/xicad/xiLib/xiShortkey.key:157 도곽 블럭내부 치수축척 일괄변경",
+      "frozen_evidence": "tests/fixtures/xiShortkey.357.key:145 same symbol/description",
+      "dcl_path": null,
+      "config_source_data": [],
+      "readable_source": null,
+      "original_inputs": ["not recovered; block/dimension handles, current scales, and target scale are explicit"],
+      "output_semantics": "dimension-scale property updates excluding already-matching snapshots",
+      "evidence_level": "shortcut_only_snapshot_update_policy_not_legacy_equivalent",
+      "semantic_gaps": ["nested dimension discovery", "annotative dimensions", "block-definition versus instance scope"]
+    },
+    {
+      "alias": "MDL",
+      "exact_symbol": "xiMakeDwgList",
+      "current_evidence": "C:/xicad/xiLib/xiShortkey.key:158 도곽블럭으로 도면목록표 만들기",
+      "frozen_evidence": "tests/fixtures/xiShortkey.357.key:146 same symbol/description",
+      "dcl_path": "C:/xicad/DialogBox/ACAD_xi0158_d.01.dcl:3-325",
+      "config_source_data": [
+        "C:/xicad/xiLib/xiConfig.cfg:49-50 has opaque /xiMDLReadBlock_ACAD registered-frame data",
+        "C:/xicad/xiLib/xiConfig.cfg:133-134 stores workspace/order/list scale/layers/gaps/block mode/selection"
+      ],
+      "readable_source": null,
+      "original_inputs": [
+        "DCL: model/paper/both and current/all/layout selection",
+        "DCL: caller-visible order point/direction/tolerance or selection order",
+        "DCL: registered attribute/general blocks",
+        "DCL: list scale, vertical lines, title prefix, text height/layer, line gap/layer",
+        "DCL: drawing number/name/A1 scale/A3 scale/revision column gaps",
+        "DCL: optional multi-file list"
+      ],
+      "output_semantics": "ordered, validated five-column drawing-list rows and table style plan",
+      "evidence_level": "shortcut_plus_dcl_and_opaque_config_snapshot_table_policy_not_legacy_equivalent",
+      "semantic_gaps": ["attribute extraction", "registered-frame matching", "table insertion point", "multi-file I/O"]
+    },
+    {
+      "alias": "PBS",
+      "exact_symbol": "xiPPlotBox",
+      "current_evidence": "C:/xicad/xiLib/xiShortkey.key:159 블럭도곽 경계 확인",
+      "frozen_evidence": "tests/fixtures/xiShortkey.357.key:147 same symbol/description",
+      "dcl_path": null,
+      "config_source_data": [],
+      "readable_source": null,
+      "original_inputs": ["not recovered; expected and adapter-observed boundary snapshots plus tolerance are explicit"],
+      "output_semantics": "matched, mismatched, or missing-observed-boundary finding per block reference",
+      "evidence_level": "shortcut_only_read_only_boundary_comparison_not_legacy_equivalent",
+      "semantic_gaps": ["plot-boundary discovery", "accepted entity type", "legacy visual marking"]
+    },
+    {
+      "alias": "TN",
+      "exact_symbol": "xiTitleNumbering",
+      "current_evidence": "C:/xicad/xiLib/xiShortkey.key:160 도곽블럭에 도면번호 일괄넣기",
+      "frozen_evidence": "tests/fixtures/xiShortkey.357.key:148 same symbol/description",
+      "dcl_path": "C:/xicad/DialogBox/ACAD_xi0091_d.01.dcl:3-227",
+      "config_source_data": [
+        "C:/xicad/xiLib/xiConfig.cfg:57-58 stores order/workspace/selection/prefix/block/attribute-related values"
+      ],
+      "readable_source": null,
+      "original_inputs": [
+        "DCL: attribute-block toggle, selected frame block and attribute name",
+        "DCL: prefix, numeric start, suffix, increment step",
+        "DCL: model/paper/both and current/all/layout selection",
+        "DCL: order point/direction/tolerance or selection order",
+        "DCL: optional multi-file list"
+      ],
+      "output_semantics": "one deterministic attribute text update per explicitly ordered target",
+      "evidence_level": "shortcut_plus_dcl_and_opaque_config_explicit_numbering_policy_not_legacy_equivalent",
+      "semantic_gaps": ["frame/attribute discovery", "spatial ordering", "multi-file I/O", "legacy zero-padding default"]
+    }
+  ],
+  "truthfulness": {
+    "dialog_required": false,
+    "cad_mutation_tool_exposed": false,
+    "legacy_equivalence_verified_in_cad": false,
+    "production_usable": false,
+    "blocked_operations": [
+      "automatic frame discovery or spatial sorting",
+      "nested dimension discovery and block-definition mutation",
+      "attribute extraction and table entity creation",
+      "plot-boundary discovery or visual marking",
+      "multi-file opening, reading, writing, or saving"
+    ],
+    "note": "All exact symbols match current and frozen shortcuts. DFS, MDL, and TN have DCL/config evidence; DBS, DSB, and PBS remain shortcut-only. Every uncertain discovery/order/file operation is caller-supplied or explicitly blocked."
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "schema_version": "1.0",
+  "batch": "headless_core_batch3",
+  "commands": [
+    {
+      "aliases": ["BAR"],
+      "core_key": "attribute_block_rotate_excluding_attributes",
+      "dialog_free": true,
+      "explicit_inputs": ["block_handles", "rotation_mode", "angle_degrees", "attribute_preservation"],
+      "adapter_capability_required": "rotate_block_non_attribute_geometry",
+      "legacy_equivalence_verified_in_cad": false,
+      "production_usable": false
+    },
+    {
+      "aliases": ["ABD"],
+      "core_key": "empty_unreferenced_block_cleanup",
+      "dialog_free": true,
+      "candidate_rule": "reference_count=0 and entity_count=0 and not protected",
+      "legacy_equivalence_verified_in_cad": false,
+      "production_usable": false
+    },
+    {
+      "aliases": ["AGD"],
+      "core_key": "forensic_ghost_object_cleanup",
+      "dialog_free": true,
+      "accepted_classifications_must_be_explicit": true,
+      "legacy_equivalence_verified_in_cad": false,
+      "production_usable": false
+    },
+    {
+      "aliases": ["LPU"],
+      "core_key": "dgn_linetype_purge",
+      "dialog_free": true,
+      "bounded_repeated_purge": true,
+      "legacy_equivalence_verified_in_cad": false,
+      "production_usable": false
+    },
+    {
+      "aliases": ["MTB1", "MTB2"],
+      "core_key": "toilet_booth_geometry",
+      "dialog_free": true,
+      "legacy_variant_behavior_inferred": false,
+      "all_geometry_dimensions_explicit": true,
+      "legacy_equivalence_verified_in_cad": false,
+      "production_usable": false
+    }
+  ],
+  "safety": {
+    "dry_run_default": true,
+    "approval_required_for_mutation": true,
+    "active_document_match_required": true,
+    "single_undo_mark": true,
+    "cad_mutation_mcp_tools_exposed": false
+  }
+}

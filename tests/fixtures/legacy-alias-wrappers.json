@@ -1,0 +1,52 @@
+{
+  "wrappers": [
+    {
+      "legacy_alias": "CE"
+    },
+    {
+      "legacy_alias": "BBB"
+    },
+    {
+      "legacy_alias": "FF"
+    },
+    {
+      "legacy_alias": "WQ"
+    },
+    {
+      "legacy_alias": "1"
+    },
+    {
+      "legacy_alias": "2"
+    },
+    {
+      "legacy_alias": "3"
+    },
+    {
+      "legacy_alias": "EW"
+    },
+    {
+      "legacy_alias": "LF"
+    },
+    {
+      "legacy_alias": "LOC"
+    },
+    {
+      "legacy_alias": "LT"
+    },
+    {
+      "legacy_alias": "DE"
+    },
+    {
+      "legacy_alias": "WE"
+    },
+    {
+      "legacy_alias": "XX"
+    },
+    {
+      "legacy_alias": "Q11"
+    },
+    {
+      "legacy_alias": "MK"
+    }
+  ]
+}

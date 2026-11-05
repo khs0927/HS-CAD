@@ -1,0 +1,99 @@
+{
+  "schema_version": "1.0",
+  "batch": "22A",
+  "contract_kind": "evidence_led_explicit_policy_plan",
+  "commands": [
+    {
+      "alias": "OM",
+      "exact_symbol": "xiOffsetMulti",
+      "current_evidence": "C:/xicad/xiLib/xiShortkey.key:105 연속 간격띄우기",
+      "frozen_evidence": "tests/fixtures/xiShortkey.357.key:95 same symbol/description",
+      "dcl_path": null,
+      "config_source_data": [],
+      "readable_source": null,
+      "original_inputs": ["not recovered; signed distance sequence and original/chained basis are explicit"],
+      "output_semantics": "ordered offset operations with stable intermediate result tokens",
+      "evidence_level": "shortcut_only_explicit_policy_not_legacy_equivalent",
+      "semantic_gaps": ["legacy distance prompt repetition", "side selection", "supported curve types"]
+    },
+    {
+      "alias": "OO",
+      "exact_symbol": "xiofc",
+      "current_evidence": "C:/xicad/xiLib/xiShortkey.key:106 현재 layer로 offset하기",
+      "frozen_evidence": "tests/fixtures/xiShortkey.357.key:96 same symbol/description",
+      "dcl_path": null,
+      "config_source_data": [],
+      "readable_source": null,
+      "original_inputs": ["not recovered; source handles, signed distance, and current layer are explicit"],
+      "output_semantics": "one offset operation per source assigned to captured current layer",
+      "evidence_level": "shortcut_only_explicit_policy_not_legacy_equivalent",
+      "semantic_gaps": ["legacy side-point interaction", "source retention default", "supported curve types"]
+    },
+    {
+      "alias": "OT",
+      "exact_symbol": "xiOffsetTolerance",
+      "current_evidence": "C:/xicad/xiLib/xiShortkey.key:107 허용공차선 띄우기",
+      "frozen_evidence": "tests/fixtures/xiShortkey.357.key:97 same symbol/description",
+      "dcl_path": null,
+      "config_source_data": [],
+      "readable_source": null,
+      "original_inputs": ["not recovered; two distinct signed tolerance distances are explicit"],
+      "output_semantics": "two deterministic offset operations per source",
+      "evidence_level": "shortcut_only_explicit_policy_not_legacy_equivalent",
+      "semantic_gaps": ["tolerance source/units", "legacy symmetric/asymmetric default", "side selection"]
+    },
+    {
+      "alias": "RDC",
+      "exact_symbol": "xiRandomCopy",
+      "current_evidence": "C:/xicad/xiLib/xiShortkey.key:109 무작위 복사하기",
+      "frozen_evidence": "tests/fixtures/xiShortkey.357.key:99 same symbol/description",
+      "dcl_path": null,
+      "config_source_data": [],
+      "readable_source": null,
+      "original_inputs": ["not recovered; bounds, count, seed, rotation range, and round-robin source policy are explicit"],
+      "output_semantics": "platform-stable SHA-256-derived bounded copy placements",
+      "evidence_level": "shortcut_only_deterministic_random_policy_not_legacy_equivalent",
+      "semantic_gaps": ["legacy random generator", "selection distribution", "base-point and rotation defaults"]
+    },
+    {
+      "alias": "RM",
+      "exact_symbol": "xiRotMulti",
+      "current_evidence": "C:/xicad/xiLib/xiShortkey.key:110 자기 자리에서 회전",
+      "frozen_evidence": "tests/fixtures/xiShortkey.357.key:100 same symbol/description",
+      "dcl_path": null,
+      "config_source_data": ["C:/xicad/xiLib/xiConfig.cfg:163-164 /xiRotMulti then Center|1"],
+      "readable_source": null,
+      "original_inputs": ["not recovered; each target center, common angle, and keep-original policy are explicit"],
+      "output_semantics": "one center-specific rotation operation per target",
+      "evidence_level": "shortcut_plus_opaque_config_explicit_policy_not_legacy_equivalent",
+      "semantic_gaps": ["meaning of config flag 1", "center derivation", "copy versus rotate prompt"]
+    },
+    {
+      "alias": "SB",
+      "exact_symbol": "xiSolidMoveBack",
+      "current_evidence": "C:/xicad/xiLib/xiShortkey.key:112 솔리드 뒤로 보내기",
+      "frozen_evidence": "tests/fixtures/xiShortkey.357.key:102 same symbol/description",
+      "dcl_path": null,
+      "config_source_data": [],
+      "readable_source": null,
+      "original_inputs": ["not recovered; target types and bottom/behind-reference destination are explicit"],
+      "output_semantics": "validated draw-order relocation intent",
+      "evidence_level": "shortcut_only_restricted_entity_policy_not_legacy_equivalent",
+      "semantic_gaps": ["legacy meaning of solid", "reference selection", "relative ordering among multiple targets"]
+    }
+  ],
+  "truthfulness": {
+    "dialog_required": false,
+    "cad_mutation_tool_exposed": false,
+    "legacy_equivalence_verified_in_cad": false,
+    "production_usable": false,
+    "blocked_operations": [
+      "automatic offset side inference",
+      "curve offset geometry generation without a CAD adapter",
+      "legacy random sequence reproduction",
+      "automatic RM center derivation",
+      "untyped SB target selection"
+    ],
+    "note": "The six exact symbols are present in current and frozen shortcuts. No command-specific DCL or readable Lisp source was found; RM alone has opaque persisted config Center|1. Explicit policies are not claimed legacy-equivalent."
+  }
+}

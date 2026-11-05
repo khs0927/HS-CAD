@@ -1,0 +1,27 @@
+{
+  "schema_version": "1.0",
+  "batch": 18,
+  "contract_kind": "dialog_free_read_only_execution_plan",
+  "commands": [
+    {"alias":"STP","symbol":"xiSTP","shortcut_evidence":"frozen fixture and C:/xicad/xiLib/xiShortkey.key","settings_evidence":"ZWCAD_xi0241_d.03.dcl","original_inputs":["straight/turning","up/down/both","start gap","step count/depth","flight gap","landing width","handrail","arrow","cut line","anti-slip","five layers"],"output_meaning":"plan stair tread lines and decoration policy","evidence_level":"dcl_recovered"},
+    {"alias":"TAJ","symbol":"xiTableWidAj","shortcut_evidence":"frozen fixture only; absent from current C:/xicad shortcut file","settings_evidence":null,"original_inputs":[],"output_meaning":"column widths derived with caller-provided text metric","evidence_level":"shortcut_only_explicit_policy_not_legacy_equivalent"},
+    {"alias":"TRUSS","symbol":"xitruss","shortcut_evidence":"frozen fixture and current shortcut file","settings_evidence":null,"original_inputs":[],"output_meaning":"chords and panel webs from explicit geometry","evidence_level":"shortcut_only_explicit_policy_not_legacy_equivalent"},
+    {"alias":"W1","symbol":"xiWin1","shortcut_evidence":"frozen fixture only; absent from current shortcut file","settings_evidence":"ACAD_xi0429_d.01.dcl","original_inputs":["divisions","frame/elevation/wall layers","center/offset","frame depth/width/location","centerline","glass","wall cleanup/gap","group"],"output_meaning":"simple-window opening and division plan","evidence_level":"dcl_recovered"},
+    {"alias":"W2","symbol":"xiWin2","shortcut_evidence":"frozen fixture only; absent from current shortcut file","settings_evidence":"ACAD_xi9476_d.01.dcl","original_inputs":["single/double glazing","simple/detail","location","2/3/4 divisions","reverse","fixed opening width","centerline","glass frame","wall gap","group"],"output_meaning":"sliding-window W2 plan","evidence_level":"dcl_recovered"},
+    {"alias":"W3","symbol":"xiWin3 (shortcut), xiWin2 (DCL dialog)","shortcut_evidence":"frozen fixture only; absent from current shortcut file","settings_evidence":"ACAD_xi8476_d.01.dcl","original_inputs":["same recovered xiWin2 controls as W2"],"output_meaning":"sliding-window W3 variant plan","evidence_level":"dcl_recovered_symbol_mapping_requires_cad_verification"},
+    {"alias":"WO","symbol":"xiWallOpening","shortcut_evidence":"frozen fixture and current shortcut file","settings_evidence":"ACAD_xi0428_d.01.dcl","original_inputs":["elevation layer/omit","center","offset","external/internal projection","wall cleanup"],"output_meaning":"wall opening geometry and cleanup policy","evidence_level":"dcl_recovered"},
+    {"alias":"ZIGZAG","symbol":"xiZIGZAG","shortcut_evidence":"frozen fixture and current shortcut file","settings_evidence":null,"original_inputs":[],"output_meaning":"zigzag vertices from explicit amplitude/pitch/phase","evidence_level":"shortcut_only_explicit_policy_not_legacy_equivalent"},
+    {"alias":"C2E","symbol":"xiCad2Excel","shortcut_evidence":"frozen fixture only; absent from current shortcut file","settings_evidence":null,"original_inputs":[],"output_meaning":"return table matrix; Excel automation blocked","evidence_level":"shortcut_only_external_integration_blocked"},
+    {"alias":"E2C","symbol":"xiExcel2Cad","shortcut_evidence":"frozen fixture only; absent from current shortcut file","settings_evidence":null,"original_inputs":[],"output_meaning":"digest-bound matrix-to-CAD table plan; Excel automation blocked","evidence_level":"shortcut_only_external_integration_blocked"},
+    {"alias":"HC","symbol":"xiHatchClone","shortcut_evidence":"frozen fixture only; absent from current shortcut file","settings_evidence":null,"original_inputs":[],"output_meaning":"clone hatch snapshot to explicit transforms; associativity blocked","evidence_level":"shortcut_only_explicit_policy_not_legacy_equivalent"},
+    {"alias":"HEX","symbol":"xiHatchExport","shortcut_evidence":"frozen fixture only; absent from current shortcut file","settings_evidence":null,"original_inputs":[],"output_meaning":"return hatch definitions; file write blocked","evidence_level":"shortcut_only_external_write_blocked"}
+  ],
+  "truthfulness": {
+    "dialog_required": false,
+    "cad_mutation_tool_exposed": false,
+    "legacy_equivalence_verified_in_cad": false,
+    "production_usable": false,
+    "blocked_operations":["C2E/E2C Excel process automation","HC associative clone without target boundary handles","HEX external file write"],
+    "note":"Shortcut-only commands use explicit policies and are not claimed as legacy-equivalent."
+  }
+}
